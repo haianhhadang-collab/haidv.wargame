@@ -92,10 +92,7 @@ ul.gon{margin:0;padding-left:20px} ul.gon li{margin:4px 0}
 .ma-o .btn{flex:none;white-space:nowrap}
 #s-vao .brand-sm{font-size:19px}
 
-/* ---------- luật chơi ---------- */
-.luat h3{font-size:20px;color:var(--do);margin:4px 0 6px}
-.luat .o{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:start}
-.luat .o b.ic{font-size:24px;line-height:1}
+/* ---------- danh sách mốc ---------- */
 .moc-ds{display:grid;gap:6px;margin-top:6px}
 .moc-ds div{display:grid;grid-template-columns:92px 1fr;gap:10px;font-size:14px;padding:6px 10px;border-radius:10px;background:var(--nen2)}
 .moc-ds b{color:var(--nhan);font-family:"Baloo 2"}
@@ -287,7 +284,7 @@ canvas.giay{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-
     <div class="eyebrow">Tư tưởng Hồ Chí Minh · POL1001</div>
     <h1 class="logo" aria-label="Nhanh! Nhanh! Nhanh!"><span>NHANH!</span><span>NHANH!</span><span>NHANH!</span></h1>
     <div class="logo-phu">PHẦN THI TĂNG TỐC</div>
-    <p class="tag">Đua trên hành trình của Bác — từ Nghệ An (1890) tới Quảng trường Ba Đình (2/9/1945). Mỗi 5 câu là một mốc lịch sử; câu đúng đẩy xe về đích.</p>
+    <p class="tag">Đua trên hành trình của Bác — từ Nghệ An (1890) tới Quảng trường Ba Đình (2/9/1945).</p>
     <div class="vach"><i></i><i></i><i></i></div>
   </div>
   <div class="card stack">
@@ -303,24 +300,7 @@ canvas.giay{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-
     <button class="btn g" id="d-tao">🎬 Giảng viên: tạo phòng</button>
     <button class="btn g" id="d-solo">🏃 Tự luyện một mình</button>
   </div>
-  <button class="btn g w" id="d-luat" style="margin-top:12px">📖 Luật chơi</button>
   <p class="tiny muted" style="text-align:center;margin-top:16px">Câu hỏi lấy từ Giáo trình Tư tưởng Hồ Chí Minh 2026. Chỉ cần biệt danh — không cần tên thật.</p>
-</div></section>
-
-<!-- ===================== LUẬT CHƠI ===================== -->
-<section class="screen" id="s-luat"><div class="page">
-  <div class="card stack luat">
-    <div class="row"><h2>Luật chơi</h2><span class="sp"></span><button class="btn g sm" data-ve="dau">← Quay lại</button></div>
-    <div class="o">
-      <b class="ic">👥</b><div><h3>Đội đấu đội</h3>2–8 đội, <b>mỗi người một máy</b>, nhập biệt danh rồi chọn đội — <b>đội không giới hạn người</b>. Mỗi người tự chơi, <b>thứ tự câu mỗi người một khác</b>. Giảng viên chọn <b>30, 40 hoặc 60 câu</b>; câu trắc nghiệm <b>9 giây</b>, câu điền chỗ trống <b>10 giây</b>. <b>Điểm đội = tổng điểm các thành viên ÷ số thành viên tham gia.</b></div>
-      <b class="ic">🙋</b><div><h3>Cá nhân</h3>Mỗi người một máy, mặc định <b>60 câu</b>, <b>15 giây</b> mỗi câu, thứ tự câu mỗi người một khác. Tự luyện ở nhà cũng theo luật này.</div>
-      <b class="ic">⭐</b><div><h3>Điểm</h3>Đúng <b>+1</b>. Sai hay hết giờ: <b>không mất điểm</b>.</div>
-      <b class="ic">🚩</b><div><h3>Mốc lịch sử</h3>Cứ 5 câu là tới một mốc trên hành trình của Bác. Chặng đúng <b>5/5 thưởng +2</b>, đúng <b>4/5 thưởng +1</b>. Ai tới mốc <b>đầu tiên</b> (có thưởng) được thêm <b>+1 Tiên phong</b>.</div>
-      <b class="ic">🏁</b><div><h3>Tăng tốc</h3>Mỗi người chạy nhịp riêng: bấm xong là sang câu mới ngay. Bằng điểm thì đội (hoặc người) có <b>thời gian trả lời trung bình mỗi câu ngắn hơn</b> xếp trên. Cuối trận có bảng vàng và danh hiệu vui cho cả đội lẫn cá nhân.</div>
-    </div>
-    <div><h3>Các mốc trên đường đua</h3><div class="moc-ds" id="l-moc"></div>
-      <p class="tiny muted" style="margin-top:6px">Mốc lấy từ Giáo trình 2026, chương 1, mục II — Quá trình hình thành và phát triển tư tưởng Hồ Chí Minh. Trận 30/40 câu đi qua ít mốc hơn, luôn về đích ở Ba Đình.</p></div>
-  </div>
 </div></section>
 
 <!-- ===================== TẠO PHÒNG ===================== -->
@@ -340,7 +320,6 @@ canvas.giay{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-
 <section class="screen" id="s-solo"><div class="page">
   <div class="card stack">
     <div class="row"><h2>Tự luyện một mình</h2><span class="sp"></span><button class="btn g sm" data-ve="dau">← Trang đầu</button></div>
-    <p class="muted small">Không cần mạng, không cần phòng. Luật như chế độ cá nhân: 15 giây mỗi câu, cuối trận xem lại câu sai kèm giải thích.</p>
     <div><span class="nhan">Số câu</span><div class="seg" id="so-l"><button data-v="30">30 câu</button><button data-v="40">40 câu</button><button data-v="60" class="on">60 câu</button></div></div>
     <div><label class="nhan" for="so-b">Câu hỏi lấy từ các buổi đã học</label><select id="so-b"></select><p class="tiny muted" id="so-kho" style="margin-top:6px"></p></div>
     <div><label class="nhan" for="so-ten">Biệt danh (tuỳ chọn)</label><input id="so-ten" maxlength="24" placeholder="VD: 12 Lan"></div>
@@ -380,7 +359,6 @@ canvas.giay{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-
       <div class="card stack">
         <div class="row"><h3 style="font-size:20px">Đường đua ván này</h3><span class="sp"></span><span class="chip" id="h-luat-ngan"></span></div>
         <div class="moc-ds" id="h-moc"></div>
-        <p class="small muted">Đúng <b class="vang">+1</b> · sai, hết giờ <b>0</b> · qua mốc: đúng 5/5 <b class="vang">+2</b>, 4/5 <b class="vang">+1</b> · tới mốc đầu tiên (có thưởng) <b class="vang">+1 Tiên phong</b><span id="h-luat-doi"> · <b>điểm đội = tổng điểm các thành viên ÷ số người</b></span> · bằng điểm thì thời gian trả lời trung bình mỗi câu ngắn hơn xếp trên.</p>
       </div>
     </div>
   </div>
@@ -673,7 +651,6 @@ function veDau(){
     $("#d-khoi-dong").onclick = () => { batMang(); SYNC.doc(`p/${h.ma}/cfg`).set(Object.assign(cfgTu(h), {tt: "dong"})).catch(() => {}); luuXoa("nhanh-host"); veDau(); };
   } else k.hidden = true;
 }
-$("#d-luat").onclick = () => { veMocDs($("#l-moc"), DB.tuyen["60"]); show("luat"); };
 $("#d-ma").addEventListener("input", e => { e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4); });
 $("#d-ma").addEventListener("keydown", e => { if(e.key === "Enter") $("#d-vao").click(); });
 $("#d-vao").onclick = () => { const ma = $("#d-ma").value.trim(), l = $("#d-loi");
@@ -688,7 +665,7 @@ function veTao(){
   const k = demKho(+$("#t-b").value);
   $$("#t-l button").forEach(b => { b.classList.toggle("on", +b.dataset.v === TAO.L); b.disabled = false; });
   $("#t-kho").textContent = `Kho: ${k.tn} câu trắc nghiệm (kể cả Đúng/Sai) + ${k.dk} câu điền chỗ trống.` + (k.max < TAO.L ? ` Chỉ đủ cho ${k.max} câu — trận sẽ rút còn ${k.max} câu.` : "");
-  $("#t-tg").innerHTML = TAO.che === "doi" ? "⏱ <b>9 giây</b> mỗi câu trắc nghiệm · <b>10 giây</b> mỗi câu điền chỗ trống · mỗi người một máy, chọn đội (không giới hạn người) · điểm đội = bình quân điểm thành viên" : "⏱ <b>15 giây</b> mỗi câu · mỗi người một máy, nhập biệt danh";
+  $("#t-tg").innerHTML = TAO.che === "doi" ? "⏱ <b>9 giây</b> mỗi câu trắc nghiệm · <b>10 giây</b> mỗi câu điền chỗ trống" : "⏱ <b>15 giây</b> mỗi câu";
   $("#t-mo").disabled = k.max < 5;
 }
 $$("#t-che button").forEach(b => b.onclick = () => { TAO.che = b.dataset.v; TAO.L = TAO.che === "doi" ? 40 : 60; veTao(); });
@@ -746,7 +723,6 @@ function ganHost(){
   c.textContent = "Máy chiếu đang chạy trên chính máy tính này — mã QR và địa chỉ trên trỏ bản trên mạng.";
   veMocDs($("#h-moc"), H.tuyen);
   $("#h-luat-ngan").textContent = `${H.tuyen.length} mốc · ${H.L} câu`;
-  $("#h-luat-doi").hidden = !laDoi();
   veAll();
 }
 function dongHost(ghiDong){
@@ -910,10 +886,8 @@ function veSanh(){
   if(laDoi()){
     $("#h-vao").innerHTML = `<div class="o-doi">` + DOI.slice(0, H.N).map((D, i) => { const tv = vao.filter(g => g.doi === i + 1);
       return `<div class="${tv.length ? "co" : ""}" style="--m:${D.mau}"><span class="ic">${D.ic}</span><span><b>Đội ${i + 1} · ${esc(D.ten)} ${tv.length ? `<em class="dem-tv">${tv.length}</em>` : ""}</b><small>${tv.length ? esc(tv.map(tenNg).join(", ")) : "chờ…"}</small></span></div>`; }).join("") + `</div>`;
-    $("#h-goi-y").textContent = "Mỗi người một máy: quét mã, nhập biệt danh, chọn đội — đội không giới hạn người. Vào muộn vẫn chơi được.";
   } else {
     $("#h-vao").innerHTML = vao.length ? `<div class="ten-ds">${vao.map(g => `<span>${esc(tenNg(g))}</span>`).join("")}</div>` : `<p class="muted">Chưa có ai — quét mã QR, nhập biệt danh.</p>`;
-    $("#h-goi-y").textContent = "Mỗi người một máy, nhập biệt danh. Vào muộn vẫn chơi được.";
   }
   $("#h-bat").disabled = !vao.length;
 }
@@ -1071,13 +1045,12 @@ function veChon(){
   show("vao");
   if(cfg.tt === "xong"){ $("#v-noi").innerHTML = `<div class="cho-o"><div class="to">Ván này đã kết thúc</div><p class="muted small">Chờ giảng viên mở ván mới — màn hình sẽ tự chuyển.</p></div>`; return; }
   const doi = cfg.che === "doi";
-  const moTa = `${doi ? `Đội đấu đội · ${cfg.N} đội · mỗi người một máy` : "Cá nhân"} · ${cfg.L} câu · ${doi ? "9 giây/câu trắc nghiệm, 10 giây/câu điền" : "15 giây/câu"}${cfg.tt === "chay" ? " · <b class='vang'>đang đua — vào là chạy ngay</b>" : ""}`;
+  const moTa = `${doi ? `Đội đấu đội · ${cfg.N} đội` : "Cá nhân"} · ${cfg.L} câu${cfg.tt === "chay" ? " · <b class='vang'>đang đua — vào là chạy ngay</b>" : ""}`;
   $("#v-noi").innerHTML = `<div><h2 style="font-size:24px">${doi ? "Vào đội" : "Nhập biệt danh"}</h2><p class="small muted" style="margin-top:4px">${moTa}</p></div>
     <div><label class="nhan" for="v-ten">Biệt danh của bạn</label><input id="v-ten" maxlength="24" placeholder="VD: 12 Lan" value="${esc(tenCu)}"></div>
     <p class="loi" id="v-loi" hidden></p>` + (doi
-    ? `<div><span class="nhan">Chọn đội — đội không giới hạn người</span><div class="doi-chon">${DOI.slice(0, cfg.N).map((D, i) =>
-        `<button data-k="${i + 1}" style="--m:${D.mau}"><span class="ic">${D.ic}</span><b>Đội ${i + 1}</b><span>${esc(D.ten)}</span><em></em></button>`).join("")}</div></div>
-       <p class="tiny muted">Mỗi người tự trả lời trên máy mình, thứ tự câu mỗi người một khác. Điểm đội = tổng điểm các thành viên ÷ số người.</p>`
+    ? `<div><span class="nhan">Chọn đội</span><div class="doi-chon">${DOI.slice(0, cfg.N).map((D, i) =>
+        `<button data-k="${i + 1}" style="--m:${D.mau}"><span class="ic">${D.ic}</span><b>Đội ${i + 1}</b><span>${esc(D.ten)}</span><em></em></button>`).join("")}</div></div>`
     : `<button class="btn w" id="v-vao">Vào đường đua →</button>`);
   const layTen = () => { const t = $("#v-ten").value.trim().replace(/\s+/g, " ").slice(0, 24);
     if(!t){ $("#v-loi").hidden = false; $("#v-loi").textContent = "Nhập một biệt danh để bảng điểm gọi tên bạn."; $("#v-ten").focus(); return null; }
@@ -1161,9 +1134,8 @@ function veDau2(){
 function veCho(){
   if(!C) return; show("choi"); veDau2();
   $("#c-noi").innerHTML = `<div class="card cho-o stack"><div class="to">Đã vào phòng ${esc(C.ma)}!</div>
-    <p class="muted">Chờ giảng viên bấm <b>Xuất phát</b>. ${C.che === "doi" ? `Bạn chơi cho <b>${esc(tenDoi(C.doi))}</b>. Mỗi người tự trả lời, thứ tự câu mỗi người một khác — điểm đội là bình quân điểm các thành viên, nên ai cũng quan trọng!` : "Chuẩn bị tinh thần: 15 giây mỗi câu."}</p>
+    <p class="muted">${C.che === "doi" ? `Đội của bạn: <b>${esc(tenDoi(C.doi))}</b>. ` : ""}Chờ giảng viên bấm <b>Xuất phát</b>.</p>
     <div class="lo-trinh" id="c-lt"></div>
-    <p class="small muted">Đúng +1 · sai không mất điểm · mỗi 5 câu một mốc: đúng 5/5 thưởng +2, 4/5 thưởng +1.</p>
     <div class="row" style="justify-content:center"><span class="net" id="c-net"></span></div>
     <button class="btn g sm" id="c-roi" style="align-self:center">Rời phòng</button></div>`;
   veLoTrinh($("#c-lt"), C.tuyen); veMang(); $("#c-roi").onclick = roiHan;
