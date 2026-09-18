@@ -588,7 +588,7 @@ async function tungVaDi(t) {
       } else t.ls.push(`Tung ra ${n}`);
       return diN(t, n);
     }
-    if (t.choGio) { t.ls.push(`${TEN_MAT[k]} — đang chờ gió nên không tính`); return; }
+    if (t.choGio) { t.ls.push(`${TEN_MAT(k)} — đang chờ gió nên không tính`); return; }
     if (k === 'mm') {
       const s = boc(MAY_MAN);
       if (s === 'themLuot') { t.ls.push('🍀 May mắn: được tung thêm'); thongBao(t, '🍀', 'được tung thêm'); await sleep(900); continue; }
@@ -623,7 +623,7 @@ async function tungVaDi(t) {
         baoLon('VỀ VẠCH XUẤT PHÁT', `${tenDoi(t)} tung ra ${k2}`, 'xau'); ghi(`${tenDoi(t)} về vạch xuất phát!`);
         await sleep(1200); t.pos = t.xuatPhat; danhDau();
       }
-    } else { t.ls.push(`Ra ${TEN_MAT[k2]} — bình yên vô sự`); ghi(`${tenDoi(t)} bình yên vô sự.`); }
+    } else { t.ls.push(`Ra ${TEN_MAT(k2)} — bình yên vô sự`); ghi(`${tenDoi(t)} bình yên vô sự.`); }
     return;
   }
 }
