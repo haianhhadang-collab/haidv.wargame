@@ -20,3 +20,17 @@ Mỗi thành viên dùng điện thoại của mình; giảng viên mở phòng 
 
 Câu hỏi lấy từ Giáo trình Tư tưởng Hồ Chí Minh 2026. Dữ liệu trận đi qua máy chủ MQTT công cộng,
 chỉ gồm biệt danh và lựa chọn trong game.
+
+## Đường tới tương lai — cờ đi theo lượt
+
+2–8 đội, mỗi đội một con tàu rời một bến cảng, vượt biển về Pác Bó rồi tự chọn đường qua đất liền
+về Quảng trường Ba Đình. Trả lời đúng thì được quay vòng quay: tiến lên, May mắn, Phần thưởng,
+Trừng phạt hay Bất ngờ; dọc đường có vật cản, cạm bẫy, thách đấu. Mỗi đội 3–5 máy thay phiên nhau.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/tuong-lai/ — hoặc quét mã QR dưới đây.
+  Giảng viên mở phòng trên máy chiếu (hoặc *Chơi thử trên một màn hình*, không cần điện thoại).
+
+![Mã QR vào game Đường tới tương lai](tuong-lai/qr-vao-game.png)
+
+Câu hỏi lấy từ Giáo trình Tư tưởng Hồ Chí Minh 2026. Dữ liệu trận đi qua máy chủ MQTT công cộng,
+chỉ gồm biệt danh và lựa chọn trong game.
