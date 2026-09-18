@@ -126,6 +126,9 @@ svg.bd:not([data-view="toan"]) .chi-toan{display:none}
 .dk-tab button.chon{border-color:#1d2330}
 .dk-tab button.can{box-shadow:0 0 0 3px #e53935 inset}
 .dk-than{padding:0 10px 12px}
+.host-thanh{display:flex;gap:8px;align-items:center;padding:4px 10px;background:#1d2330;color:#fff;font-size:14px}
+.host-thanh button{padding:3px 8px;font-size:13px}
+#hostChoi .dt{height:calc(100vh - 34px);height:calc(100dvh - 34px)}
 </style>
 </head>
 <body>
@@ -316,7 +319,7 @@ function taoBanDo(khung, laMC) {
     huL: svg.querySelector('.huL'), xxL: svg.querySelector('.xxL'), tau: {}, xx: {}, hu: {}, keyNen: '', keySang: ''};
 }
 function veBanDo(B, st, opt) {
-  const doiDung = st.doi.filter(t => !t.vang);
+  const doiDung = st.doi.filter(t => !t.vang && !t.roi && t.lane != null);
   const kn = doiDung.map(t => t.lane + ':' + t.i).join(',');
   if (B.keyNen !== kn) { B.nen.innerHTML = svgBanDoTinh(doiDung); B.keyNen = kn; }
   B.svg.setAttribute('data-view', opt.view);
@@ -422,6 +425,7 @@ const HOST = {kho: null, cau: {}, cho: [], ban: true, can: true, luuLuc: 0, phat
 const conDoiChoi = () => S.doi.filter(t => !t.vang && !t.xong);
 const danhDau = () => { HOST.ban = true; HOST.can = true; };
 const tenDoi = t => `${t.bt} ${t.ten}`;
+const aiDo = () => (S && S.caNhan ? 'người' : 'đội');
 function ghi(c, dam) { S.log.push({l: S.luot, c, d: !!dam}); if (S.log.length > 80) S.log.shift(); danhDau(); }
 function baoLon(b1, b2, kieu, ms) { S.bangCho.push({b1, b2, kieu: kieu || '', ms: ms || 2600}); danhDau(); }
 function thongBao(t, icon, chu) { S.tb.push({id: ++S.dem, icon, chu: `${tenDoi(t)}: ${chu}`, mau: t.mau, luc: now()}); if (S.tb.length > 20) S.tb.shift(); ghi(`${tenDoi(t)}: ${chu}`); }
@@ -447,24 +451,37 @@ function layCau(loai) {
 const giayCau = (x, loai) => loai === 'chinh' ? S.caiDat.giay : loai === 'en' ? 20 : x.l === 'DS' ? 10 : 20;
 function taoVong(tl) { const s = +tl.so; return [['1', s], ['2', s], ['3', s], ['4', s], ['5', s], ['6', s], ['mm', +tl.mm], ['th', +tl.th], ['ph', +tl.ph], ['bn', +tl.bn]].filter(x => x[1] > 0); }
 
+const taoDoi = (mau, i, lane) => Object.assign({}, mau, {i, lane, ben: lane == null ? '' : BEN[lane], may: [], conTro: -1, vang: false,
+  pos: null, xuatPhat: null, lichSu: [], xong: false, hang: 0, luotXong: 0, dung: 0, choGio: null, phat: 0, en: 0,
+  phao: 0, laBan: 0, kkc: 0, soCauDung: 0, bayAn: null, bayAnLoai: null, muDat: [], mocDaQua: {}, nghi: false,
+  buoc: 'cho', ls: [], cau: null, loat: null, cho: null, xx: null, hieu: null, dangDi: false});
 function taoTranMoi(caiDat, kieu) {
-  const n = caiDat.soDoi, dau = Math.floor((8 - n) / 2);
+  const caNhan = !!caiDat.caNhan, n = caiDat.soDoi, dau = Math.floor((8 - n) / 2);
   S = {
-    ma: String(1000 + Math.floor(Math.random() * 9000)), kieu, local: kieu === 'mot', mc: 0, caiDat,
+    ma: String(1000 + Math.floor(Math.random() * 9000)), kieu, local: kieu === 'mot', caNhan, mc: 0, caiDat,
     vong: taoVong(caiDat.tl), pha: 'sanh', luot: 0, dem: 0, soXong: 0, ketThuc: false,
-    doi: Array.from({length: n}, (_, i) => Object.assign({}, DOI_MAU[i], {i, lane: dau + i, ben: BEN[dau + i], may: [], conTro: -1, vang: false,
-      pos: null, xuatPhat: null, lichSu: [], xong: false, hang: 0, luotXong: 0, dung: 0, choGio: null, phat: 0, en: 0,
-      phao: 0, laBan: 0, kkc: 0, soCauDung: 0, bayAn: null, bayAnLoai: null, muDat: [], mocDaQua: {}, nghi: false,
-      buoc: 'cho', ls: [], cau: null, loat: null, cho: null, xx: null, hieu: null, dangDi: false})),
+    doi: caNhan ? [] : Array.from({length: n}, (_, i) => taoDoi(DOI_MAU[i], i, dau + i)),
     thietBi: {}, tuChoi: {}, bayMu: {}, daDung: {}, log: [], tb: [], hu: [], bangCho: [], bang: null, thachDau: null, hangThachDau: [],
-    mocDaHien: {}, dung2: null, ketQua: null
+    mocDaHien: {}, dung2: null, ketQua: null, hostToi: null
   };
+  HOST.toi = null;
   if (S.local) S.doi.forEach(t => { t.may = ['L' + t.i]; S.thietBi['L' + t.i] = {ten: 'Máy chung', doi: t.i, lan: now()}; });
+  if (caNhan && caiDat.hostChoi) { const id = 'H' + Math.random().toString(36).slice(2, 8); themNguoiChoi(id, caiDat.tenHost); HOST.toi = S.hostToi = {id, doi: 0}; }
   taoKho(caiDat);
   if (!HOST.kho.en.length) S.caiDat.en = false;
 }
+/* Chế độ cá nhân: mỗi người một tàu, biểu tượng theo thứ tự vào phòng (lấy biểu tượng còn trống). */
+function themNguoiChoi(id, ten) {
+  const dang = new Set(S.doi.filter(t => !t.roi).map(t => t.bt));
+  const mau = DOI_MAU.find(m => !dang.has(m.bt)) || DOI_MAU[S.doi.length % 8];
+  const t = taoDoi(mau, S.doi.length, null);
+  t.ten = String(ten || '').trim().slice(0, 16) || `Người chơi ${S.doi.filter(x => !x.roi).length + 1}`;
+  t.may = [id]; S.doi.push(t);
+  S.thietBi[id] = {ten: t.ten, doi: t.i, lan: now()};
+  return t;
+}
 const loaiBayRandom = () => ngauNhien(S.caiDat.en ? ['B1', 'B2', 'B3', 'B4', 'B5', 'B6'] : ['B1', 'B2', 'B3', 'B4', 'B5']);
-const conSong = id => S.local || (S.thietBi[id] && now() - S.thietBi[id].lan < 30000);
+const conSong = id => S.local || (HOST.toi && id === HOST.toi.id) || (S.thietBi[id] && now() - S.thietBi[id].lan < 30000);
 function layMayKeTiep(t) {
   if (S.local) return 'L' + t.i;
   const ds = t.may; if (!ds.length) return null;
@@ -474,7 +491,18 @@ function layMayKeTiep(t) {
 const quyen = (t, may, giao) => S.local || may === giao || (!conSong(giao) && t.may.includes(may));
 
 function batDauTran() {
-  if (!S.local) {
+  if (S.caNhan) {
+    const ds = S.doi.filter(t => !t.roi);
+    if (!ds.length) return alert('Chưa có người chơi nào.');
+    const dau = Math.floor((8 - ds.length) / 2);
+    S.doi = ds.map((t, i) => {
+      t.i = i; t.lane = dau + i; t.ben = BEN[t.lane];
+      t.may.forEach(id => { if (S.thietBi[id]) S.thietBi[id].doi = i; });
+      if (HOST.toi && t.may.includes(HOST.toi.id)) HOST.toi.doi = i;
+      return t;
+    });
+    try { if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(() => {}); } catch (e) { /* bỏ qua */ }
+  } else if (!S.local) {
     S.doi.forEach(t => { t.vang = !t.may.length; });
     if (!S.doi.some(t => !t.vang)) return alert('Chưa đội nào có máy vào phòng.');
     const thieu = S.doi.filter(t => !t.vang && t.may.length < 3);
@@ -720,7 +748,7 @@ async function apDungBay(t, loai, chuMu) {
 function trungPhat(t) {
   const ds = conDoiChoi(), muc = ngauNhien(ds), bi = muc === t ? [t] : [t, muc];
   t.ls.push(muc === t ? '⚖️ Trừng phạt: vòng tên đội dừng ở chính đội mình' : `⚖️ Trừng phạt: vòng tên đội dừng ở ${tenDoi(muc)}`);
-  baoLon('⚖️ TRỪNG PHẠT', muc === t ? `${tenDoi(t)} tự chịu phạt: lượt sau trả lời đúng 2 câu` : `${tenDoi(t)} và ${tenDoi(muc)}: mỗi đội trả lời đúng 2 câu ở lượt sau`, 'xau');
+  baoLon('⚖️ TRỪNG PHẠT', muc === t ? `${tenDoi(t)} tự chịu phạt: lượt sau trả lời đúng 2 câu` : `${tenDoi(t)} và ${tenDoi(muc)}: mỗi ${aiDo()} trả lời đúng 2 câu ở lượt sau`, 'xau');
   for (const d of bi) {
     if (d.phao > 0) { d.phao--; hieuUng(d, '⛑️', 'sang'); thongBao(d, '⛑️', 'Phao cứu sinh giúp thoát phạt'); }
     else { d.phat += 2; hieuUng(d, '⚖️', 'rung'); thongBao(d, '⚖️', 'chịu phạt — lượt sau trả lời đúng 2 câu Đúng/Sai'); }
@@ -772,7 +800,7 @@ async function thachDau(a, b) {
   const x = layCau('ds'), giay = giayCau(x, 'thach'), bd = now() + 2500;
   S.thachDau = {khoa: `td.${++S.dem}`, id: x.id, doi: [a.i, b.i], may: {[a.i]: layMayKeTiep(a), [b.i]: layMayKeTiep(b)}, batDau: bd, han: bd + giay * 1000, giay, tl: {}, luc: {}};
   hieuUng(a, '⚔️', 'nhay'); hieuUng(b, '⚔️', 'nhay');
-  baoLon('⚔️ THÁCH ĐẤU!', `${tenDoi(a)} gặp ${tenDoi(b)} — câu Đúng/Sai ${giay} giây, đội thua lùi 2 ô`, 'xau');
+  baoLon('⚔️ THÁCH ĐẤU!', `${tenDoi(a)} gặp ${tenDoi(b)} — câu Đúng/Sai ${giay} giây, ${aiDo()} thua lùi 2 ô`, 'xau');
   danhDau();
   await choDen(() => { const td = S.thachDau; return !td || (td.tl[a.i] !== undefined && td.tl[b.i] !== undefined) || now() > td.han; });
   const td = S.thachDau; if (!td) return;
@@ -780,7 +808,7 @@ async function thachDau(a, b) {
   const kq = [a, b].map(d => ({d, dung: td.tl[d.i] !== undefined && cham(xq, td.tl[d.i]), luc: td.luc[d.i] || Infinity}));
   const dung = kq.filter(z => z.dung).sort((p, q) => p.luc - q.luc);
   td.ketQua = true; td.dapAn = loiDapAn(xq); td.a = xq.a; td.dung = Object.fromEntries(kq.map(z => [z.d.i, z.dung]));
-  if (!dung.length) { baoLon('HÒA', 'Cả hai đội đều chưa đúng — không đội nào lùi'); ghi('Thách đấu hòa.'); }
+  if (!dung.length) { baoLon('HÒA', `Cả hai ${aiDo()} đều chưa đúng — không ai phải lùi`); ghi('Thách đấu hòa.'); }
   else { const thang = dung[0].d, thua = thang === a ? b : a; td.thang = thang.i; baoLon(`${tenDoi(thang)} THẮNG`, `${tenDoi(thua)} lùi 2 ô`, 'tot'); ghi(`${tenDoi(thang)} thắng thách đấu, ${tenDoi(thua)} lùi 2 ô.`); await sleep(1200); thua.pos = oLui2(thua); hieuUng(thua, '💨', 'rung'); }
   danhDau(); await sleep(2600); S.thachDau = null; danhDau();
 }
@@ -829,7 +857,10 @@ function xuLyHanhDong(m) {
   const tb = S.thietBi[m.id];
   if (tb) tb.lan = now();
   if (m.t === 'o') { if (!tb && m.doi != null) nhanVao(m); else danhDau(); return; }
-  if (m.t === 'roi') { if (tb) { const d = S.doi[tb.doi]; if (S.pha === 'sanh') d.may = d.may.filter(x => x !== m.id); delete S.thietBi[m.id]; danhDau(); } return; }
+  if (m.t === 'roi') {
+    if (tb) { const d = S.doi[tb.doi]; if (S.pha === 'sanh' && d) { if (S.caNhan) d.roi = true; else d.may = d.may.filter(x => x !== m.id); } delete S.thietBi[m.id]; danhDau(); }
+    return;
+  }
   const t = S.doi[m.doi]; if (!t) return;
   if (!S.local && (!tb || tb.doi !== m.doi)) return;
   if (m.t === 'tl') nhanTraLoi(t, m.id, m.khoa, m.chon);
@@ -838,6 +869,13 @@ function xuLyHanhDong(m) {
   danhDau();
 }
 function nhanVao(m) {
+  if (S.caNhan) {
+    const cu = S.thietBi[m.id];
+    if (cu && S.doi[cu.doi] && !S.doi[cu.doi].roi) { cu.lan = now(); danhDau(); return; }
+    if (S.pha !== 'sanh') { S.tuChoi[m.id] = 'Trận đã bắt đầu — không vào thêm được.'; danhDau(); return; }
+    if (S.doi.filter(t => !t.roi).length >= 8) { S.tuChoi[m.id] = 'Phòng đã đủ 8 người.'; danhDau(); return; }
+    themNguoiChoi(m.id, m.ten); delete S.tuChoi[m.id]; danhDau(); return;
+  }
   const t = S.doi[m.doi]; if (!t || S.local) return;
   const cu = S.thietBi[m.id];
   if (cu && cu.doi !== m.doi) { const d0 = S.doi[cu.doi]; d0.may = d0.may.filter(x => x !== m.id); }
@@ -855,8 +893,8 @@ function nhanVao(m) {
 function congKhai() {
   const T = now(), cl = h => h ? Math.max(0, h - T) : 0;
   return {
-    ma: S.ma, pha: S.pha, luot: S.luot, en: S.caiDat.en, local: S.local,
-    doi: S.doi.map(t => ({
+    ma: S.ma, pha: S.pha, luot: S.luot, en: S.caiDat.en, local: S.local, caNhan: !!S.caNhan,
+    doi: S.doi.map(t => ({ roi: !!t.roi,
       i: t.i, bt: t.bt, ten: t.ten, ben: t.ben, mau: t.mau, lane: t.lane, vang: t.vang, may: t.may, pos: t.pos, gd: gdCua(t.pos), kc: t.pos ? BD.kc[t.pos] : null,
       xong: t.xong, hang: t.hang, dung: t.dung, nghi: t.nghi, choGio: t.choGio, phat: t.phat, en: t.en, phao: t.phao, laBan: t.laBan, kkc: t.kkc,
       soCauDung: t.soCauDung, buoc: t.buoc, ls: t.ls, muDat: t.muDat, hieu: t.hieu,
@@ -976,7 +1014,8 @@ function veTrangDau() {
     <div class="luoi2">
       <div class="the cot" style="${coMa ? 'order:2' : ''}">
         <h3>Giảng viên</h3>
-        <button class="chinh" data-act="caiDat" data-kieu="mang">Mở phòng: máy chiếu + điện thoại →</button>
+        <button class="chinh" data-act="caiDat" data-kieu="mang">Mở phòng đội: máy chiếu + điện thoại →</button>
+        <button data-act="caiDat" data-kieu="canhan">Mở phòng cá nhân: máy chiếu + 1–8 người →</button>
         <button data-act="caiDat" data-kieu="mot">Chơi thử trên một màn hình →</button>
         <button data-act="huongDan">📖 Hướng dẫn chơi</button>
         ${tiep ? `<button data-act="tiepTuc">↻ Tiếp tục trận đang dở (mã ${esc(tiep.S.ma)}, lượt ${tiep.S.luot})</button>` : ''}
@@ -986,7 +1025,8 @@ function veTrangDau() {
         <input id="oMa" placeholder="Mã phòng (4 số)" inputmode="numeric" maxlength="4" value="${esc(coMa || '')}">
         <input id="oTen" placeholder="Biệt danh (tuỳ chọn)" maxlength="20" value="${esc(docVao().ten || '')}">
         <button class="chinh" data-act="vaoPhong">Vào phòng →</button>
-        <p class="mo" style="margin:0;font-size:14px">Xoay ngang điện thoại để xem bản đồ rộng hơn.</p>
+        <button data-act="caiDat" data-kieu="canhanChoi">🏁 Chơi cá nhân: tạo phòng trên máy này (1–8 người) →</button>
+        <p class="mo" style="margin:0;font-size:14px">Chơi cá nhân: máy tạo phòng cũng là người chơi; bạn bè nhập mã phòng để đua cùng, hoặc chơi một mình. Xoay ngang điện thoại để xem bản đồ rộng hơn.</p>
       </div>
     </div></div>`;
   if (coMa) { const o = $('#oTen'); if (o) o.focus(); }
@@ -1002,6 +1042,7 @@ function veHuongDan() {
     <li>Chỗ có nhiều đường: <b>chạm vào ô đang sáng</b> để chọn nơi đến.</li>
     <li>Chỉ ô mình dừng lại mới có tác dụng; đi ngang qua thì không sao.</li>
     <li>Hai đội dừng chung một ô ở vịnh hoặc đất liền thì <b>thách đấu</b> cuối lượt: đội thua lùi 2 ô.</li>
+    <li><b>Chơi cá nhân</b> (1–8 người): mỗi người một máy, một tàu; luật như trên.</li>
   </ol></div>
   <div class="the" style="margin-top:14px"><h3>Xúc xắc</h3>
     <div class="hang" style="gap:14px">${['1', '2', '3', '4', '5', '6', 'mm', 'th', 'ph', 'bn'].map(k => `<span class="xx" style="--c:54px">${htmlMat(k)}</span>`).join('')}</div>
@@ -1011,14 +1052,17 @@ function veHuongDan() {
 function veCaiDat(kieu) {
   MAN = 'caidat';
   const buoiDs = [...new Set(Object.values(CD_BUOI))].sort((a, b) => a - b), toiDa = buoiDs[buoiDs.length - 1] || 11, coEn = KHO_EN.length > 0;
-  goc.innerHTML = `<div class="dau"><h1>${kieu === 'mot' ? 'Chơi thử trên một màn hình' : 'Mở phòng'}</h1>
+  const caNhan = kieu === 'canhan' || kieu === 'canhanChoi';
+  const tieuDe = {mot: 'Chơi thử trên một màn hình', canhan: 'Mở phòng cá nhân (1–8 người)', canhanChoi: 'Chơi cá nhân trên máy này'}[kieu] || 'Mở phòng đội';
+  goc.innerHTML = `<div class="dau"><h1>${tieuDe}</h1>
   <div class="the cot" style="max-width:640px">
-    <label class="o">Số đội <select id="cdSoDoi">${[2, 3, 4, 5, 6, 7, 8].map(n => `<option ${n === (kieu === 'mot' ? 4 : 6) ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+    ${kieu === 'canhanChoi' ? `<label class="o">Biệt danh của bạn <input id="cdTen" maxlength="16" value="${esc(($('#oTen') && $('#oTen').value) || docVao().ten || '')}" placeholder="Người chơi 1"></label>` : ''}
+    ${caNhan ? '<p class="mo" style="margin:0">Mỗi người một máy, một tàu; tối đa 8 người. Người khác vào bằng mã phòng.</p>' : `<label class="o">Số đội <select id="cdSoDoi">${[2, 3, 4, 5, 6, 7, 8].map(n => `<option ${n === (kieu === 'mot' ? 4 : 6) ? 'selected' : ''}>${n}</option>`).join('')}</select></label>`}
     <label class="o">Lớp đã học đến buổi <select id="cdBuoi">${buoiDs.map(b => `<option value="${b}" ${b === toiDa ? 'selected' : ''}>Buổi ${b} (chủ đề ${Object.keys(CD_BUOI).filter(c => CD_BUOI[c] <= b).join(', ')})</option>`).join('')}</select></label>
     <label class="o">Hành trình <select id="cdNgan"><option value="0">Chuẩn — từ bến cảng (khoảng 20 câu)</option><option value="1">Ngắn — từ bến dừng chân thứ nhất (khoảng 17 câu)</option></select></label>
     <label class="o">Thời gian trả lời <select id="cdGiay"><option>30</option><option selected>45</option><option>60</option></select></label>
     <label class="o">Thử thách tiếng Anh <input type="checkbox" id="cdEn" ${coEn ? 'checked' : 'disabled'}></label>
-    ${kieu === 'mot' ? '' : '<label class="o">Chạy thử: cho đội dưới 3 máy vẫn xuất phát <input type="checkbox" id="cdThu"></label>'}
+    ${kieu === 'mang' ? '<label class="o">Chạy thử: cho đội dưới 3 máy vẫn xuất phát <input type="checkbox" id="cdThu"></label>' : ''}
     <details><summary class="mo">Nâng cao: tỉ lệ các mặt xúc xắc (%)</summary>
       <label class="o">Mỗi mặt số 1 → 6 <input id="tlSo" type="number" value="${TL_MAC_DINH.so}" style="width:80px"></label>
       <label class="o">May mắn <input id="tlMm" type="number" value="${TL_MAC_DINH.mm}" style="width:80px"></label>
@@ -1026,18 +1070,18 @@ function veCaiDat(kieu) {
       <label class="o">Trừng phạt <input id="tlPh" type="number" value="${TL_MAC_DINH.ph}" style="width:80px"></label>
       <label class="o">Bất ngờ <input id="tlBn" type="number" value="${TL_MAC_DINH.bn}" style="width:80px"></label>
     </details>
-    <div class="hang"><button data-act="veDau">← Quay lại</button><button class="chinh" data-act="taoPhong" data-kieu="${kieu}">${kieu === 'mot' ? 'Bắt đầu chơi thử →' : 'Mở phòng →'}</button></div>
+    <div class="hang"><button data-act="veDau">← Quay lại</button><button class="chinh" data-act="taoPhong" data-kieu="${kieu}">${kieu === 'mot' ? 'Bắt đầu chơi thử →' : kieu === 'canhanChoi' ? 'Tạo phòng →' : 'Mở phòng →'}</button></div>
   </div></div>`;
 }
-function docCaiDat() {
+function docCaiDat(kieu) {
   const v = id => $(id) ? $(id).value : null, so = id => Math.max(0, +(v(id) || 0));
-  return {soDoi: +v('#cdSoDoi'), buoi: +v('#cdBuoi'), ngan: v('#cdNgan') === '1', giay: +v('#cdGiay'), en: !!($('#cdEn') && $('#cdEn').checked),
+  return {caNhan: kieu === 'canhan' || kieu === 'canhanChoi', hostChoi: kieu === 'canhanChoi', tenHost: v('#cdTen') || '', soDoi: +v('#cdSoDoi') || 0, buoi: +v('#cdBuoi'), ngan: v('#cdNgan') === '1', giay: +v('#cdGiay'), en: !!($('#cdEn') && $('#cdEn').checked),
     chayThu: !!($('#cdThu') && $('#cdThu').checked), tl: {so: so('#tlSo'), mm: so('#tlMm'), th: so('#tlTh'), ph: so('#tlPh'), bn: so('#tlBn')}};
 }
 
 /* ===================== MÀN MÁY CHIẾU ===================== */
 async function moPhong(kieu) {
-  taoTranMoi(docCaiDat(), kieu === 'mot' ? 'mot' : (QS.get('noi') === 'bc' ? 'bc' : 'mqtt'));
+  taoTranMoi(docCaiDat(kieu), kieu === 'mot' ? 'mot' : (QS.get('noi') === 'bc' ? 'bc' : 'mqtt'));
   batDauNhip();
   if (S.local) { veLaiMC(true); batDauTran(); return; }
   MAN = 'sanh'; veLaiMC(true);
@@ -1057,6 +1101,7 @@ function linkVao() {
 function veLaiMC(toanBo) {
   if (!S || (MAN !== 'sanh' && MAN !== 'tran' && !toanBo)) return;
   if (S.pha === 'sanh') return veSanh();
+  if (HOST.toi) return veHostChoi(toanBo);
   if (MAN !== 'tran' || toanBo || !$('.mc')) {
     MAN = 'tran';
     goc.innerHTML = `<div class="mc">
@@ -1135,9 +1180,10 @@ function veKetQua(st) {
   return `<div style="padding:12px"><h2>Kết quả</h2><table class="bg">${kq.map(x => `<tr><td style="font-size:22px;font-weight:800">${x.thu}</td>
     <td><span class="bieu em" style="border-color:${x.mau};margin-right:6px">${x.bt}</span>${esc(x.ten)}</td>
     <td>${x.xong ? `Về Ba Đình (lượt ${x.luotXong})` : `còn ${x.kc} bước`}<div class="mo" style="font-size:13px">${x.soCauDung} câu đúng</div></td></tr>`).join('')}</table>
-    <p class="mo" style="font-size:14px">Thứ hạng này là xếp hạng nhóm của buổi (3-2-1-0). Trong game không có điểm.</p></div>`;
+    <p class="mo" style="font-size:14px">${S.caNhan ? 'Chơi cá nhân: thứ hạng chỉ để vui, không vào sổ.' : 'Thứ hạng này là xếp hạng nhóm của buổi (3-2-1-0). Trong game không có điểm.'}</p></div>`;
 }
 function veSanh() {
+  if (S.caNhan) return veSanhCaNhan();
   MAN = 'sanh';
   const link = linkVao(), soMay = t => t.may.length;
   const du = S.doi.filter(t => soMay(t) > 0), du3 = du.every(t => soMay(t) >= 3), coThe = du.length > 0 && (du3 || S.caiDat.chayThu);
@@ -1153,9 +1199,42 @@ function veSanh() {
       <div class="hang"><button data-act="veDauMC">← Trang đầu</button><button class="chinh" data-act="batDau" ${coThe ? '' : 'disabled'}>Bắt đầu trận →</button></div>
       ${!du3 && du.length ? `<p class="mo" style="font-size:14px">${S.caiDat.chayThu ? 'Đang chạy thử: đội dưới 3 máy vẫn xuất phát.' : 'Còn đội chưa đủ 3 máy.'}</p>` : ''}
     </div></div></div>`;
+  veQR(link);
+}
+function veQR(link) {
   if (link) napThuVien('https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js', 'qrcode').then(() => {
     const q = window.qrcode(0, 'M'); q.addData(link); q.make(); const el = $('#qr'); if (el) el.innerHTML = q.createSvgTag({cellSize: 6, margin: 2});
   }).catch(() => {});
+}
+function veSanhCaNhan() {
+  MAN = 'sanh';
+  const link = linkVao(), ds = S.doi.filter(t => !t.roi), toi = HOST.toi ? S.doi[HOST.toi.doi] : null;
+  goc.innerHTML = `<div class="dau" style="max-width:1100px"><h1>${toi ? 'Phòng chơi cá nhân' : 'Mở phòng cá nhân'}</h1>
+    <div class="luoi2"><div class="the cot" style="align-items:center;text-align:center">
+      <div class="mo">Mã phòng — nhập mã này hoặc quét QR để vào đua</div><div class="ma-lon">${S.ma}</div>
+      <div id="qr" style="min-height:40px"></div>
+      ${link ? `<div class="mo" style="font-size:13px;word-break:break-all">${esc(link)}</div>` : '<div class="canh">Game đang mở từ tệp trên máy: máy khác không vào được. Chơi một mình thì vẫn được.</div>'}
+      <div class="mo" style="font-size:14px">${Mang.ketNoi ? '🟢 Đã nối máy chủ trung gian' : HOST.loiMang ? '🔴 ' + esc(HOST.loiMang) : '… đang nối mạng'}</div>
+    </div>
+    <div class="the"><h3>Người chơi (${ds.length}/8)</h3><table class="bg">${ds.map(t => `<tr><td style="width:44px"><span class="bieu em" style="border-color:${t.mau}">${t.bt}</span></td><td><b>${esc(t.ten)}</b>${toi === t ? ' <span class="mo">(bạn)</span>' : ''}</td></tr>`).join('') || '<tr><td class="mo">Chưa có ai vào phòng.</td></tr>'}</table>
+      <p class="mo" style="font-size:14px">${toi ? 'Bấm Bắt đầu khi đủ người — chơi một mình cũng được. Máy này đang giữ phòng: giữ màn hình sáng suốt trận.' : 'Mỗi người vào bằng máy của mình; tối đa 8 người.'}</p>
+      <div class="hang"><button data-act="veDauMC">← Trang đầu</button><button class="chinh" data-act="batDau" ${ds.length ? '' : 'disabled'}>Bắt đầu →</button></div>
+    </div></div></div>`;
+  veQR(link);
+}
+/* Chơi cá nhân, máy giữ phòng cũng là người chơi: hiện màn điện thoại của mình + thanh điều khiển phòng. */
+function veHostChoi(toanBo) {
+  if (MAN !== 'tran' || toanBo || !$('#hostChoi')) {
+    MAN = 'tran';
+    goc.innerHTML = `<div id="hostChoi"><div class="host-thanh"><span>Phòng <b>${S.ma}</b></span><span id="hcLuot"></span><span style="flex:1"></span><button class="nho" data-act="ketThuc" id="nutKet">⏹ Kết thúc</button><button class="nho" data-act="veDauMC" id="nutVe">← Thoát</button></div><div data-khung="1"></div><div id="mcBang"></div></div>`;
+  }
+  const st = congKhai();
+  $('#hcLuot').textContent = S.pha === 'ket' ? '· kết thúc' : `· lượt ${S.luot || 0} · ${st.doi.length} người`;
+  const khung = goc.querySelector('[data-khung]');
+  khung.dataset.id = HOST.toi.id; khung.dataset.doi = HOST.toi.doi;
+  veThietBi(khung, st, HOST.toi, true);
+  $('#mcBang').innerHTML = S.bang ? `<div class="bang ${S.bang.kieu}" style="position:fixed"><div class="b1">${esc(S.bang.b1)}</div><div class="b2">${esc(S.bang.b2)}</div></div>` : '';
+  capNhatDongHo();
 }
 function veBangDieuKhien(st) {
   const el = $('#mcDk'); if (!el) return;
@@ -1204,7 +1283,7 @@ function hanhDongMC(act, d) {
 async function tiepTucTran() {
   let luuCu = null; try { luuCu = JSON.parse(localStorage.getItem('dttl-tran2') || 'null'); } catch (e) { /* bỏ qua */ }
   if (!luuCu) return veTrangDau();
-  S = luuCu.S; S.ketThuc = false; S.thachDau = null; S.bangCho = []; S.bang = null; S.hu = []; S.hangThachDau = [];
+  S = luuCu.S; HOST.toi = S.hostToi || null; S.ketThuc = false; S.thachDau = null; S.bangCho = []; S.bang = null; S.hu = []; S.hangThachDau = [];
   S.doi.forEach(t => { t.cau = null; t.cho = null; t.dangDi = false; t.buoc = 'cho'; });
   taoKho(S.caiDat); batDauNhip();
   if (!S.local) await noiMangMC();
@@ -1226,7 +1305,7 @@ function luuVao() { try { localStorage.setItem('dttl-vao-' + MAY.id, JSON.string
 async function vaoPhong() {
   const ma = ($('#oMa').value || '').trim(), ten = ($('#oTen').value || '').trim();
   if (!/^\d{4}$/.test(ma)) { alert('Nhập mã phòng 4 chữ số.'); return; }
-  MAY.id = idMay(); MAY.ma = ma; MAY.ten = ten;
+  MAY.id = idMay(); MAY.ma = ma; MAY.ten = ten; MAY.daXin = false; MAY.st = null;
   const cu = docVao(); MAY.doi = cu.ma === ma && now() - (cu.luc || 0) < 3 * 3600e3 ? cu.doi : null;
   luuVao();
   MAN = 'may'; goc.innerHTML = `<div class="dau"><div class="tb">Đang nối vào phòng ${esc(ma)}…</div></div>`;
@@ -1259,7 +1338,15 @@ function khoaXacNhan(st) {
 }
 function veMay() {
   const st = MAY.st; if (!st) return;
-  if (MAY.doi == null || !st.thietBi[MAY.id]) return veChonDoi(st);
+  if (st.caNhan) {                                   // cá nhân: vào thẳng, không chọn đội
+    const tb = st.thietBi[MAY.id], loi = st.tuChoi && st.tuChoi[MAY.id];
+    if (!tb) {
+      if (!loi && !MAY.daXin) { MAY.daXin = true; const m = {t: 'vao', id: MAY.id, doi: -1, ten: MAY.ten}; Mang.gui('a', m); MAY.cho = {msg: m, khoa: khoaXacNhan(st), luc: now(), lan: 0}; }
+      goc.innerHTML = `<div class="dau">${loi ? `<div class="tb xau">${esc(loi)}</div><button data-act="veDau">← Trang đầu</button>` : '<div class="tb">Đang vào phòng…</div>'}</div>`;
+      return;
+    }
+    if (MAY.doi !== tb.doi) { MAY.doi = tb.doi; luuVao(); }
+  } else if (MAY.doi == null || !st.thietBi[MAY.id]) return veChonDoi(st);
   let khung = goc.querySelector('[data-khung]');
   if (!khung) { goc.innerHTML = '<div data-khung="1"></div>'; khung = goc.querySelector('[data-khung]'); }
   khung.dataset.id = MAY.id; khung.dataset.doi = MAY.doi;
@@ -1292,7 +1379,7 @@ function veThietBi(khung, st, toi, coBanDo) {
     const tb = st.thietBi[toi.id] || {}, thu = t.may.indexOf(toi.id) + 1;
     khung._dau.style.background = t.mau;
     khung._dau.innerHTML = `<span class="bieu em" style="border-color:#fff;width:30px;height:30px;font-size:17px">${t.bt}</span><span class="t">${esc(t.ten)}</span>`
-      + `<span style="font-size:13px">máy ${thu}/${t.may.length}${tb.ten ? ' · ' + esc(tb.ten) : ''}${t.kc != null ? ` · ${GD_TEN[t.gd]} · còn ${t.kc} bước` : ''}</span>`
+      + `<span style="font-size:13px">${st.caNhan ? '' : `máy ${thu}/${t.may.length}${tb.ten ? ' · ' + esc(tb.ten) : ''}`}${t.kc != null ? ` · ${GD_TEN[t.gd]} · còn ${t.kc} bước` : ''}</span>`
       + `<span class="dh">${hetMs(dh)}</span>`
       + [['gan', '🔍 Gần tôi'], ['gd', '🗺️ Chặng'], ['toan', '🌐 Toàn cảnh']].map(([k, n]) => `<button class="${MAY.xem === k ? 'bat' : ''}" data-act="xem" data-v="${k}">${n}</button>`).join('')
       + `<button data-act="toanMH">⛶</button>`;
@@ -1312,6 +1399,13 @@ function veThietBi(khung, st, toi, coBanDo) {
 function noiDungMay(st, t, toi, coBanDo, dhHtml) {
   const tenMay = id => { const x = st.thietBi[id]; const k = t.may.indexOf(id) + 1; return (x && x.ten) ? `${x.ten} (máy ${k})` : `máy ${k}`; };
   let h = coBanDo ? '' : `<div class="hang" style="margin:6px 0"><span class="bieu em" style="border-color:${t.mau}">${t.bt}</span><b>${esc(t.ten)}</b><span class="mo">${t.kc != null ? `· ${GD_TEN[t.gd]} · còn ${t.kc} bước` : ''}</span><b style="margin-left:auto">${dhHtml}</b></div>`;
+  if (st.pha === 'sanh' && st.caNhan) {
+    const ds = st.doi.filter(x => !x.roi);
+    return h + `<div class="tb">Đã vào phòng. Tàu của bạn: <span class="em">${t.bt}</span> <b>${esc(t.ten)}</b>. Chờ chủ phòng bắt đầu.</div>
+      <p><b>Người chơi (${ds.length}/8):</b> ${ds.map(x => `<span class="em">${x.bt}</span> ${esc(x.ten)}`).join(' · ')}</p>
+      <p class="mo">Trả lời đúng là xúc xắc tự lăn và tàu đi ngay. Ai về Ba Đình trước thì thắng.</p>
+      <button data-act="roi">← Rời phòng</button>`;
+  }
   if (st.pha === 'sanh') {
     return h + `<div class="tb">Đã vào đội <b>${t.bt} ${esc(t.ten)}</b>. Chờ giảng viên bắt đầu trận.</div>
       <p><b>Các máy của đội (${t.may.length}/5):</b> ${t.may.map(id => esc(tenMay(id))).join(' · ')}</p>
@@ -1320,11 +1414,11 @@ function noiDungMay(st, t, toi, coBanDo, dhHtml) {
   }
   if (st.pha === 'ket') {
     const kq = st.ketQua || [], toiKq = kq.find(x => x.i === t.i);
-    return h + `<div class="tb tot" style="font-size:19px">Trận kết thúc${toiKq ? ` — đội ${esc(t.ten)} xếp thứ <b>${toiKq.thu}</b>` : ''}</div>`
+    return h + `<div class="tb tot" style="font-size:19px">Trận kết thúc${toiKq ? ` — ${st.caNhan ? 'bạn' : 'đội ' + esc(t.ten)} xếp thứ <b>${toiKq.thu}</b>` : ''}</div>`
       + kq.map(x => `<div>${x.thu}. ${x.bt} ${esc(x.ten)} — ${x.xong ? 'về Ba Đình' : 'còn ' + x.kc + ' bước'}</div>`).join('');
   }
   if (t.vang) return h + '<div class="tb vang">Đội không tham gia trận này.</div>';
-  if (t.xong) return h + `<div class="tb tot" style="font-size:19px">🏁 Đã về Ba Đình — thứ ${t.hang}. Chờ các đội khác.</div>`;
+  if (t.xong) return h + `<div class="tb tot" style="font-size:19px">🏁 Đã về Ba Đình — thứ ${t.hang}. Chờ ${st.caNhan ? 'mọi người' : 'các đội khác'}.</div>`;
   const nhan = nhanDoi(t); if (nhan) h += `<div style="margin-bottom:4px">${nhan}</div>`;
   const td = st.thachDau;
   if (td && td.doi.includes(t.i)) return h + veThachDauMay(st, t, toi, td, tenMay);
@@ -1384,13 +1478,13 @@ function veThachDauMay(st, t, toi, td, tenMay) {
   return h;
 }
 function hanhDongMay(act, d, khung) {
-  const toi = {id: khung.dataset.id, doi: +khung.dataset.doi};
-  const st = S && S.local ? congKhai() : MAY.st; if (!st) return;
+  const toi = {id: khung.dataset.id, doi: +khung.dataset.doi}, laHost = !!(S && (S.local || HOST.toi));
+  const st = laHost ? congKhai() : MAY.st; if (!st) return;
   const t = st.doi[toi.doi];
-  const lamMoi = () => (S && S.local ? veLaiMC() : veMay());
+  const lamMoi = () => (laHost ? veLaiMC() : veMay());
   const gui = m => {
     m.id = toi.id; m.doi = toi.doi;
-    if (S && S.local) { xuLyHanhDong(m); veLaiMC(); return; }
+    if (laHost) { xuLyHanhDong(m); veLaiMC(); return; }
     Mang.gui('a', m); MAY.cho = {msg: m, khoa: khoaXacNhan(MAY.st), luc: now(), lan: 0};
   };
   if (act === 'tl' || act === 'td') return gui({t: act, khoa: d.khoa, chon: d.chon});
@@ -1404,7 +1498,7 @@ function hanhDongMay(act, d, khung) {
   if (act === 'o') { if (t && t.cho) gui({t: 'chon', seq: t.cho.seq, gt: d.o}); return; }
   if (act === 'xem') { MAY.xem = d.v; return lamMoi(); }
   if (act === 'toanMH') return toanManHinh();
-  if (act === 'roi') { Mang.gui('a', {t: 'roi', id: toi.id, doi: toi.doi}); MAY.doi = null; luuVao(); return veMay(); }
+  if (act === 'roi') { Mang.gui('a', {t: 'roi', id: toi.id, doi: toi.doi}); MAY.doi = null; luuVao(); if (st.caNhan) { MAN = 'dau'; setTimeout(() => { Mang.dong(); veTrangDau(); }, 300); return; } return veMay(); }
 }
 document.addEventListener('click', e => {           // chọn đội (ngoài khung máy)
   const b = e.target.closest('[data-act="chonDoi"]'); if (!b) return;
