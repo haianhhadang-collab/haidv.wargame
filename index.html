@@ -49,6 +49,7 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13.5px;color:var(--
 .chip.do{background:var(--do);color:var(--nen)}.chip.xanh{background:var(--xanh-nen);color:var(--xanh)}.chip.vang{background:var(--vang-nen)}
 .dem{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:clamp(28px,3.4vw,44px);line-height:1;min-width:2em;text-align:right}
 .dem.gap{color:var(--do)}
+.qr-o{background:#fff;padding:6px;border:2px solid var(--vien);line-height:0;align-self:flex-start}.qr-o svg{display:block}
 .ma{font-family:"Baloo 2",sans-serif;font-weight:800;font-size:clamp(32px,4.6vw,52px);letter-spacing:.08em;line-height:1}
 .cau{font-size:clamp(18px,2.3vw,26px);line-height:1.45;font-weight:500}
 .trong{display:inline-block;min-width:4em;border-bottom:3px dashed var(--do);color:var(--do);text-align:center;font-weight:700;padding:0 6px}
@@ -524,7 +525,8 @@ details.tay{border:2px dashed var(--nhat);padding:10px 12px}
   <div class="top">
     <button class="link" id="h-ve">← Trang đầu</button>
     <div><p class="eyebrow">Mã phòng</p><p class="ma" id="h-ma"></p></div>
-    <div class="small muted" style="max-width:380px">Mọi người mở <b id="h-url"></b> → nhập mã, chọn tên đội. <b>Chỉ huy vào trước.</b><br><span id="h-net"></span><br><span class="warn" id="h-lo" hidden>Đang chạy trên máy này (localhost)</span></div>
+    <div id="h-qr" class="qr-o" hidden title="Quét để vào phòng"></div>
+    <div class="small muted" style="max-width:380px"><b>Quét mã QR</b> hoặc mở <b id="h-url"></b> → nhập mã, chọn tên đội. <b>Chỉ huy vào trước.</b><br><span id="h-net"></span><br><span class="warn" id="h-lo" hidden>Máy chiếu đang chạy bản trên máy này — điện thoại vào bản trên mạng qua mã QR.</span></div>
     <span class="sp"></span><span class="chip" id="h-vong"></span><p class="dem" id="h-dem"></p>
   </div>
   <div class="san"><div class="stack"><div id="h-main" class="stack"></div><div id="h-ho" class="stack"></div></div><div id="h-ben" class="stack"></div></div>
@@ -831,6 +833,27 @@ function veMang(){ const on = SYNC.coMay(), dang = !on && SYNC.dangThu();
    giữ luật, hiện bảng kết quả và tường thuật. Xong hết thì mở
    nút Thành tích.
    ============================================================ */
+/* địa chỉ game cho điện thoại: đang chạy bản trên mạng thì dùng chính nó; chạy từ tệp / máy này thì dùng bản trên GitHub Pages */
+const DIA_CHI_WEB = "https://haianhhadang-collab.github.io/haidv.wargame/";
+const laBanWeb = ()=> /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[::1\]|192\.168\.|10\.)/.test(location.hostname);
+const diaChiGame = ()=> laBanWeb() ? location.origin + location.pathname.replace(/index\.html$/, "") : DIA_CHI_WEB;
+/* mã QR (thư viện qrcode-generator nạp khi cần từ jsdelivr); không nạp được thì chỉ còn địa chỉ chữ */
+let hueQR = null;
+function napQR(){
+  if(!hueQR) hueQR = new Promise(r=>{ if(window.qrcode) return r(true);
+    const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+    sc.onload = ()=> r(!!window.qrcode); sc.onerror = ()=>{ hueQR = null; r(false); }; document.head.appendChild(sc); });
+  return hueQR;
+}
+function veQR(el, text, px){
+  if(!el) return; el.hidden = true;
+  napQR().then(ok=>{ if(!ok || !el.isConnected) return;
+    const q = qrcode(0, "M"); q.addData(text); q.make();
+    el.innerHTML = q.createSvgTag({cellSize: 4, margin: 2});
+    const sv = el.querySelector("svg"); sv.setAttribute("width", px); sv.setAttribute("height", px);
+    el.hidden = false; });
+}
+
 let H = null;
 const D = so => H.doi[so-1];
 const diem = d => Object.values(d.bk).reduce((a,b)=>a+b, 0);
@@ -905,8 +928,10 @@ function ketNoiPhong(){
       if(v.ch && !H.chiHuy[so] && !(bo && v.luc <= bo)){ H.chiHuy[so] = v.id; ke(`${tenDoi(so)}: Chỉ huy đã vào phòng`); doi = true; } });
     if(doi){ H.khoaVe = ""; gui(); veHost(); } }));
   $("#h-ma").textContent = H.ma;
-  $("#h-url").textContent = location.host ? location.host + location.pathname.replace(/index\.html$/, "") : "trang game này";
-  $("#h-lo").hidden = !(location.protocol === "file:" || /^(localhost|127\.|\[::1\])/.test(location.hostname));
+  const web = diaChiGame();
+  $("#h-url").textContent = web.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  $("#h-lo").hidden = laBanWeb();
+  veQR($("#h-qr"), web + "?ma=" + H.ma, 170);
 }
 
 /* ---------- trạng thái gửi cho điện thoại ---------- */
@@ -1614,6 +1639,8 @@ N.id = tabDoc() || luuDoc("dienbien-id") || ""; if(!N.id){ N.id = maMoi(); luuGh
   kenh.postMessage({k:"hoi", id:N.id, hoi});
 })();
 $("#n-ma").value = luuDoc("dienbien-ma") || "";
+const MA_QR = (location.search.match(/[?&]ma=(\d{4})\b/) || [])[1] || "";   /* quét mã QR của phòng: điền sẵn mã */
+if(MA_QR){ $("#n-ma").value = MA_QR; setTimeout(()=>{ if(!N.ma) $("#n-ten").focus(); }, 600); }
 $("#n-ten").value = luuDoc("dienbien-ten") || "";   /* tải lại trang vẫn giữ biệt danh */
 $("#n-ch").checked = false;   /* không tự tick lại: máy từng làm Chỉ huy (kể cả trận một đội) vào phòng mới phải tick lại */
 N.so = +(luuDoc("dienbien-so") || 0);
@@ -1695,6 +1722,7 @@ function ghiVao(phien){
 function tuVaoLai(){
   let v; try{ v = JSON.parse(luuDoc("dienbien-vao-" + N.id) || "null"); }catch(e){ v = null; }
   if(!v || !/^\d{4}$/.test(v.ma || "") || !(v.so >= 1) || !v.phien || Date.now() - (v.luc || 0) > 3 * 3600e3) return false;
+  if(MA_QR && v.ma !== MA_QR) return false;   /* vừa quét QR phòng khác: vào phòng mới */
   vaoPhong(v.ma, v.so, luuDoc("dienbien-ten") || "", !!v.ch, v.phien);
   return true;
 }
@@ -1974,12 +2002,13 @@ function nVe(){
   if(p === "cho"){
     if(ch && N.moDD){ m.innerHTML = `<div id="n-dd"></div><button class="btn g w" id="dd-xong" style="margin-top:10px">Xong</button>`;
       veDD(m.querySelector("#n-dd")); m.querySelector("#dd-xong").onclick = ()=>{ N.moDD = false; N.khoaVe = ""; nVe(); }; return; }
-    m.innerHTML = `${t.solo && ch ? `<div class="card stack" style="text-align:center"><p class="eyebrow">Mã trận của đội</p><p class="ma">${esc(N.ma)}</p><p class="small muted">Đọc mã này cho cả đội nhập vào máy mình.</p></div>` : ""}<div class="card stack"><div class="canh">${nv(than, "vui", 64, "song")}<div><h2>Đã vào đội ✓</h2>
+    m.innerHTML = `${t.solo && ch ? `<div class="card stack" style="text-align:center"><p class="eyebrow">Mã trận của đội</p><p class="ma">${esc(N.ma)}</p><div id="n-qr" class="qr-o" hidden style="align-self:center"></div><p class="small muted">Cả đội quét mã QR, hoặc nhập mã này vào máy mình.</p></div>` : ""}<div class="card stack"><div class="canh">${nv(than, "vui", 64, "song")}<div><h2>Đã vào đội ✓</h2>
         <p><b>${esc(dv.ten)}</b><br><span class="muted small">Sở trường: ${esc(dv.nl)}</span></p></div></div>
       <p class="small">Chỉ huy điểm danh và phân vai; phân đủ <b>${t.solo ? "Bí thư · Trinh sát · Xạ thủ" : "Bí thư · Trinh sát · Xạ thủ · Phản gián"}</b> thì đội mới xuất kích được.</p>
       <p class="eyebrow">Phân vai trong đội</p>
       <div class="vai">${VAI.filter(v=> !(t.solo && v[0] === "phangian")).map(([b, tt, mt])=>`<div>${nv(b, "vui", 54, "song")}<b>${tt}</b><span>${mt}</span></div>`).join("")}</div></div><div id="n-dd"></div>`;
     veDD(m.querySelector("#n-dd"));
+    if(t.solo && ch) veQR(m.querySelector("#n-qr"), diaChiGame() + "?ma=" + N.ma, 180);
   }
   else if(p === "pgt") vePGT(m);
   else if(p === "dem"){
