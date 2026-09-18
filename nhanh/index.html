@@ -272,6 +272,16 @@ ul.gon{margin:0;padding-left:20px} ul.gon li{margin:4px 0}
 .xem-o .q{font-weight:600;margin:4px 0 8px}
 .xem-o .d{font-size:14.5px} .xem-o .d b{color:var(--xanh)} .xem-o .d s{color:#B91C1C}
 .xem-o .g{font-size:13.5px;color:var(--chu2);margin-top:8px;padding-top:8px;border-top:1px dashed var(--vien2)}
+.giai{margin-top:14px;padding:14px 16px;border-radius:16px;background:#fff;border:1px solid var(--vien);border-left:5px solid var(--do);box-shadow:var(--bong);display:flex;flex-direction:column;gap:9px;animation:baoVao .35s ease-out both}
+.giai.dung{border-left-color:#22C55E}
+.giai-dau{font-family:"Baloo 2";font-weight:800;font-size:22px;line-height:1.1;color:var(--do)}
+.giai.dung .giai-dau{color:var(--xanh)}
+.giai p{font-size:15px;line-height:1.5}
+.giai .dap b{color:var(--xanh)} .giai .dap s{color:#B91C1C}
+.giai-cau{background:var(--xanh-nen);border-radius:12px;padding:10px 12px}
+.giai-cau b{color:var(--xanh)}
+.giai-vi{color:var(--chu2);background:var(--nen2);border-radius:12px;padding:10px 12px}
+.giai-vi b{color:var(--chu)}
 canvas.giay{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:70}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
@@ -1196,7 +1206,24 @@ function chot(ch){
   n.textContent = ok ? chon1(["+1 Chuẩn!", "+1 Vèo!", "+1 Tăng tốc!", "+1 Quá đỉnh!", "+1 Chính xác!"]) : ch < 0 ? chon1(["Hết giờ!", "Chậm một nhịp!", "Đồng hồ thắng rồi!"]) : chon1(["Hụt rồi!", "Suýt nữa!", "Phanh gấp!", "Rẽ nhầm đường!"]);
   document.body.appendChild(n); setTimeout(() => n.remove(), 1000);
   ok ? AM.dung() : AM.sai(); rung(ok ? 25 : [40, 40, 40]);
-  c.hen = setTimeout(() => { if(C !== c) return; if(c.ans.length % 5 === 0) veMoc(); else hoiTiep(); }, ok ? 850 : 1700);
+  c.hen = setTimeout(() => { if(C === c && c.pha === "lo") veGiai(q, ch, ok); }, 450);
+}
+/* khung giải thích sau mỗi câu: vì sao đúng / sai */
+const nhanPA = (q, c) => c < 0 ? "hết giờ" : q.k === "ds" ? (c === 0 ? "Đúng" : "Sai") : q.k === "dk" ? q.o[c] : `${"ABCDE"[c]}. ${q.o[c]}`;
+function veGiai(q, ch, ok){
+  const c = C; if(!c) return; c.pha = "giai";
+  const moc = c.ans.length % 5 === 0, cuoi = c.ans.length >= c.L, da = dapAn(q);
+  const dau = ok ? chon1(["✓ Chính xác!", "✓ Chuẩn không cần chỉnh!", "✓ Đúng rồi!"]) : ch < 0 ? "⏰ Hết giờ" : "✗ Chưa đúng";
+  const cau = q.k === "dk" ? `<p class="giai-cau">${esc(q.q).replace("___", `<b>${esc(q.o[0])}</b>`)}</p>` : "";
+  const dap = q.k === "dk" ? (ok ? "" : `<p class="dap">${ch >= 0 ? `Bạn chọn: <s>${esc(q.o[ch])}</s> · ` : ""}Cụm đúng: <b>${esc(q.o[0])}</b></p>`)
+    : `<p class="dap">${!ok && ch >= 0 ? `Bạn chọn: <s>${esc(nhanPA(q, ch))}</s><br>` : ""}${q.k === "tn" && /SAI/.test(q.d) ? "Phương án SAI cần chọn" : "Đáp án"}: <b>${esc(nhanPA(q, da))}</b></p>`;
+  const el = document.createElement("div"); el.className = "giai " + (ok ? "dung" : "sai");
+  el.innerHTML = `<div class="giai-dau">${dau}</div>${cau}${dap}${q.g ? `<p class="giai-vi">💡 <b>Vì sao?</b> ${esc(q.g)}</p>` : ""}
+    <button class="btn w" id="c-sau">${cuoi ? "Về đích →" : moc ? "Tới mốc tiếp theo →" : "Câu tiếp →"}</button>`;
+  $("#c-noi").appendChild(el);
+  const o = $("#c-dh"); if(o) o.style.visibility = "hidden";
+  try{ el.scrollIntoView({behavior: "smooth", block: "nearest"}); }catch(e){}
+  $("#c-sau").onclick = () => { if(C !== c || c.pha !== "giai") return; moc ? veMoc() : hoiTiep(); };
 }
 function veMoc(){
   const c = C; if(!c) return; c.pha = "moc";
@@ -1251,7 +1278,7 @@ function veXem(loc){
   XEM = loc || XEM; show("xem"); if(!C) return;
   $$("#x-loc button").forEach(b => b.classList.toggle("on", b.dataset.v === XEM));
   const ds = C.ans.map((a, i) => ({a, i, q: QB[a[0]], ok: dungQ(QB[a[0]], a[1])})).filter(x => x.q && (XEM === "all" || !x.ok));
-  const nhan = (q, c) => c < 0 ? "hết giờ" : q.k === "ds" ? (c === 0 ? "Đúng" : "Sai") : q.k === "dk" ? q.o[c] : `${"ABCDE"[c]}. ${q.o[c]}`;
+  const nhan = nhanPA;
   $("#x-ds").innerHTML = ds.length ? ds.map(x => { const q = x.q, da = dapAn(q);
     return `<div class="xem-o ${x.ok ? "ok" : ""}"><span class="tiny muted">Câu ${x.i + 1} · ${q.k === "dk" ? "Điền chỗ trống" : q.k === "ds" ? "Đúng/Sai" : esc(q.d)}</span>
       <div class="q">${esc(q.q).replace("___", "<u>&nbsp;&nbsp;?&nbsp;&nbsp;</u>")}</div>
@@ -1261,7 +1288,8 @@ function veXem(loc){
 $$("#x-loc button").forEach(b => b.onclick = () => veXem(b.dataset.v));
 $("#v-ve").onclick = roiHan;
 $("#x-ve").onclick = () => { show("choi"); };
-document.addEventListener("keydown", e => {   /* máy tính: phím 1–5 hoặc A–E để trả lời */
+document.addEventListener("keydown", e => {   /* máy tính: phím 1–5 hoặc A–E để trả lời; Enter / Space / → để sang câu tiếp */
+  if(C && C.pha === "giai" && /^(Enter| |ArrowRight)$/.test(e.key) && $("#c-sau")){ e.preventDefault(); $("#c-sau").click(); return; }
   if(!C || C.pha !== "hoi" || /input|select|textarea/i.test(e.target.tagName)) return;
   const k = e.key.toUpperCase(), n = "12345".indexOf(k) >= 0 ? "12345".indexOf(k) : "ABCDE".indexOf(k); if(n < 0) return;
   const b = $$("#c-noi .pa button")[n]; if(b) b.click();
