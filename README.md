@@ -23,13 +23,12 @@ chỉ gồm biệt danh và lựa chọn trong game.
 
 ## Đường tới tương lai — cờ đi theo lượt
 
-2–8 đội (Rồng, Voi, Đại bàng, Ngựa, Cá chép, Tre, Lúa, Trâu), bản đồ ô tổ ong ba chặng: trên biển,
-cập bến Pác Bó, du hành về Quảng trường Ba Đình. Trả lời đúng là xúc xắc tự lăn và tàu đi ngay;
-dọc đường có vật cản, cạm bẫy, bảo bối, thách đấu. Mỗi đội 3–5 máy thay phiên nhau; hoặc chơi cá nhân
-1–8 người (một người tạo phòng ngay trên điện thoại và cùng chơi).
+Đường đua ô tổ ong ba màn: trên biển, cập bến Pác Bó, du hành về Quảng trường Ba Đình; mỗi màn ba tuyến
+(ngắn nhiều bẫy, dài ít bẫy) và một checkpoint. Trả lời đúng là xúc xắc 10 mặt tự lăn, người chơi tự chọn
+đường; dọc đường có vật cản, cạm bẫy, bảo bối, hiếm hoi có Dịch chuyển tức thời. Hiện có **chế độ cá nhân**
+(một người, không cần tạo phòng, không cần mạng); chế độ đội đấu đội và nội bộ đang được dựng lại.
 
 - **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/tuong-lai/ — hoặc quét mã QR dưới đây.
-  Giảng viên mở phòng trên máy chiếu (hoặc *Chơi thử trên một màn hình*, không cần điện thoại).
 
 ![Mã QR vào game Đường tới tương lai](tuong-lai/qr-vao-game.png)
 
