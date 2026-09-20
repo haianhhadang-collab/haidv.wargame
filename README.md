@@ -25,13 +25,13 @@ chỉ gồm biệt danh và lựa chọn trong game.
 
 Đường đua ô tổ ong ba màn: trên biển, cập bến Pác Bó, tiến về Thủ đô — Quảng trường Ba Đình; mỗi màn ba tuyến
 (ngắn nhiều bẫy, dài ít bẫy) và một checkpoint. Trả lời đúng là xúc xắc 10 mặt tự lăn, người chơi tự chọn
-đường; dọc đường có vật cản, cạm bẫy, bảo bối, hiếm hoi có Dịch chuyển tức thời. **Chơi một mình** (không cần
-mạng) hoặc **chơi phòng** tối đa 10 người: một người tạo phòng trên điện thoại và cùng chơi, mọi người vào bằng
-mã phòng; Màn 3 đi chung bản đồ và có thách đấu.
+đường; dọc đường có vật cản, cạm bẫy, bảo bối, hiếm hoi có Dịch chuyển tức thời. Ba cách chơi:
+**một mình** (không cần mạng), **phòng** tối đa 10 người đua với nhau, và **đội đấu đội** cho cả lớp
+(10 đội × 3 người, máy giảng viên giữ phòng và chiếu bản đồ). Màn 3 đi chung bản đồ và có thách đấu.
 
-- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/hanh-trinh/ — hoặc quét mã QR dưới đây.
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/doi/ — hoặc quét mã QR dưới đây.
 
-![Mã QR vào game Hành trình Tư tưởng](hanh-trinh/qr-vao-game.png)
+![Mã QR vào game Hành trình Tư tưởng](doi/qr-vao-game.png)
 
 Câu hỏi lấy từ Giáo trình Tư tưởng Hồ Chí Minh 2026. Dữ liệu trận đi qua máy chủ MQTT công cộng,
 chỉ gồm biệt danh và lựa chọn trong game.
