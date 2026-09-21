@@ -23,35 +23,34 @@ body{font-family:system-ui,"Segoe UI",Roboto,Helvetica,Arial,sans-serif,"Segoe U
 .em{font-family:"Segoe UI Emoji","Apple Color Emoji","Noto Color Emoji",sans-serif}
 h1,h2,h3{font-family:var(--tieu);font-weight:700;line-height:1.12;margin:.2em 0 .5em;color:var(--camD)}
 button{font-family:var(--tieu);font-weight:700;font-size:.95em;line-height:1.2;cursor:pointer;color:var(--chu);
-  background:transparent;border:1px solid var(--vien);border-radius:999px;padding:10px 18px}
+  background:transparent;border:1px solid var(--vien);border-radius:999px;padding:.66em 1.2em}
 button:hover:not(:disabled){background:var(--cam3);border-color:var(--cam)}
 button.chinh{background:var(--cam);border-color:var(--cam);color:var(--the);box-shadow:var(--bong2)}
 button.chinh:hover:not(:disabled){background:var(--camV);border-color:var(--camV)}
-button.nho{padding:6px 13px;font-size:.82em}
+button.nho{padding:.4em .85em;font-size:.82em}
 button:disabled{opacity:.45;cursor:default}
-input,select{font:inherit;padding:8px 14px;border:1px solid rgba(32,30,29,.2);border-radius:999px;background:#fff;color:var(--chu)}
-input[type=checkbox]{width:20px;height:20px;accent-color:var(--cam)}
+input,select{font:inherit;padding:.5em .9em;border:1px solid rgba(32,30,29,.2);border-radius:999px;background:#fff;color:var(--chu)}
+input[type=checkbox]{width:1.25em;height:1.25em;accent-color:var(--cam)}
 .mo{color:var(--mo)}
-.the{background:var(--the);border:1px solid rgba(32,30,29,.12);border-radius:28px;padding:20px;box-shadow:var(--bong2)}
-.dau{max-width:860px;margin:0 auto;padding:26px 18px 40px;position:relative}
-.dau h1{font-size:clamp(34px,8vw,42px);margin-bottom:6px}
-@media(min-width:1700px){.dau{font-size:21px;max-width:1120px}.dau h1{font-size:54px}}
-@media(min-width:2600px){.dau{font-size:26px;max-width:1380px}.dau h1{font-size:66px}}
-.nhan-dau{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:999px;background:var(--luc2);color:var(--lucV);font-weight:700;font-size:13px}
+.the{background:var(--the);border:1px solid rgba(32,30,29,.12);border-radius:1.7em;padding:1.2em;box-shadow:var(--bong2)}
+.dau{margin:0 auto;padding:1.6em 1.1em 2.4em;position:relative;
+  font-size:clamp(16px,1.04vw,38px);max-width:clamp(860px,57vw,2300px)}   /* màn càng rộng, cả trang càng to */
+.dau h1{font-size:clamp(34px,2.5vw,96px);margin-bottom:.14em}
+.nhan-dau{display:inline-flex;align-items:center;gap:.45em;padding:.32em .85em;border-radius:999px;background:var(--luc2);color:var(--lucV);font-weight:700;font-size:.82em}
 .tron1,.tron2{position:absolute;border-radius:50%;pointer-events:none;z-index:-1}
-.tron1{right:-40px;top:-60px;width:190px;height:190px;background:var(--cam2);opacity:.75}
-.tron2{right:70px;top:52px;width:70px;height:70px;background:var(--luc3);opacity:.8}
-.cot{display:flex;flex-direction:column;gap:12px}
+.tron1{right:-2.5em;top:-3.7em;width:11.8em;height:11.8em;background:var(--cam2);opacity:.75}
+.tron2{right:4.4em;top:3.2em;width:4.4em;height:4.4em;background:var(--luc3);opacity:.8}
+.cot{display:flex;flex-direction:column;gap:.75em}
 .hang{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-label.o{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:9px 0;border-bottom:1px dashed rgba(32,30,29,.18);font-weight:600}
+label.o{display:flex;justify-content:space-between;align-items:center;gap:.75em;padding:.55em 0;border-bottom:1px dashed rgba(32,30,29,.18);font-weight:600}
 label.o:last-child{border-bottom:0}
 .ico{width:1.5em;height:1.5em;vertical-align:-.4em;flex:none}
-.bieu{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:#fff;border:3px solid;flex:none}
-.bieu svg{width:26px;height:26px}
-.chon-bt{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:9px}
-.chon-bt button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px 8px;border-radius:22px;
+.bieu{display:inline-flex;align-items:center;justify-content:center;width:2.25em;height:2.25em;border-radius:50%;background:#fff;border:3px solid;flex:none}
+.bieu svg{width:72%;height:72%}
+.chon-bt{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.8em,1fr));gap:.56em}
+.chon-bt button{display:flex;flex-direction:column;align-items:center;gap:.45em;padding:.75em .3em .6em;border-radius:1.4em;
   background:#fff;font-family:inherit;font-weight:400;font-size:.82em;color:var(--xam8);text-align:center}
-.chon-bt button svg{width:52px;height:52px;padding:7px;border-radius:50%;background:var(--xam1);border:1px solid rgba(32,30,29,.08)}
+.chon-bt button svg{width:4em;height:4em;padding:.54em;border-radius:50%;background:var(--xam1);border:1px solid rgba(32,30,29,.08)}
 .chon-bt button.chon{border:2px solid var(--cam);background:var(--cam2);font-weight:700;color:var(--camD)}
 .chon-bt button.chon svg{background:var(--the)}
 /* xúc xắc */
@@ -135,6 +134,8 @@ h3.tieu .gio{margin-left:auto;font-size:.76em;padding:4px 13px;border-radius:999
 .tb.tot{background:var(--luc2);border-left-color:var(--luc)}
 .tb.vang{background:var(--cam3);border-left-color:var(--cam)}
 .gt{font-size:.85em;color:var(--mo);margin-top:8px}
+.gthich{margin-top:10px;padding:.8em 1em;border-radius:1.1em;background:var(--cam3);border-left:6px solid var(--cam);font-size:.9em;line-height:1.5}
+.gthich b{font-family:var(--tieu);color:var(--camD)}
 .nhan{display:inline-block;font-size:.72em;padding:3px 10px;border-radius:999px;background:var(--xam1);color:var(--xam8);margin:3px 4px 0 0}
 .nhan.xau{background:var(--cam2);color:var(--camD)} .nhan.tot{background:var(--luc2);color:var(--lucD)} .nhan.vang{background:var(--cam3);color:var(--camV)}
 .lua{display:flex;flex-direction:column;gap:10px}
@@ -142,8 +143,8 @@ h3.tieu .gio{margin-left:auto;font-size:.76em;padding:4px 13px;border-radius:999
   border:2px solid var(--vien);border-left:10px solid;background:var(--the);font-family:inherit;font-weight:400;font-size:1.07em}
 @media(min-width:1024px){                        /* máy tính, máy chiếu: cỡ gốc lớn dần theo bề rộng bảng, tới trần --co-max */
   .pn-xx,.pn-nd{font-size:clamp(var(--co-pa), 2.4cqi, var(--co-max))}
-  .dt-dau .t{font-size:clamp(18px,1.05vw,30px)}.dt-dau .tt{font-size:clamp(13px,.72vw,21px)}.dt-dau .dh{font-size:clamp(20px,1.15vw,33px)}
-  .dt-dau button{font-size:clamp(13px,.68vw,20px)}.dt-dau .bieu{width:clamp(36px,2.1vw,58px);height:clamp(36px,2.1vw,58px)}
+  .dt-dau .t{font-size:clamp(18px,1.15vw,38px)}.dt-dau .tt{font-size:clamp(13px,.8vw,26px)}.dt-dau .dh{font-size:clamp(20px,1.25vw,40px)}
+  .dt-dau button{font-size:clamp(13px,.75vw,25px)}.dt-dau .bieu{width:clamp(36px,2.3vw,72px);height:clamp(36px,2.3vw,72px)}
   .dt-dau .bieu svg{width:72%;height:72%}
 }
 .cau .nhieu{display:inline-block;background:var(--cam2);color:var(--camD);border-radius:999px;padding:1px 10px;margin-right:6px;font-family:var(--tieu);font-size:.85em}
@@ -162,19 +163,19 @@ h3.tieu .gio{margin-left:auto;font-size:.76em;padding:4px 13px;border-radius:999
 .bang.tot{border-color:var(--luc)} .bang.tot .b1{color:var(--lucV)}
 .bang.moc{border-color:var(--cam)} .bang.moc .b2{font-style:italic}
 .bang.dc{border-color:var(--lucV)} .bang.dc .b1{color:var(--lucD)}
-.luoi2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+.luoi2{display:grid;grid-template-columns:1fr 1fr;gap:1em;margin-top:1em}
 @media(max-width:760px){.luoi2{grid-template-columns:1fr}}
-.ma-lon{font-family:var(--tieu);font-size:3.3em;font-weight:700;letter-spacing:8px;color:var(--camD);line-height:1.1}
-#qr svg{width:13em;height:13em}
-table.bg{width:100%;border-collapse:collapse} table.bg td{padding:7px 4px;border-bottom:1px solid rgba(32,30,29,.09);vertical-align:middle}
+.ma-lon{font-family:var(--tieu);font-size:3.3em;font-weight:700;letter-spacing:.15em;color:var(--camD);line-height:1.1}
+#qr svg{width:12em;height:12em;max-width:100%}
+table.bg{width:100%;border-collapse:collapse} table.bg td{padding:.45em .25em;border-bottom:1px solid rgba(32,30,29,.09);vertical-align:middle}
 .cham{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--xam3);margin-right:6px;vertical-align:1px} .cham.on{background:var(--luc)}
-.bieu{position:relative} .bieu .so{position:absolute;right:-7px;top:-7px;background:var(--camD);color:var(--the);border-radius:999px;font-family:var(--tieu);font-size:11px;padding:0 5px;line-height:16px}
+.bieu{position:relative} .bieu .so{position:absolute;right:-.45em;top:-.45em;background:var(--camD);color:var(--the);border-radius:999px;font-family:var(--tieu);font-size:.62em;padding:0 .45em;line-height:1.5}
 .xh{margin-top:16px;font-size:.85em} .xh table{width:100%;border-collapse:collapse} .xh td{padding:4px;border-bottom:1px solid rgba(32,30,29,.09);vertical-align:middle}
 .xh b{font-family:var(--tieu)}
-.xh .bieu{width:26px;height:26px;border-width:2px} .xh .bieu svg{width:18px;height:18px}
+.xh .bieu{width:1.85em;height:1.85em;border-width:2px}
 .the-dau{border:3px solid var(--camV);border-radius:22px;padding:13px 15px;background:var(--cam3);margin:8px 0}
-.the-dau h3{margin:0 0 8px;font-size:1.2em} .the-dau .bieu{width:28px;height:28px;border-width:2px;vertical-align:middle} .the-dau .bieu svg{width:19px;height:19px}
-.canh{padding:11px 15px;background:var(--cam3);border-radius:18px;border-left:6px solid var(--cam);margin:10px 0}
+.the-dau h3{margin:0 0 8px;font-size:1.2em} .the-dau .bieu{width:1.6em;height:1.6em;border-width:2px;vertical-align:middle}
+.canh{padding:.7em .95em;background:var(--cam3);border-radius:1.1em;border-left:6px solid var(--cam);margin:.6em 0}
 .giua{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:16px 4px}
 .vong{width:2.6em;height:2.6em;border-radius:50%;background:var(--mat);border:3px dashed var(--xam3);display:grid;place-items:center;font-size:2.8em}
 .ket{font-family:var(--tieu);font-weight:700;font-size:1.3em;color:var(--lucV);margin:8px 0 10px;text-align:center;line-height:1.2}
@@ -219,7 +220,9 @@ const CH = {
   mayMan: {themLuot: 38, phao: 28, gioXuoi: 28},     // chia trong mặt May mắn
   dichChuyen: 1,                                     // Dịch chuyển tức thời: % trên tổng số lần tung (nằm trong May mắn)
   phanThuong: {laBan: 70, kkc: 30},
-  giay: {cau: 45, phat: 10, en: 20, dc: 20, chon: 20, doc: 15, thach: 10, hoi: 10, bb: 8, tiep: 10},   // thach: thách đấu · hoi: hỏi ý đội · bb: quyết bảo bối · tiep: tiếp sức
+  giay: {cau: 45, phat: 10, en: 20, dc: 20, chon: 20, doc: 15, docDung: 5, docSai: 10, thach: 10, hoi: 10, bb: 8, tiep: 10},
+  /* doc: cả chặng đọc giải thích rồi tự sang câu sau · docDung/docSai: bắt buộc đọc mấy giây rồi mới bấm "Câu tiếp" được
+     (thầy chốt 21/9: đúng 5 giây, sai 10 giây) · thach: thách đấu · hoi: hỏi ý đội · bb: quyết bảo bối · tiep: tiếp sức */
   toiDa: 10,                                         // chơi phòng: số người tối đa (tính cả chủ phòng)
   doiToiDa: 10, soNguoiDoi: 3,                       // chơi đội: số đội và số người mỗi đội (thầy chốt 20/9)
   hoiMoiMan: 2,                                      // chơi đội: mỗi màn được hỏi ý đội mấy lần
@@ -550,7 +553,7 @@ function taoNguoi(id, bt, so, ten, bot, may) {
   return {id, bt, so: so || 0, ten: ten || '', mau: BIEU[bt].mau, bot: !!bot, pos: s0, lichSu: [], vet: [s0], denLuc: 0,
     may: may || [id], conTro: 0, hoi: null, hoiCon: 0, hoiMan: -1, bb: null, tiep: null,
     dung: 0, choGio: null, phat: 0, en: 0, phao: 0, laBan: 0, kkc: 0, soCau: 0, soCauDung: 0, xong: false, hang: 0, xongLuc: 0, luot: 0,
-    buoc: 'cho', ls: [], cau: null, loat: null, cho: null, xx: null, hieu: null, dcSo: 0, docHan: 0, docXong: false,
+    buoc: 'cho', ls: [], cau: null, loat: null, cho: null, xx: null, hieu: null, dcSo: 0, docHan: 0, docMo: 0, docXong: false,
     soLanDi: 0, bayAnLuot: 3 + Math.floor(Math.random() * 7), daDung: {}, mocDaHien: {},
     tb: [], hu: [], bangCho: [], bang: null, dong: false, choDau: 0, huyQuay: false, daDi: false, dangDi: false, thuong: 0, lanCuoi: now()};
 }
@@ -604,7 +607,7 @@ async function luot(t) {
     await docTiep(t); return cuoiLuot(t);
   }
   t.soCauDung++;
-  await ngu(t, 900);
+  await docTiep(t);                                           // đúng cũng đọc giải thích rồi mới tung (thầy chốt 21/9)
   if (t.huyQuay) { t.ls.push('⚔️ Lượt quay bị hủy vì thách đấu'); return cuoiLuot(t, 1300); }
   await tungVaDi(t);
   if (!t.xong) return cuoiLuot(t, 1300);
@@ -633,7 +636,10 @@ function traLoi(t, khoa, chon, may) {
   c.traLoi = String(chon); c.dung = cham(c.x, chon); danhDau();
 }
 function docTiep(t) {                                         // đọc đáp án, giải thích rồi bấm "Câu tiếp"
-  t.buoc = 'doc'; t.docHan = now() + CH.giay.doc * 1000; t.docXong = false; danhDau();
+  const khoa = (t.cau && t.cau.dung ? CH.giay.docDung : CH.giay.docSai) * 1000;   // trả lời sai thì bắt đọc lâu hơn
+  t.buoc = 'doc'; t.docMo = now() + khoa;
+  t.docHan = t.docMo + Math.max(CH.giay.doc * 1000 - khoa, 5000);   // còn ít nhất 5 giây để tự bấm trước khi tự sang câu
+  t.docXong = false; danhDau();
   return choDen(() => t.docXong || now() > t.docHan);
 }
 async function loatCau(t) {
@@ -980,12 +986,13 @@ function nhip() {
     if (t.dong && G.pha === 'choi') {                         // đang dừng vì thách đấu: đồng hồ của người này đứng yên
       if (t.cau && t.cau.traLoi === null) t.cau.han += dt;
       if (t.cho && t.cho.gt === undefined) t.cho.han += dt;
-      if (t.buoc === 'doc') t.docHan += dt;
+      if (t.buoc === 'doc') { t.docHan += dt; t.docMo += dt; }
     } else {
       if (t.cau && t.cau.traLoi === null && T > t.cau.han) { t.cau.traLoi = '-'; t.cau.dung = false; danhDau(); }
       if (t.cho && t.cho.gt === undefined && T > t.cho.han) { t.cho.gt = t.cho.macDinh; danhDau(); }
       if (t.tiep && t.tiep.traLoi === null && T > t.tiep.han) { t.tiep.traLoi = '-'; t.tiep.dung = false; danhDau(); }
     }
+    if (t.buoc === 'doc' && t.docMo && T >= t.docMo) { t.docMo = 0; danhDau(); }   // hết giờ đọc: mở nút "Câu tiếp"
     if (!t.bang || T > t.bang.het) { const n = t.bangCho.shift(); if (n || t.bang) { t.bang = n ? Object.assign({}, n, {het: T + n.ms / TOC}) : null; danhDau(); } }
     if (t.hu.length && T - t.hu[0].luc > 2000) t.hu = t.hu.filter(h => T - h.luc < 2000);
   }
@@ -1009,7 +1016,7 @@ function botTick(T) {
     if (t.cho && t.cho.gt === undefined && (t.cho.bot || (t.cho.bot = T + treBot(400, 900))) < T) chon(t, t.cho.seq, t.cho.loai === 'o' ? oTotNhat(t.cho.lua) : t.cho.loai === 'buoc' ? 1 + Math.floor(Math.random() * 3) : 'thu', t.cho.may);
     if (t.bb && t.bb.gt === undefined && (t.bb.bot || (t.bb.bot = T + treBot(500, 1500))) < T) chonBaoBoi(t, Math.random() < 0.65 ? 'dung' : 'de', t.bb.may);
     if (t.tiep && t.tiep.traLoi === null && (t.tiep.bot || (t.tiep.bot = T + treBot(600, 2000))) < T) traLoiTiep(t, t.tiep.khoa, tl(t.tiep.x), t.tiep.may);
-    if (t.buoc === 'doc' && !t.docXong && (t.docBot || (t.docBot = T + treBot(700, 0))) < T) { t.docXong = true; t.docBot = 0; }
+    if (t.buoc === 'doc' && !t.docXong && !t.docMo && (t.docBot || (t.docBot = T + treBot(700, 0))) < T) { t.docXong = true; t.docBot = 0; }
   }
   for (const D of Object.values(G.dau)) {
     if (D.pha === 'chon' && D.chon.bot && (D.botLuc || (D.botLuc = T + treBot(600, 1500))) < T) { const ds = nguoiTaiO(D.o, D.chon); if (ds.length) chonDoiThu(D.chon, D.id, ngauNhien(ds).id, D.may); }
@@ -1045,7 +1052,7 @@ function pubRieng(t, T) {
     xx: t.xx && {seq: t.xx.seq, kq: t.xx.kq, tuoi: T - t.xx.luc},
     cau: c && {khoa: c.khoa, loai: c.loai, x: pubCau(c.x), may: c.may, con: da ? 0 : con(c.han), traLoi: c.traLoi, dung: c.dung, a: da ? c.x.a : null, g: da ? (c.x.g || '') : null, dapAn: da ? loiDapAn(c.x) : null},
     cho: t.cho && t.cho.gt === undefined ? {loai: t.cho.loai, lua: t.cho.lua, seq: t.cho.seq, may: t.cho.may, con: con(t.cho.han)} : null,
-    docCon: t.buoc === 'doc' ? con(t.docHan) : 0,
+    docCon: t.buoc === 'doc' ? con(t.docHan) : 0, docMo: t.buoc === 'doc' ? con(t.docMo) : 0,
     tb: t.tb.filter(x => T - x.luc < 7000).slice(-3).map(x => ({icon: x.icon, chu: x.chu, mau: x.mau, tuoi: T - x.luc})),
     hu: t.hu.filter(h => T - h.luc < 1900).map(h => ({id: h.id, pos: h.pos, icon: h.icon, tuoi: T - h.luc})),
     bang: t.bang && {b1: t.bang.b1, b2: t.bang.b2, kieu: t.bang.kieu, con: con(t.bang.het)}};
@@ -1081,7 +1088,7 @@ function phatTrangThai(T) {                                   // kênh chung cho
   if (lapLai) G.phatRieng = T;
   for (const t of G.ds) {
     const goi = pubRieng(t, T);                               // chỉ phát khi nội dung đổi (đồng hồ đếm ngược chạy sẵn ở máy nhận)
-    const chuoi = JSON.stringify(goi, (k, v) => (k === 'con' || k === 'tuoi' || k === 'docCon') ? 0 : v);
+    const chuoi = JSON.stringify(goi, (k, v) => (k === 'con' || k === 'tuoi' || k === 'docCon' || k === 'docMo') ? 0 : v);
     if (t.goiCu === chuoi && !lapLai) continue;
     t.goiCu = chuoi; goi._nhan = 0;
     Mang.gui('d' + t.id, goi, true);
@@ -1226,7 +1233,7 @@ function xuLyLenh(m) {
   if (G.pha !== 'choi') return;
   if (m.t === 'tl') traLoi(t, m.khoa, m.chon, m.id);
   else if (m.t === 'chon') chon(t, m.seq, m.gt, m.id);
-  else if (m.t === 'tiep') { if (t.buoc === 'doc' && !t.dong) { t.docXong = true; danhDau(); } }
+  else if (m.t === 'tiep') { if (t.buoc === 'doc' && !t.dong && !t.docMo) { t.docXong = true; danhDau(); } }
   else if (m.t === 'thach') chonDoiThu(t, m.dau, m.doi, m.id);
   else if (m.t === 'tlDau') traLoiDau(t, m.dau, m.khoa, m.chon, m.id);
   else if (m.t === 'bb') chonBaoBoi(t, m.gt, m.id);
@@ -1478,15 +1485,15 @@ function veTrangDau() {
     ${maUrl ? vao : ''}
     <div class="the cot" style="margin-top:14px">
       <h3 style="margin-bottom:0">🧭 Chơi một mình, hoặc 👑 tạo phòng cho cả nhóm</h3>
-      <div><div class="mo" style="margin:4px 0 8px">Biểu tượng khi chơi một mình (chơi phòng: cấp theo thứ tự vào phòng)</div>
+      <div><div class="mo" style="margin:.25em 0 .5em">Biểu tượng khi chơi một mình (chơi phòng: cấp theo thứ tự vào phòng)</div>
         <div class="chon-bt">${Object.entries(BIEU).map(([k, b]) => `<button class="${k === UI.btChon ? 'chon' : ''}" data-act="bt" data-k="${k}">${icoBt(k, '')}<span>${esc(b.ten)}</span></button>`).join('')}</div></div>
       <label class="o">Lớp đã học đến buổi <select id="cdBuoi">${buoiDs.map(b => `<option value="${b}" ${b === toiDa ? 'selected' : ''}>Buổi ${b} (chủ đề ${Object.keys(CD_BUOI).filter(c => CD_BUOI[c] <= b).sort().join(', ')})</option>`).join('')}</select></label>
       <label class="o">Thời gian trả lời <select id="cdGiay"><option>20</option><option>30</option><option selected>45</option><option>60</option></select></label>
       <label class="o">Thử thách tiếng Anh <input type="checkbox" id="cdEn" ${KHO_EN.length ? 'checked' : 'disabled'}></label>
       <div class="hang"><button class="chinh" data-act="batDau" style="flex:1" ${DL ? '' : 'disabled'}>🧭 Chơi một mình →</button><button class="chinh" data-act="taoPhong" style="flex:1;background:var(--camD);border-color:var(--camD)" ${DL ? '' : 'disabled'}>👑 Tạo phòng (tối đa ${CH.toiDa} người) →</button></div>
-      <p class="mo" style="font-size:14px;margin:0">Tạo phòng: máy này vừa giữ phòng vừa chơi; mọi người vào bằng mã phòng hoặc quét mã QR. Màn 1–2 mỗi người một đường riêng, Màn 3 đi chung và có thách đấu.</p>
+      <p class="mo" style="font-size:.88em;margin:0">Tạo phòng: máy này vừa giữ phòng vừa chơi; mọi người vào bằng mã phòng hoặc quét mã QR. Màn 1–2 mỗi người một đường riêng, Màn 3 đi chung và có thách đấu.</p>
       <div class="hang"><button class="chinh" data-act="taoPhongDoi" style="flex:1;background:var(--lucV);border-color:var(--lucV)" ${DL ? '' : 'disabled'}>🎓 Phòng đội cho lớp (${CH.doiToiDa} đội × ${CH.soNguoiDoi} người) →</button></div>
-      <p class="mo" style="font-size:14px;margin:0">Phòng đội: máy giảng viên giữ phòng và chiếu bản đồ, <b>không chơi</b>. Mỗi đội một tàu, ba máy trong đội lần lượt làm từng việc.</p>
+      <p class="mo" style="font-size:.88em;margin:0">Phòng đội: máy giảng viên giữ phòng và chiếu bản đồ, <b>không chơi</b>. Mỗi đội một tàu, ba máy trong đội lần lượt làm từng việc.</p>
     </div>
     ${maUrl ? '' : `<div style="margin-top:14px">${vao}</div>`}
     <p style="margin-top:14px"><button data-act="huongDan">📖 Hướng dẫn chơi</button></p>
@@ -1502,7 +1509,7 @@ function veHuongDan() {
     'Ô thứ hai của mỗi màn là <b>checkpoint 🚩</b>: bị đẩy lùi cũng chỉ về tới checkpoint của màn đang đi.',
     'Chỉ ô mình dừng lại mới có tác dụng; đi ngang qua thì không sao.'
   ];
-  const so = n => `<span style="flex:none;width:37px;height:37px;border-radius:50%;background:var(--cam2);color:var(--camD);font-family:var(--tieu);font-weight:700;font-size:18px;display:grid;place-items:center">${n}</span>`;
+  const so = n => `<span style="flex:none;width:2.3em;height:2.3em;border-radius:50%;background:var(--cam2);color:var(--camD);font-family:var(--tieu);font-weight:700;font-size:1.15em;display:grid;place-items:center">${n}</span>`;
   goc.innerHTML = `<div class="dau"><span class="tron1"></span><span class="tron2"></span>
   <h1>Hướng dẫn chơi</h1>
   <div class="the cot">${buoc.map((b, i) => `<div class="hang" style="align-items:flex-start;flex-wrap:nowrap">${so(i + 1)}<p style="margin:0;line-height:1.5">${b}</p></div>`).join('')}</div>
@@ -1514,7 +1521,7 @@ function veHuongDan() {
     <li>Không thách đấu ở Pác Bó, checkpoint và Ba Đình. Bảo bối không có tác dụng trong thách đấu.</li>
   </ol></div>
   <div class="the cot" style="margin-top:16px"><h3>🎲 Xúc xắc</h3>
-    <div class="hang" style="gap:12px">${['1', '2', '3', '4', '5', '6', 'mm', 'th', 'ph', 'bn'].map(k => `<span class="xx" style="--c:54px">${htmlMat(k)}</span>`).join('')}</div>
+    <div class="hang" style="gap:.75em">${['1', '2', '3', '4', '5', '6', 'mm', 'th', 'ph', 'bn'].map(k => `<span class="xx" style="--c:3.4em">${htmlMat(k)}</span>`).join('')}</div>
     <p class="mo" style="margin:0">Mặt số: tiến đúng số ô (mỗi mặt ${x.so}%). May mắn ${x.mm}% · Phần thưởng ${x.th}% · Trừng phạt ${x.ph}% · Bất ngờ ${x.bn}%. Hiếm lắm mới gặp ✨ Dịch chuyển tức thời.</p></div>
   <p style="margin-top:18px"><button data-act="veDau">← Trang đầu</button></p></div>`;
 }
@@ -1530,11 +1537,11 @@ function veSanh(ST) {
   const laHost = !!G, toi = toiTrong(ST), T = now();
   if (!$('#sanh')) {
     const link = laHost ? linkVao() : null;
-    goc.innerHTML = `<div class="dau" id="sanh" style="max-width:1000px"><h1>Phòng chơi</h1>
+    goc.innerHTML = `<div class="dau" id="sanh" style="max-width:min(2300px,62vw)"><h1>Phòng chơi</h1>
       <div class="luoi2"><div class="the cot" style="align-items:center;text-align:center">
         <div class="mo">Mã phòng — nhập mã này hoặc quét mã QR để vào</div><div class="ma-lon">${esc(ST.ma)}</div>
-        ${laHost ? `<div id="qr"></div><div class="mo" style="font-size:13px;word-break:break-all">${esc(link)}</div>` : ''}
-        <div id="sanhMang" class="mo" style="font-size:14px"></div></div>
+        ${laHost ? `<div id="qr"></div><div class="mo" style="font-size:.8em;word-break:break-all">${esc(link)}</div>` : ''}
+        <div id="sanhMang" class="mo" style="font-size:.88em"></div></div>
       <div class="the" id="sanhDs"></div></div></div>`;
     if (laHost) veQR(link);
   }
@@ -1543,11 +1550,11 @@ function veSanh(ST) {
   const cd = ST.cd;
   if (ST.kieu === 'doi') {
     const soMay = ST.ds.reduce((n, t) => n + t.may.length, 0);
-    const hangD = ST.ds.map((t, i) => `<tr><td style="width:44px">${oBieu(t)}</td><td><b>${esc(t.ten)}</b>
-      <div class="mo" style="font-size:13px">${t.may.length ? t.may.map(m => `<span class="cham ${m.song ? 'on' : ''}"></span>${esc(m.ten)}${m.id === UI.toi ? ' (bạn)' : ''}${laHost ? ` <select data-act="doiMay" data-id="${esc(m.id)}" style="padding:2px 4px;font-size:12px">${ST.ds.map((x, k) => `<option value="${k}" ${k === i ? 'selected' : ''}>đội ${k + 1}</option>`).join('')}</select>` : ''}`).join(' · ') : 'chưa có ai'}</div></td>
+    const hangD = ST.ds.map((t, i) => `<tr><td style="width:3em">${oBieu(t)}</td><td><b>${esc(t.ten)}</b>
+      <div class="mo" style="font-size:.8em">${t.may.length ? t.may.map(m => `<span class="cham ${m.song ? 'on' : ''}"></span>${esc(m.ten)}${m.id === UI.toi ? ' (bạn)' : ''}${laHost ? ` <select data-act="doiMay" data-id="${esc(m.id)}" style="padding:.15em .3em;font-size:.74em">${ST.ds.map((x, k) => `<option value="${k}" ${k === i ? 'selected' : ''}>đội ${k + 1}</option>`).join('')}</select>` : ''}`).join(' · ') : 'chưa có ai'}</div></td>
       <td style="text-align:right;font-weight:800;color:${t.may.length === CH.soNguoiDoi ? 'var(--luc)' : 'var(--vang)'}">${t.may.length}/${CH.soNguoiDoi}</td></tr>`).join('');
     datHtml($('#sanhDs'), `<h3>Các đội (${ST.ds.length}/${CH.doiToiDa} đội · ${soMay} máy)</h3><table class="bg">${hangD || '<tr><td class="mo">Chưa có ai vào phòng.</td></tr>'}</table>
-      <p class="mo" style="font-size:14px">Buổi ${cd.buoi} · ${cd.giay} giây mỗi câu · tiếng Anh ${cd.en ? 'bật' : 'tắt'}.${laHost ? ' Người vào sau được xếp lần lượt vào đội còn chỗ; thầy đổi đội được tới khi bấm Bắt đầu. Máy này giữ phòng và chiếu bản đồ, không chơi.' : ' Chờ giảng viên bấm Bắt đầu.'}</p>
+      <p class="mo" style="font-size:.88em">Buổi ${cd.buoi} · ${cd.giay} giây mỗi câu · tiếng Anh ${cd.en ? 'bật' : 'tắt'}.${laHost ? ' Người vào sau được xếp lần lượt vào đội còn chỗ; thầy đổi đội được tới khi bấm Bắt đầu. Máy này giữ phòng và chiếu bản đồ, không chơi.' : ' Chờ giảng viên bấm Bắt đầu.'}</p>
       <div class="hang">${laHost
         ? `<button data-act="thoat">${T - UI.xacNhan < 4000 ? 'Bấm lần nữa để đóng phòng' : '← Đóng phòng'}</button><button class="chinh" data-act="batDauPhong" style="flex:1">Bắt đầu (${ST.ds.filter(t => t.may.length).length} đội) →</button>`
         : `<button data-act="thoat">${T - UI.xacNhan < 4000 ? 'Bấm lần nữa để rời phòng' : '← Rời phòng'}</button>`}</div>`);
@@ -1556,10 +1563,10 @@ function veSanh(ST) {
   const hang = ST.ds.map(p => {
     const laChu = p.id === ST.host;
     const nut = laHost && !laChu ? `<button class="nho" data-act="moiRa" data-id="${esc(p.id)}">${UI.kick && UI.kick.id === p.id && T - UI.kick.luc < 4000 ? 'Bấm lần nữa để mời ra' : 'Mời ra'}</button>` : '';
-    return `<tr><td style="width:44px">${oBieu(p)}</td><td><span class="cham ${p.song ? 'on' : ''}"></span><b>${esc(p.ten)}</b> <span class="mo" style="font-size:13px">· ${esc(tenBt(p))}${laChu ? ' · chủ phòng' : ''}${p.id === UI.toi ? ' · bạn' : ''}</span></td><td style="text-align:right">${nut}</td></tr>`;
+    return `<tr><td style="width:3em">${oBieu(p)}</td><td><span class="cham ${p.song ? 'on' : ''}"></span><b>${esc(p.ten)}</b> <span class="mo" style="font-size:.8em">· ${esc(tenBt(p))}${laChu ? ' · chủ phòng' : ''}${p.id === UI.toi ? ' · bạn' : ''}</span></td><td style="text-align:right">${nut}</td></tr>`;
   }).join('');
   datHtml($('#sanhDs'), `<h3>Người chơi (${ST.ds.length}/${CH.toiDa})</h3><table class="bg">${hang}</table>
-    <p class="mo" style="font-size:14px">Buổi ${cd.buoi} · ${cd.giay} giây mỗi câu · tiếng Anh ${cd.en ? 'bật' : 'tắt'}.${laHost ? ' Mời ra được tới khi bấm Bắt đầu; sau đó không thêm, không bớt người. Máy này giữ phòng: để màn hình sáng suốt trận.' : ''}</p>
+    <p class="mo" style="font-size:.88em">Buổi ${cd.buoi} · ${cd.giay} giây mỗi câu · tiếng Anh ${cd.en ? 'bật' : 'tắt'}.${laHost ? ' Mời ra được tới khi bấm Bắt đầu; sau đó không thêm, không bớt người. Máy này giữ phòng: để màn hình sáng suốt trận.' : ''}</p>
     <div class="hang">${laHost
       ? `<button data-act="thoat">${T - UI.xacNhan < 4000 ? 'Bấm lần nữa để đóng phòng' : '← Đóng phòng'}</button><button class="chinh" data-act="batDauPhong" style="flex:1">Bắt đầu (${ST.ds.length} người) →</button>`
       : `<button data-act="thoat">${T - UI.xacNhan < 4000 ? 'Bấm lần nữa để rời phòng' : '← Rời phòng'}</button>`}</div>`);
@@ -1615,7 +1622,7 @@ function veGiangVien(ST, toanBo) {
   bd.style.height = toan ? Math.round(Math.min(innerHeight * 0.5, innerWidth * (TD.cao + 10) / TD.rong)) + 'px' : '';
   veBanDo(UI.B, null, ST);
   const trangThai = p => p.xong ? `🏁 hạng ${p.hang}` : p.dong ? '⚔️ thách đấu' : p.buoc === 'nghi' ? '⏸️ nghỉ lượt' : p.bb ? '🎒 chọn bảo bối' : p.tiep ? '🤝 tiếp sức' : p.viec ? `⏳ ${esc(tenMayST(p, p.viec.may))}` : '…';
-  datHtml($('.pn-nd'), `<table class="bg" style="font-size:14px">${xepHang(ST.ds).map((p, i) => `<tr><td style="width:26px">${i + 1}</td><td style="width:44px">${oBieu(p)}</td>
+  datHtml($('.pn-nd'), `<table class="bg" style="font-size:14px">${xepHang(ST.ds).map((p, i) => `<tr><td style="width:26px">${i + 1}</td><td style="width:3em">${oBieu(p)}</td>
     <td><b>${esc(p.ten)}</b><div class="mo" style="font-size:12px">${p.may.map(m => `<span class="cham ${m.song ? 'on' : ''}"></span>${esc(m.ten)}`).join(' · ')}</div></td>
     <td style="white-space:nowrap">${p.xong ? `🏁 lượt ${p.luot}` : `Màn ${manCua(p.pos) + 1} · còn ${p.kc}`}</td><td style="white-space:nowrap">${trangThai(p)}</td><td class="mo">${p.soCauDung}/${p.soCau}</td></tr>`).join('')}</table>`
     + (ST.pha === 'ket' ? `<div class="hang" style="margin-top:10px"><button data-act="thoat">← Đóng phòng</button></div>` : ''));
@@ -1697,7 +1704,13 @@ function noiDung(V, ST) {
     if (V.choGio && c.loai === 'chinh') s += `<div class="tb vang">🌬️ Chờ gió: trả lời đúng rồi phải tung ra ${V.choGio.join(', ')} mới đi tiếp.</div>`;
     return h + s + veCauHoi(c, ST) + veHoiDoi(V, ST) + xh;
   }
-  if (V.buoc === 'doc' && V.cau) return h + ls + `<button class="chinh to" data-act="tiep">Câu tiếp → <span class="mo" style="color:#fff8ecc0;font-size:14px" data-het="${nhanCua(V, ST) + V.docCon}"></span></button>` + veCauHoi(V.cau, ST) + xh;
+  if (V.buoc === 'doc' && V.cau) {
+    const TT = nhanCua(V, ST);
+    const nut = V.docMo > 0
+      ? `<button class="chinh to" disabled>📖 Đang đọc giải thích… <span data-het="${TT + V.docMo}"></span></button>`
+      : `<button class="chinh to" data-act="tiep">Câu tiếp → <span style="color:#fff8ecc0;font-size:.78em" data-het="${TT + V.docCon}"></span></button>`;
+    return h + ls + nut + veCauHoi(V.cau, ST) + xh;
+  }
   if (V.buoc === 'chon' && V.cho) {
     const c = V.cho;
     if (c.loai === 'buoc') return h + ls + `<div class="hang">${[1, 2, 3].map(n => `<button class="to" style="width:auto;flex:1" data-act="chon" data-seq="${c.seq}" data-gt="${n}">${n}</button>`).join('')}</div>` + xh;
@@ -1729,7 +1742,7 @@ function veCauHoi(c, ST) {
   if (daTL) {
     h += `<div class="tb ${c.dung ? 'tot' : 'xau'}" style="font-size:18px">${c.dung ? '✔ Đúng!' : (c.traLoi === '-' ? '⏱ Hết giờ' : '✘ Chưa đúng')}</div>`;
     if (!c.dung) h += `<div class="gt">Đáp án: <b>${esc(c.dapAn)}</b></div>`;
-    if (c.g) h += `<details class="gt" ${c.dung ? '' : 'open'}><summary>Giải thích</summary>${esc(c.g)}</details>`;
+    if (c.g) h += `<div class="gthich"><b>Giải thích</b><br>${esc(c.g)}</div>`;
   }
   return h;
 }
