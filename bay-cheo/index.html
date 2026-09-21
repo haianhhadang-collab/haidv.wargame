@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bẫy chéo — Tư tưởng Hồ Chí Minh, buổi 3</title>
+<style>
+:root{
+  --do:#A4161A; --do-dam:#6E0D10; --do-nen:#FBECEA;
+  --giay:#FFFDF9; --the:#FFFFFF; --hop:#F6F1EA; --vien:#E0D7CC;
+  --muc:#1F1F1F; --muc2:#6B625A;
+  --xanh:#2E7D32; --xanh-nen:#E8F2E9;
+  --n1:#C43D2E; --n2:#0E7C86; --n3:#B7791F; --n4:#5B21B6;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--giay);color:var(--muc);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1500px;margin:0 auto;padding:14px 20px 18px;min-height:100%;display:flex;flex-direction:column}
+.man{display:none;flex:1;flex-direction:column}
+.man.on{display:flex}
+
+/* ---------- màn mở ---------- */
+.bia{justify-content:center;text-align:center;gap:6px}
+.bia h1{font-size:clamp(44px,7vw,86px);margin:6px 0;color:var(--do);letter-spacing:-.02em}
+.bia .sub{font-size:clamp(17px,2vw,23px);color:var(--muc2)}
+.luat{max-width:1000px;margin:22px auto 0;text-align:left;display:grid;gap:9px}
+.luat .d{background:var(--hop);border:1px solid var(--vien);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline}
+.luat .d b{color:var(--do);font-size:19px;white-space:nowrap}
+.luat .d span{font-size:16.5px}
+.ten{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:1000px;margin:18px auto 0}
+.ten input{width:100%;padding:11px 12px;border:1.5px solid var(--vien);border-radius:10px;
+  font:inherit;font-weight:600;text-align:center;background:var(--the);color:var(--muc)}
+
+/* ---------- thanh trên ---------- */
+.top{display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--do);
+  border-radius:14px;color:#fff}
+.top.db{background:var(--do-dam)}
+.top .stt{font-size:27px;font-weight:700;white-space:nowrap}
+.top .dang{font-size:17px;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:999px;white-space:nowrap}
+.top .vong{font-size:15px;opacity:.85;white-space:nowrap}
+.top .sp{flex:1}
+.dh{font-size:52px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;min-width:104px;text-align:right}
+.dh.het{color:#FFD5D0}
+.thanh{height:9px;background:var(--vien);border-radius:99px;overflow:hidden;margin:9px 0 14px}
+.thanh i{display:block;height:100%;width:100%;background:var(--do);transition:width .25s linear}
+.thanh i.gap{background:#D97706}
+.thanh i.het{background:#9B1C1C}
+
+/* ---------- câu hỏi ---------- */
+.hoi{font-size:clamp(23px,2.5vw,33px);font-weight:700;line-height:1.28;margin:2px 0 16px}
+.pa{display:grid;gap:10px}
+.pa .o{display:flex;gap:15px;align-items:center;background:var(--hop);border:1.5px solid var(--vien);
+  border-radius:13px;padding:12px 16px;font-size:clamp(16px,1.55vw,21px)}
+.pa .o .k{width:44px;height:44px;flex:none;border-radius:50%;background:var(--do);color:#fff;
+  font-weight:700;font-size:22px;display:grid;place-items:center}
+.pa .o.dung{background:var(--xanh-nen);border-color:var(--xanh)}
+.pa .o.dung .k{background:var(--xanh)}
+.pa .o.mo{opacity:.4}
+.vs{margin-top:14px;background:var(--xanh-nen);border:1.5px solid var(--xanh);border-radius:13px;padding:13px 18px}
+.vs h3{margin:0 0 5px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--xanh)}
+.vs p{margin:0;font-size:clamp(15px,1.45vw,19.5px);line-height:1.5}
+
+/* ---------- bảng điểm ---------- */
+.duoi{margin-top:auto;padding-top:14px}
+.bang{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.nhom{background:var(--the);border:2px solid var(--vien);border-radius:13px;padding:9px 12px;
+  display:flex;align-items:center;gap:10px;transition:.15s}
+.nhom.chon{border-color:var(--do);background:var(--do-nen);box-shadow:0 0 0 3px rgba(164,22,26,.14)}
+.nhom .cham{width:13px;height:13px;border-radius:50%;flex:none}
+.nhom:nth-child(1) .cham{background:var(--n1)} .nhom:nth-child(2) .cham{background:var(--n2)}
+.nhom:nth-child(3) .cham{background:var(--n3)} .nhom:nth-child(4) .cham{background:var(--n4)}
+.nhom .tn{font-weight:600;font-size:16px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nhom .d{font-size:31px;font-weight:800;font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.nhom .nut{display:flex;flex-direction:column;gap:3px}
+.nhom .nut button{width:26px;height:20px;border:1px solid var(--vien);background:var(--hop);
+  border-radius:5px;font-size:12px;line-height:1;padding:0}
+
+/* ---------- hàng điều khiển ---------- */
+.dk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:11px}
+.b{border:1.5px solid var(--vien);background:var(--the);border-radius:10px;padding:10px 15px;font-size:16px;font-weight:600}
+.b:hover{border-color:var(--muc2)}
+.b.chinh{background:var(--do);border-color:var(--do);color:#fff}
+.b.xanh{background:var(--xanh);border-color:var(--xanh);color:#fff}
+.b.to{font-size:18px;padding:12px 22px}
+.b:disabled{opacity:.35;cursor:not-allowed}
+.b .p{opacity:.6;font-size:13px;font-weight:500;margin-left:6px}
+.tt{font-size:14px;color:var(--muc2);margin-left:auto;text-align:right}
+.tt b{color:var(--do)}
+
+/* ---------- chuyển vòng & kết ---------- */
+.chuyen{justify-content:center;text-align:center}
+.chuyen h2{font-size:clamp(40px,6vw,74px);color:var(--do-dam);margin:0 0 12px}
+.xh{max-width:900px;margin:0 auto;display:grid;gap:11px}
+.xh .h{display:flex;align-items:center;gap:16px;background:var(--hop);border:1.5px solid var(--vien);
+  border-radius:14px;padding:14px 20px;font-size:24px}
+.xh .h.nhat{background:#FFF7E0;border-color:var(--n3);border-width:2.5px}
+.xh .h .hang{font-size:32px;font-weight:800;width:56px;color:var(--do)}
+.xh .h .tn{flex:1;font-weight:600;text-align:left}
+.xh .h .d{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+@media (max-width:900px){
+  .ten,.bang{grid-template-columns:repeat(2,1fr)}
+  .dh{font-size:40px;min-width:78px}
+}
+@media print{.dk,.thanh{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= MÀN MỞ ================= -->
+<section class="man bia on" id="manBia">
+  <div style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:var(--muc2)">
+    POL1001 · Tư tưởng Hồ Chí Minh · Buổi 3 · Mốc 5 · BẢN DỰ PHÒNG</div>
+  <h1>BẪY CHÉO</h1>
+  <div class="sub">12 câu vòng chính &nbsp;+&nbsp; vòng đặc biệt 3 câu về thang điểm &nbsp;·&nbsp; 15 giây mỗi câu</div>
+
+  <div class="luat">
+    <div class="d"><b>Đây là bản dự phòng</b><span>Bản chính của mốc 5 là <b>câu hỏi do sinh viên soạn</b>. Chỉ mở bản này khi lớp nộp thiếu hoặc câu không dùng được.</span></div>
+    <div class="d"><b>Giơ tay</b><span>Mỗi nhóm cử <b>một đại diện</b> giơ tay, <b>đổi người sau mỗi 4 câu</b>.</span></div>
+    <div class="d"><b>Trọng tài</b><span><b>Lớp trưởng</b> làm trọng tài. Quyết định của trọng tài là quyết định cuối cùng.</span></div>
+    <div class="d"><b>15 giây</b><span>Đồng hồ chạy ngay khi câu hỏi hiện ra. Hết giờ không ai giơ tay thì bỏ câu.</span></div>
+    <div class="d"><b>Đúng +3 · Sai −1</b><span>Như phiếu BTVN W3 đã phát. Trả lời sai thì quyền trả lời chuyển sang nhóm giơ tay nhanh thứ hai.</span></div>
+    <div class="d"><b>Vòng đặc biệt</b><span>Ba câu cuối hỏi về <b>thang điểm của khung đáp án</b> — chỗ mất điểm oan nhất trong bài thi. Điểm như vòng chính.</span></div>
+  </div>
+
+  <div class="ten" id="oTen"></div>
+  <div class="dk" style="justify-content:center;margin-top:20px">
+    <button class="b chinh to" id="btBatDau">Bắt đầu ▶</button>
+    <button class="b to" id="btToanMan">Toàn màn hình</button>
+  </div>
+  <div style="margin-top:14px;font-size:14px;color:var(--muc2)">
+    Phím tắt: <b>1 2 3 4</b> chọn nhóm giơ tay · <b>Đ</b> đúng · <b>S</b> sai ·
+    <b>A</b> hiện đáp án · <b>Enter</b> câu tiếp · <b>Space</b> dừng/chạy đồng hồ · <b>R</b> chạy lại 15 giây
+  </div>
+</section>
+
+<!-- ================= MÀN CHUYỂN VÒNG ================= -->
+<section class="man chuyen" id="manChuyen">
+  <h2>VÒNG ĐẶC BIỆT</h2>
+  <div class="sub" style="font-size:clamp(19px,2.2vw,28px);color:var(--muc2)">
+    Ba ý nghĩa của việc học tập môn học</div>
+  <div style="margin-top:18px;font-size:clamp(18px,2vw,24px)">
+    Điểm cao hơn: <b style="color:var(--do)">đúng +3</b> &nbsp;·&nbsp; <b style="color:var(--do)">sai −1</b></div>
+  <div class="dk" style="justify-content:center;margin-top:26px">
+    <button class="b chinh to" id="btVaoDB">Vào vòng đặc biệt ▶</button>
+  </div>
+</section>
+
+<!-- ================= MÀN CHƠI ================= -->
+<section class="man" id="manChoi">
+  <div class="top" id="thanhTren">
+    <div class="stt" id="txtStt">CÂU 1 / 12</div>
+    <div class="dang" id="txtDang">Chọn 1 đáp án đúng</div>
+    <div class="vong" id="txtDiem">đúng +2 · sai −1</div>
+    <div class="sp"></div>
+    <div class="dh" id="txtDh">15</div>
+  </div>
+  <div class="thanh"><i id="thanhGio"></i></div>
+
+  <div class="hoi" id="txtHoi"></div>
+  <div class="pa" id="oPa"></div>
+  <div class="vs" id="oVs" style="display:none">
+    <h3>Vì sao</h3><p id="txtVs"></p>
+  </div>
+
+  <div class="duoi">
+    <div class="bang" id="oBang"></div>
+    <div class="dk">
+      <button class="b" id="btDung">Đúng <span class="p" id="pDung">+2</span></button>
+      <button class="b" id="btSai">Sai <span class="p" id="pSai">−1</span></button>
+      <button class="b" id="btLai">Chạy lại 15s <span class="p">R</span></button>
+      <button class="b xanh" id="btDapAn">Hiện đáp án <span class="p">A</span></button>
+      <button class="b chinh" id="btTiep">Câu tiếp <span class="p">Enter</span></button>
+      <div class="tt" id="txtTro">Trọng tài <b>lớp trưởng</b> chỉ nhóm giơ tay nhanh nhất → bấm số nhóm</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MÀN KẾT ================= -->
+<section class="man chuyen" id="manKet">
+  <h2 style="color:var(--do)">KẾT QUẢ</h2>
+  <div class="xh" id="oXh"></div>
+  <div class="dk" style="justify-content:center;margin-top:24px">
+    <button class="b to" id="btChoiLai">Chơi lại từ đầu</button>
+  </div>
+  <div style="margin-top:20px;font-size:clamp(17px,1.9vw,22px);color:var(--muc2)">
+    Ba từ khóa mang ra khỏi phòng: <b style="color:var(--do)">TƯ DUY — ĐẠO ĐỨC — PHONG CÁCH</b></div>
+</section>
+
+</div>
+<script>
+const DATA = {"ten": "Bẫy chéo — buổi 3 (bản dự phòng của giảng viên)", "nguon": "Học liệu 04 buổi 3 — 12 câu vòng chính + 3 câu vòng đặc biệt về thang điểm. Chỉ dùng khi câu hỏi sinh viên soạn không đủ hoặc không dùng được. Nội dung rút từ Giáo trình 2026, Chương 2 mục I.1.a và đáp án câu 3 của dự thảo đề thi.", "giay": 15, "diem": {"chinh": {"dung": 3, "sai": -1}, "dacbiet": {"dung": 3, "sai": -1}}, "cau": [{"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Sự thất bại của các cuộc khởi nghĩa dưới ngọn cờ “Cần Vương” chứng tỏ điều cốt lõi nào?", "opts": ["Tư tưởng phong kiến tỏ ra lỗi thời trước các nhiệm vụ lịch sử.", "Các tổ chức và người lãnh đạo chưa có phương pháp cách mạng đúng đắn.", "Giai cấp tư sản Việt Nam thời kỳ này còn non yếu.", "Giai cấp công nhân mới chỉ là một lực lượng ít ỏi, non trẻ."], "ans": 0, "why": "Giáo trình: “Các cuộc khởi nghĩa vũ trang dưới ngọn cờ ‘Cần Vương’ do các sĩ phu, văn thân lãnh đạo cuối cùng đều thất bại. Điều đó chứng tỏ tư tưởng phong kiến tỏ ra lỗi thời trước các nhiệm vụ lịch sử.” Phương án B và C là nguyên nhân thất bại của khuynh hướng DÂN CHỦ TƯ SẢN — đây là cái bẫy tráo nguyên nhân giữa hai khuynh hướng."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Thực dân Pháp bắt đầu xâm lược Việt Nam năm nào, và triều đình nhà Nguyễn phản ứng ra sao?", "opts": ["Năm 1858, triều đình tổ chức kháng chiến toàn quốc đến cùng.", "Năm 1884, triều đình lập tức ký hiệp ước đầu hàng đầu tiên.", "Năm 1858, triều đình lần lượt ký các hiệp ước đầu hàng, từng bước trở thành tay sai của thực dân Pháp.", "Năm 1897, triều đình chủ động mời Pháp vào khai thác thuộc địa."], "ans": 2, "why": "Nguyên văn giáo trình: “Năm 1858, thực dân Pháp bắt đầu tiến hành xâm lược Việt Nam. Triều đình nhà Nguyễn lần lượt ký kết các hiệp ước đầu hàng, từng bước trở thành tay sai của thực dân Pháp.”"}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Bên cạnh mâu thuẫn cơ bản giữa nông dân với địa chủ phong kiến, xã hội Việt Nam xuất hiện những mâu thuẫn MỚI nào?", "opts": ["Thợ thủ công với tư sản; tiểu tư sản thành thị với Pháp.", "Công nhân Việt Nam với tư sản; toàn thể nhân dân Việt Nam với thực dân Pháp.", "Nông dân với địa chủ; tiểu thương thành thị với thực dân Pháp.", "Tiểu tư sản với địa chủ; toàn thể nhân dân với tư bản."], "ans": 1, "why": "Đúng nội dung ô 5 của khung đáp án. Chú ý chữ “bên cạnh”: mâu thuẫn cũ giữa nông dân với địa chủ phong kiến KHÔNG mất đi, mâu thuẫn mới chồng lên trên."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Nguyên nhân SÂU XA dẫn đến thất bại của các phong trào yêu nước theo khuynh hướng dân chủ tư sản đầu thế kỷ XX là gì?", "opts": ["Tổ chức lãnh đạo chưa có đường lối đúng đắn.", "Lực lượng công nhân lúc đó còn quá ít ỏi.", "Giai cấp tư sản Việt Nam còn non yếu.", "Tinh thần yêu nước chưa sục sôi trong nhân dân."], "ans": 2, "why": "Giáo trình tách rõ hai loại: “Nguyên nhân sâu xa là giai cấp tư sản Việt Nam còn non yếu. Nguyên nhân trực tiếp là các tổ chức và người lãnh đạo của các phong trào chưa có đường lối và phương pháp cách mạng đúng đắn.” Phương án A là nguyên nhân TRỰC TIẾP. Phương án D trái hẳn giáo trình: “Tinh thần yêu nước vẫn sục sôi trong lòng nhân dân.”"}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Giai cấp công nhân Việt Nam trước Chiến tranh thế giới thứ nhất chịu sự áp bức, bóc lột của những thế lực nào?", "opts": ["Đế quốc, tư sản, địa chủ.", "Thực dân Pháp, tư sản, điền chủ.", "Xâm lược, tư bản, tiểu tư sản.", "Thực dân, tư bản, phong kiến."], "ans": 3, "why": "Nguyên văn: “Công nhân Việt Nam chịu ba tầng áp bức bóc lột: thực dân, tư bản, phong kiến.” Ba phương án kia đều đổi một trong ba chữ — đây là kiểu bẫy đổi một chữ của cụm cố định."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Quá trình khai thác thuộc địa của thực dân Pháp tác động thế nào đến giai cấp địa chủ ở Việt Nam?", "opts": ["Bị xóa bỏ hoàn toàn cùng với chế độ phong kiến.", "Được bổ sung, củng cố, tăng cường thêm các điền chủ người Pháp và người nước ngoài.", "Chuyển hóa thành giai cấp tư sản công nghiệp hiện đại.", "Tự nguyện giao lại ruộng đất cho nông dân."], "ans": 1, "why": "Câu bẫy trọng tâm của cả buổi. Ai hiểu “xuất hiện giai tầng mới” nghĩa là “giai cấp cũ mất đi” sẽ chọn A. Giáo trình còn ghi Pháp “vẫn duy trì nền kinh tế nông nghiệp lạc hậu với khoảng 95% dân số là nông dân”."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Bên cạnh tầng lớp thợ thủ công và tiểu thương, xã hội Việt Nam xuất hiện những giai tầng MỚI nào?", "opts": ["Giai cấp công nhân, giai cấp tư sản và tầng lớp tiểu tư sản ở thành thị.", "Giai cấp công nhân, giai cấp nông dân và tầng lớp trí thức.", "Giai cấp tư sản, giai cấp địa chủ và tầng lớp điền chủ người Pháp.", "Giai cấp công nhân, tầng lớp sĩ phu và tầng lớp văn thân."], "ans": 0, "why": "Nội dung ô 4. B sai vì nông dân là giai cấp CŨ. C sai vì địa chủ là giai cấp cũ được củng cố. D sai vì sĩ phu, văn thân là tầng lớp cũ — chính họ đã lãnh đạo Cần Vương."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Nhóm tên nào dưới đây gồm TOÀN BỘ là người lãnh đạo phong trào theo khuynh hướng DÂN CHỦ TƯ SẢN?", "opts": ["Trương Định, Nguyễn Trung Trực, Hoàng Hoa Thám.", "Trần Tấn, Đặng Như Mai, Nguyễn Thiện Thuật.", "Phan Bội Châu, Phan Châu Trinh, Lương Văn Can, Nguyễn Quyền.", "Phan Đình Phùng, Phạm Bành, Đinh Công Tráng."], "ans": 2, "why": "A, B, D đều thuộc khuynh hướng PHONG KIẾN — khởi nghĩa vũ trang và Cần Vương. C gồm Đông Du (Phan Bội Châu), Duy Tân (Phan Châu Trinh) và Đông Kinh nghĩa thục (Lương Văn Can, Nguyễn Quyền). Xếp nhầm tên là sai luận cứ, không phải sai chi tiết."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Ghép đúng phong trào với người khởi xướng và thời gian:", "opts": ["Đông Du — Phan Châu Trinh — 1905–1909.", "Duy Tân — Phan Bội Châu — 1906–1908.", "Đông Kinh nghĩa thục — Lương Văn Can, Nguyễn Quyền — 1905–1909.", "Đông Du — Phan Bội Châu — 1905–1909."], "ans": 3, "why": "Đông Du: Phan Bội Châu, 1905–1909. Duy Tân: Phan Châu Trinh, 1906–1908. Đông Kinh nghĩa thục: Lương Văn Can, Nguyễn Quyền, từ tháng 3 đến tháng 11/1907. Hai phương án đầu tráo chỗ hai cụ Phan."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Giáo trình mô tả phong trào công nhân Việt Nam chuyển từ hình thức đấu tranh nào sang hình thức nào?", "opts": ["Từ bãi công, đình công tiến tới khởi nghĩa vũ trang giành chính quyền.", "Từ đốt lán trại, bỏ trốn tập thể tiến tới đình công, bãi công.", "Từ biểu tình ôn hòa tiến tới thành lập công đoàn hợp pháp.", "Từ đình công tiến tới thành lập chính đảng của giai cấp công nhân."], "ans": 1, "why": "Nguyên văn: “Từ hình thức đấu tranh thô sơ như đốt lán trại, bỏ trốn tập thể, họ đã nhanh chóng tiến tới đình công, bãi công.” A và D nói về giai đoạn sau — không thuộc bài này."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Thực tiễn Việt Nam cuối XIX – đầu XX tạo ra những tiền đề nào cho sự hình thành tư tưởng Hồ Chí Minh? Chọn tổ hợp ĐÚNG.", "opts": ["Khủng hoảng về đường lối cứu nước · sự ra đời của giai cấp công nhân · mâu thuẫn xã hội sâu sắc thêm.", "Khủng hoảng về đường lối cứu nước · thành công của các cuộc vận động cải cách · Việt Nam giành lại độc lập.", "Sự ra đời của giai cấp công nhân · thành công của phong trào Đông Du · mâu thuẫn xã hội sâu sắc thêm.", "Việt Nam trở thành quốc gia độc lập hoàn toàn · giai cấp tư sản lớn mạnh · phong trào Cần Vương thắng lợi."], "ans": 0, "why": "Ba tiền đề giáo trình nêu: khủng hoảng về đường lối cứu nước sau khi mọi phong trào đều thất bại; sự ra đời và phát triển của giai cấp công nhân cùng phong trào đấu tranh của họ; việc Pháp biến Việt Nam thành nước thuộc địa làm các mâu thuẫn xã hội sâu sắc thêm. Mọi phương án nhắc tới “thành công”, “thắng lợi” hay “giành lại độc lập” đều ngược chiều của bài này."}, {"vong": "chinh", "dang": "Điền khuyết", "q": "Cuộc khủng hoảng về đường lối cứu nước đặt ra câu hỏi từ thực tiễn: “Cứu nước bằng con đường nào để có thể đi đến ______?”", "opts": ["Độc lập", "Văn minh", "Thắng lợi", "Hội nhập"], "ans": 2, "why": "Nguyên văn giáo trình: “Xuất hiện câu hỏi từ thực tiễn đặt ra là: Cứu nước bằng con đường nào để có thể đi đến thắng lợi?” Chữ “thắng lợi” là chữ đắt: các phong trào trước đó không thiếu lòng yêu nước, cũng không thiếu người hy sinh — cái thiếu là con đường đi tới thắng lợi. Đây cũng là câu mở của buổi 4."}, {"vong": "dacbiet", "dang": "Chọn 1 đáp án đúng", "q": "Trong đáp án đề thi, ý phụ “Xã hội Việt Nam thay đổi” đáng bao nhiêu điểm?", "opts": ["0,5 điểm", "1,0 điểm", "1,5 điểm", "2,5 điểm"], "ans": 2, "why": "1,5 điểm — gồm ba luận cứ, mỗi luận cứ 0,5. Đây là phần nhiều điểm nhất của bài, nhưng lại là phần sinh viên hay viết ngắn nhất vì không thuộc sử phổ thông."}, {"vong": "dacbiet", "dang": "Chọn 1 đáp án đúng", "q": "Hai ý phụ của bài — “Xã hội Việt Nam thay đổi” và “Phong trào đều bị thất bại” — ý nào nhiều điểm hơn, và hơn bao nhiêu?", "opts": ["Hai ý bằng nhau, mỗi ý 1,25 điểm.", "“Phong trào đều bị thất bại” nhiều hơn 0,5 điểm.", "“Xã hội Việt Nam thay đổi” nhiều hơn 0,5 điểm.", "“Xã hội Việt Nam thay đổi” nhiều hơn 1,0 điểm."], "ans": 2, "why": "1,5 so với 1,0 — chênh 0,5 điểm. Ai dồn công viết dài phần phong trào vì thuộc tên các thủ lĩnh, rồi viết qua loa phần xã hội thay đổi, là mất điểm ở đúng chỗ nhiều điểm nhất."}, {"vong": "dacbiet", "dang": "Chọn 1 đáp án đúng", "q": "Ý phụ “Phong trào theo khuynh hướng phong kiến và dân chủ tư sản đều bị thất bại” đáng 1,0 điểm. 1,0 điểm ấy nằm ở đâu?", "opts": ["Cả 1,0 điểm cho câu khái quát; hai luận cứ bên dưới không có điểm.", "Hai luận cứ bên dưới, mỗi luận cứ 0,5 — cộng lại đúng 1,0 của ý phụ.", "Câu khái quát 1,0, cộng thêm mỗi luận cứ 0,5 — cả nhánh 2,0 điểm.", "Câu khái quát 0,5, hai luận cứ mỗi cái 0,25."], "ans": 1, "why": "Điểm của ý phụ là điểm của cả nhánh: 0,5 + 0,5 = 1,0. Cả bài cũng vậy: 1,5 + 1,0 = 2,5 điểm của ý chính. Câu khái quát “đều bị thất bại” không được cộng điểm riêng — nhưng nó nối hai luận cứ thành một ý. Thiếu nó, bài chỉ còn là kể hai phong trào rời nhau."}]};
+const CAU = DATA.cau, GIAY = DATA.giay, DIEM = DATA.diem;
+const SO_CHINH = CAU.filter(c => c.vong === "chinh").length;
+const KY = ["A","B","C","D"];
+const $ = id => document.getElementById(id);
+
+let iCau = 0, nhomChon = -1, hienDapAn = false, conLai = GIAY, dangChay = false, dongHo = null;
+let diem = [0,0,0,0];
+let ten = ["Nhóm 1","Nhóm 2","Nhóm 3","Nhóm 4"];
+
+/* ---- ô nhập tên nhóm ở màn mở ---- */
+ten.forEach((t,i) => {
+  const inp = document.createElement("input");
+  inp.value = t; inp.maxLength = 22; inp.setAttribute("aria-label","Tên nhóm "+(i+1));
+  inp.oninput = () => { ten[i] = inp.value.trim() || ("Nhóm "+(i+1)); veBang(); };
+  $("oTen").appendChild(inp);
+});
+
+/* ---- bảng điểm ---- */
+function veBang(){
+  const o = $("oBang"); o.innerHTML = "";
+  ten.forEach((t,i) => {
+    const d = document.createElement("div");
+    d.className = "nhom" + (i === nhomChon ? " chon" : "");
+    d.onclick = () => chonNhom(i);
+    d.innerHTML = '<span class="cham"></span><span class="tn"></span>'
+      + '<span class="d">' + diem[i] + '</span>'
+      + '<span class="nut"><button data-c="1">▲</button><button data-c="-1">▼</button></span>';
+    d.querySelector(".tn").textContent = t;
+    d.querySelectorAll("button").forEach(b => b.onclick = e => {
+      e.stopPropagation(); diem[i] += (+b.dataset.c); veBang();
+    });
+    o.appendChild(d);
+  });
+}
+
+/* ---- đồng hồ ---- */
+function veGio(){
+  $("txtDh").textContent = conLai;
+  const i = $("thanhGio");
+  i.style.width = (conLai / GIAY * 100) + "%";
+  i.className = conLai <= 0 ? "het" : (conLai <= 5 ? "gap" : "");
+  $("txtDh").className = "dh" + (conLai <= 0 ? " het" : "");
+}
+function beep(f, ms){
+  try{
+    const c = new (window.AudioContext || window.webkitAudioContext)();
+    const o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = f; o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(.15, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, c.currentTime + ms/1000);
+    o.start(); o.stop(c.currentTime + ms/1000);
+  }catch(e){}
+}
+function chay(){
+  if (dangChay || conLai <= 0) return;
+  dangChay = true;
+  dongHo = setInterval(() => {
+    conLai--; veGio();
+    if (conLai === 5) beep(660, 90);
+    if (conLai <= 0){ dung(); beep(320, 420); }
+  }, 1000);
+}
+function dung(){ dangChay = false; clearInterval(dongHo); dongHo = null; }
+function datLai(){ dung(); conLai = GIAY; veGio(); }
+
+/* ---- điều khiển câu ---- */
+function chonNhom(i){
+  if (i < 0 || i > 3) return;
+  nhomChon = (nhomChon === i ? -1 : i);
+  veBang();
+  $("txtTro").innerHTML = nhomChon < 0
+    ? 'Trọng tài <b>lớp trưởng</b> chỉ nhóm giơ tay nhanh nhất → bấm số nhóm'
+    : 'Đang trả lời: <b>' + ten[nhomChon] + '</b> → bấm Đúng hoặc Sai';
+}
+function cham(dung_){
+  if (nhomChon < 0){ $("txtTro").innerHTML = '<b>Chưa chọn nhóm.</b> Bấm 1–4 hoặc bấm vào ô nhóm.'; return; }
+  const v = CAU[iCau].vong === "dacbiet" ? DIEM.dacbiet : DIEM.chinh;
+  diem[nhomChon] += dung_ ? v.dung : v.sai;
+  beep(dung_ ? 880 : 240, 160);
+  if (dung_){
+    dungLuot(); hien();
+    $("txtTro").innerHTML = '<b>' + ten[nhomChon] + '</b> đúng +' + v.dung + ' — bấm <b>Câu tiếp</b>';
+  }
+  else {
+    const cu = ten[nhomChon];
+    nhomChon = -1; veBang();
+    $("txtTro").innerHTML = '<b>' + cu + '</b> sai −' + Math.abs(v.sai) + '. Quyền trả lời chuyển sang nhóm giơ tay kế tiếp.';
+  }
+  veBang();
+}
+function dungLuot(){ dung(); }
+
+function hien(){
+  hienDapAn = true;
+  const c = CAU[iCau];
+  document.querySelectorAll("#oPa .o").forEach((o,k) => {
+    o.classList.toggle("dung", k === c.ans);
+    o.classList.toggle("mo", k !== c.ans);
+  });
+  $("txtVs").textContent = c.why;
+  $("oVs").style.display = "";
+  dung();
+}
+
+function veCau(){
+  const c = CAU[iCau];
+  const db = c.vong === "dacbiet";
+  const v = db ? DIEM.dacbiet : DIEM.chinh;
+  $("thanhTren").className = "top" + (db ? " db" : "");
+  $("txtStt").textContent = db
+    ? "ĐẶC BIỆT " + (iCau - SO_CHINH + 1) + " / " + (CAU.length - SO_CHINH)
+    : "CÂU " + (iCau + 1) + " / " + SO_CHINH;
+  $("txtDang").textContent = c.dang;
+  $("txtDiem").textContent = "đúng +" + v.dung + " · sai −" + Math.abs(v.sai);
+  $("pDung").textContent = "+" + v.dung;
+  $("pSai").textContent = "−" + Math.abs(v.sai);
+  $("txtHoi").textContent = c.q;
+
+  const o = $("oPa"); o.innerHTML = "";
+  c.opts.forEach((t,k) => {
+    const d = document.createElement("div");
+    d.className = "o";
+    d.innerHTML = '<span class="k">' + KY[k] + '</span><span class="t"></span>';
+    d.querySelector(".t").textContent = t;
+    o.appendChild(d);
+  });
+  $("oVs").style.display = "none";
+  hienDapAn = false; nhomChon = -1;
+  $("txtTro").innerHTML = 'Trọng tài <b>lớp trưởng</b> chỉ nhóm giơ tay nhanh nhất → bấm số nhóm';
+  veBang();
+  datLai();
+  chay();                       // 15 giây chạy ngay khi câu hiện ra
+}
+
+function tiep(){
+  if (iCau >= CAU.length - 1){ ketThuc(); return; }
+  const sau = CAU[iCau + 1];
+  if (sau.vong === "dacbiet" && CAU[iCau].vong === "chinh"){
+    dung(); iCau++; moMan("manChuyen"); return;
+  }
+  iCau++; moMan("manChoi"); veCau();
+}
+
+function ketThuc(){
+  dung();
+  const xh = ten.map((t,i) => ({t, d: diem[i]})).sort((a,b) => b.d - a.d);
+  const o = $("oXh"); o.innerHTML = "";
+  xh.forEach((n,k) => {
+    const d = document.createElement("div");
+    d.className = "h" + (k === 0 ? " nhat" : "");
+    d.innerHTML = '<span class="hang">' + (k+1) + '</span><span class="tn"></span>'
+      + '<span class="d">' + n.d + '</span>';
+    d.querySelector(".tn").textContent = n.t;
+    o.appendChild(d);
+  });
+  moMan("manKet");
+}
+
+function moMan(id){
+  ["manBia","manChuyen","manChoi","manKet"].forEach(m => $(m).classList.toggle("on", m === id));
+}
+
+/* ---- nút ---- */
+$("btBatDau").onclick = () => { iCau = 0; diem = [0,0,0,0]; moMan("manChoi"); veCau(); };
+$("btVaoDB").onclick  = () => { moMan("manChoi"); veCau(); };
+$("btDung").onclick   = () => cham(true);
+$("btSai").onclick    = () => cham(false);
+$("btLai").onclick    = () => { datLai(); chay(); };
+$("btDapAn").onclick  = () => hien();
+$("btTiep").onclick   = () => tiep();
+$("btChoiLai").onclick= () => { iCau = 0; diem = [0,0,0,0]; moMan("manBia"); veBang(); };
+$("btToanMan").onclick= () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+};
+
+/* ---- phím tắt ---- */
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  const k = e.key.toLowerCase();
+  if (!$("manChoi").classList.contains("on")){
+    if (e.key === "Enter"){
+      if ($("manBia").classList.contains("on")) $("btBatDau").click();
+      else if ($("manChuyen").classList.contains("on")) $("btVaoDB").click();
+    }
+    return;
+  }
+  if (k >= "1" && k <= "4"){ chonNhom(+k - 1); e.preventDefault(); }
+  else if (k === "đ" || k === "d"){ cham(true); e.preventDefault(); }
+  else if (k === "s"){ cham(false); e.preventDefault(); }
+  else if (k === "a"){ hien(); e.preventDefault(); }
+  else if (k === "r"){ datLai(); chay(); e.preventDefault(); }
+  else if (e.key === "Enter" || e.key === "ArrowRight"){ tiep(); e.preventDefault(); }
+  else if (e.key === " "){ dangChay ? dung() : chay(); e.preventDefault(); }
+});
+
+veBang();
+</script>
+</body>
+</html>

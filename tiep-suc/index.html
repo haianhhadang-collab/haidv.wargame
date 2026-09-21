@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chạy tiếp sức bốn vế</title>
+<meta name="description" content="Bảng điều khiển trò Chạy tiếp sức bốn vế — mốc 7 buổi 2 môn Tư tưởng Hồ Chí Minh. Giảng viên bấm số từng bạn viết lên bảng, máy giữ thứ tự về đích và chấm khi chốt. Chạy trên một máy, không cần mạng.">
+<style>
+:root{
+  --giay:#F0F1EC; --the:#FBFBF7; --the2:#E7EAE1;
+  --muc:#1B3350; --muc2:#4E657E; --muc3:#8496A6; --vien:#D1D6CA;
+  --vang:#E8B71E; --vang-nen:#F8EDBE;
+  --do:#CE4132; --do-nen:#F6DDD8;
+  --bang:#2F6B52; --bang-nen:#DDEAE1;
+  --d1:#C43D2E; --d2:#0E9488; --d3:#C79413; --d4:#7B3FA0;
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --giay:#121922; --the:#1B2531; --the2:#222D3A;
+  --muc:#E7EEF5; --muc2:#A5B7C7; --muc3:#718597; --vien:#2B3947;
+  --vang:#F6CD44; --vang-nen:#3C3418; --do:#F2705F; --do-nen:#3A211D;
+  --bang:#5CBF90; --bang-nen:#163024;
+  --d1:#D94D3C; --d2:#14A89A; --d3:#D9A61E; --d4:#9159B8;
+}}
+:root[data-theme="dark"]{
+  --giay:#121922; --the:#1B2531; --the2:#222D3A;
+  --muc:#E7EEF5; --muc2:#A5B7C7; --muc3:#718597; --vien:#2B3947;
+  --vang:#F6CD44; --vang-nen:#3C3418; --do:#F2705F; --do-nen:#3A211D;
+  --bang:#5CBF90; --bang-nen:#163024;
+  --d1:#D94D3C; --d2:#14A89A; --d3:#D9A61E; --d4:#9159B8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--giay);color:var(--muc);
+  font-family:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,sans-serif;
+  font-size:clamp(15px,1.15vw,19px);line-height:1.45}
+h1,h2,h3{margin:0;line-height:1.1;text-wrap:balance;font-weight:800}
+p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer;font-family:inherit}
+.mono{font-variant-numeric:tabular-nums}
+:focus-visible{outline:3px solid var(--vang);outline-offset:2px;border-radius:6px}
+.page{max-width:1600px;margin:0 auto;padding:14px 18px 28px;display:flex;flex-direction:column;gap:14px}
+
+/* ---- thanh trên ---- */
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:var(--the);border:1.5px solid var(--vien);border-radius:var(--r);padding:12px 18px}
+.top h1{font-size:clamp(22px,2.3vw,34px)}
+.eyebrow{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--muc3);font-weight:700}
+.clk{margin-left:auto;font-size:clamp(30px,4vw,56px);font-weight:800;letter-spacing:.02em}
+.clk.chay{color:var(--bang)}
+.btn{background:var(--muc);color:var(--giay);border:0;border-radius:10px;padding:11px 20px;font-weight:800;font-size:1.02em}
+.btn:hover{filter:brightness(1.15)}
+.btn:disabled{opacity:.38;cursor:not-allowed;filter:none}
+.btn.g{background:transparent;color:var(--muc);border:2px solid var(--vien)}
+.btn.g:hover{border-color:var(--muc3);filter:none}
+.btn.vang{background:var(--vang);color:#241c00}
+
+/* ---- sáu ô ---- */
+.o-luoi{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:900px){.o-luoi{grid-template-columns:1fr}}
+.o{display:flex;gap:14px;align-items:flex-start;background:var(--the);
+  border:2px solid var(--vien);border-radius:var(--r);padding:14px 16px}
+.o .so{flex:none;width:46px;height:46px;border-radius:50%;background:var(--muc);color:var(--giay);
+  display:grid;place-items:center;font-weight:800;font-size:24px}
+.o .tx{font-size:clamp(14px,1.15vw,19px);line-height:1.35}
+.o .nhan{display:block;margin-top:7px;font-size:13px;font-weight:800;letter-spacing:.06em;text-transform:uppercase}
+.o.dung{border-color:var(--bang);background:var(--bang-nen)}
+.o.dung .so{background:var(--bang)}
+.o.dung .nhan{color:var(--bang)}
+.o.sai{border-color:var(--do);background:var(--do-nen)}
+.o.sai .so{background:var(--do)}
+.o.sai .nhan{color:var(--do);text-transform:none;letter-spacing:0;font-weight:600;font-size:14px}
+
+/* ---- bốn làn ---- */
+.lan{display:grid;grid-template-columns:minmax(150px,200px) minmax(240px,1fr) auto auto;
+  gap:14px;align-items:center;background:var(--the);border:2px solid var(--vien);
+  border-left-width:10px;border-radius:var(--r);padding:12px 16px}
+@media (max-width:1100px){.lan{grid-template-columns:1fr;justify-items:stretch}}
+.lan.chon{border-color:var(--muc);box-shadow:0 0 0 3px var(--vang)}
+.lan .ten{font-weight:800;font-size:clamp(17px,1.5vw,24px)}
+.lan .phim{display:block;font-size:12px;color:var(--muc3);font-weight:600}
+.o-trong{display:flex;gap:9px}
+.slot{width:clamp(54px,5vw,74px);height:clamp(54px,5vw,74px);border-radius:12px;
+  border:2.5px dashed var(--vien);display:grid;place-items:center;
+  font-size:clamp(24px,2.6vw,38px);font-weight:800;color:var(--muc3);background:transparent}
+.slot.co{border-style:solid;background:var(--the2);color:var(--muc)}
+.slot.ok{border-color:var(--bang);background:var(--bang-nen);color:var(--bang)}
+.slot.xau{border-color:var(--do);background:var(--do-nen);color:var(--do)}
+.slot .dau{display:block;font-size:13px;font-weight:700;margin-top:-4px;white-space:nowrap}
+.phimso{display:flex;gap:7px;flex-wrap:wrap}
+.phimso button{width:clamp(40px,3.4vw,52px);height:clamp(40px,3.4vw,52px);border-radius:10px;
+  border:2px solid var(--vien);background:var(--the2);font-weight:800;font-size:clamp(17px,1.6vw,22px)}
+.phimso button:hover:not(:disabled){border-color:var(--muc);background:var(--vang-nen)}
+.phimso button:disabled{opacity:.35;cursor:not-allowed}
+.lan .gio{text-align:right;min-width:120px}
+.lan .gio .t{font-size:clamp(18px,1.8vw,26px);font-weight:800}
+.lan .gio .n{font-size:12.5px;color:var(--muc3)}
+.lui{background:transparent;border:2px solid var(--vien);border-radius:10px;padding:8px 12px;font-size:14px;font-weight:700;width:auto!important;height:auto!important}
+
+/* ---- kết quả ---- */
+.kq{background:var(--the);border:2px solid var(--vang);border-radius:var(--r);padding:16px 18px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muc3);
+  padding:8px 10px;border-bottom:2px solid var(--vien);white-space:nowrap}
+td{padding:10px;border-bottom:1px solid var(--vien);font-size:clamp(15px,1.25vw,20px)}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.cham{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:9px;vertical-align:-1px}
+.ghi{background:var(--the2);border-radius:10px;padding:12px 16px;font-size:.94em;color:var(--muc2)}
+.ghi b{color:var(--muc)}
+.an{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="top">
+    <div>
+      <div class="eyebrow">Tư tưởng Hồ Chí Minh · POL1001 · buổi 2 · mốc 7 · phút 74–83</div>
+      <h1>Chạy tiếp sức bốn vế</h1>
+    </div>
+    <div class="clk mono" id="dongho">00:00</div>
+    <button class="btn" id="batdau">Bắt đầu</button>
+    <button class="btn vang" id="chot">Chốt đáp án</button>
+    <button class="btn g" id="luotmoi">Lượt mới</button>
+  </div>
+
+  <div class="o-luoi" id="oluoi"></div>
+
+  <div id="lanluoi" style="display:flex;flex-direction:column;gap:12px"></div>
+
+  <div class="kq an" id="kq"></div>
+
+  <div class="ghi" id="huong"></div>
+
+</div>
+
+<script>
+"use strict";
+/* ============================================================
+   CHẠY TIẾP SỨC BỐN VẾ — bảng điều khiển cho giảng viên
+   Chiếu lên máy chiếu, chạy trên một máy, không cần mạng.
+   Trong lúc chơi màn hình KHÔNG báo đúng sai (kịch bản: giảng
+   viên không nhắc, không gật, không lắc đầu). Chỉ khi bấm
+   "Chốt đáp án" mới hiện kết quả.
+   ============================================================ */
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* sáu ô — đúng thứ tự đánh số trên slide 12 */
+const O = [
+  {so:1, tx:"…kế thừa và phát triển các giá trị truyền thống tốt đẹp của dân tộc, tiếp thu tinh hoa văn hóa nhân loại"},
+  {so:2, tx:"…kết quả của sự vận dụng NGUYÊN VẸN chủ nghĩa Mác – Lênin vào điều kiện cụ thể của nước ta",
+         sai:"Sai một chữ then chốt: đúng phải là “vận dụng và phát triển SÁNG TẠO”. Bỏ chữ sáng tạo là biến Bác thành người chép sách. (Thẻ nhiễu N1 ở mốc 3.)"},
+  {so:3, tx:"…là một hệ thống quan điểm toàn diện và sâu sắc về những vấn đề cơ bản của cách mạng Việt Nam"},
+  {so:4, tx:"…là tài sản tinh thần vô cùng to lớn và quý giá của Đảng và dân tộc ta, mãi mãi soi đường cho sự nghiệp cách mạng của nhân dân ta giành thắng lợi"},
+  {so:5, tx:"…kết quả của sự vận dụng và phát triển SÁNG TẠO chủ nghĩa Mác – Lênin vào điều kiện cụ thể của nước ta"},
+  {so:6, tx:"…là tài sản tinh thần VÔ GIÁ của RIÊNG Đảng Cộng sản Việt Nam",
+         sai:"Sai hai chỗ: đúng là “vô cùng to lớn và quý giá”, và “của Đảng VÀ DÂN TỘC TA”. (Thẻ nhiễu N2 ở mốc 3.)"}
+];
+/* đáp án: vế 1 – vế 2 – vế 3 – vế 4 */
+const DUNG = [3, 5, 1, 4];
+const VAI = ["vế 1 · là gì", "vế 2 · từ đâu", "vế 3 · còn từ đâu nữa", "vế 4 · để làm gì"];
+const DIEM = [4, 3, 2, 1];
+const PHIM_LAN = ["q", "w", "e", "r"];
+
+const S = {
+  lan: [1,2,3,4].map(n => ({so:n, chon:[], xong:null})),
+  chon: 0, chay:false, t0:0, dung:0, chot:false
+};
+
+/* ---------- đồng hồ ---------- */
+function giay(){ return S.chay ? (Date.now() - S.t0 + S.dung) : S.dung; }
+function mmss(ms){
+  const t = Math.max(0, Math.floor(ms/1000));
+  return String(Math.floor(t/60)).padStart(2,"0") + ":" + String(t%60).padStart(2,"0");
+}
+function veDongHo(){
+  $("#dongho").textContent = mmss(giay());
+  $("#dongho").className = "clk mono" + (S.chay ? " chay" : "");
+}
+
+/* ---------- sáu ô ---------- */
+function veO(){
+  $("#oluoi").innerHTML = O.map(o=>{
+    let cls = "o", nhan = "";
+    if(S.chot){
+      const vt = DUNG.indexOf(o.so);
+      if(vt >= 0){ cls += " dung"; nhan = `<span class="nhan">${esc(VAI[vt])}</span>`; }
+      else { cls += " sai"; nhan = `<span class="nhan">${esc(o.sai || "Ô sai")}</span>`; }
+    }
+    return `<div class="${cls}"><span class="so mono">${o.so}</span>
+      <span><span class="tx">${esc(o.tx)}</span>${nhan}</span></div>`;
+  }).join("");
+}
+
+/* ---------- bốn làn ---------- */
+function veLan(){
+  $("#lanluoi").innerHTML = S.lan.map((l, i)=>{
+    const mau = "var(--d" + l.so + ")";
+    const slots = [0,1,2,3].map(k=>{
+      const v = l.chon[k];
+      let cls = "slot" + (v ? " co" : "");
+      let dau = "";
+      if(S.chot && v){
+        const ok = v === DUNG[k];
+        cls = "slot " + (ok ? "ok" : "xau");
+        dau = `<span class="dau">${ok ? "✓" : "✕ đúng: " + DUNG[k]}</span>`;
+      }
+      return `<div class="${cls} mono">${v || "·"}${dau}</div>`;
+    }).join("");
+    const nut = O.map(o=>`<button data-lan="${i}" data-so="${o.so}"
+        ${(!S.chay || S.chot || l.chon.length >= 4) ? "disabled" : ""}>${o.so}</button>`).join("");
+    return `<div class="lan ${S.chon === i ? "chon" : ""}" data-chon="${i}" style="border-left-color:${mau}">
+      <div><span class="ten" style="color:${mau}">Nhóm ${l.so}</span>
+        <span class="phim">phím ${PHIM_LAN[i].toUpperCase()} để chọn làn</span></div>
+      <div class="o-trong">${slots}</div>
+      <div class="phimso">${nut}
+        <button class="lui" data-lui="${i}" ${(!l.chon.length || S.chot) ? "disabled" : ""}>↶ xóa ô cuối</button></div>
+      <div class="gio"><div class="t mono">${l.xong === null ? "—" : mmss(l.xong)}</div>
+        <div class="n">${l.xong === null ? (l.chon.length + "/4 ô") : "về đích"}</div></div>
+    </div>`;
+  }).join("");
+}
+
+/* ---------- ghi một số ---------- */
+function ghi(i, so){
+  const l = S.lan[i];
+  if(!S.chay || S.chot || l.chon.length >= 4) return;
+  l.chon.push(so);
+  if(l.chon.length === 4) l.xong = giay();
+  S.chon = i;
+  veLan();
+}
+function lui(i){
+  const l = S.lan[i];
+  if(S.chot || !l.chon.length) return;
+  l.chon.pop(); l.xong = null; S.chon = i; veLan();
+}
+
+$("#lanluoi").onclick = e=>{
+  const b = e.target.closest("[data-so],[data-lui]");
+  if(b){
+    if(b.dataset.lui !== undefined) lui(Number(b.dataset.lui));
+    else ghi(Number(b.dataset.lan), Number(b.dataset.so));
+    return;
+  }
+  const l = e.target.closest("[data-chon]");
+  if(l){ S.chon = Number(l.dataset.chon); veLan(); }
+};
+
+/* ---------- nút điều khiển ---------- */
+$("#batdau").onclick = ()=>{
+  if(S.chot) return;
+  if(S.chay){ S.dung = giay(); S.chay = false; }
+  else { S.t0 = Date.now(); S.chay = true; }
+  $("#batdau").textContent = S.chay ? "Tạm dừng" : (S.dung ? "Chạy tiếp" : "Bắt đầu");
+  veDongHo(); veLan(); veHuong();
+};
+$("#chot").onclick = ()=>{
+  if(S.chot) return;
+  if(S.chay){ S.dung = giay(); S.chay = false; }
+  S.chot = true;
+  $("#batdau").disabled = true;
+  $("#chot").disabled = true;
+  veDongHo(); veO(); veLan(); veKQ(); veHuong();
+};
+$("#luotmoi").onclick = ()=>{
+  S.lan.forEach(l=>{ l.chon = []; l.xong = null; });
+  S.chay = false; S.dung = 0; S.t0 = 0; S.chot = false; S.chon = 0;
+  $("#batdau").disabled = false; $("#batdau").textContent = "Bắt đầu";
+  $("#chot").disabled = false;
+  $("#kq").className = "kq an";
+  veDongHo(); veO(); veLan(); veHuong();
+};
+
+/* ---------- bàn phím ---------- */
+document.addEventListener("keydown", e=>{
+  if(e.ctrlKey || e.altKey || e.metaKey) return;
+  const k = e.key.toLowerCase();
+  const iLan = PHIM_LAN.indexOf(k);
+  if(iLan >= 0){ S.chon = iLan; veLan(); e.preventDefault(); return; }
+  if(k >= "1" && k <= "6"){ ghi(S.chon, Number(k)); e.preventDefault(); return; }
+  if(k === "backspace"){ lui(S.chon); e.preventDefault(); return; }
+  if(k === " "){ $("#batdau").click(); e.preventDefault(); return; }
+  if(k === "enter"){ $("#chot").click(); e.preventDefault(); }
+});
+
+/* ---------- xếp hạng ----------
+   Kịch bản: xong trước và đúng cả bốn số thì thắng;
+   xong trước mà sai thì thua nhóm xong sau mà đúng. */
+function xepHang(){
+  return S.lan.map(l=>{
+    const du = l.chon.length === 4;
+    const dung = du && l.chon.every((v,k)=> v === DUNG[k]);
+    const soDung = l.chon.filter((v,k)=> v === DUNG[k]).length;
+    return {so:l.so, chon:l.chon, xong:l.xong, du, dung, soDung};
+  }).sort((a,b)=>{
+    if(a.dung !== b.dung) return a.dung ? -1 : 1;
+    const ta = a.xong === null ? Infinity : a.xong, tb = b.xong === null ? Infinity : b.xong;
+    if(ta !== tb) return ta - tb;
+    return b.soDung - a.soDung;
+  });
+}
+function veKQ(){
+  const h = xepHang();
+  const caSai = h.every(r=> !r.dung);
+  $("#kq").className = "kq";
+  $("#kq").innerHTML = `
+    <div class="eyebrow">Kết quả lượt này</div>
+    <h2 style="font-size:clamp(20px,2vw,30px);margin-top:4px">Đáp án: ${DUNG.join(" – ")}</h2>
+    <table style="margin-top:12px">
+      <tr><th>Hạng</th><th>Nhóm</th><th>Bốn số đã viết</th><th class="n">Về đích</th><th class="n">Điểm cột C</th></tr>
+      ${h.map((r,i)=>`<tr>
+        <td class="n"><b>${i+1}</b></td>
+        <td><span class="cham" style="background:var(--d${r.so})"></span><b>Nhóm ${r.so}</b></td>
+        <td class="mono">${r.chon.length ? r.chon.join(" – ") : "—"}
+          ${r.dung ? '<b style="color:var(--bang)"> ✓ đúng cả bốn</b>'
+                   : (r.du ? `<span style="color:var(--do)"> ✕ đúng ${r.soDung}/4</span>`
+                           : '<span style="color:var(--muc3)"> chưa xong</span>')}</td>
+        <td class="n mono">${r.xong === null ? "—" : mmss(r.xong)}</td>
+        <td class="n"><b>${DIEM[i]}</b></td></tr>`).join("")}
+    </table>
+    <div class="ghi" style="margin-top:12px">
+      ${caSai ? "<b>Cả bốn nhóm đều sai.</b> Theo kịch bản: xóa bảng, bấm <b>Lượt mới</b> và chơi lại lượt hai — <b>chưa nói đáp án</b>. Nếu lượt hai vẫn sai thì dành 3 phút đầu buổi 3 chốt lại."
+              : "<b>Ghi điểm vào cột C của sổ điểm</b> — nhất 4, nhì 3, ba 2, tư 1. Sau đó chiếu lại slide khái niệm nguyên văn và chốt hai ô sai."}
+    </div>`;
+}
+
+/* ---------- dòng hướng dẫn ---------- */
+function veHuong(){
+  $("#huong").innerHTML = S.chot
+    ? `<b>Đã chốt.</b> Đọc cho lớp: ô <b>2</b> sai chữ “nguyên vẹn”, đúng phải là “phát triển <b>sáng tạo</b>”; ô <b>6</b> sai hai chỗ — “vô giá” và “của <b>riêng</b> Đảng”. Hai chỗ đó chính là hai chỗ đề thi hay bắt lỗi nhất. Muốn chơi lượt nữa thì bấm <b>Lượt mới</b>.`
+    : (S.chay
+      ? `Bạn nào chạy lên viết số nào thì bấm số đó ở hàng của nhóm ấy. <b>Phím tắt:</b> Q W E R chọn làn · <b>1–6</b> ghi số · <b>Backspace</b> xóa ô cuối · <b>Enter</b> chốt. Màn hình cố ý <b>không báo đúng sai</b> cho tới khi chốt.`
+      : `Mỗi nhóm cử <b>4 bạn</b> xếp hàng dọc trước bảng. Bạn thứ nhất viết số của <b>vế 1</b>, chạy về đập tay bạn thứ hai — cứ thế đến bạn thứ tư. <b>Người sau không được sửa số người trước</b>, người đứng dưới không được nhắc. Bấm <b>Bắt đầu</b> (hoặc phím cách) khi hô xuất phát.`);
+}
+
+/* ---------- chạy ---------- */
+veO(); veLan(); veHuong(); veDongHo();
+setInterval(veDongHo, 250);
+</script>
+</body>
+</html>

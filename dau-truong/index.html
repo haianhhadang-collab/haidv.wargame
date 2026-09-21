@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đấu trường — Tư tưởng Hồ Chí Minh, buổi 2</title>
+<style>
+:root{
+  --do:#A4161A; --do-dam:#6E0D10; --do-nen:#FBECEA;
+  --giay:#FFFDF9; --the:#FFFFFF; --hop:#F6F1EA; --vien:#E0D7CC;
+  --muc:#1F1F1F; --muc2:#6B625A;
+  --xanh:#2E7D32; --xanh-nen:#E8F2E9;
+  --n1:#C43D2E; --n2:#0E7C86; --n3:#B7791F; --n4:#5B21B6;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--giay);color:var(--muc);
+  font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+  font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+.wrap{max-width:1500px;margin:0 auto;padding:14px 20px 18px;min-height:100%;display:flex;flex-direction:column}
+.man{display:none;flex:1;flex-direction:column}
+.man.on{display:flex}
+
+/* ---------- màn mở ---------- */
+.bia{justify-content:center;text-align:center;gap:6px}
+.bia h1{font-size:clamp(44px,7vw,86px);margin:6px 0;color:var(--do);letter-spacing:-.02em}
+.bia .sub{font-size:clamp(17px,2vw,23px);color:var(--muc2)}
+.luat{max-width:1000px;margin:22px auto 0;text-align:left;display:grid;gap:9px}
+.luat .d{background:var(--hop);border:1px solid var(--vien);border-radius:12px;padding:12px 16px;display:flex;gap:14px;align-items:baseline}
+.luat .d b{color:var(--do);font-size:19px;white-space:nowrap}
+.luat .d span{font-size:16.5px}
+.ten{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:1000px;margin:18px auto 0}
+.ten input{width:100%;padding:11px 12px;border:1.5px solid var(--vien);border-radius:10px;
+  font:inherit;font-weight:600;text-align:center;background:var(--the);color:var(--muc)}
+
+/* ---------- thanh trên ---------- */
+.top{display:flex;align-items:center;gap:16px;padding:10px 16px;background:var(--do);
+  border-radius:14px;color:#fff}
+.top.db{background:var(--do-dam)}
+.top .stt{font-size:27px;font-weight:700;white-space:nowrap}
+.top .dang{font-size:17px;background:rgba(255,255,255,.18);padding:5px 13px;border-radius:999px;white-space:nowrap}
+.top .vong{font-size:15px;opacity:.85;white-space:nowrap}
+.top .sp{flex:1}
+.dh{font-size:52px;font-weight:800;font-variant-numeric:tabular-nums;line-height:1;min-width:104px;text-align:right}
+.dh.het{color:#FFD5D0}
+.thanh{height:9px;background:var(--vien);border-radius:99px;overflow:hidden;margin:9px 0 14px}
+.thanh i{display:block;height:100%;width:100%;background:var(--do);transition:width .25s linear}
+.thanh i.gap{background:#D97706}
+.thanh i.het{background:#9B1C1C}
+
+/* ---------- câu hỏi ---------- */
+.hoi{font-size:clamp(23px,2.5vw,33px);font-weight:700;line-height:1.28;margin:2px 0 16px}
+.pa{display:grid;gap:10px}
+.pa .o{display:flex;gap:15px;align-items:center;background:var(--hop);border:1.5px solid var(--vien);
+  border-radius:13px;padding:12px 16px;font-size:clamp(16px,1.55vw,21px)}
+.pa .o .k{width:44px;height:44px;flex:none;border-radius:50%;background:var(--do);color:#fff;
+  font-weight:700;font-size:22px;display:grid;place-items:center}
+.pa .o.dung{background:var(--xanh-nen);border-color:var(--xanh)}
+.pa .o.dung .k{background:var(--xanh)}
+.pa .o.mo{opacity:.4}
+.vs{margin-top:14px;background:var(--xanh-nen);border:1.5px solid var(--xanh);border-radius:13px;padding:13px 18px}
+.vs h3{margin:0 0 5px;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--xanh)}
+.vs p{margin:0;font-size:clamp(15px,1.45vw,19.5px);line-height:1.5}
+
+/* ---------- bảng điểm ---------- */
+.duoi{margin-top:auto;padding-top:14px}
+.bang{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.nhom{background:var(--the);border:2px solid var(--vien);border-radius:13px;padding:9px 12px;
+  display:flex;align-items:center;gap:10px;transition:.15s}
+.nhom.chon{border-color:var(--do);background:var(--do-nen);box-shadow:0 0 0 3px rgba(164,22,26,.14)}
+.nhom .cham{width:13px;height:13px;border-radius:50%;flex:none}
+.nhom:nth-child(1) .cham{background:var(--n1)} .nhom:nth-child(2) .cham{background:var(--n2)}
+.nhom:nth-child(3) .cham{background:var(--n3)} .nhom:nth-child(4) .cham{background:var(--n4)}
+.nhom .tn{font-weight:600;font-size:16px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nhom .d{font-size:31px;font-weight:800;font-variant-numeric:tabular-nums;min-width:52px;text-align:right}
+.nhom .nut{display:flex;flex-direction:column;gap:3px}
+.nhom .nut button{width:26px;height:20px;border:1px solid var(--vien);background:var(--hop);
+  border-radius:5px;font-size:12px;line-height:1;padding:0}
+
+/* ---------- hàng điều khiển ---------- */
+.dk{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:11px}
+.b{border:1.5px solid var(--vien);background:var(--the);border-radius:10px;padding:10px 15px;font-size:16px;font-weight:600}
+.b:hover{border-color:var(--muc2)}
+.b.chinh{background:var(--do);border-color:var(--do);color:#fff}
+.b.xanh{background:var(--xanh);border-color:var(--xanh);color:#fff}
+.b.to{font-size:18px;padding:12px 22px}
+.b:disabled{opacity:.35;cursor:not-allowed}
+.b .p{opacity:.6;font-size:13px;font-weight:500;margin-left:6px}
+.tt{font-size:14px;color:var(--muc2);margin-left:auto;text-align:right}
+.tt b{color:var(--do)}
+
+/* ---------- chuyển vòng & kết ---------- */
+.chuyen{justify-content:center;text-align:center}
+.chuyen h2{font-size:clamp(40px,6vw,74px);color:var(--do-dam);margin:0 0 12px}
+.xh{max-width:900px;margin:0 auto;display:grid;gap:11px}
+.xh .h{display:flex;align-items:center;gap:16px;background:var(--hop);border:1.5px solid var(--vien);
+  border-radius:14px;padding:14px 20px;font-size:24px}
+.xh .h.nhat{background:#FFF7E0;border-color:var(--n3);border-width:2.5px}
+.xh .h .hang{font-size:32px;font-weight:800;width:56px;color:var(--do)}
+.xh .h .tn{flex:1;font-weight:600;text-align:left}
+.xh .h .d{font-size:34px;font-weight:800;font-variant-numeric:tabular-nums}
+@media (max-width:900px){
+  .ten,.bang{grid-template-columns:repeat(2,1fr)}
+  .dh{font-size:40px;min-width:78px}
+}
+@media print{.dk,.thanh{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ================= MÀN MỞ ================= -->
+<section class="man bia on" id="manBia">
+  <div style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:var(--muc2)">
+    POL1001 · Tư tưởng Hồ Chí Minh · Buổi 2 · Mốc 5</div>
+  <h1>ĐẤU TRƯỜNG</h1>
+  <div class="sub">12 câu thi đấu &nbsp;+&nbsp; vòng đặc biệt 3 câu &nbsp;·&nbsp; 15 giây mỗi câu</div>
+
+  <div class="luat">
+    <div class="d"><b>Giơ tay</b><span>Mỗi nhóm cử <b>một đại diện</b> giơ tay. Chỉ đại diện được giơ, người khác giơ thì không tính.</span></div>
+    <div class="d"><b>Trọng tài</b><span><b>Lớp trưởng</b> làm trọng tài: xác định nhóm nào giơ tay nhanh nhất. Quyết định của trọng tài là quyết định cuối cùng.</span></div>
+    <div class="d"><b>15 giây</b><span>Đồng hồ chạy ngay khi câu hỏi hiện ra. Hết 15 giây mà không nhóm nào giơ tay thì bỏ câu, không ai được điểm.</span></div>
+    <div class="d"><b>Đúng +2 · Sai −1</b><span>Trả lời sai thì quyền trả lời chuyển sang nhóm giơ tay nhanh thứ hai.</span></div>
+    <div class="d"><b>Vòng đặc biệt: Đúng +3 · Sai −1</b><span>Ba câu cuối về ba ý nghĩa của việc học môn học, điểm cao hơn.</span></div>
+    <div class="d"><b>Đọc hết bốn phương án</b><span>Có câu phương án D là “cả ba phương án trên”. Giơ tay vội là mất điểm.</span></div>
+  </div>
+
+  <div class="ten" id="oTen"></div>
+  <div class="dk" style="justify-content:center;margin-top:20px">
+    <button class="b chinh to" id="btBatDau">Bắt đầu ▶</button>
+    <button class="b to" id="btToanMan">Toàn màn hình</button>
+  </div>
+  <div style="margin-top:14px;font-size:14px;color:var(--muc2)">
+    Phím tắt: <b>1 2 3 4</b> chọn nhóm giơ tay · <b>Đ</b> đúng · <b>S</b> sai ·
+    <b>A</b> hiện đáp án · <b>Enter</b> câu tiếp · <b>Space</b> dừng/chạy đồng hồ · <b>R</b> chạy lại 15 giây
+  </div>
+</section>
+
+<!-- ================= MÀN CHUYỂN VÒNG ================= -->
+<section class="man chuyen" id="manChuyen">
+  <h2>VÒNG ĐẶC BIỆT</h2>
+  <div class="sub" style="font-size:clamp(19px,2.2vw,28px);color:var(--muc2)">
+    Ba ý nghĩa của việc học tập môn học</div>
+  <div style="margin-top:18px;font-size:clamp(18px,2vw,24px)">
+    Điểm cao hơn: <b style="color:var(--do)">đúng +3</b> &nbsp;·&nbsp; <b style="color:var(--do)">sai −1</b></div>
+  <div class="dk" style="justify-content:center;margin-top:26px">
+    <button class="b chinh to" id="btVaoDB">Vào vòng đặc biệt ▶</button>
+  </div>
+</section>
+
+<!-- ================= MÀN CHƠI ================= -->
+<section class="man" id="manChoi">
+  <div class="top" id="thanhTren">
+    <div class="stt" id="txtStt">CÂU 1 / 12</div>
+    <div class="dang" id="txtDang">Chọn 1 đáp án đúng</div>
+    <div class="vong" id="txtDiem">đúng +2 · sai −1</div>
+    <div class="sp"></div>
+    <div class="dh" id="txtDh">15</div>
+  </div>
+  <div class="thanh"><i id="thanhGio"></i></div>
+
+  <div class="hoi" id="txtHoi"></div>
+  <div class="pa" id="oPa"></div>
+  <div class="vs" id="oVs" style="display:none">
+    <h3>Vì sao</h3><p id="txtVs"></p>
+  </div>
+
+  <div class="duoi">
+    <div class="bang" id="oBang"></div>
+    <div class="dk">
+      <button class="b" id="btDung">Đúng <span class="p" id="pDung">+2</span></button>
+      <button class="b" id="btSai">Sai <span class="p" id="pSai">−1</span></button>
+      <button class="b" id="btLai">Chạy lại 15s <span class="p">R</span></button>
+      <button class="b xanh" id="btDapAn">Hiện đáp án <span class="p">A</span></button>
+      <button class="b chinh" id="btTiep">Câu tiếp <span class="p">Enter</span></button>
+      <div class="tt" id="txtTro">Trọng tài <b>lớp trưởng</b> chỉ nhóm giơ tay nhanh nhất → bấm số nhóm</div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MÀN KẾT ================= -->
+<section class="man chuyen" id="manKet">
+  <h2 style="color:var(--do)">KẾT QUẢ</h2>
+  <div class="xh" id="oXh"></div>
+  <div class="dk" style="justify-content:center;margin-top:24px">
+    <button class="b to" id="btChoiLai">Chơi lại từ đầu</button>
+  </div>
+  <div style="margin-top:20px;font-size:clamp(17px,1.9vw,22px);color:var(--muc2)">
+    Ba từ khóa mang ra khỏi phòng: <b style="color:var(--do)">TƯ DUY — ĐẠO ĐỨC — PHONG CÁCH</b></div>
+</section>
+
+</div>
+<script>
+const DATA = {"ten": "Đấu trường — buổi 2", "nguon": "Học liệu 04 (12 câu) + vòng đặc biệt 3 câu. Dùng chung cho bản slide PPTX và bản game HTML.", "giay": 15, "diem": {"chinh": {"dung": 2, "sai": -1}, "dacbiet": {"dung": 3, "sai": -1}}, "cau": [{"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Yếu tố nào thể hiện rõ nhất tính “toàn diện và sâu sắc” của tư tưởng Hồ Chí Minh trong việc định hướng cách mạng Việt Nam?", "opts": ["Mục tiêu xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh.", "Con đường phát triển độc lập dân tộc gắn liền với chủ nghĩa xã hội.", "Khẳng định vai trò lãnh đạo của Đảng và sự quản lý của Nhà nước cách mạng.", "Tất cả các yếu tố trên, cùng với xây dựng con người, kết hợp sức mạnh dân tộc với sức mạnh thời đại và phương pháp cách mạng phù hợp."], "ans": 3, "why": "Giáo trình mô tả tính “toàn diện và sâu sắc” bằng cách liệt kê nhiều khía cạnh: mục tiêu quốc gia, con đường phát triển, vai trò của Đảng và Nhà nước, lực lượng cách mạng, xây dựng con người, kết hợp sức mạnh dân tộc và thời đại, phương pháp cách mạng. Ba phương án đầu đều đúng nhưng mỗi phương án chỉ nêu một phần — chọn một phần là hiểu sót chữ “toàn diện”."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Mục đích cuối cùng mà Hồ Chí Minh và nhân dân Việt Nam hướng tới khi xây dựng đất nước là gì?", "opts": ["Xây dựng một nước Việt Nam độc lập, dân chủ và giàu mạnh.", "Góp phần xứng đáng vào sự nghiệp cách mạng thế giới.", "Xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh.", "Xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh, đồng thời góp phần xứng đáng vào sự nghiệp cách mạng thế giới."], "ans": 3, "why": "Nguyên văn lời Hồ Chí Minh: “Toàn Đảng toàn dân ta đoàn kết phấn đấu, xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh, và góp phần xứng đáng vào sự nghiệp cách mạng thế giới.” Phương án C thiếu hẳn vế quốc tế — đây là bẫy hay bắt được nhiều nhóm nhất câu này."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Cơ sở hình thành tư tưởng Hồ Chí Minh nào được giáo trình nhấn mạnh là “giá trị cơ bản nhất trong quá trình hình thành và phát triển”?", "opts": ["Tiếp thu tinh hoa văn hóa nhân loại.", "Kế thừa các giá trị truyền thống tốt đẹp của dân tộc.", "Chủ nghĩa Mác – Lênin.", "Thực tiễn cách mạng Việt Nam."], "ans": 2, "why": "Giáo trình viết: “đã nêu lên cơ sở hình thành tư tưởng Hồ Chí Minh là chủ nghĩa Mác – Lênin — giá trị cơ bản nhất trong quá trình hình thành và phát triển của tư tưởng Hồ Chí Minh”. Ba phương án còn lại đều là cơ sở thật, nhưng không phải cơ sở được xếp hạng “cơ bản nhất”."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Theo khái niệm của Đại hội XI, mục tiêu xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh được đặt ra nhằm góp phần xứng đáng vào sự nghiệp nào?", "opts": ["Phát triển kinh tế khu vực Đông Nam Á.", "Liên minh các nước xã hội chủ nghĩa.", "Cách mạng thế giới.", "Bảo vệ hòa bình thế giới."], "ans": 2, "why": "Nguyên văn: “…góp phần xứng đáng vào sự nghiệp cách mạng thế giới”. Phương án D nghe rất xuôi tai và gần nghĩa, nhưng không phải chữ của văn kiện. Đây là chỗ nhắc lại nguyên tắc của buổi học: phần phải thuộc thì phải đúng từng chữ."}, {"vong": "chinh", "dang": "Chọn 1 đáp án sai", "q": "Khi nghiên cứu môn học Tư tưởng Hồ Chí Minh, sinh viên sẽ KHÔNG đạt được mục tiêu nào sau đây?", "opts": ["Nâng cao năng lực tư duy lý luận.", "Củng cố lập trường, quan điểm cách mạng trên nền tảng chủ nghĩa Mác – Lênin, tư tưởng Hồ Chí Minh.", "Vận dụng tư tưởng Hồ Chí Minh vào giải quyết các vấn đề đặt ra trong cuộc sống.", "Phát triển trực tiếp các kỹ năng chuyên môn sâu trong lĩnh vực khoa học tự nhiên."], "ans": 3, "why": "Ba phương án đầu đều nằm trong phần “Ý nghĩa của việc học tập môn học”. Môn học hướng vào tư duy lý luận, đạo đức và phương pháp – phong cách công tác, không hướng vào kỹ năng chuyên môn ngành. Cảnh báo dạng câu: đề hỏi đáp án SAI, đọc lướt là chọn nhầm ngay phương án A."}, {"vong": "chinh", "dang": "Chọn 1 đáp án sai", "q": "Phát biểu nào dưới đây về quá trình nhận thức của Đảng Cộng sản Việt Nam đối với tư tưởng Hồ Chí Minh là KHÔNG chính xác?", "opts": ["Ngay từ khi ra đời, Cương lĩnh chính trị đầu tiên của Đảng đã thể hiện những nội dung cơ bản của tư tưởng Hồ Chí Minh.", "Việc nhận thức về tư tưởng Hồ Chí Minh sau khi Đảng ra đời là một quá trình đơn giản và thuận lợi.", "Đại hội II (1951) nêu rõ đường lối chính trị, nếp làm việc và đạo đức cách mạng của Đảng ta hiện nay là của Hồ Chủ tịch.", "Đại hội VII (1991) là mốc lớn khi nêu cao tư tưởng Hồ Chí Minh làm nền tảng tư tưởng, kim chỉ nam cho hành động."], "ans": 1, "why": "Giáo trình viết rõ đây là “một quá trình không đơn giản”: đã có sự hiểu không đúng từ Quốc tế Cộng sản và từ một số người trong Đảng Cộng sản Đông Dương. Nói quá trình đó “đơn giản và thuận lợi” là sai."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Việc nghiên cứu môn học Tư tưởng Hồ Chí Minh giúp sinh viên hình thành và củng cố những gì?", "opts": ["Tri thức khoa học về hệ thống quan điểm cách mạng Việt Nam.", "Năng lực, phương pháp làm việc, niềm tin và tình cảm cách mạng.", "Lập trường, quan điểm cách mạng trên nền tảng chủ nghĩa Mác – Lênin, tư tưởng Hồ Chí Minh; bản lĩnh chính trị và trách nhiệm công dân.", "Cả ba phương án trên."], "ans": 3, "why": "Cả ba đều được nêu trong phần “Ý nghĩa của việc học tập môn học”, cùng với khả năng đấu tranh phê phán những quan điểm sai trái. Câu này bắt đúng thói quen giơ tay vội: thấy A đúng là giơ ngay, trong khi B và C cũng đúng — nên đáp án phải là D."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Nhận thức của Đảng Cộng sản Việt Nam về tư tưởng Hồ Chí Minh đã trải qua những chặng nào?", "opts": ["Thể hiện ngay từ Cương lĩnh chính trị đầu tiên của Đảng.", "Từng gặp sự hiểu không đúng từ Quốc tế Cộng sản và một số người trong Đảng Cộng sản Đông Dương.", "Đại hội II (1951) khẳng định; Đại hội IV đánh giá Hồ Chí Minh là người sáng lập và rèn luyện Đảng; Đại hội VII (1991) lấy làm nền tảng tư tưởng, kim chỉ nam.", "Cả ba phương án trên."], "ans": 3, "why": "Cả ba chặng đều nằm trong phần “Khái niệm trên là sự ghi nhận quá trình nhận thức của Đảng…”. Ghi nhớ trục thời gian: 1930 Cương lĩnh → thời kỳ hiểu chưa đúng → 1951 Đại hội II → Đại hội IV → 1991 Đại hội VII → 2011 Đại hội XI (khái niệm đang dùng)."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Phương châm “Dĩ bất biến, ứng vạn biến” của Hồ Chí Minh có thể vận dụng để xây dựng những phong cách nào?", "opts": ["Phong cách tư duy và phong cách diễn đạt.", "Phong cách làm việc.", "Phong cách ứng xử và phong cách sinh hoạt.", "Cả ba phương án trên."], "ans": 3, "why": "Giáo trình liệt kê đủ: phong cách tư duy, diễn đạt, làm việc, ứng xử, sinh hoạt “v.v. phù hợp với hoàn cảnh”. Đây chính là ý nghĩa thứ ba của việc học môn học — xây dựng, rèn luyện phương pháp và phong cách công tác, ý đáng 0,50 điểm và cũng là ý sinh viên hay quên nhất."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Tư tưởng Hồ Chí Minh là nền tảng tư tưởng và kim chỉ nam cho hành động của Đảng và cách mạng Việt Nam, cùng với  ______ .", "opts": ["Chủ nghĩa yêu nước.", "Chủ nghĩa Mác – Lênin.", "Chủ nghĩa xã hội khoa học.", "Chủ nghĩa nhân văn."], "ans": 1, "why": "Nguyên văn: “Cùng với chủ nghĩa Mác – Lênin, tư tưởng Hồ Chí Minh là một bộ phận cấu thành làm nên nền tảng tư tưởng và kim chỉ nam cho hành động của Đảng và cách mạng Việt Nam.” Hai trụ cột, không phải một."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "Tổ chức quốc tế nào đã ra Nghị quyết kỷ niệm 100 năm Ngày sinh Chủ tịch Hồ Chí Minh, tôn vinh Người là “Anh hùng giải phóng dân tộc và Nhà văn hóa kiệt xuất của Việt Nam”?", "opts": ["Liên Hợp Quốc.", "UNICEF.", "UNESCO.", "WHO."], "ans": 2, "why": "Tổ chức Giáo dục, Khoa học và Văn hóa của Liên hợp quốc — UNESCO — ra Nghị quyết số 240/18.6.5. Phương án A đúng một nửa nên rất dễ chọn nhầm: UNESCO là tổ chức chuyên môn thuộc Liên Hợp Quốc, nhưng nghị quyết là của UNESCO."}, {"vong": "chinh", "dang": "Chọn 1 đáp án đúng", "q": "…đấu tranh phê phán những quan điểm sai trái để bảo vệ sự trong sáng của chủ nghĩa Mác – Lênin, tư tưởng Hồ Chí Minh, đường lối, chủ trương của Đảng, chính sách, pháp luật của  ______ .", "opts": ["Chính phủ.", "Quốc hội.", "Nhà nước.", "Mặt trận Tổ quốc."], "ans": 2, "why": "Nguyên văn giáo trình: “…đường lối, chủ trương của Đảng, chính sách, pháp luật của Nhà nước”. Cặp từ luôn đi với nhau trong văn kiện là **Đảng — Nhà nước**, không phải Đảng — Chính phủ."}, {"vong": "dacbiet", "dang": "Chọn 1 đáp án đúng", "q": "Ý nghĩa của việc học tập môn học Tư tưởng Hồ Chí Minh gồm mấy ý?", "opts": ["Hai ý.", "Ba ý.", "Bốn ý.", "Năm ý."], "ans": 1, "why": "Ba ý: (1) nâng cao năng lực TƯ DUY lý luận — 0,75 đ; (2) giáo dục và định hướng thực hành ĐẠO ĐỨC cách mạng, củng cố niềm tin khoa học, bồi dưỡng lòng yêu nước — 0,75 đ; (3) xây dựng, rèn luyện PHƯƠNG PHÁP VÀ PHONG CÁCH công tác — 0,50 đ. Ba từ khóa neo: tư duy — đạo đức — phong cách."}, {"vong": "dacbiet", "dang": "Chọn 1 đáp án đúng", "q": "Trong ba ý nghĩa đó, ý nào ít điểm nhất theo đáp án đề thi, và mấy điểm?", "opts": ["Nâng cao năng lực tư duy lý luận — 0,50 đ.", "Giáo dục và định hướng thực hành đạo đức cách mạng — 0,50 đ.", "Xây dựng, rèn luyện phương pháp và phong cách công tác — 0,50 đ.", "Cả ba ý bằng nhau, mỗi ý khoảng 0,67 đ."], "ans": 2, "why": "Ý thứ ba ngắn nhất, ít điểm nhất, và là ý sinh viên hay quên nhất. Quên nó là mất nửa điểm. Nó gắn với phương châm vừa gặp ở câu 9: “Dĩ bất biến, ứng vạn biến”."}, {"vong": "dacbiet", "dang": "Chọn 1 đáp án đúng", "q": "Hai ý nghĩa còn lại, mỗi ý mấy điểm trong đáp án đề thi?", "opts": ["0,50 đ mỗi ý.", "0,75 đ mỗi ý.", "1,00 đ mỗi ý.", "1,25 đ mỗi ý."], "ans": 1, "why": "0,75 + 0,75 + 0,50 = 2,0 điểm — đúng bằng phần “ý nghĩa” trong đáp án đề thi. Cộng với 3,0 điểm của phần khái niệm là trọn 5,0 điểm của câu hỏi."}]};
+const CAU = DATA.cau, GIAY = DATA.giay, DIEM = DATA.diem;
+const SO_CHINH = CAU.filter(c => c.vong === "chinh").length;
+const KY = ["A","B","C","D"];
+const $ = id => document.getElementById(id);
+
+let iCau = 0, nhomChon = -1, hienDapAn = false, conLai = GIAY, dangChay = false, dongHo = null;
+let diem = [0,0,0,0];
+let ten = ["Nhóm 1","Nhóm 2","Nhóm 3","Nhóm 4"];
+
+/* ---- ô nhập tên nhóm ở màn mở ---- */
+ten.forEach((t,i) => {
+  const inp = document.createElement("input");
+  inp.value = t; inp.maxLength = 22; inp.setAttribute("aria-label","Tên nhóm "+(i+1));
+  inp.oninput = () => { ten[i] = inp.value.trim() || ("Nhóm "+(i+1)); veBang(); };
+  $("oTen").appendChild(inp);
+});
+
+/* ---- bảng điểm ---- */
+function veBang(){
+  const o = $("oBang"); o.innerHTML = "";
+  ten.forEach((t,i) => {
+    const d = document.createElement("div");
+    d.className = "nhom" + (i === nhomChon ? " chon" : "");
+    d.onclick = () => chonNhom(i);
+    d.innerHTML = '<span class="cham"></span><span class="tn"></span>'
+      + '<span class="d">' + diem[i] + '</span>'
+      + '<span class="nut"><button data-c="1">▲</button><button data-c="-1">▼</button></span>';
+    d.querySelector(".tn").textContent = t;
+    d.querySelectorAll("button").forEach(b => b.onclick = e => {
+      e.stopPropagation(); diem[i] += (+b.dataset.c); veBang();
+    });
+    o.appendChild(d);
+  });
+}
+
+/* ---- đồng hồ ---- */
+function veGio(){
+  $("txtDh").textContent = conLai;
+  const i = $("thanhGio");
+  i.style.width = (conLai / GIAY * 100) + "%";
+  i.className = conLai <= 0 ? "het" : (conLai <= 5 ? "gap" : "");
+  $("txtDh").className = "dh" + (conLai <= 0 ? " het" : "");
+}
+function beep(f, ms){
+  try{
+    const c = new (window.AudioContext || window.webkitAudioContext)();
+    const o = c.createOscillator(), g = c.createGain();
+    o.frequency.value = f; o.connect(g); g.connect(c.destination);
+    g.gain.setValueAtTime(.15, c.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, c.currentTime + ms/1000);
+    o.start(); o.stop(c.currentTime + ms/1000);
+  }catch(e){}
+}
+function chay(){
+  if (dangChay || conLai <= 0) return;
+  dangChay = true;
+  dongHo = setInterval(() => {
+    conLai--; veGio();
+    if (conLai === 5) beep(660, 90);
+    if (conLai <= 0){ dung(); beep(320, 420); }
+  }, 1000);
+}
+function dung(){ dangChay = false; clearInterval(dongHo); dongHo = null; }
+function datLai(){ dung(); conLai = GIAY; veGio(); }
+
+/* ---- điều khiển câu ---- */
+function chonNhom(i){
+  if (i < 0 || i > 3) return;
+  nhomChon = (nhomChon === i ? -1 : i);
+  veBang();
+  $("txtTro").innerHTML = nhomChon < 0
+    ? 'Trọng tài <b>lớp trưởng</b> chỉ nhóm giơ tay nhanh nhất → bấm số nhóm'
+    : 'Đang trả lời: <b>' + ten[nhomChon] + '</b> → bấm Đúng hoặc Sai';
+}
+function cham(dung_){
+  if (nhomChon < 0){ $("txtTro").innerHTML = '<b>Chưa chọn nhóm.</b> Bấm 1–4 hoặc bấm vào ô nhóm.'; return; }
+  const v = CAU[iCau].vong === "dacbiet" ? DIEM.dacbiet : DIEM.chinh;
+  diem[nhomChon] += dung_ ? v.dung : v.sai;
+  beep(dung_ ? 880 : 240, 160);
+  if (dung_){
+    dungLuot(); hien();
+    $("txtTro").innerHTML = '<b>' + ten[nhomChon] + '</b> đúng +' + v.dung + ' — bấm <b>Câu tiếp</b>';
+  }
+  else {
+    const cu = ten[nhomChon];
+    nhomChon = -1; veBang();
+    $("txtTro").innerHTML = '<b>' + cu + '</b> sai −' + Math.abs(v.sai) + '. Quyền trả lời chuyển sang nhóm giơ tay kế tiếp.';
+  }
+  veBang();
+}
+function dungLuot(){ dung(); }
+
+function hien(){
+  hienDapAn = true;
+  const c = CAU[iCau];
+  document.querySelectorAll("#oPa .o").forEach((o,k) => {
+    o.classList.toggle("dung", k === c.ans);
+    o.classList.toggle("mo", k !== c.ans);
+  });
+  $("txtVs").textContent = c.why;
+  $("oVs").style.display = "";
+  dung();
+}
+
+function veCau(){
+  const c = CAU[iCau];
+  const db = c.vong === "dacbiet";
+  const v = db ? DIEM.dacbiet : DIEM.chinh;
+  $("thanhTren").className = "top" + (db ? " db" : "");
+  $("txtStt").textContent = db
+    ? "ĐẶC BIỆT " + (iCau - SO_CHINH + 1) + " / " + (CAU.length - SO_CHINH)
+    : "CÂU " + (iCau + 1) + " / " + SO_CHINH;
+  $("txtDang").textContent = c.dang;
+  $("txtDiem").textContent = "đúng +" + v.dung + " · sai −" + Math.abs(v.sai);
+  $("pDung").textContent = "+" + v.dung;
+  $("pSai").textContent = "−" + Math.abs(v.sai);
+  $("txtHoi").textContent = c.q;
+
+  const o = $("oPa"); o.innerHTML = "";
+  c.opts.forEach((t,k) => {
+    const d = document.createElement("div");
+    d.className = "o";
+    d.innerHTML = '<span class="k">' + KY[k] + '</span><span class="t"></span>';
+    d.querySelector(".t").textContent = t;
+    o.appendChild(d);
+  });
+  $("oVs").style.display = "none";
+  hienDapAn = false; nhomChon = -1;
+  $("txtTro").innerHTML = 'Trọng tài <b>lớp trưởng</b> chỉ nhóm giơ tay nhanh nhất → bấm số nhóm';
+  veBang();
+  datLai();
+  chay();                       // 15 giây chạy ngay khi câu hiện ra
+}
+
+function tiep(){
+  if (iCau >= CAU.length - 1){ ketThuc(); return; }
+  const sau = CAU[iCau + 1];
+  if (sau.vong === "dacbiet" && CAU[iCau].vong === "chinh"){
+    dung(); iCau++; moMan("manChuyen"); return;
+  }
+  iCau++; moMan("manChoi"); veCau();
+}
+
+function ketThuc(){
+  dung();
+  const xh = ten.map((t,i) => ({t, d: diem[i]})).sort((a,b) => b.d - a.d);
+  const o = $("oXh"); o.innerHTML = "";
+  xh.forEach((n,k) => {
+    const d = document.createElement("div");
+    d.className = "h" + (k === 0 ? " nhat" : "");
+    d.innerHTML = '<span class="hang">' + (k+1) + '</span><span class="tn"></span>'
+      + '<span class="d">' + n.d + '</span>';
+    d.querySelector(".tn").textContent = n.t;
+    o.appendChild(d);
+  });
+  moMan("manKet");
+}
+
+function moMan(id){
+  ["manBia","manChuyen","manChoi","manKet"].forEach(m => $(m).classList.toggle("on", m === id));
+}
+
+/* ---- nút ---- */
+$("btBatDau").onclick = () => { iCau = 0; diem = [0,0,0,0]; moMan("manChoi"); veCau(); };
+$("btVaoDB").onclick  = () => { moMan("manChoi"); veCau(); };
+$("btDung").onclick   = () => cham(true);
+$("btSai").onclick    = () => cham(false);
+$("btLai").onclick    = () => { datLai(); chay(); };
+$("btDapAn").onclick  = () => hien();
+$("btTiep").onclick   = () => tiep();
+$("btChoiLai").onclick= () => { iCau = 0; diem = [0,0,0,0]; moMan("manBia"); veBang(); };
+$("btToanMan").onclick= () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen().catch(()=>{});
+};
+
+/* ---- phím tắt ---- */
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "INPUT") return;
+  const k = e.key.toLowerCase();
+  if (!$("manChoi").classList.contains("on")){
+    if (e.key === "Enter"){
+      if ($("manBia").classList.contains("on")) $("btBatDau").click();
+      else if ($("manChuyen").classList.contains("on")) $("btVaoDB").click();
+    }
+    return;
+  }
+  if (k >= "1" && k <= "4"){ chonNhom(+k - 1); e.preventDefault(); }
+  else if (k === "đ" || k === "d"){ cham(true); e.preventDefault(); }
+  else if (k === "s"){ cham(false); e.preventDefault(); }
+  else if (k === "a"){ hien(); e.preventDefault(); }
+  else if (k === "r"){ datLai(); chay(); e.preventDefault(); }
+  else if (e.key === "Enter" || e.key === "ArrowRight"){ tiep(); e.preventDefault(); }
+  else if (e.key === " "){ dangChay ? dung() : chay(); e.preventDefault(); }
+});
+
+veBang();
+</script>
+</body>
+</html>
