@@ -28,10 +28,11 @@ chỉ gồm biệt danh và lựa chọn trong game.
 đường; dọc đường có vật cản, cạm bẫy, bảo bối, hiếm hoi có Dịch chuyển tức thời. Ba cách chơi:
 **một mình** (không cần mạng), **phòng** tối đa 10 người đua với nhau, và **đội đấu đội** cho cả lớp
 (10 đội × 3 người, máy giảng viên giữ phòng và chiếu bản đồ). Màn 3 đi chung bản đồ và có thách đấu.
+Giao diện vẽ tay trên nền giấy cũ.
 
-- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/doi/ — hoặc quét mã QR dưới đây.
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/hanh-trinh-tu-tuong/ — hoặc quét mã QR dưới đây.
 
-![Mã QR vào game Hành trình Tư tưởng](doi/qr-vao-game.png)
+![Mã QR vào game Hành trình Tư tưởng](hanh-trinh-tu-tuong/qr-vao-game.png)
 
 Câu hỏi lấy từ Giáo trình Tư tưởng Hồ Chí Minh 2026. Dữ liệu trận đi qua máy chủ MQTT công cộng,
 chỉ gồm biệt danh và lựa chọn trong game.
