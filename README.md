@@ -69,6 +69,22 @@ về đích và chấm. Chạy trên một máy nối máy chiếu, không cần
 
 - **Mở trên máy chiếu:** https://haianhhadang-collab.github.io/haidv.wargame/tiep-suc/
 
+## Bi kịch thuộc địa
+
+Serious game nhập vai cho buổi 2 và buổi 3. Mỗi nhóm nhận một lý lịch đen rồi đi qua 12 thủ đoạn
+cai trị của chính quyền thực dân: đọc thông cáo hoa mỹ, lật mặt nạ, rồi trong 15 giây chọn một
+trong ba lá đơn — cúi đầu, thỉnh cầu hay kháng cự. Hai thước đo *Sinh lực* và *Lòng dân* chạy
+ngược nhau, nên cúi đầu thì sống được mà mất khí phách.
+
+Hết 12 lượt, mọi lá đơn đều trở về với một con dấu — dẫn vào câu hỏi chốt: khủng hoảng đầu thế kỷ XX
+không phải khủng hoảng lòng yêu nước mà là khủng hoảng **đường lối cứu nước**.
+Sinh viên chơi trên điện thoại của mình, nhóm trưởng chụp màn hình tổng kết gửi giảng viên.
+Nhân vật trong game là biếm hoạ hư cấu, châm biếm chính quyền thực dân — không nhằm vào nhân dân Pháp.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/bi-kich/
+
+![Mã QR vào Bi kịch thuộc địa](bi-kich/qr-vao-game.png)
+
 ---
 
 Câu hỏi và trích dẫn lấy từ **Giáo trình Tư tưởng Hồ Chí Minh 2026**.
