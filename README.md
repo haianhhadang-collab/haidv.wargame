@@ -37,6 +37,16 @@ Ba cách chơi: **một mình** (không cần mạng), **phòng** tối đa 10 n
 
 Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm biệt danh và lựa chọn trong game.
 
+## 1911 — Anh Ba xin làm phụ bếp
+
+Game nhập vai cá nhân trên điện thoại, khoảng 15 phút: vào vai anh Ba xin làm phụ bếp trên con tàu
+rời bến Nhà Rồng ngày 5/6/1911. Qua bếp trưởng, viên trung úy cầm hồ sơ và thuyền trưởng bằng logic,
+óc phán đoán và kiến thức giáo trình (thời kỳ trước năm 1911). Không cần mạng sau khi mở trang.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/1911/
+
+![Mã QR vào 1911 — Anh Ba xin làm phụ bếp](1911/qr-vao-game.png)
+
 ## Lúc đó Bác tên gì?
 
 Game mini cá nhân, mỗi em một điện thoại: 10 câu về các tên gọi của Bác qua từng chặng đường,

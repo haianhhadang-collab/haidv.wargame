@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>1911</title>
+<meta name="description" content="Vào vai anh Ba, xin làm phụ bếp trên con tàu rời bến Nhà Rồng ngày 5/6/1911.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+/* Giấy cũ, mực nâu, son đỏ. Chữ co giãn theo bề rộng màn: sàn 18px trên điện thoại, trần 26px trên màn rộng. */
+:root{
+  --giay:#f4ecdc; --giay2:#e8dcc2; --the:#fbf6ea; --muc:#2a2019; --muc2:#5f4d3c; --muc3:#8a7763;
+  --son:#9c2f22; --bien:#1f4b5a; --vang:#e2b04a; --la:#2f6b3f; --vien:#d3c19c; --bong:rgba(60,40,20,.13);
+  font-size:clamp(18px, .45vw + 14px, 26px);
+  color-scheme:light;
+}
+*{ box-sizing:border-box; }
+html,body{ margin:0; background:var(--giay); color:var(--muc); }
+body{ font-family:Lora,Cambria,"Palatino Linotype",serif; line-height:1.6; -webkit-text-size-adjust:100%; min-height:100vh;
+  background:radial-gradient(ellipse at top,#fbf6ea 0%,var(--giay) 55%,#eadbbd 100%) fixed; }
+button{ font:inherit; color:inherit; }
+[hidden]{ display:none !important; }
+:focus-visible{ outline:2.5px solid var(--son); outline-offset:2px; }
+h1,h2,h3,h4,.tde{ font-family:"Playfair Display",Cambria,serif; line-height:1.15; }
+
+/* ===== Thanh đo ===== */
+#hud{ position:sticky; top:0; z-index:10; background:var(--muc); color:var(--giay); padding:.45rem 1rem .55rem; box-shadow:0 2px 8px rgba(0,0,0,.25); }
+.hud-in{ max-width:38rem; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; gap:.2rem 1.1rem; }
+.hud-man{ flex:1 1 100%; font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; opacity:.75; }
+.do{ display:flex; align-items:center; gap:.45rem; font-size:.82rem; }
+.o-tin{ display:flex; gap:3px; }
+.o-tin i{ display:block; width:.72rem; height:.95rem; border-radius:2px; background:rgba(244,236,220,.18); }
+.o-tin i.day{ background:var(--vang); }
+.o-tin i.can{ outline:1.5px solid rgba(244,236,220,.85); outline-offset:1px; }
+.dh{ display:flex; gap:4px; }
+.dh i{ width:1.1rem; height:1.1rem; border-radius:50%; border:1.5px solid rgba(244,236,220,.45); font-style:normal; font-size:.7rem;
+  display:grid; place-items:center; font-weight:700; color:transparent; }
+.dh i.co{ background:#d4533f; border-color:#d4533f; color:#fff; }
+.nhay{ animation:nhay .6s; }
+@keyframes nhay{ 40%{ transform:scale(1.18); } }
+
+/* ===== Trang ===== */
+main{ max-width:38rem; margin:0 auto; padding:1rem 1rem 4rem; }
+.ke{ font-style:italic; color:var(--muc2); margin:.75rem 0; }
+.loi{ margin:.8rem 0; padding:.55rem .85rem; background:var(--the); border-left:4px solid var(--ai,var(--muc3)); border-radius:0 8px 8px 0; box-shadow:0 1px 2px var(--bong); }
+.loi .ai{ display:block; font-size:.7rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--ai,var(--muc3)); }
+.loi p{ margin:.15rem 0; }
+.dich{ font-size:.85rem; color:var(--muc3); font-style:italic; }
+.moi{ animation:hien .35s ease-out; }
+@keyframes hien{ from{ opacity:0; transform:translateY(6px); } }
+.canh{ cursor:pointer; min-height:40vh; }
+.nut{ display:inline-flex; align-items:center; justify-content:center; gap:.5rem; border:0; border-radius:10px; padding:.8rem 1.3rem; min-height:3rem;
+  background:var(--muc); color:var(--giay); font-weight:600; cursor:pointer; }
+.nut:disabled{ opacity:.4; cursor:not-allowed; }
+.nut.phu{ background:transparent; color:var(--muc); box-shadow:inset 0 0 0 1.5px var(--vien); }
+.nut.son{ background:var(--son); }
+.chan{ margin-top:1.3rem; display:flex; gap:.6rem; flex-wrap:wrap; }
+.chan .nut{ flex:1 1 auto; }
+.lc{ display:block; width:100%; text-align:left; margin:.55rem 0; padding:.75rem 1rem; background:var(--the); border:1.5px solid var(--vien); border-radius:10px;
+  cursor:pointer; line-height:1.5; }
+.lc:hover:not(:disabled){ border-color:var(--muc2); }
+.lc:disabled{ cursor:default; opacity:.45; }
+.lc.chon{ opacity:1; border-color:var(--son); box-shadow:inset 0 0 0 1.5px var(--son); }
+.lc.dung{ opacity:1; border-color:var(--la); box-shadow:inset 0 0 0 1.5px var(--la); }
+.lc.dung::before{ content:"✓ "; color:var(--la); font-weight:700; }
+.lc.sai{ opacity:1; border-color:var(--son); text-decoration:line-through; text-decoration-color:rgba(156,47,34,.6); }
+.chips{ display:flex; flex-wrap:wrap; gap:.4rem; margin:.8rem 0; }
+.chip{ font-size:.78rem; font-weight:700; padding:.2rem .65rem; border-radius:99px; background:#ddd2bb; color:var(--muc2); }
+.chip.tot{ background:#d7e8d4; color:var(--la); }
+.chip.xau{ background:#f3d3cc; color:var(--son); }
+.huong{ font-size:.9rem; background:rgba(31,75,90,.07); border:1px dashed rgba(31,75,90,.35); border-radius:10px; padding:.6rem .85rem; color:var(--bien); }
+
+/* ===== Màn 1: yết thị ===== */
+.sotay{ font-size:.85rem; background:var(--the); border:1px solid var(--vien); border-radius:10px; padding:.55rem .85rem; margin:.8rem 0; }
+.yt-luoi{ display:grid; gap:1rem; margin:1.1rem 0; }
+@media (min-width:44rem){ .yt-luoi{ grid-template-columns:repeat(3,1fr); gap:.8rem; } .yt .yt-d{ font-size:.78rem; } }
+.yt{ position:relative; display:block; width:100%; text-align:center; background:#efe3c3; border:3px double #8a7250; padding:.8rem .7rem; cursor:pointer;
+  box-shadow:2px 3px 0 var(--bong); transform:rotate(-.6deg); }
+.yt:nth-child(2){ transform:rotate(.5deg); } .yt:nth-child(3){ transform:rotate(-.3deg); }
+.yt .yt-t{ display:block; font-size:1.02rem; font-weight:800; letter-spacing:.03em; margin-bottom:.35rem; }
+.yt .yt-d{ display:block; font-size:.86rem; line-height:1.45; }
+.yt:disabled{ cursor:default; }
+.yt.hong{ opacity:.45; }
+.yt.hong::after{ content:"✗"; position:absolute; top:.1rem; right:.5rem; color:var(--son); font-size:1.6rem; font-weight:700; }
+.yt.dung{ box-shadow:0 0 0 3px var(--la); }
+
+/* ===== Lời khai ===== */
+.khai-muc h3{ font-family:Lora,serif; font-size:1rem; margin:1.1rem 0 .3rem; }
+
+/* ===== Gọt khoai ===== */
+.khoai{ text-align:center; margin:1rem 0; user-select:none; -webkit-user-select:none; }
+.dong-ho{ height:.6rem; background:var(--giay2); border-radius:99px; overflow:hidden; margin:.6rem 0; }
+.dong-ho i{ display:block; height:100%; width:100%; background:var(--son); }
+.dem{ font-size:1.3rem; font-weight:700; }
+.dem-nguoc{ font-size:5rem; font-weight:900; margin:1.5rem 0; }
+.cu{ font-size:7.5rem; line-height:1; background:radial-gradient(circle,#fff8e6 0%,rgba(255,248,230,0) 70%); border:0; border-radius:50%; padding:1rem 1.6rem;
+  cursor:pointer; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+.cu:active{ transform:scale(.93); }
+.cu.xoay{ animation:xoay .3s; }
+@keyframes xoay{ 50%{ transform:rotate(-14deg) scale(1.08); } }
+.vo{ display:flex; gap:.45rem; justify-content:center; margin:.3rem 0 .8rem; }
+.vo i{ width:.85rem; height:.85rem; border-radius:50%; background:var(--giay2); border:1px solid var(--vien); }
+.vo i.co{ background:var(--vang); border-color:#b8862b; }
+.ro{ font-size:1.1rem; line-height:1.3; min-height:1.5rem; word-break:break-all; }
+
+/* ===== Hành lý ===== */
+.ngan{ margin:1rem 0; padding:.7rem .85rem; border:1.5px solid var(--vien); border-radius:12px; background:rgba(255,255,255,.35); }
+.ngan h3{ font-family:Lora,serif; font-size:.85rem; margin:.1rem 0 .3rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muc2); }
+.ngan .lc{ margin:.45rem 0; }
+.gt-nho{ font-size:.85rem; color:var(--bien); margin:.4rem 0 .1rem; }
+
+/* ===== Bìa ===== */
+.bia{ text-align:center; padding-top:1rem; }
+.bia svg{ width:min(100%,22rem); height:auto; }
+.bia h1{ font-size:5.2rem; font-weight:900; margin:.1rem 0 0; letter-spacing:.05em; }
+.phu-de{ font-size:1.2rem; font-style:italic; color:var(--son); margin:0 0 1rem; }
+.bia .gt{ text-align:left; }
+.chu-giai{ font-size:.9rem; background:var(--the); border:1px solid var(--vien); border-radius:10px; padding:.5rem .9rem; margin-top:1rem; }
+.chu-giai p{ margin:.35rem 0; }
+
+/* ===== Kết cục ===== */
+.nhan-ket{ font-size:.75rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muc3); margin:1rem 0 0; }
+.ket h2{ font-size:2.4rem; margin:.2rem 0 .6rem; }
+.ket h3{ font-size:1.35rem; margin:2rem 0 .5rem; }
+.ket h4{ font-family:Lora,serif; font-size:.9rem; margin:1rem 0 .2rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muc2); }
+.so{ display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem; margin:1.2rem 0; }
+.so div{ background:var(--the); border:1px solid var(--vien); border-radius:10px; padding:.6rem .4rem; text-align:center; font-size:.8rem; color:var(--muc2); }
+.so b{ display:block; font-family:"Playfair Display",serif; font-size:1.6rem; color:var(--muc); }
+.nl{ padding:0; margin:0; }
+.nl li{ list-style:none; margin:.6rem 0; padding:.6rem .85rem; background:var(--the); border:1px solid var(--vien); border-radius:10px; }
+.nl .dau{ font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muc3); font-weight:700; }
+.nl .gt{ font-size:.86rem; color:var(--bien); margin-top:.3rem; }
+.nl .chips{ margin:.4rem 0 0; }
+.dung-sai{ font-weight:700; } .dung-sai.d{ color:var(--la); } .dung-sai.s{ color:var(--son); }
+.st ul{ margin:.2rem 0; padding-left:1.2rem; font-size:.9rem; }
+.st li{ margin:.25rem 0; }
+</style>
+</head>
+<body>
+<header id="hud" hidden></header>
+<main id="man"></main>
+
+<script>
+const ND = {"ten":"1911","phuDe":"Anh Ba xin làm phụ bếp","gioiThieu":["Sài Gòn, tháng Sáu năm 1911. Bạn vào vai anh Ba, 21 tuổi, muốn xuống một con tàu Pháp làm phụ bếp để sang phương Tây tìm đường cứu nước.","Muốn lên tàu, bạn phải qua cuộc phỏng vấn của bếp trưởng, qua mắt một viên trung úy cầm hồ sơ, và để thuyền trưởng ký tên bạn vào sổ.","Dùng logic, óc phán đoán và hiểu biết lịch sử. Khoảng 15 phút."],"luat":{"longTinDau":2,"longTinToiDa":10,"longTinCan":7,"dauHoiToiDa":3,"tauDungLanDau":1,"gotKhoai":{"giay":20,"chamMoiCu":4,"moc":[[20,2],[12,1]]},"maThuanLoi":"Ông Renaud nheo mắt: “Lúc nãy anh khai ‘{khai}’. Giờ lại nói thế này?”","khaiVoLy":[{"cap":["hocvan:khong","nghe:dayhoc"],"loi":"Không biết chữ mà đi dạy học? Anh đùa tôi đấy à?"}],"tenMacDinh":"Văn Ba"},"khai":[{"ma":"hocvan","hoi":"Học hành","lc":[{"ma":"khong","nhan":"Không biết chữ"},{"ma":"quochoc","nhan":"Học trường Quốc học Huế","that":true},{"ma":"nho","nhan":"Học vài năm chữ Nho ở làng"}]},{"ma":"que","hoi":"Quê quán","lc":[{"ma":"nghean","nhan":"Nghệ An","that":true},{"ma":"saigon","nhan":"Sài Gòn"},{"ma":"hue","nhan":"Huế"}]},{"ma":"nghe","hoi":"Nghề trước đây","lc":[{"ma":"bocvac","nhan":"Bốc vác ở bến cảng"},{"ma":"dayhoc","nhan":"Dạy học ở Phan Thiết","that":true},{"ma":"chua","nhan":"Chưa làm nghề gì"}]}],"canh":[{"loai":"ke","man":1,"tenMan":"Bến Nhà Rồng","dong":[{"ke":"Sài Gòn, sáng mùng 2 tháng Sáu năm 1911."},{"ke":"Nắng đầu hè đổ xuống sông Sài Gòn. Trên mái tòa nhà của hãng tàu, hai con rồng đắp nổi chầu vào nhau; dân quanh bến gọi luôn chỗ này là Nhà Rồng."},{"ai":"Tư Lê","noi":"Anh Ba, anh tính thiệt hả? Tàu Tây chớ đâu phải ghe bầu ra Phan Thiết."},{"ai":"Ba","noi":"Thiệt chớ. Mình phải ra ngoài, coi nước Pháp và các nước khác họ làm ra sao, rồi về giúp đồng bào mình."},{"ai":"Tư Lê","noi":"Anh là thầy giáo, học trò Dục Thanh còn chờ anh về. Giờ đi rửa nồi cho Tây?"},{"ai":"Ba","noi":"Ở Dục Thanh, tôi dạy học trò thương nước. Mà tụi nhỏ cứ hỏi một câu tôi chưa trả lời được: thương rồi làm sao? Muốn trả lời thì phải đi coi."},{"ke":"Mấy người lính thủy vừa dán ba tờ yết thị tuyển người lên cột đèn."},{"ke":"Nhiệm vụ: tìm con tàu sang Pháp, đang cần phụ bếp."}]},{"loai":"tau","man":1,"ma":"tau","nhan":"Chọn tàu","de":[{"ke":"Chạm vào tờ yết thị bạn chọn. Chọn đúng ngay lần đầu thì tới sớm, bếp trưởng còn đang cần người: +1 Lòng tin."}],"soTay":[["départ","khởi hành"],["pour","đi tới"],["on embauche","cần tuyển"],["aide-cuisinier","phụ bếp"],["chauffeur","thợ đốt lò"],["juin","tháng Sáu"]],"yetThi":[{"ma":"A","tieuDe":"VILLE DE TOURANE","dong":["Compagnie Nationale","Départ : 4 juin 1911","Pour : Hong Kong – Shanghai","On embauche : aide-cuisinier"],"phanHoi":[{"ai":"Thủy thủ","noi":"Hong Kong, Thượng Hải! Tàu này đi Tàu, không đi Tây đâu, cậu em."}]},{"ma":"B","tieuDe":"AMIRAL LATOUCHE-TRÉVILLE","dong":["Chargeurs Réunis","Départ : 5 juin 1911","Pour : Marseille – Le Havre","On embauche : aide-cuisinier"],"dung":true,"phanHoi":[{"ke":"Người lính gác cầu tàu liếc tờ yết thị rồi hất đầu xuống hầm."},{"ai":"Lính gác","noi":"Bếp ở dưới. Nhanh lên, ông Renaud đang cần người."}]},{"ma":"C","tieuDe":"BASSAC","dong":["Compagnie Nationale","Départ : 18 juin 1911","Pour : Marseille","On embauche : chauffeur"],"phanHoi":[{"ai":"Thủy thủ","noi":"Chauffeur là thợ đốt lò, cậu em. Mà tàu này hai tuần nữa mới chạy."}]}]},{"loai":"ke","man":2,"tenMan":"Bếp trưởng Renaud","dong":[{"ke":"Bếp tàu nằm sâu dưới boong hai, nóng như lò bánh mì. Bếp trưởng Renaud, người vùng Bretagne, bụng to, tạp dề loang mỡ, đang băm hành."},{"ai":"Renaud","noi":"Lại một cậu An Nam… Nghe đây: dưới bếp này tôi không nhớ nổi tên dài, ai cũng chỉ một tiếng cho dễ gọi. Giờ khai đi: học hành gì, quê ở đâu, trước làm nghề gì?"},{"ke":"Khai thế nào là quyền của bạn. Nhưng bếp trưởng có mắt, có tai, và ông sẽ còn hỏi tiếp."}]},{"loai":"khai","man":2,"nut":"Khai với bếp trưởng"},{"loai":"hoi","man":2,"ma":"r1","nhan":"Renaud hỏi bằng tiếng Pháp","de":[{"ai":"Renaud","noi":"Tu comprends ce que je dis ?","dich":"Anh có hiểu tôi nói gì không?"}],"lc":[{"ma":"A","chu":"(Bằng tiếng Pháp) “Oui, monsieur. Je comprends.”","lt":1,"maThuan":["hocvan:khong","hocvan:nho"],"phanHoi":[{"ai":"Renaud","noi":"Tiếng Pháp rõ ràng quá. Tốt, khỏi phải ra hiệu tay chân."}],"giaiThich":"Trả lời bằng tiếng Pháp chỉ hợp với lời khai đã học trường Quốc học Huế."},{"ma":"B","chu":"(Lắc đầu) “Dạ… tôi không hiểu tiếng Tây.”","lt":0,"maThuan":["hocvan:quochoc"],"phanHoi":[{"ai":"Renaud","noi":"Không hiểu thì lúc tôi quát “Chaud devant!” anh sẽ đứng đực ra giữa lối. Thôi được."}],"giaiThich":"Học trường Quốc học mà không hiểu câu tiếng Pháp đơn giản thì không ai tin."},{"ma":"C","chu":"“Dạ, tôi hiểu được đôi chút.”","lt":0,"phanHoi":[{"ai":"Renaud","noi":"Đôi chút. Được, dưới bếp chỉ cần vài chục chữ."}],"giaiThich":"An toàn, nhưng không làm bếp trưởng tin thêm."}]},{"loai":"hoi","man":2,"ma":"r2","nhan":"Giọng nói","de":[{"ai":"Renaud","noi":"Tôi ở Sài Gòn mười năm rồi. Giọng anh không phải giọng Sài Gòn. Người ở đâu?"}],"lc":[{"ma":"A","chu":"“Dạ, tôi người Nghệ An, vào Nam tìm việc.”","lt":1,"maThuan":["que:saigon","que:hue"],"phanHoi":[{"ai":"Renaud","noi":"Nghệ An. Nghe nói dân xứ đó cứng đầu lắm. Dưới bếp cần người cứng đầu."}],"giaiThich":"Nói thật, khớp với giọng nói."},{"ma":"B","chu":"“Dạ, tôi ở Huế lâu năm, giọng miền Trung.”","lt":0,"maThuan":["que:saigon"],"phanHoi":[{"ai":"Renaud","noi":"Huế, miền Trung. Cũng được."}],"giaiThich":"Không sai, nhưng cũng không nói hết."},{"ma":"C","chu":"“Tôi người Sài Gòn chính gốc, thưa ông.”","lt":-1,"maThuan":["que:nghean","que:hue"],"phanHoi":[{"ai":"Renaud","noi":"Chính gốc? Giọng anh nặng như đá. Đừng coi tôi là thằng ngốc."}],"giaiThich":"Giọng nói làm lộ lời khai quê Sài Gòn."}]},{"loai":"hoi","man":2,"ma":"r3","nhan":"Vì sao xin việc cực nhất","de":[{"ai":"Renaud","noi":"Phụ bếp là việc cực nhất trên tàu: bốn giờ sáng nhóm lò, chín giờ tối mới xong, bị quát cả ngày. Sao một người trẻ như anh lại xin việc này?"}],"lc":[{"ma":"A","chu":"“Tôi muốn thấy nước Pháp từ trong bếp, ngoài chợ, dưới hầm tàu, chỗ người ta làm lụng thật.”","lt":1,"phanHoi":[{"ai":"Renaud","noi":"(khịt mũi) Hừm. Câu trả lời lạ. Nhưng không tệ."}],"giaiThich":"Thật lòng và đúng chí hướng: muốn tận mắt xem xã hội phương Tây."},{"ma":"B","chu":"“Tôi cần tiền, ông trả bao nhiêu tôi cũng làm.”","lt":0,"phanHoi":[{"ai":"Renaud","noi":"Ai xuống đây cũng cần tiền. Chẳng có gì đặc biệt."}],"giaiThich":"Câu trả lời của mọi người xin việc."},{"ma":"C","chu":"“Tôi chỉ cần sang được Pháp. Tới Marseille là tôi xin nghỉ.”","lt":-1,"phanHoi":[{"ai":"Renaud","noi":"Tôi cần người làm trọn chuyến, không cần khách đi nhờ."}],"giaiThich":"Bếp trưởng cần người làm được việc; nói trước là sẽ bỏ ngang thì mất lòng tin."}]},{"loai":"hoi","man":2,"ma":"r4","nhan":"Bàn tay","de":[{"ke":"Ông Renaud buông dao, cầm lấy bàn tay bạn, lật ngửa ra xem."},{"ai":"Renaud","noi":"Tay này quen cầm bút, không phải tay cầm xẻng than. Ba ngày nữa nó phồng rộp hết."}],"lc":[{"ma":"A","chu":"“Tay cầm bút được thì cầm xẻng cũng được, thưa ông. Khó là cái lưng có chịu cúi hay không. Lưng tôi thì chịu.”","lt":1,"maThuan":["hocvan:khong","nghe:bocvac"],"phanHoi":[{"ai":"Renaud","noi":"(bật cười) Cái lưng chịu cúi. Để xem."}],"giaiThich":"Nhận thật mình là người cầm bút, và cho thấy mình chịu khó."},{"ma":"B","chu":"“Dạ, tôi bốc vác quen rồi, tay chai lắm.”","lt":-1,"phanHoi":[{"ai":"Renaud","noi":"Chai chỗ nào? Tay mềm như tay thầy đồ. Đừng nói dối tôi."}],"giaiThich":"Bàn tay mềm làm lộ lời nói dối về nghề bốc vác."},{"ma":"C","chu":"“Dạ, tay tôi yếu thật. Xin ông cho thử việc rồi hẵng xét.”","lt":0,"phanHoi":[{"ai":"Renaud","noi":"Thử thì thử."}],"giaiThich":"An toàn, không thêm lòng tin."}]},{"loai":"gotKhoai","man":2,"ma":"khoai","nhan":"Gọt khoai","de":[{"ai":"Renaud","noi":"Thấy bao khoai ở góc kia không? Vác lên bàn, rồi gọt cho tôi hai chục củ. Tôi đếm giờ."},{"ke":"Chạm thật nhanh vào củ khoai. Cứ 4 lần chạm là gọt xong một củ. Bạn có 20 giây."}],"ketQua":{"2":[{"ke":"Ông Renaud đứng khoanh tay nhìn. Vỏ mỏng, cuộn thành một dải dài không đứt."},{"ai":"Renaud","noi":"Được. Tay thầy đồ mà gọt khoai như thợ."}],"1":[{"ai":"Renaud","noi":"Chậm. Nhưng chịu khó. Mai sẽ nhanh hơn."}],"0":[{"ai":"Renaud","noi":"Thế này thì bữa trưa thành bữa tối."}]}},{"loai":"hoi","man":2,"ma":"r5","nhan":"Sang Pháp để làm gì","de":[{"ai":"Renaud","noi":"Câu cuối. Sang tới Pháp rồi anh định làm gì?"}],"lc":[{"ma":"A","chu":"“Hồi mười ba tuổi tôi nghe ba chữ Tự do, Bình đẳng, Bác ái. Tôi muốn sang xem ba chữ đó ở nhà các ông ra sao, và vì sao ở xứ tôi thì không thấy.”","lt":1,"phanHoi":[{"ke":"Căn bếp lặng đi, chỉ còn tiếng lửa reo trong lò. Ông Renaud quay đi khuấy nồi súp."},{"ai":"Renaud","noi":"Câu đó anh nói với tôi thôi. Đừng nói với ai khác trên tàu này."}],"giaiThich":"Nói thật với người sẵn lòng nghe thì được tin. Hãy nhớ lời dặn của bếp trưởng."},{"ma":"B","chu":"“Làm cho trọn chuyến tàu, rồi xem ở Marseille có việc gì thì làm.”","lt":0,"phanHoi":[{"ai":"Renaud","noi":"Thật thà. Được."}],"giaiThich":"An toàn, không thêm lòng tin."},{"ma":"C","chu":"“Tôi sẽ tìm gặp những người An Nam ở bên đó để bàn việc nước.”","lt":-1,"phanHoi":[{"ai":"Renaud","noi":"(hạ giọng) Nói to thế trên tàu này là rước họa vào thân. Tôi không muốn rắc rối trong bếp của tôi."}],"giaiThich":"Nói thẳng chuyện việc nước giữa bếp tàu Pháp là tự chuốc rắc rối cho mình và cho người nhận mình."}]},{"loai":"ke","man":3,"tenMan":"Viên trung úy","dong":[{"ke":"Cửa bếp bật mở. Một viên trung úy trẻ bước vào, tay kẹp tập hồ sơ."},{"ai":"Trung úy","noi":"Ông Renaud, người mới đây hả? Tòa sứ dặn: trông chừng mấy cậu An Nam biết chữ."},{"ke":"Ông ta lật hồ sơ, đọc chậm từng câu. Có câu đọc đúng. Có câu cố tình đọc sai, để xem bạn phản ứng thế nào."},{"ke":"Mỗi câu có ba cách đáp: nhận, chối, hoặc nói thêm. Nhận điều sai, chối điều đúng, hay nói nhiều hơn cần thiết đều thêm một Dấu hỏi. Đủ 3 Dấu hỏi là bị giữ lại trên bờ."},{"ke":"Ông Renaud vẫn đứng bên bếp lò. Ông nghe hết."}]},{"loai":"hoi","man":3,"ma":"t1","nhan":"Năm sinh, quê quán","kienThuc":true,"maThuanLoi":"Ông Renaud liếc sang: lúc nãy anh khai với ông “{khai}”.","de":[{"ai":"Trung úy","noi":"Hồ sơ ghi: sinh năm 1890, người Nghệ An. Đúng không?"}],"giaiThich":"Câu đúng. Giáo trình: Hồ Chí Minh sinh ngày 19/5/1890 ở Nghệ An. Câu đúng thì nhận gọn.","lc":[{"ma":"A","chu":"“Dạ, đúng.”","dh":0,"maThuan":["que:saigon","que:hue"],"phanHoi":[{"ai":"Trung úy","noi":"Ừm."}]},{"ma":"B","chu":"“Dạ, không phải.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Không phải? Sổ trường Quốc học ghi rành rành đây."}]},{"ma":"C","chu":"“Dạ đúng. Nghệ An là đất địa linh nhân kiệt, sinh ra bao nhiêu người yêu nước…”","dh":1,"maThuan":["que:saigon","que:hue"],"phanHoi":[{"ai":"Trung úy","noi":"Người yêu nước? Anh nói nhiều quá đấy."}]}]},{"loai":"hoi","man":3,"ma":"t2","nhan":"Người cha","kienThuc":true,"de":[{"ai":"Trung úy","noi":"Cha anh đỗ tiến sĩ, làm tri phủ ở kinh đô Huế. Phải không?"}],"giaiThich":"Câu sai ở “tiến sĩ” và “tri phủ ở Huế”. Giáo trình: cụ Nguyễn Sinh Sắc đỗ phó bảng, từng được bổ nhiệm Tri huyện Bình Khê, tỉnh Bình Định. Câu sai thì chối gọn.","lc":[{"ma":"A","chu":"“Dạ, phải.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"(cười nhạt) Tôi đọc sai đấy. Anh nhận bừa cả chuyện nhà mình à?"}]},{"ma":"B","chu":"“Dạ, không phải ạ.”","dh":0,"phanHoi":[{"ai":"Trung úy","noi":"Ừm. Tôi đọc nhầm dòng."}]},{"ma":"C","chu":"“Dạ không. Cha tôi đỗ phó bảng, làm tri huyện Bình Khê. Cha tôi vẫn nói quan trường là nô lệ trong những người nô lệ…”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Quan trường là nô lệ? Hay lắm. Tôi sẽ ghi câu này vào hồ sơ."}]}]},{"loai":"hoi","man":3,"ma":"t3","nhan":"Năm 1908","kienThuc":true,"de":[{"ai":"Trung úy","noi":"Năm 1908, lúc dân Trung Kỳ kéo nhau đi chống thuế, anh đang ở Huế. Đúng không?"}],"giaiThich":"Câu đúng. Giáo trình: Hồ Chí Minh đã tham gia phong trào chống thuế ở Trung Kỳ (năm 1908), khi đang học ở Huế. Câu đúng thì nhận gọn.","lc":[{"ma":"A","chu":"“Dạ, năm đó tôi ở Huế.”","dh":0,"phanHoi":[{"ai":"Trung úy","noi":"(lật trang) Ở Huế. Năm đó cả Huế ai chẳng nghe tiếng dân kêu."}]},{"ma":"B","chu":"“Dạ không, năm đó tôi ở quê.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Sổ trường ghi anh có mặt ở Huế cả năm. Anh nói dối."}]},{"ma":"C","chu":"“Dạ phải. Dân kêu thì mình phải đứng về phía dân chứ, thưa ông.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Đứng về phía dân. (ghi chép) Tôi nhớ câu này."}]}]},{"loai":"hoi","man":3,"ma":"t4","nhan":"Năm 1910","kienThuc":true,"maThuanLoi":"Ông Renaud liếc sang: lúc nãy anh khai với ông “{khai}”.","de":[{"ai":"Trung úy","noi":"Năm 1910 anh dạy học ở trường Dục Thanh, Phan Thiết. Phải không?"}],"giaiThich":"Câu đúng. Giáo trình: năm 1910, Người là thầy giáo ở Trường Dục Thanh, Phan Thiết. Câu đúng thì nhận gọn.","lc":[{"ma":"A","chu":"“Dạ, phải.”","dh":0,"maThuan":["nghe:bocvac","nghe:chua"],"phanHoi":[{"ai":"Trung úy","noi":"Thầy giáo xuống làm phụ bếp. Lạ thật."}]},{"ma":"B","chu":"“Dạ không, tôi chưa từng dạy học.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Học trò Dục Thanh còn nhớ tên anh đấy."}]},{"ma":"C","chu":"“Dạ phải. Tôi dạy học trò lòng yêu nước và vận mệnh nước nhà.”","dh":1,"maThuan":["nghe:bocvac","nghe:chua"],"phanHoi":[{"ai":"Trung úy","noi":"Lòng yêu nước. Vận mệnh nước nhà. (ghi chép) Thầy giáo giỏi lắm."}]}]},{"loai":"hoi","man":3,"ma":"t5","nhan":"Các bậc tiền bối","kienThuc":true,"de":[{"ai":"Trung úy","noi":"Anh là người của Phan Bội Châu, đang tìm đường sang Nhật. Phải không?"}],"giaiThich":"Câu sai. Giáo trình: Người khâm phục Phan Bội Châu, Phan Châu Trinh, Hoàng Hoa Thám nhưng không tán thành, không đi theo phương pháp, khuynh hướng cứu nước của các vị đó. Câu sai thì chối gọn.","lc":[{"ma":"A","chu":"“Dạ, phải.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Phải?! (đập tay xuống bàn) Vậy anh xuống tàu đi Marseille làm gì?"}]},{"ma":"B","chu":"“Dạ không. Tôi xin đi Pháp, thưa ông.”","dh":0,"phanHoi":[{"ai":"Trung úy","noi":"Đi Pháp. Ừ, tàu này đi Pháp."}]},{"ma":"C","chu":"“Dạ không. Tôi kính phục cụ Phan, nhưng tôi không đi theo con đường của cụ.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Kính phục cụ Phan! Hay lắm."}]}]},{"loai":"ke","man":3,"dong":[{"ai":"Renaud","noi":"(gõ muôi vào thành nồi) Thưa trung úy, tôi cần người gọt khoai, không cần người có giấy khen hạnh kiểm. Ông muốn điều tra thì mời lên boong trên."},{"ke":"Viên trung úy gập hồ sơ, bước ra. Nhưng chiều nay, lúc thuyền trưởng ký sổ, ông ta sẽ đứng ngay bên cạnh."}]},{"loai":"hoi","man":4,"tenMan":"Thuyền trưởng ký sổ","ma":"c1","nhan":"Tên ghi sổ","de":[{"ke":"Chiều. Phòng thuyền trưởng Louis Édouard Maisen. Viên trung úy đứng bên bàn, tay vẫn kẹp tập hồ sơ. Ông Renaud đứng ở cửa."},{"ai":"Thuyền trưởng","noi":"Tên gì, để tôi ghi sổ thủy thủ đoàn?"}],"lc":[{"ma":"A","chu":"“Nguyễn Tất Thành.”","dh":1,"ten":"Nguyễn Tất Thành","phanHoi":[{"ke":"Viên trung úy gõ ngón tay lên một dòng trong hồ sơ."},{"ai":"Trung úy","noi":"Nguyễn Tất Thành. Đúng cái tên trong sổ trường Quốc học."}],"giaiThich":"Tên thật đang nằm trong hồ sơ của trung úy. (Giáo trình: Người lúc nhỏ tên là Nguyễn Sinh Cung, sau đổi thành Nguyễn Tất Thành.)"},{"ma":"B","chu":"“Văn Ba.”","dh":0,"ten":"Văn Ba","phanHoi":[{"ai":"Thuyền trưởng","noi":"Un nom facile. Tên dễ nhớ. Tốt."}],"giaiThich":"Manh mối: Tư Lê gọi bạn là “anh Ba”, bếp trưởng dặn dưới bếp chỉ gọi một tiếng. Theo sử liệu, Người lấy tên Văn Ba khi xuống tàu (chi tiết ngoài giáo trình)."},{"ma":"C","chu":"“Lê… Tư Lê.”","dh":1,"ten":"Tư Lê","phanHoi":[{"ai":"Trung úy","noi":"Tư Lê? Cậu thanh niên đứng dưới bến sáng nay cũng xưng là Tư Lê. Hai người một tên à?"}],"giaiThich":"Mượn tên người bạn đang đứng dưới bến thì lộ ngay."}]},{"loai":"hoi","man":4,"ma":"c2","nhan":"Vì sao muốn đi (trước mặt trung úy)","de":[{"ai":"Thuyền trưởng","noi":"Câu cuối. Vì sao anh muốn đi?"},{"ke":"Viên trung úy ngẩng lên khỏi hồ sơ, chờ nghe."}],"lc":[{"ma":"A","chu":"“Tôi muốn sang xem Tự do, Bình đẳng, Bác ái ở nước Pháp ra sao, và vì sao xứ tôi không có.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Vì sao xứ anh không có? (ghi chép) Câu hỏi hay đấy."}],"giaiThich":"Lời thật nói với bếp trưởng thì được tin; nói trước mặt người cầm hồ sơ thì thành dấu hỏi. Người nghe đã khác."},{"ma":"B","chu":"“Tôi muốn làm việc, học nghề, xem nước Pháp và các nước khác.”","dh":0,"phanHoi":[{"ai":"Thuyền trưởng","noi":"Học nghề. Tốt. Tàu cần người chịu học."}],"giaiThich":"Nói thật mà không nói hết: đủ để được nhận, không đủ để bị ghi vào hồ sơ."},{"ma":"C","chu":"“Tôi muốn tìm hiểu những gì ẩn giấu sau sức mạnh của nước Pháp.”","dh":1,"phanHoi":[{"ai":"Trung úy","noi":"Ẩn giấu sau sức mạnh của nước Pháp… (ghi chép rất lâu)"}],"giaiThich":"Đây đúng là chí hướng của Người theo giáo trình: muốn tìm hiểu những gì ẩn giấu sau sức mạnh của kẻ thù. Nhưng nói ra trước mặt trung úy là tự nộp mình."}]},{"loai":"xet","man":4,"de":[{"ai":"Thuyền trưởng","noi":"Ông Renaud, người này được không?"}],"dat":[{"ke":"Ông Renaud gật đầu."},{"ai":"Renaud","noi":"Được. Mai bốn giờ sáng xuống bếp."},{"ke":"Ngòi bút sắt cào lên trang giấy: {ten}, aide-cuisinier. Bạn đã có chỗ trên tàu."}]},{"loai":"ke","man":5,"tenMan":"Đêm trên bến","nut":"Giơ hai bàn tay","dong":[{"ke":"Tối hôm đó, hai người ngồi ở mé bến. Đèn trên tàu hắt vàng xuống mặt nước."},{"ai":"Tư Lê","noi":"Anh Ba, đi xa như vậy, tiền đâu mà đi? Sang tới bên đó lấy gì mà sống?"}]},{"loai":"ke","man":5,"dong":[{"ai":"Ba","noi":"Đây. Tiền đây. Mình làm việc, mình sống, mình đi."},{"ke":"Tư Lê nhìn hai bàn tay ấy rất lâu, rồi lắc đầu."},{"ai":"Tư Lê","noi":"Tôi… tôi không đi đâu, anh Ba. Tôi không có gan như anh."},{"ai":"Ba","noi":"Không sao. Mỗi người một con đường. Anh ở lại, giữ gìn sức khỏe."},{"ke":"Đêm ấy, dưới hầm tàu, anh Ba không ngủ được. Anh xếp lại hành lý, không phải quần áo, mà là những gì mang theo trong lòng."}]},{"loai":"hanhLy","man":5,"ma":"hanhly","nhan":"Hành lý ký ức","nut":"Đóng va li","de":[{"ke":"Sáu ngăn hành lý. Mỗi ngăn chọn một ký ức thật. Những thẻ còn lại là ký ức bị trộn sai."}],"ngan":[{"ten":"Quê hương","the":[{"chu":"Nghệ An, vùng đất địa linh nhân kiệt, giàu truyền thống yêu nước","dung":true},{"chu":"Quảng Nam, đất học, quê của nhiều nhà nho duy tân"},{"chu":"Bình Định, nơi cả nhà sinh sống từ đời ông bà"}],"giaiThich":"Giáo trình: Nghệ An là vùng đất địa linh nhân kiệt, giàu truyền thống yêu nước."},{"ten":"Lời cha","the":[{"chu":"Cụ Nguyễn Sinh Sắc đỗ phó bảng, dạy: “Đừng lấy phong cách nhà quan làm phong cách nhà ta”","dung":true},{"chu":"Cụ Nguyễn Sinh Sắc đỗ tiến sĩ, dạy: “Làm quan là con đường giúp dân”"},{"chu":"Cụ Nguyễn Sinh Sắc đỗ phó bảng, dạy: “Học để ra làm quan, rạng danh dòng họ”"}],"giaiThich":"Giáo trình: cụ Nguyễn Sinh Sắc đỗ phó bảng, thường dạy các con: “Đừng lấy phong cách nhà quan làm phong cách nhà ta”, và tâm sự: “Quan trường là nô lệ trong những người nô lệ, lại càng nô lệ hơn”."},{"ten":"Hình bóng mẹ","the":[{"chu":"Cụ Hoàng Thị Loan: nhân hậu, tần tảo, đảm đang, hòa thuận với mọi người","dung":true},{"chu":"Cụ Hoàng Thị Loan: nghiêm khắc, muốn con theo nghiệp khoa cử làm quan"},{"chu":"Cụ Hoàng Thị Loan: dạy con chữ Hán, dặn con giữ nếp nhà nho"}],"giaiThich":"Giáo trình: cụ Hoàng Thị Loan là người mẹ Việt Nam điển hình với đức tính nhân hậu, tần tảo, đảm đang, hết mực thương yêu chồng, con và hòa thuận nhân đức với mọi người."},{"ten":"Năm 1908","the":[{"chu":"Tham gia phong trào chống thuế ở Trung Kỳ","dung":true},{"chu":"Tham gia phong trào chống thuế ở Nam Kỳ"},{"chu":"Sang Nhật theo phong trào Đông Du"}],"giaiThich":"Giáo trình: Hồ Chí Minh đã tham gia phong trào chống thuế ở Trung Kỳ (năm 1908)."},{"ten":"Năm 1910","the":[{"chu":"Dạy học ở Trường Dục Thanh, Phan Thiết","dung":true},{"chu":"Dạy học ở Trường Quốc học Huế"},{"chu":"Làm thông ngôn ở tòa sứ Sài Gòn"}],"giaiThich":"Giáo trình: là thầy giáo ở Trường Dục Thanh, Phan Thiết, Người dành hết tâm huyết truyền thụ cho học sinh lòng yêu nước (năm 1910)."},{"ten":"Các bậc tiền bối","the":[{"chu":"Khâm phục Phan Bội Châu, Phan Châu Trinh, Hoàng Hoa Thám, nhưng không đi theo con đường của các cụ","dung":true},{"chu":"Quyết theo con đường Đông Du của Phan Bội Châu"},{"chu":"Quyết theo con đường của Phan Châu Trinh"}],"giaiThich":"Giáo trình: Người rất khâm phục tinh thần yêu nước của các vị tiền bối nhưng sáng suốt phê phán, không tán thành, không đi theo các phương pháp, khuynh hướng cứu nước của các vị đó."}]},{"loai":"ke","man":5,"tenMan":"Mùng 5 tháng Sáu","nut":"Lên boong","dong":[{"ke":"Mùng 5 tháng Sáu năm 1911. Bốn giờ sáng, anh Ba đã ngồi thổi lò."},{"ke":"Rồi sàn tàu rung lên. Tiếng máy trầm xuống, ì ì như một con thú lớn vừa thở ra."},{"ai":"Renaud","noi":"Tàu nhổ neo rồi. Lên boong đi. Năm phút. Đời người chỉ rời quê lần đầu có một lần."}]},{"loai":"ke","man":5,"nut":"Xuống bếp","dong":[{"ke":"Gió sông lồng lộng. Mái Nhà Rồng lùi dần, rồi cột cờ Thủ Ngữ, rồi hàng dừa nước hai bên bờ. Sài Gòn chìm vào vệt xanh mờ phía chân trời."},{"ke":"Anh không khóc. Anh đứng thẳng như lúc còn đứng trên bục giảng ở Dục Thanh."},{"ke":"Rồi anh quay xuống bếp. Nồi súp của ông Renaud sắp trào."}]},{"loai":"ket","ma":"nhan"}],"ketCuc":{"nhan":{"tieuDe":"Lên đường","dong":[{"ke":"Ngày 5/6/1911, Hồ Chí Minh đi ra nước ngoài tìm con đường cứu nước, cứu dân."},{"ke":"Từ năm 1911 đến năm 1917, từ Pháp, Người đến nhiều nước trên thế giới."},{"ke":"Thời kỳ tiếp theo: 1911–1920, hình thành tư tưởng cứu nước, giải phóng dân tộc Việt Nam theo con đường cách mạng vô sản."}]},"tuchoi":{"tieuDe":"Tàu đi, anh ở lại","dong":[{"ke":"Ông Renaud im lặng một lúc rồi lắc đầu."},{"ai":"Renaud","noi":"Không được. Tôi không tin người này."},{"ke":"Chiều mùng 5, anh Ba đứng trên bến nhìn con tàu ra khơi."}],"loiKhuyen":"Lòng tin của bếp trưởng chỉ có {lt}/10, cần ít nhất {can}. Xem phần Nhìn lại để biết chỗ mất điểm: lời khai có khớp với những gì bạn nói sau đó không?"},"giu":{"tieuDe":"Bị giữ lại","dong":[{"ai":"Trung úy","noi":"Anh đi theo tôi lên tòa sứ. Chúng ta còn nhiều chuyện để nói."},{"ke":"Con tàu Amiral Latouche-Tréville nhổ neo mà không có anh."}],"loiKhuyen":"Đủ 3 Dấu hỏi. Với người cầm hồ sơ: câu đúng thì nhận gọn, câu sai thì chối gọn, không nói thêm."},"lichSu":"Trong lịch sử, ngày 5/6/1911 anh Ba đã lên được con tàu này, rời bến Nhà Rồng đi tìm đường cứu nước. Chơi lại để đi cùng anh."},"suThat":{"giaoTrinh":["Sinh ngày 19/5/1890 ở Nghệ An, vùng đất địa linh nhân kiệt; lúc nhỏ tên Nguyễn Sinh Cung, sau đổi thành Nguyễn Tất Thành","Cha, cụ Nguyễn Sinh Sắc, đỗ phó bảng, từng làm Tri huyện Bình Khê (Bình Định); dạy “Đừng lấy phong cách nhà quan làm phong cách nhà ta”","Mẹ, cụ Hoàng Thị Loan: nhân hậu, tần tảo, đảm đang","Năm 1908 tham gia phong trào chống thuế ở Trung Kỳ","Năm 1910 là thầy giáo Trường Dục Thanh, Phan Thiết","Khâm phục Phan Bội Châu, Phan Châu Trinh, Hoàng Hoa Thám nhưng không đi theo con đường của các vị; muốn tìm hiểu những gì ẩn giấu sau sức mạnh của kẻ thù","Ngày 5/6/1911 đi ra nước ngoài tìm con đường cứu nước, cứu dân"],"suLieu":["Tàu Amiral Latouche-Tréville của hãng Chargeurs Réunis, bến Nhà Rồng, đi Marseille","Tên Văn Ba, việc phụ bếp; thuyền trưởng Louis Édouard Maisen","Người bạn Tư Lê và câu “tiền đây” với hai bàn tay","Nghe ba chữ Tự do, Bình đẳng, Bác ái năm 13 tuổi"],"huCau":["Bếp trưởng Renaud, viên trung úy, ba tờ yết thị, bài gọt khoai, mọi câu hỏi phỏng vấn"]}};
+const L = ND.luat, C = ND.canh;
+const KHOA = 'game1911-v1';
+const $ = s => document.querySelector(s);
+const MAU = { 'Renaud':'#9c2f22', 'Trung úy':'#27405a', 'Tư Lê':'#8a5a2b', 'Ba':'#1f6b73', 'Thuyền trưởng':'#5b3f73' };
+const TAU = `<svg viewBox="0 0 320 124" aria-hidden="true">
+ <circle cx="160" cy="18" r="8" fill="#8a7763" opacity=".35"/><circle cx="178" cy="10" r="10" fill="#8a7763" opacity=".25"/><circle cx="200" cy="6" r="7" fill="#8a7763" opacity=".18"/>
+ <line x1="72" y1="18" x2="72" y2="80" stroke="#2a2019" stroke-width="3"/><line x1="248" y1="22" x2="248" y2="80" stroke="#2a2019" stroke-width="3"/>
+ <line x1="72" y1="20" x2="248" y2="24" stroke="#2a2019" stroke-width="1"/>
+ <rect x="141" y="28" width="20" height="30" fill="#2a2019"/><rect x="141" y="32" width="20" height="6" fill="#9c2f22"/>
+ <rect x="96" y="56" width="112" height="10" fill="#2a2019"/><rect x="82" y="64" width="150" height="16" fill="#2a2019"/>
+ <path d="M26 80 H296 L274 104 H50 Z" fill="#2a2019"/>
+ <g fill="#e2b04a"><circle cx="90" cy="90" r="2.2"/><circle cx="116" cy="90" r="2.2"/><circle cx="142" cy="90" r="2.2"/><circle cx="168" cy="90" r="2.2"/><circle cx="194" cy="90" r="2.2"/><circle cx="220" cy="90" r="2.2"/></g>
+ <path d="M0 106 Q40 100 80 106 T160 106 T240 106 T320 106 V124 H0 Z" fill="#1f4b5a" opacity=".28"/>
+</svg>`;
+
+let S = null;
+const TEN_MAN = []; { let t = ''; C.forEach((c, i) => { if (c.tenMan) t = c.tenMan; TEN_MAN[i] = t; }); }
+
+// ---------- trạng thái ----------
+function moi(){ return { i:-1, lt:L.longTinDau, dh:0, khai:{}, kq:{}, hien:{}, log:[], ten:L.tenMacDinh, seed:(Math.random()*1e9)|0, ket:null }; }
+function luu(){ try { localStorage.setItem(KHOA, JSON.stringify(S)); } catch(e) {} }
+function doc(){ try { const t = localStorage.getItem(KHOA); return t ? JSON.parse(t) : null; } catch(e) { return null; } }
+
+function rng(a){ return function(){ a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a);
+  t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function tron(ds, k){ const r = rng(S.seed + k * 7919), a = ds.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+
+// ---------- vẽ chung ----------
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c])); }
+function thay(s){ return esc(s).replace(/\{ten\}/g, esc(S.ten)); }
+function dong(d, moiHien){
+  const m = moiHien ? ' moi' : '';
+  if (d.ke != null) return `<p class="ke${m}">${thay(d.ke)}</p>`;
+  return `<div class="loi${m}" style="--ai:${MAU[d.ai] || '#8a7763'}"><span class="ai">${esc(d.ai)}</span><p>${thay(d.noi)}</p>${d.dich ? `<p class="dich">${esc(d.dich)}</p>` : ''}</div>`;
+}
+function chips(lt, dh){
+  const a = [];
+  if (lt > 0) a.push(`<span class="chip tot">+${lt} Lòng tin</span>`);
+  if (lt < 0) a.push(`<span class="chip xau">−${-lt} Lòng tin</span>`);
+  if (dh > 0) a.push(`<span class="chip xau">+${dh} Dấu hỏi</span>`);
+  if (!a.length) a.push('<span class="chip">Không đổi</span>');
+  return `<div class="chips">${a.join('')}</div>`;
+}
+function veHud(nhay){
+  const h = $('#hud'), c = C[S.i]; h.hidden = false;
+  const o = Array.from({ length:L.longTinToiDa }, (_, k) => `<i class="${k < S.lt ? 'day' : ''}${k === L.longTinCan - 1 ? ' can' : ''}"></i>`).join('');
+  const q = Array.from({ length:L.dauHoiToiDa }, (_, k) => `<i class="${k < S.dh ? 'co' : ''}">?</i>`).join('');
+  h.innerHTML = `<div class="hud-in"><div class="hud-man">Màn ${c.man} · ${esc(TEN_MAN[S.i])}</div>
+    <div class="do" id="do-lt"><span>Lòng tin</span><span class="o-tin">${o}</span><b>${S.lt}/${L.longTinToiDa}</b></div>
+    <div class="do" id="do-dh"><span>Dấu hỏi</span><span class="dh">${q}</span></div></div>`;
+  (nhay || []).forEach(id => { const e = document.getElementById(id); if (e) e.classList.add('nhay'); });
+}
+function apDung(lt, dh){
+  const truoc = S.lt;
+  S.lt = Math.max(0, Math.min(L.longTinToiDa, S.lt + lt)); S.dh += dh;
+  const n = []; if (S.lt !== truoc) n.push('do-lt'); if (dh) n.push('do-dh'); veHud(n);
+}
+function nhanKhai(m){ const muc = ND.khai.find(k => k.ma === m), l = muc && muc.lc.find(x => x.ma === S.khai[m]); return l ? l.nhan : ''; }
+function cuon(sel){ const e = typeof sel === 'string' ? $(sel) : sel; if (e) e.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+
+function sang(){ S.i++; luu(); window.scrollTo(0, 0); ve(); }
+function denKet(ma){ S.ket = ma; luu(); window.scrollTo(0, 0); ve(); }
+
+function ve(){
+  if (S.ket) return veKet();
+  if (S.i < 0) return veBia();
+  const c = C[S.i]; veHud();
+  ({ ke:veKe, tau:veTau, khai:veKhai, hoi:veHoi, gotKhoai:veKhoai, xet:veXet, hanhLy:veHanhLy, ket:x => denKet(x.ma) })[c.loai](c);
+}
+
+// ---------- bìa ----------
+function veBia(){
+  $('#hud').hidden = true;
+  const cu = doc(), tiep = cu && cu.i >= 0 && !cu.ket && C[cu.i];
+  $('#man').innerHTML = `<section class="bia">${TAU}<h1 class="tde">${esc(ND.ten)}</h1><p class="phu-de">${esc(ND.phuDe)}</p>
+    <div class="gt">${ND.gioiThieu.map(t => `<p>${esc(t)}</p>`).join('')}
+    <div class="chu-giai"><p><b>Lòng tin</b> của bếp trưởng: bắt đầu ${L.longTinDau}/${L.longTinToiDa}. Lúc thuyền trưởng ký sổ phải đạt từ ${L.longTinCan} trở lên (ô có viền sáng).</p>
+    <p><b>Dấu hỏi</b> của viên trung úy: đủ ${L.dauHoiToiDa} là bị giữ lại trên bờ.</p></div></div>
+    <div class="chan">${tiep ? `<button class="nut son" id="tiep-cu">Chơi tiếp (Màn ${C[cu.i].man})</button>` : ''}
+    <button class="nut${tiep ? ' phu' : ' son'}" id="moi">${tiep ? 'Chơi lại từ đầu' : 'Bắt đầu'}</button></div></section>`;
+  $('#moi').onclick = () => { S = moi(); S.i = 0; luu(); ve(); };
+  if (tiep) $('#tiep-cu').onclick = () => { S = Object.assign(moi(), cu); ve(); };
+}
+
+// ---------- lời kể: chạm để hiện từng dòng ----------
+function veKe(c){
+  const i = S.i, n = Math.min(S.hien[i] || 1, c.dong.length), het = n >= c.dong.length;
+  $('#man').innerHTML = `<section class="canh">${c.dong.slice(0, n).map((d, k) => dong(d, k === n - 1)).join('')}</section>
+    <div class="chan"><button class="nut" id="tiep">${het ? esc(c.nut || 'Tiếp ▸') : 'Tiếp ▸'}</button></div>`;
+  const buoc = () => { if (het) return sang(); S.hien[i] = n + 1; luu(); veKe(c); cuon('#tiep'); };
+  $('#tiep').onclick = buoc;
+  if (!het) $('.canh').onclick = buoc;
+}
+
+// ---------- màn 1: chọn tàu ----------
+function veTau(c){
+  const i = S.i, kq = S.kq[i] || (S.kq[i] = { thu:[], xong:false });
+  const cuoi = kq.thu.length ? c.yetThi.find(y => y.ma === kq.thu[kq.thu.length - 1]) : null;
+  $('#man').innerHTML = `${c.de.map(d => dong(d)).join('')}
+    <div class="sotay"><b>Sổ tay của Ba:</b> ${c.soTay.map(([f, v]) => `<i>${esc(f)}</i> = ${esc(v)}`).join(' · ')}</div>
+    <div class="yt-luoi">${tron(c.yetThi, i).map(y => {
+      const da = kq.thu.includes(y.ma), cls = da ? (y.dung ? ' dung' : ' hong') : '';
+      return `<button class="yt${cls}" data-ma="${y.ma}" ${da || kq.xong ? 'disabled' : ''}><span class="yt-t tde">${esc(y.tieuDe)}</span>${y.dong.map(t => `<span class="yt-d">${esc(t)}</span>`).join('')}</button>`;
+    }).join('')}</div>
+    <div id="ph">${cuoi ? cuoi.phanHoi.map(d => dong(d, true)).join('') : ''}</div>
+    ${kq.xong ? chips(kq.lt, 0) + '<div class="chan"><button class="nut" id="tiep">Xuống bếp ▸</button></div>' : ''}`;
+  document.querySelectorAll('.yt:not(:disabled)').forEach(b => b.onclick = () => {
+    const y = c.yetThi.find(v => v.ma === b.dataset.ma); kq.thu.push(y.ma);
+    if (y.dung) {
+      kq.xong = true; kq.lt = kq.thu.length === 1 ? L.tauDungLanDau : 0; apDung(kq.lt, 0);
+      S.log.push({ man:c.man, nhan:c.nhan, chon:`${y.tieuDe} (lần chọn thứ ${kq.thu.length})`, lt:kq.lt, dh:0,
+        giai:'Tàu đúng đi Marseille (Pháp), cần aide-cuisinier (phụ bếp), khởi hành 5 juin (5/6/1911).' });
+    }
+    luu(); veTau(c); cuon(kq.xong ? '#tiep' : '#ph');
+  });
+  if (kq.xong) $('#tiep').onclick = sang;
+}
+
+// ---------- màn 2: lời khai ----------
+function veKhai(c){
+  const i = S.i, kq = S.kq[i] || (S.kq[i] = { chon:{} }), du = ND.khai.every(m => kq.chon[m.ma]);
+  let h = `<h2 class="tde">Lời khai</h2><p class="ke">Chọn một ý cho mỗi mục.</p>
+    ${ND.khai.map((m, k) => `<div class="khai-muc"><h3>${esc(m.hoi)}</h3>${tron(m.lc, i * 31 + k).map(l =>
+      `<button class="lc${kq.chon[m.ma] === l.ma ? ' chon' : ''}" data-m="${m.ma}" data-v="${l.ma}" ${kq.xong ? 'disabled' : ''}>${esc(l.nhan)}</button>`).join('')}</div>`).join('')}`;
+  if (kq.xong) h += `<div id="ph">${(kq.vo || []).map(t => dong({ ai:'Renaud', noi:t }, true)).join('')}</div>${chips(kq.lt, 0)}
+    <div class="chan"><button class="nut" id="tiep">Tiếp ▸</button></div>`;
+  else h += `<div class="chan"><button class="nut" id="tiep" ${du ? '' : 'disabled'}>${esc(c.nut)}</button></div>`;
+  $('#man').innerHTML = h;
+  if (kq.xong) { $('#tiep').onclick = sang; return; }
+  document.querySelectorAll('.lc').forEach(b => b.onclick = () => { kq.chon[b.dataset.m] = b.dataset.v; luu(); veKhai(c); });
+  $('#tiep').onclick = () => {
+    S.khai = Object.assign({}, kq.chon);
+    // Lời khai tự mâu thuẫn (không biết chữ mà dạy học): bếp trưởng bắt ngay, mỗi cặp −1 Lòng tin
+    const vo = (L.khaiVoLy || []).filter(v => v.cap.every(s => { const [m, x] = s.split(':'); return S.khai[m] === x; }));
+    S.log.push({ man:c.man, nhan:'Lời khai', chon:ND.khai.map(m => `${m.hoi}: ${nhanKhai(m.ma)}`).join(' · '),
+      lt:vo.length ? -vo.length : undefined,
+      giai:(vo.length ? 'Lời khai tự mâu thuẫn. ' : '') + 'Lời khai thật: ' + ND.khai.map(m => m.lc.find(l => l.that).nhan).join(' · ') + '. Những gì nói sau đó phải khớp với lời khai.' });
+    if (!vo.length) { kq.xong = true; luu(); return sang(); }
+    Object.assign(kq, { xong:true, vo:vo.map(v => v.loi), lt:-vo.length }); apDung(kq.lt, 0);
+    luu(); veKhai(c); cuon('#tiep');
+  };
+}
+
+// ---------- câu hỏi có lựa chọn ----------
+function veHoi(c){
+  const i = S.i, kq = S.kq[i];
+  let h = c.de.map(d => dong(d)).join('') + tron(c.lc, i).map(o =>
+    `<button class="lc${kq && kq.ma === o.ma ? ' chon' : ''}" data-ma="${o.ma}" ${kq ? 'disabled' : ''}>${esc(o.chu)}</button>`).join('');
+  if (kq) {
+    const o = c.lc.find(x => x.ma === kq.ma);
+    let ph = o.phanHoi;
+    if (kq.mt) {
+      const loi = { ke:(c.maThuanLoi || L.maThuanLoi).replace('{khai}', kq.mt) };
+      ph = c.maThuanLoi ? ph.concat([loi]) : [loi];   // màn 2: bếp trưởng bắt lỗi thay câu đáp; màn 3: trung úy đáp, bếp trưởng nghe thấy
+    }
+    h += `<div id="ph">${ph.map(d => dong(d, true)).join('')}</div>${chips(kq.lt, kq.dh)}<div class="chan"><button class="nut" id="tiep">Tiếp ▸</button></div>`;
+  }
+  $('#man').innerHTML = h;
+  if (!kq) document.querySelectorAll('.lc').forEach(b => b.onclick = () => chonHoi(c, b.dataset.ma));
+  else $('#tiep').onclick = () => S.dh >= L.dauHoiToiDa ? denKet('giu') : sang();
+}
+function chonHoi(c, ma){
+  const o = c.lc.find(x => x.ma === ma);
+  const k = (o.maThuan || []).find(s => { const [m, v] = s.split(':'); return S.khai[m] === v; });
+  const mt = k ? nhanKhai(k.split(':')[0]) : null;
+  const lt = mt ? -1 : (o.lt || 0), dh = o.dh || 0;
+  if (o.ten) S.ten = o.ten;
+  S.kq[S.i] = { ma, lt, dh, mt };
+  apDung(lt, dh);
+  S.log.push({ man:c.man, nhan:c.nhan, chon:o.chu, lt, dh, mt, kt:!!c.kienThuc, dung:dh === 0,
+    giai:[c.giaiThich, o.giaiThich].filter(Boolean).join(' ') });
+  luu(); veHoi(c); cuon('#tiep');
+}
+
+// ---------- trò bấm nhanh: gọt khoai ----------
+function veKhoai(c){
+  const kq = S.kq[S.i];
+  if (kq) {
+    $('#man').innerHTML = `${c.de.map(d => dong(d)).join('')}<div class="khoai"><div class="dem">Gọt được ${kq.cu} củ</div></div>
+      ${(c.ketQua[String(kq.lt)] || []).map(d => dong(d, true)).join('')}${chips(kq.lt, 0)}
+      <div class="chan"><button class="nut" id="tiep">Tiếp ▸</button></div>`;
+    $('#tiep').onclick = sang; return;
+  }
+  $('#man').innerHTML = `${c.de.map(d => dong(d)).join('')}<div class="khoai" id="kk"><button class="nut son" id="batdau">Bắt đầu gọt</button></div>`;
+  $('#batdau').onclick = () => {
+    let n = 3; const kk = $('#kk'); cuon(kk);
+    const dem = () => { if (!n) return choiKhoai(c); kk.innerHTML = `<div class="dem-nguoc tde">${n--}</div>`; setTimeout(dem, 700); };
+    dem();
+  };
+}
+function choiKhoai(c){
+  const g = L.gotKhoai, het = Date.now() + g.giay * 1000;
+  let cu = 0, cham = 0, xong = false;
+  $('#kk').innerHTML = `<div class="dong-ho"><i id="thanh"></i></div><div class="dem"><span id="so-cu">0</span> củ · còn <span id="giay">${g.giay}</span> giây</div>
+    <button class="cu" id="cu" aria-label="Củ khoai, chạm để gọt">🥔</button><div class="vo" id="vo">${'<i></i>'.repeat(g.chamMoiCu)}</div><div class="ro" id="ro"></div>`;
+  const nut = $('#cu'), vo = [...$('#vo').children];
+  nut.addEventListener('pointerdown', e => {
+    e.preventDefault(); if (xong) return;
+    if (++cham >= g.chamMoiCu) {
+      cham = 0; cu++; $('#so-cu').textContent = cu; $('#ro').insertAdjacentHTML('beforeend', '🥔');
+      nut.classList.remove('xoay'); void nut.offsetWidth; nut.classList.add('xoay');
+    }
+    vo.forEach((d, k) => d.classList.toggle('co', k < cham));
+  });
+  const buoc = () => {
+    const con = Math.max(0, het - Date.now());
+    $('#thanh').style.width = (con / (g.giay * 10)) + '%'; $('#giay').textContent = Math.ceil(con / 1000);
+    if (con > 0) return requestAnimationFrame(buoc);
+    xong = true;
+    let lt = 0; for (const [m, v] of g.moc) if (cu >= m) { lt = v; break; }
+    S.kq[S.i] = { cu, lt }; apDung(lt, 0);
+    S.log.push({ man:c.man, nhan:c.nhan, chon:`${cu} củ trong ${g.giay} giây`, lt, dh:0,
+      giai:g.moc.map(([m, v]) => `từ ${m} củ: +${v}`).join(', ') + '.' });
+    luu(); setTimeout(() => veKhoai(c), 600);
+  };
+  requestAnimationFrame(buoc);
+}
+
+// ---------- màn 4: xét lòng tin ----------
+function veXet(c){
+  const i = S.i, kq = S.kq[i];
+  let h = c.de.map(d => dong(d)).join('');
+  if (!kq) {
+    $('#man').innerHTML = h + '<div class="chan"><button class="nut" id="nghe">Chờ ông Renaud trả lời…</button></div>';
+    $('#nghe').onclick = () => { S.kq[i] = { dat:S.lt >= L.longTinCan }; luu(); S.kq[i].dat ? veXet(c) : denKet('tuchoi'); };
+    return;
+  }
+  $('#man').innerHTML = h + `<p class="huong">Lòng tin ${S.lt}/${L.longTinToiDa}: đủ mốc ${L.longTinCan}.</p>${c.dat.map(d => dong(d, true)).join('')}
+    <div class="chan"><button class="nut" id="tiep">Tiếp ▸</button></div>`;
+  $('#tiep').onclick = sang;
+}
+
+// ---------- màn 5: hành lý ký ức ----------
+function veHanhLy(c){
+  const i = S.i, kq = S.kq[i] || (S.kq[i] = { chon:{} }), xong = kq.xong;
+  const du = c.ngan.every((_, k) => kq.chon[k] != null);
+  let h = c.de.map(d => dong(d)).join('') + c.ngan.map((n, k) => {
+    const ds = tron(n.the.map((t, j) => Object.assign({ j }, t)), i * 97 + k);
+    return `<div class="ngan"><h3>${k + 1}. ${esc(n.ten)}</h3>${ds.map(t => {
+      let cls = '';
+      if (xong) cls = t.dung ? ' dung' : (kq.chon[k] === t.j ? ' sai' : '');
+      else if (kq.chon[k] === t.j) cls = ' chon';
+      return `<button class="lc${cls}" data-k="${k}" data-j="${t.j}" ${xong ? 'disabled' : ''}>${esc(t.chu)}</button>`;
+    }).join('')}${xong ? `<p class="gt-nho">${esc(n.giaiThich)}</p>` : ''}</div>`;
+  }).join('');
+  h += xong
+    ? `<p class="huong"><b>${kq.diem}/${c.ngan.length}</b> ký ức thật đã vào va li.</p><div class="chan"><button class="nut" id="tiep">Tiếp ▸</button></div>`
+    : `<div class="chan"><button class="nut" id="dong" ${du ? '' : 'disabled'}>${esc(c.nut)}</button></div>`;
+  $('#man').innerHTML = h;
+  if (xong) { $('#tiep').onclick = sang; return; }
+  document.querySelectorAll('.lc').forEach(b => b.onclick = () => { kq.chon[+b.dataset.k] = +b.dataset.j; luu(); veHanhLy(c); });
+  $('#dong').onclick = () => {
+    kq.xong = true; kq.diem = c.ngan.filter((n, k) => n.the[kq.chon[k]].dung).length;
+    c.ngan.forEach((n, k) => { const t = n.the[kq.chon[k]];
+      S.log.push({ man:c.man, nhan:`Hành lý: ${n.ten}`, chon:t.chu, kt:true, dung:!!t.dung, giai:n.giaiThich }); });
+    luu(); veHanhLy(c); window.scrollTo({ top:0, behavior:'smooth' });
+  };
+}
+
+// ---------- kết cục ----------
+function veKet(){
+  $('#hud').hidden = true;
+  const ma = S.ket, k = ND.ketCuc[ma], kt = S.log.filter(x => x.kt), st = ND.suThat;
+  const ds = a => `<ul>${a.map(t => `<li>${esc(t)}</li>`).join('')}</ul>`;
+  let h = `<section class="ket"><p class="nhan-ket">${ma === 'nhan' ? 'Kết thúc' : 'Kết cục'}</p><h2 class="tde">${esc(k.tieuDe)}</h2>${k.dong.map(d => dong(d)).join('')}`;
+  if (k.loiKhuyen) h += `<p class="huong">${esc(k.loiKhuyen.replace('{lt}', S.lt).replace('{can}', L.longTinCan))}</p><p class="ke">${esc(ND.ketCuc.lichSu)}</p>`;
+  h += `<div class="so"><div><b>${S.lt}/${L.longTinToiDa}</b>Lòng tin</div><div><b>${S.dh}/${L.dauHoiToiDa}</b>Dấu hỏi</div>
+    <div><b>${kt.filter(x => x.dung).length}/${kt.length}</b>Câu kiến thức đúng</div></div>
+    <div class="chan"><button class="nut son" id="lai">Chơi lại</button></div>
+    <h3>Nhìn lại từng quyết định</h3><ol class="nl">${S.log.map(x => `<li>
+      <div class="dau">Màn ${x.man} · ${esc(x.nhan)}${x.kt ? ` · <span class="dung-sai ${x.dung ? 'd' : 's'}">${x.dung ? '✓ đúng' : '✗ sai'}</span>` : ''}</div>
+      <div>${esc(x.chon)}</div>${x.lt != null || x.dh != null ? chips(x.lt || 0, x.dh || 0) : ''}
+      ${x.mt ? `<div class="gt">Khác với lời khai “${esc(x.mt)}” nên bị trừ lòng tin.</div>` : ''}${x.giai ? `<div class="gt">${esc(x.giai)}</div>` : ''}</li>`).join('')}</ol>
+    <h3>Thật hay hư cấu?</h3><div class="st"><h4>Có trong giáo trình</h4>${ds(st.giaoTrinh)}<h4>Sử liệu ngoài giáo trình</h4>${ds(st.suLieu)}<h4>Hư cấu</h4>${ds(st.huCau)}</div>
+    <div class="chan"><button class="nut phu" id="lai2">Chơi lại</button></div></section>`;
+  $('#man').innerHTML = h;
+  $('#lai').onclick = $('#lai2').onclick = () => { S = moi(); S.i = 0; luu(); window.scrollTo(0, 0); ve(); };
+}
+
+S = moi(); ve();
+</script>
+</body>
+</html>
