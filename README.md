@@ -44,7 +44,7 @@ Mỗi sinh viên giữ một mảnh câu Hồ Chí Minh trong Giáo trình 2026;
 
 - **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/mot-nua/
 
-Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm biệt danh và lựa chọn trong game.
+Dữ liệu trận đi qua máy chủ MQTT công cộng, gồm số nhóm, họ tên người chơi nhập và lựa chọn trong game.
 
 ## 1911 — Anh Ba xin làm phụ bếp
 

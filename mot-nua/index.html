@@ -8,122 +8,231 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
+/* ===== Hồ sen: nước thẫm, lưới ô, lá sen, cá koi (bản vẽ "Đi tìm một nửa — Hồ sen", 9/10/2026) ===== */
 :root{
-  --muc:#1F2A44; --muc2:#55607A; --muc3:#8A93A8; --giay:#F5F1E8; --the:#FFFDF8; --the2:#ECE6D8; --vien:#D9D1BF;
-  --do:#B8322A; --vang:#E2A625; --xanh:#2E7D5B; --r:14px;
-  font-size:clamp(16px, .5vw + 12px, 22px); color-scheme:light;
+  --nuoc:#1A4436; --muc:#13261F; --muc2:#4D5A52; --kem:#FBF7EA; --kem2:#E9F2DA; --ke:#D9D1BF;
+  --la:#6DC043; --la-dam:#2F6B22; --vang:#F6D77A; --nghe:#F0B429; --do:#E0453B; --do-dam:#8E1E17;
+  --lam:#3A8DEB; --xanh:#3E9B47; --sen:#2E7D3A; --nhat:#D8EFE0; --nhat2:#BFD9C9;
+  --ban:rgba(8,26,20,.74); --vienn:#0E1F33; --r:22px;
+  font-size:clamp(16px, .5vw + 12px, 22px); color-scheme:dark;
 }
-@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
-  --muc:#EEF1F7; --muc2:#AEB6C8; --muc3:#7C8599; --giay:#14181F; --the:#1C222C; --the2:#252C38; --vien:#333C4B;
-  --do:#EF6E62; --vang:#F2C14E; --xanh:#5CC495; color-scheme:dark; } }
-:root[data-theme="dark"]{
-  --muc:#EEF1F7; --muc2:#AEB6C8; --muc3:#7C8599; --giay:#14181F; --the:#1C222C; --the2:#252C38; --vien:#333C4B;
-  --do:#EF6E62; --vang:#F2C14E; --xanh:#5CC495; color-scheme:dark; }
 *{ box-sizing:border-box; }
-html,body{ margin:0; background:var(--giay); color:var(--muc); }
-body{ font-family:"Be Vietnam Pro",system-ui,sans-serif; line-height:1.5; -webkit-text-size-adjust:100%; }
-h1,h2,h3{ font-family:"Baloo 2","Be Vietnam Pro",sans-serif; line-height:1.15; margin:.2em 0 .4em; }
-h1{ font-size:2.1rem; } h2{ font-size:1.5rem; } h3{ font-size:1.15rem; }
+html,body{ margin:0; background:var(--nuoc); color:#fff; }
+body{ font-family:"Be Vietnam Pro",system-ui,sans-serif; line-height:1.5; -webkit-text-size-adjust:100%; min-height:100vh; }
+main{ position:relative; z-index:1; text-shadow:0 1px 3px rgba(5,20,15,.55); }
+.the,.cua button,input,select,.khoa,.nut,.chua button,.chip-nhom span,.hang-la,.o-nhom .tl,.so-hang{ text-shadow:none; }
+h1,h2,h3{ font-family:"Baloo 2","Be Vietnam Pro",sans-serif; font-weight:800; line-height:1.15; margin:.2em 0 .4em; }
+h1{ font-size:2.3rem; text-shadow:0 3px 0 rgba(5,20,15,.6); } h2{ font-size:1.6rem; } h3{ font-size:1.2rem; }
 p{ margin:.4em 0; }
 [hidden]{ display:none !important; }
-:focus-visible{ outline:2.5px solid var(--vang); outline-offset:2px; }
+:focus-visible{ outline:3px solid var(--vang); outline-offset:3px; }
 .mono{ font-family:"IBM Plex Mono",ui-monospace,monospace; }
-.nho{ font-size:.85rem; } .mo{ color:var(--muc2); }
-.man{ max-width:40rem; margin:0 auto; padding:1rem 1rem 3rem; }
-.nut{ font:600 1rem "Be Vietnam Pro",sans-serif; border:0; border-radius:12px; padding:.75rem 1.1rem; cursor:pointer;
-  background:var(--muc); color:var(--giay); display:inline-flex; align-items:center; justify-content:center; gap:.5rem; }
-.nut.phu{ background:transparent; color:var(--muc); box-shadow:inset 0 0 0 1.5px var(--vien); }
-.nut.vang{ background:var(--vang); color:#1F2A44; }
-.nut:disabled{ opacity:.45; cursor:not-allowed; }
-.nut.nho{ padding:.4rem .75rem; font-size:.85rem; }
-.nut-lon{ width:100%; font-size:1.15rem; padding:1rem; border-radius:16px; }
-.hang-nut{ display:flex; flex-wrap:wrap; gap:.6rem; margin:.8rem 0; }
-label.o{ display:block; font-weight:600; margin:.8rem 0 .25rem; }
-input,select{ font:inherit; color:inherit; background:var(--the); border:1.5px solid var(--vien); border-radius:12px; padding:.65rem .75rem; width:100%; }
-.loi{ color:var(--do); font-weight:600; }
-.o-the{ background:var(--the); border:1px solid var(--vien); border-radius:var(--r); padding:1rem; margin:.8rem 0; }
-.bao{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:var(--muc); color:var(--giay);
-  padding:.6rem 1rem; border-radius:10px; z-index:60; max-width:90vw; font-size:.95rem; }
-.mang{ font-size:.8rem; display:inline-flex; align-items:center; gap:.35rem; color:var(--muc2); }
-.mang .dot{ width:.6rem; height:.6rem; border-radius:50%; background:var(--do); display:inline-block; }
-.mang .dot.on{ background:#5CC495; } .mang .dot.dang{ background:var(--vang); }
-table.bd{ border-collapse:collapse; width:100%; }
-table.bd th,table.bd td{ border-bottom:1px solid var(--vien); padding:.45rem .55rem; text-align:left; }
-table.bd th{ font-size:.8em; color:var(--muc2); font-weight:600; }
-table.bd td.so{ font-family:"IBM Plex Mono",monospace; }
+.nho{ font-size:.85rem; } .mo{ color:var(--nhat); }
+.man{ max-width:40rem; margin:0 auto; padding:1.1rem 1rem 3rem; }
+
+/* ===== Nền hồ (trang trí, không bắt chạm) ===== */
+.nen{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; background-color:var(--nuoc);
+  background-image:radial-gradient(ellipse 60% 40% at 20% 15%,rgba(120,170,140,.28),transparent 70%),
+    radial-gradient(ellipse 50% 35% at 80% 55%,rgba(10,30,24,.55),transparent 70%),
+    radial-gradient(ellipse 70% 40% at 35% 85%,rgba(90,140,110,.22),transparent 70%),
+    radial-gradient(ellipse 40% 30% at 70% 20%,rgba(8,26,20,.5),transparent 70%); }
+.nen::before{ content:""; position:absolute; inset:0; background-image:linear-gradient(rgba(220,255,235,.09) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(220,255,235,.09) 1px,transparent 1px); background-size:26px 26px; }
+@media (min-width:1000px){ .nen::before{ background-size:36px 36px; } }
+.nen .o-toi{ position:absolute; background:rgba(5,20,15,.32); }
+.nen svg{ position:absolute; }
+.nen .koi{ filter:drop-shadow(0 8px 5px rgba(0,0,0,.35)); animation:boi 17s ease-in-out infinite alternate; }
+.nen .koi.cham-hon{ animation-duration:23s; animation-direction:alternate-reverse; }
+.nen .noi{ filter:drop-shadow(0 10px 8px rgba(0,0,0,.4)); }
+.nen .canh-hoa{ position:absolute; width:9px; height:6px; border-radius:70% 30% 70% 30%; background:#F7BCD2; animation:troi 9s ease-in-out infinite alternate; }
+@keyframes boi{ from{ translate:0 0; } to{ translate:var(--dx,24px) var(--dy,36px); } }
+@keyframes troi{ to{ translate:10px 14px; rotate:40deg; } }
+@media (prefers-reduced-motion:reduce){ .nen .koi,.nen .canh-hoa{ animation:none; } }
+
+/* ===== Thẻ và khung ===== */
+.the{ background:var(--kem); color:var(--muc); border:3px solid var(--muc); border-radius:var(--r);
+  box-shadow:0 .45rem 0 rgba(5,20,15,.55); padding:1rem 1.1rem; margin:.9rem 0; }
+.the .mo{ color:var(--muc2); }
+.o-the{ background:var(--ban); color:#fff; border:2px solid rgba(255,255,255,.14); border-radius:var(--r); padding:.85rem 1rem; margin:.9rem 0; }
+.o-the > b{ font:800 1.25rem "Baloo 2",sans-serif; display:block; }
+.bang-nhap{ background:var(--ban); border:2px solid rgba(255,255,255,.14); border-radius:24px; padding:1rem; margin:.9rem 0; }
+.bang-nhap > label.o:first-child{ margin-top:0; }
+.cham{ display:inline-block; width:1em; height:1em; border-radius:50%; border:2px solid #fff; vertical-align:-.15em; flex:none; }
+.the .cham,.chip-nhom .cham{ border-color:var(--muc); }
+
+/* ===== Nút ===== */
+.nut{ font:700 1rem "Be Vietnam Pro",sans-serif; border:3px solid var(--vienn); border-radius:16px; padding:.7rem 1.1rem; cursor:pointer;
+  background:var(--xanh); color:#fff; box-shadow:0 5px 0 var(--vienn),inset 0 6px 0 rgba(255,255,255,.25);
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; }
+.nut:active{ translate:0 3px; box-shadow:0 2px 0 var(--vienn),inset 0 6px 0 rgba(255,255,255,.25); }
+.nut.phu{ background:var(--ban); color:#fff; border:2px solid rgba(255,255,255,.22); box-shadow:none; border-radius:999px; font-weight:600; }
+.nut.vang{ background:var(--nghe); color:var(--muc); }
+.nut.lam{ background:var(--lam); } .nut.do{ background:var(--do); }
+.nut:disabled{ background:#8C9A8F; color:#fff; cursor:not-allowed; translate:none; }
+.nut.nho{ padding:.4rem .85rem; font-size:.85rem; }
+.nut-lon{ width:100%; font-size:1.2rem; padding:.9rem; border-radius:18px; }
+.hang-nut{ display:flex; flex-wrap:wrap; gap:.7rem; margin:.9rem 0; }
+.nut-tron{ width:4.1rem; height:4.1rem; border-radius:50%; border:3px solid var(--vienn); padding:0; cursor:pointer; color:#fff;
+  box-shadow:0 5px 0 var(--vienn),inset 0 -7px 0 rgba(0,0,0,.2),inset 0 7px 0 rgba(255,255,255,.32);
+  display:flex; align-items:center; justify-content:center; }
+.nut-tron svg{ width:46%; height:46%; }
+.nut-tron:active{ translate:0 3px; box-shadow:0 2px 0 var(--vienn),inset 0 -7px 0 rgba(0,0,0,.2),inset 0 7px 0 rgba(255,255,255,.32); }
+.nut-tron.do{ background:var(--do); } .nut-tron.xanh{ background:var(--xanh); }
+.hang-tron{ display:flex; justify-content:center; gap:2.75rem; padding-top:.5rem; }
+.hang-tron > div{ display:flex; flex-direction:column; align-items:center; gap:.5rem; font-size:.82rem; font-weight:600; }
+
+/* ===== Ô nhập ===== */
+label.o{ display:block; font-weight:600; margin:.8rem 0 .3rem; }
+input,select{ font:inherit; color:var(--muc); background:#FFFDF4; border:3px solid var(--muc); border-radius:16px; padding:.6rem .8rem; width:100%; color-scheme:light; }
+.loi{ color:#FFB4AA; font-weight:600; }
+.bao{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:var(--muc); color:#fff; border:2px solid rgba(255,255,255,.25);
+  padding:.6rem 1rem; border-radius:12px; z-index:60; max-width:90vw; font-size:.95rem; }
+.mang{ font-size:.8rem; display:inline-flex; align-items:center; gap:.35rem; color:var(--nhat); }
+.mang .dot{ width:.6rem; height:.6rem; border-radius:50%; background:#FF8A7E; display:inline-block; }
+.mang .dot.on{ background:#6EE0A0; } .mang .dot.dang{ background:var(--vang); }
+table.bd{ border-collapse:collapse; width:100%; color:var(--muc); }
+table.bd th,table.bd td{ border-bottom:1.5px solid var(--ke); padding:.45rem .6rem; text-align:left; }
+table.bd th{ font-size:.75em; color:var(--muc2); font-weight:600; border-bottom:3px solid var(--muc); }
+table.bd td.so{ font-family:"IBM Plex Mono",monospace; font-weight:600; }
+table.bd tr.hang1 td{ background:#FFF1C2; font-weight:700; }
 
 /* ===== Trang đầu ===== */
-.logo{ display:flex; gap:.9rem; align-items:center; margin:1.2rem 0 .4rem; }
-.logo svg{ width:4.6rem; height:4.6rem; flex:none; }
-.logo h1{ margin:0; font-size:2.4rem; }
+.logo{ display:flex; gap:.9rem; align-items:center; margin:1rem 0 .4rem; }
+.logo svg{ width:5rem; height:5rem; flex:none; filter:drop-shadow(0 8px 6px rgba(0,0,0,.35)); }
+.logo h1{ margin:0; font-size:2.5rem; }
+.logo.giua{ flex-direction:column; text-align:center; gap:.2rem; margin:.6rem 0 .2rem; }
+.logo.giua svg{ width:7rem; height:7rem; }
 .cua{ display:grid; gap:.8rem; margin:1rem 0; }
-.cua button{ text-align:left; background:var(--the); color:var(--muc); border:1px solid var(--vien); border-radius:var(--r);
-  padding:1rem 1.1rem; cursor:pointer; font:inherit; }
-.cua button:hover{ border-color:var(--muc3); }
-.cua b{ font-family:"Baloo 2",sans-serif; font-size:1.25rem; display:block; line-height:1.2; }
+.cua button{ text-align:left; background:var(--kem); color:var(--muc); border:3px solid var(--muc); border-radius:var(--r);
+  box-shadow:0 5px 0 rgba(5,20,15,.55); padding:.9rem 1.1rem; cursor:pointer; font:inherit; }
+.cua button:hover{ background:#fff; }
+.cua button .mo{ color:var(--muc2); }
+.cua b{ font-family:"Baloo 2",sans-serif; font-size:1.3rem; display:block; line-height:1.2; }
 .luat{ padding-left:1.2rem; } .luat li{ margin:.3rem 0; }
 
-/* ===== Mảnh câu ===== */
-.manh{ position:relative; background:var(--the); border:2.5px dashed var(--mau,var(--muc3)); border-radius:18px; padding:1.2rem 1.1rem 1rem; margin:.8rem 0; }
-.manh .nhan{ display:flex; justify-content:space-between; gap:.5rem; flex-wrap:wrap; font-size:.8rem; font-weight:700; color:var(--muc2); text-transform:uppercase; letter-spacing:.03em; }
-.manh .ba{ color:var(--do); }
-.manh blockquote{ margin:.6rem 0 .2rem; font-family:"Baloo 2",sans-serif; font-weight:600; font-size:1.55rem; line-height:1.3; }
-.ma-toi{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; background:var(--muc); color:var(--giay); border-radius:16px; padding:.7rem 1rem; margin:.8rem 0; }
-.ma-toi .so{ font:600 2.2rem "IBM Plex Mono",monospace; letter-spacing:.12em; }
-.nhap{ display:flex; gap:.5rem; margin:.4rem 0; }
-.nhap input{ font:600 1.6rem "IBM Plex Mono",monospace; text-align:center; letter-spacing:.15em; }
-.khoa{ background:color-mix(in srgb,var(--do) 12%,var(--the)); border:1.5px solid var(--do); color:var(--do); border-radius:12px; padding:.6rem .8rem; font-weight:700; text-align:center; }
-.dongho{ display:flex; align-items:center; gap:.7rem; font-weight:600; }
-.dongho .so{ font:600 1.4rem "IBM Plex Mono",monospace; }
-.dongho .vach{ flex:1; height:.5rem; background:var(--the2); border-radius:9px; overflow:hidden; }
-.dongho .vach i{ display:block; height:100%; background:var(--vang); }
-.dongho.cuoi .so{ color:var(--do); } .dongho.cuoi .vach i{ background:var(--do); }
-.thanh{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; background:var(--mau,var(--muc)); color:#fff; padding:.5rem .9rem; border-radius:var(--r); font-weight:600; }
+/* ===== Điện thoại ===== */
+.thanh{ display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; margin:.1rem 0 .6rem; }
+.thanh .ten{ display:flex; align-items:center; gap:.5rem; background:var(--ban); border:2px solid rgba(255,255,255,.18); border-radius:999px;
+  padding:.35rem .9rem .35rem .45rem; font-weight:600; font-size:.95rem; }
+.thanh .ten .cham{ width:1.25rem; height:1.25rem; }
 .thanh .sp{ flex:1; }
-.cau-du{ background:var(--the); border:2px solid var(--xanh); border-radius:18px; padding:1.1rem; margin:.8rem 0; }
-.cau-du .tick{ color:var(--xanh); font-weight:800; font-family:"Baloo 2",sans-serif; font-size:1.35rem; }
-.cau-du blockquote{ margin:.5rem 0; font-family:"Baloo 2",sans-serif; font-weight:600; font-size:1.35rem; line-height:1.35; }
-.cau-du blockquote mark{ background:color-mix(in srgb,var(--vang) 45%,transparent); color:inherit; border-radius:4px; padding:0 .1em; }
-.cau-du .nguon{ font-size:.9rem; color:var(--muc2); }
-.cau-du .y{ margin-top:.6rem; background:var(--the2); border-radius:10px; padding:.55rem .75rem; font-size:.95rem; }
-.cau-du .y b{ display:block; font-size:.75rem; text-transform:uppercase; letter-spacing:.03em; color:var(--muc2); }
+.dongho{ display:flex; align-items:center; gap:.65rem; background:var(--ban); border-radius:16px; padding:.5rem .9rem; font-weight:600; margin:.6rem 0; }
+.dongho .so{ font:600 1.4rem "IBM Plex Mono",monospace; color:var(--vang); }
+.dongho .vach{ flex:1; height:.62rem; background:rgba(255,255,255,.16); border-radius:9px; overflow:hidden; }
+.dongho .vach i{ display:block; height:100%; background:var(--vang); border-radius:9px; }
+.dongho.cuoi .so{ color:#FF8A7E; } .dongho.cuoi .vach i{ background:#FF8A7E; }
+.manh .dau{ display:flex; align-items:center; gap:.65rem; }
+.manh .dau svg{ width:2.75rem; height:2.75rem; flex:none; }
+.manh .dau b{ font:800 1.25rem "Baloo 2",sans-serif; display:block; line-height:1.2; }
+.manh .ba{ display:block; font-size:.82rem; font-weight:700; color:#B3261E; }
+.manh blockquote{ margin:.7rem 0; font:700 1.8rem/1.25 "Baloo 2",sans-serif; }
+.ma-toi{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; background:var(--muc); color:var(--kem); border-radius:16px; padding:.45rem 1rem; }
+.ma-toi .so{ font:600 2.1rem "IBM Plex Mono",monospace; letter-spacing:.14em; color:var(--vang); }
+.nhap{ display:flex; gap:.75rem; margin:.4rem 0; }
+.nhap input{ flex:1; min-width:0; font:600 1.9rem "IBM Plex Mono",monospace; text-align:center; letter-spacing:.18em; padding:.55rem .25rem; }
+.bang-nhap .nhan-nhap{ font-weight:600; font-size:.95rem; display:block; }
+.khoa{ background:#FCE4E1; color:var(--do-dam); border:3px solid var(--muc); border-radius:var(--r); box-shadow:0 .45rem 0 rgba(5,20,15,.55);
+  padding:1.3rem 1rem; margin:.9rem 0; display:flex; flex-direction:column; align-items:center; gap:.6rem; text-align:center; }
+.khoa .dem-nguoc{ width:6.5rem; height:6.5rem; border-radius:50%; background:var(--do); border:4px solid var(--muc); color:#fff;
+  box-shadow:inset 0 -8px 0 rgba(0,0,0,.2),inset 0 8px 0 rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; font:800 3.4rem/1 "Baloo 2",sans-serif; }
+.khoa b{ font:800 1.5rem "Baloo 2",sans-serif; }
+.cau-du{ position:relative; margin-top:3.4rem; padding-top:3.3rem; }
+.cau-du .sen{ position:absolute; left:50%; top:-3.25rem; translate:-50% 0; width:6.25rem; height:6.25rem; filter:drop-shadow(0 6px 5px rgba(0,0,0,.3)); }
+.cau-du .tick{ display:block; text-align:center; font:800 1.6rem "Baloo 2",sans-serif; color:var(--sen); }
+.cau-du blockquote{ margin:.6rem 0; font:600 1.3rem/1.35 "Baloo 2",sans-serif; }
+.cau-du blockquote mark{ background:var(--vang); color:inherit; border-radius:5px; padding:0 .12em; box-decoration-break:clone; -webkit-box-decoration-break:clone; }
+.cau-du .nguon{ font-size:.85rem; color:var(--muc2); }
+.cau-du .y{ margin-top:.6rem; background:var(--kem2); border-radius:14px; padding:.55rem .75rem; font-size:.9rem; }
+.cau-du .y b{ display:block; font-size:.7rem; text-transform:uppercase; letter-spacing:.04em; color:#4F6B3E; }
+.cau-du.gon{ margin-top:.9rem; padding-top:1rem; }
+.cau-du.gon .tick{ text-align:left; font-size:1.15rem; }
+.hang-la{ position:relative; width:13.5rem; height:13.5rem; margin:.4rem auto 0; }
+.hang-la svg{ position:absolute; inset:0; width:100%; height:100%; filter:drop-shadow(0 10px 8px rgba(0,0,0,.4)); }
+.hang-la div{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--muc); padding-top:1rem; line-height:1.15; font-weight:700; }
+.hang-la .lon{ font:800 3.1rem/1 "Baloo 2",sans-serif; }
+.cho-pill{ display:flex; align-items:center; justify-content:center; gap:.6rem; background:var(--ban); border-radius:18px; padding:.75rem 1rem; font-weight:600; margin:.9rem 0; text-align:center; }
+.cho-pill::before{ content:""; width:.6rem; height:.6rem; border-radius:50%; background:var(--vang); flex:none; }
+.giua-chu{ text-align:center; }
 
 /* ===== Máy chiếu: chữ co giãn theo bề rộng màn hình ===== */
 #s-chieu{ font-size:clamp(22px, 1.45vw, 44px); }
-.chieu{ padding:1.1em 1.6em 2em; max-width:none; }
-.chieu-dau{ display:flex; align-items:center; gap:1em; flex-wrap:wrap; }
-.chieu-dau h1{ margin:0; font-size:1.9em; flex:1; }
-.cho{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1.6em; align-items:start; margin-top:.8em; }
-.qr{ background:#fff; padding:.5em; border-radius:16px; width:13em; }
+.chieu{ padding:1.1em 1.8em 2em; max-width:none; }
+.chieu-dau{ display:flex; align-items:center; gap:.8em; flex-wrap:wrap; }
+.chieu-dau svg{ width:2.6em; height:2.6em; flex:none; }
+.chieu-dau h1{ margin:0; font-size:2em; flex:1; }
+.chieu-dau .mo{ font-size:.85em; }
+.chieu .nut{ font-size:1em; }
+.chieu .nut.nho{ font-size:.8em; }
+.cho{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2em; align-items:center; margin-top:.8em; }
+.qr-la{ position:relative; width:20em; height:20em; }
+.qr-la > svg{ position:absolute; inset:0; width:100%; height:100%; filter:drop-shadow(0 .7em .5em rgba(0,0,0,.45)); }
+.qr{ position:absolute; left:22%; top:24%; width:56%; background:#fff; border:.18em solid var(--muc); border-radius:.9em; padding:.5em; }
 .qr svg{ width:100%; height:auto; display:block; }
-.ma-phong{ font:600 3.6em "IBM Plex Mono",monospace; letter-spacing:.12em; line-height:1; }
-.dem{ font:700 2.6em "Baloo 2",sans-serif; line-height:1; }
-.chip-nhom{ display:flex; flex-wrap:wrap; gap:.45em; margin:.6em 0; }
-.chip-nhom span{ background:var(--mau); color:#fff; border-radius:999px; padding:.2em .8em; font-weight:600; }
-.canh{ background:color-mix(in srgb,var(--vang) 22%,var(--the)); border-left:6px solid var(--vang); border-radius:10px; padding:.6em .9em; margin:.7em 0; }
-.dh-lon{ font:600 3.4em "IBM Plex Mono",monospace; line-height:1; }
-.dh-lon.cuoi{ color:var(--do); }
-.luoi-nhom{ display:grid; grid-template-columns:repeat(auto-fill,minmax(11em,1fr)); gap:.7em; margin:1em 0; }
-.o-nhom{ background:var(--the); border:1px solid var(--vien); border-top:8px solid var(--mau); border-radius:var(--r); padding:.6em .8em; }
-.o-nhom b{ font-family:"Baloo 2",sans-serif; font-size:1.3em; }
-.o-nhom .tl{ font:700 2.1em "Baloo 2",sans-serif; line-height:1.05; }
-.o-nhom .vach{ height:.45em; background:var(--the2); border-radius:9px; overflow:hidden; margin-top:.3em; }
-.o-nhom .vach i{ display:block; height:100%; background:var(--mau); }
-.tong{ height:.7em; background:var(--the2); border-radius:9px; overflow:hidden; margin:.5em 0 .2em; }
-.tong i{ display:block; height:100%; background:var(--xanh); transition:width .4s; }
-.chua{ display:flex; flex-wrap:wrap; gap:.4em; margin:.4em 0; }
-.chua button{ font:inherit; font-size:.8em; background:var(--the); color:var(--muc); border:1.5px solid var(--vien); border-radius:10px; padding:.25em .6em; cursor:pointer; }
-.chua button.hoi{ border-color:var(--do); color:var(--do); }
-.hang1 td{ font-weight:700; }
-.chieu table.bd{ font-size:1.05em; }
+.ma-phong{ font:600 4.4em/1 "IBM Plex Mono",monospace; letter-spacing:.12em; color:var(--vang); text-shadow:0 .06em 0 rgba(5,20,15,.6); vertical-align:middle; }
+.dem-o{ display:flex; align-items:center; gap:1em; background:rgba(8,26,20,.66); border-radius:1.2em; padding:.8em 1.1em; margin:.8em 0; }
+.dem{ font:800 3.6em/1 "Baloo 2",sans-serif; }
+.chip-nhom{ display:flex; flex-wrap:wrap; gap:.45em; margin:.4em 0 0; }
+.chip-nhom span{ display:flex; align-items:center; gap:.4em; background:var(--kem); color:var(--muc); border:.14em solid var(--muc); border-radius:999px; padding:.15em .7em .15em .3em; font-weight:700; font-size:.85em; }
+.canh{ background:#FFF1C2; color:var(--muc); border:.14em solid var(--muc); border-radius:.8em; padding:.6em .9em; margin:.7em 0; font-weight:600; }
+.choi{ display:grid; grid-template-columns:15em minmax(0,1fr); gap:2.2em; margin-top:1em; align-items:start; }
+.da{ width:13em; height:13em; margin:0 auto; border-radius:50%; background:var(--muc); border:.28em solid #0A1712;
+  box-shadow:0 .45em 0 rgba(5,15,10,.6),inset 0 -.6em 0 rgba(0,0,0,.25); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.15em; }
+.da .vong{ font:700 1.2em "Baloo 2",sans-serif; color:var(--nhat2); }
+.dh-lon{ font:600 3.4em/1 "IBM Plex Mono",monospace; color:var(--vang); }
+.dh-lon.cuoi{ color:#FF8A7E; }
+.tong{ height:.7em; background:rgba(255,255,255,.16); border-radius:9px; overflow:hidden; margin:1em 0 .3em; }
+.tong i{ display:block; height:100%; background:var(--la); border-radius:9px; transition:width .4s; }
+.tong-chu b{ font:800 1.35em "Baloo 2",sans-serif; }
+.choi .hang-nut .nut{ flex:1; font-size:.85em; padding:.6em .7em; }
+.luoi-nhom{ display:grid; grid-template-columns:repeat(auto-fill,minmax(7.4em,1fr)); gap:.8em; }
+.o-nhom{ display:flex; flex-direction:column; align-items:center; gap:.2em; text-align:center; }
+.o-nhom .la-nhom{ position:relative; width:7.4em; height:7.4em; }
+.o-nhom svg{ position:absolute; inset:0; width:100%; height:100%; filter:drop-shadow(0 .35em .3em rgba(0,0,0,.4)); }
+.o-nhom .tl{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding-top:.35em; font:800 1.9em "Baloo 2",sans-serif; color:var(--muc); }
+.o-nhom b{ display:flex; align-items:center; gap:.35em; font:800 1.1em "Baloo 2",sans-serif; }
+.o-nhom .mo{ font-size:.8em; }
+.chua-o{ background:rgba(8,26,20,.7); border-radius:1.2em; padding:.8em 1em; margin-top:1.1em; }
+.chua-o h3{ margin:0 0 .2em; font-size:1.3em; }
+.chua{ display:flex; flex-wrap:wrap; gap:.5em; margin:.5em 0 0; }
+.chua button{ font:600 .85em "IBM Plex Mono",monospace; background:var(--kem); color:var(--muc); border:.14em solid var(--muc); border-radius:.6em;
+  padding:.25em .65em; cursor:pointer; box-shadow:0 .18em 0 rgba(5,20,15,.55); }
+.chua button.hoi{ background:#FCE4E1; border-color:#B3261E; color:var(--do-dam); }
+.chieu .the{ padding:.6em .9em .3em; }
+.chieu table.bd{ font-size:1em; }
+.ket{ display:grid; grid-template-columns:auto minmax(0,1fr); gap:2em; align-items:center; margin-top:.6em; }
+.buc{ display:flex; align-items:flex-end; justify-content:center; gap:.3em; }
+.bac{ display:flex; flex-direction:column; align-items:center; gap:.3em; }
+.bac .la-bac{ position:relative; }
+.bac .la-bac > svg{ position:absolute; left:0; bottom:0; width:100%; height:auto; filter:drop-shadow(0 .45em .4em rgba(0,0,0,.4)); }
+.bac .la-bac .so-hang{ position:absolute; left:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; font-family:"Baloo 2",sans-serif; font-weight:800; color:var(--muc); }
+.bac .la-bac .sen{ position:absolute; left:50%; top:0; bottom:auto; translate:-50% 0; width:42%; height:auto; filter:drop-shadow(0 .3em .25em rgba(0,0,0,.3)); }
+.bac b{ display:flex; align-items:center; gap:.35em; font:800 1.15em "Baloo 2",sans-serif; }
+.chieu details{ margin:.5em 0; }
+.chieu summary{ cursor:pointer; color:var(--nhat); font-weight:600; }
 
 /* ===== Xem thử trên một máy ===== */
 .thu-luoi{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:8px; padding:8px; }
-.thu-luoi iframe{ width:100%; height:560px; border:1px solid var(--vien); border-radius:12px; background:var(--giay); }
+.thu-luoi iframe{ width:100%; height:560px; border:2px solid rgba(255,255,255,.2); border-radius:12px; background:var(--nuoc); }
 .thu-luoi iframe.may-chieu{ grid-column:1/-1; height:520px; }
 </style>
 </head>
 <body>
+<div class="nen" aria-hidden="true">
+  <div class="o-toi" style="left:7%;top:80%;width:26%;height:9%"></div>
+  <div class="o-toi" style="right:6%;top:70%;width:20%;height:12%"></div>
+  <svg class="koi" style="left:56%;top:-3%;width:clamp(36px,6vmin,70px);rotate:128deg;--dx:-30px;--dy:18px" viewBox="0 0 40 110"><path d="M20 78 C27 88 33 97 31 108 C26 101 23 97 20 93 C17 97 14 101 9 108 C7 97 13 88 20 78Z" fill="#F3EFE6" opacity=".9"/><path d="M9 34 C2 38 0 46 2 52 C6 48 9 44 11 40Z" fill="#F3EFE6"/><path d="M31 34 C38 38 40 46 38 52 C34 48 31 44 29 40Z" fill="#F3EFE6"/><path d="M20 4 C29 4 32 20 31 38 C30 58 26 72 20 82 C14 72 10 58 9 38 C8 20 11 4 20 4Z" fill="#FBF8F1"/><ellipse cx="20" cy="15" rx="7" ry="6" fill="#E2483D"/><ellipse cx="17" cy="46" rx="5" ry="8" fill="#E2483D" opacity=".85"/></svg>
+  <svg class="koi cham-hon" style="left:84%;top:24%;width:clamp(34px,5.5vmin,64px);rotate:160deg;--dx:-20px;--dy:40px" viewBox="0 0 40 110"><path d="M20 78 C27 88 33 97 31 108 C26 101 23 97 20 93 C17 97 14 101 9 108 C7 97 13 88 20 78Z" fill="#F0C77A" opacity=".9"/><path d="M20 4 C29 4 32 20 31 38 C30 58 26 72 20 82 C14 72 10 58 9 38 C8 20 11 4 20 4Z" fill="#E9A23B"/><ellipse cx="20" cy="30" rx="6" ry="10" fill="#F7D58A"/></svg>
+  <svg class="koi" style="left:5%;top:62%;width:clamp(22px,3.5vmin,40px);rotate:200deg;--dx:26px;--dy:-30px;animation-duration:21s" viewBox="0 0 40 110"><path d="M20 78 C27 88 33 97 31 108 C26 101 23 97 20 93 C17 97 14 101 9 108 C7 97 13 88 20 78Z" fill="#F7A253" opacity=".9"/><path d="M20 4 C29 4 32 20 31 38 C30 58 26 72 20 82 C14 72 10 58 9 38 C8 20 11 4 20 4Z" fill="#F07A2A"/></svg>
+  <svg class="noi" style="left:-6%;bottom:-6%;width:clamp(150px,24vmin,280px);rotate:24deg" viewBox="0 0 100 100"><path d="M50 50 L61.9 5.6 A46 46 0 1 1 38.1 5.6 Z" fill="#6DC043" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 50 L50 92 M50 50 L18 76 M50 50 L82 76 M50 50 L8 42 M50 50 L92 42 M50 50 L26 13 M50 50 L74 13" stroke="#4E9A2E" stroke-width="1.4" opacity=".7"/></svg>
+  <svg class="noi" style="right:-4%;bottom:-5%;width:clamp(110px,17vmin,210px);rotate:-70deg" viewBox="0 0 100 100"><path d="M50 50 L61.9 5.6 A46 46 0 1 1 38.1 5.6 Z" fill="#7BCB4C" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 50 L50 92 M50 50 L18 76 M50 50 L82 76 M50 50 L8 42 M50 50 L92 42" stroke="#4E9A2E" stroke-width="1.4" opacity=".7"/></svg>
+  <svg class="noi" style="right:-4%;top:-4%;width:clamp(100px,15vmin,190px);rotate:140deg" viewBox="0 0 100 100"><path d="M50 50 L61.9 5.6 A46 46 0 1 1 38.1 5.6 Z" fill="#6DC043" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/><path d="M50 50 L50 92 M50 50 L18 76 M50 50 L82 76" stroke="#4E9A2E" stroke-width="1.4" opacity=".7"/></svg>
+  <svg class="noi" style="left:2%;bottom:7%;width:clamp(64px,10vmin,120px)" viewBox="0 0 100 100"><g fill="#F4A7C8" stroke="#C9567F" stroke-width="1.6"><ellipse cx="50" cy="26" rx="13" ry="24"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(45 50 50)"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(90 50 50)"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(135 50 50)"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(180 50 50)"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(225 50 50)"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(270 50 50)"/><ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(315 50 50)"/></g><g fill="#FAD3E2" stroke="#D97399" stroke-width="1.2"><ellipse cx="50" cy="34" rx="9" ry="16" transform="rotate(22 50 50)"/><ellipse cx="50" cy="34" rx="9" ry="16" transform="rotate(94 50 50)"/><ellipse cx="50" cy="34" rx="9" ry="16" transform="rotate(166 50 50)"/><ellipse cx="50" cy="34" rx="9" ry="16" transform="rotate(238 50 50)"/><ellipse cx="50" cy="34" rx="9" ry="16" transform="rotate(310 50 50)"/></g><circle cx="50" cy="50" r="9" fill="#F2C94C" stroke="#B88A12" stroke-width="1.5"/></svg>
+  <span class="canh-hoa" style="left:87%;top:50%"></span>
+  <span class="canh-hoa" style="left:7%;top:36%;animation-delay:-3s"></span>
+  <span class="canh-hoa" style="left:64%;top:96%;animation-delay:-5s"></span>
+  <span class="canh-hoa" style="left:31%;top:11%;animation-delay:-2s"></span>
+  <span class="canh-hoa" style="left:46%;top:58%;animation-delay:-7s"></span>
+</div>
 <main>
   <section id="s-dau"></section>
   <section id="s-tao" hidden></section>
@@ -147,7 +256,8 @@ const CH = {
   khoaDoc: 5,         // giây khóa nút Xong để đọc câu đầy đủ
   giayCuoi: 30        // 30 giây cuối đồng hồ đỏ
 };
-const MAU = ["#B8322A", "#2C6FBB", "#2E7D5B", "#C7861B", "#7B3FA0", "#0E8C84", "#C4407E", "#5B6B2E", "#9A5518", "#3D4B5C"];
+/* màu nhóm nổi trên nền hồ xanh thẫm (không dùng xanh lá: chìm vào nước và lá sen) */
+const MAU = ["#E2483D", "#3A8DEB", "#F0B429", "#9B6BD6", "#E86FA6", "#2BB3A6", "#F07A2A", "#8BD3F7", "#C7E36B", "#F2EEE3"];
 const mauNhom = n => MAU[(Math.max(1, n) - 1) % MAU.length];
 
 /* ============================================================
@@ -167,9 +277,37 @@ const giay = ms => { if(ms == null) return "—"; const d = Math.max(0, Math.rou
 let hBao = 0;
 function bao(t, ms = 2600){ const e = $("#bao"); e.textContent = t; e.hidden = false; clearTimeout(hBao); hBao = setTimeout(() => e.hidden = true, ms); }
 function hien(id){ $$("main > section").forEach(s => s.hidden = s.id !== id); window.scrollTo(0, 0); }
-const LOGO = `<svg viewBox="0 0 96 96" aria-hidden="true"><path d="M48 14 L48 82" stroke="currentColor" stroke-width="3" stroke-dasharray="6 6"/>
-  <path d="M44 20 H22 a8 8 0 0 0-8 8 v40 a8 8 0 0 0 8 8 h22 v-12 a6 6 0 0 0 0-12 v-8 a6 6 0 0 1 0-12 z" fill="#B8322A"/>
-  <path d="M52 20 h22 a8 8 0 0 1 8 8 v40 a8 8 0 0 1-8 8 H52 v-12 a6 6 0 0 1 0-12 v-8 a6 6 0 0 0 0-12 z" fill="#E2A625"/></svg>`;
+/* hình vẽ hồ sen: lá sen tách đôi (biểu tượng), lá sen có khía, hoa sen, lá chia mảnh */
+const LOGO = `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M43 50 L43 4.2 A46 46 0 0 0 43 95.8 Z" fill="#6DC043" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M57 50 L57 4.2 A46 46 0 0 1 57 95.8 Z" fill="#A5DB6E" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M43 50 L14 30 M43 50 L10 62 M57 50 L86 30 M57 50 L90 62" stroke="#3F8A28" stroke-width="1.4" opacity=".6"/>
+  <circle cx="50" cy="50" r="7" fill="#F4A7C8" stroke="#C9567F" stroke-width="1.5"/></svg>`;
+const LA = (mau = "#6DC043") => `<svg viewBox="0 0 100 100" aria-hidden="true"><path d="M50 50 L61.9 5.6 A46 46 0 1 1 38.1 5.6 Z" fill="${mau}" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M50 50 L50 92 M50 50 L18 76 M50 50 L82 76 M50 50 L8 42 M50 50 L92 42" stroke="#4E9A2E" stroke-width="1.4" opacity=".6"/></svg>`;
+const SEN = `<svg class="sen" viewBox="0 0 100 100" aria-hidden="true"><g fill="#F4A7C8" stroke="#C9567F" stroke-width="1.6">${[0, 45, 90, 135, 180, 225, 270, 315].map(g => `<ellipse cx="50" cy="26" rx="13" ry="24" transform="rotate(${g} 50 50)"/>`).join("")}</g>
+  <g fill="#FAD3E2" stroke="#D97399" stroke-width="1.2">${[22, 94, 166, 238, 310].map(g => `<ellipse cx="50" cy="34" rx="9" ry="16" transform="rotate(${g} 50 50)"/>`).join("")}</g>
+  <circle cx="50" cy="50" r="9" fill="#F2C94C" stroke="#B88A12" stroke-width="1.5"/></svg>`;
+/* lá sen chia n phần, phần thứ i (mảnh của mình) tô xanh */
+function laManh(n, i){
+  const d = a => [22 + 20 * Math.cos(a * Math.PI / 180), 22 + 20 * Math.sin(a * Math.PI / 180)].map(x => x.toFixed(2)).join(" ");
+  return `<svg viewBox="0 0 44 44" aria-hidden="true">${Array.from({length: n}, (_, k) => { const a0 = -90 + 360 * k / n, a1 = a0 + 360 / n;
+    return `<path d="M22 22 L${d(a0)} A20 20 0 0 1 ${d(a1)} Z" ${k === i ? 'fill="#6DC043" stroke="#2F6B22" stroke-width="2.5"' : 'fill="#FBF7EA" stroke="#5E8F4A" stroke-width="2" stroke-dasharray="4 3"'} stroke-linejoin="round"/>`; }).join("")}</svg>`;
+}
+/* lá sen của một nhóm trên máy chiếu: vòng màu nhóm quanh lá = tỷ lệ đã ghép */
+const laNhom = (tl, mau) => `<svg viewBox="0 0 110 110" aria-hidden="true"><circle cx="55" cy="55" r="52" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="5"/>
+  <circle cx="55" cy="55" r="52" fill="none" stroke="${mau}" stroke-width="5" stroke-linecap="round" pathLength="100" stroke-dasharray="${Math.round(tl * 100)} 100" transform="rotate(-90 55 55)"/>
+  <path d="M55 55 L66.9 10.6 A46 46 0 1 1 43.1 10.6 Z" fill="#7BCB4C" stroke="#2F6B22" stroke-width="2.5" stroke-linejoin="round"/></svg>`;
+const cham = n => `<span class="cham" style="background:${mauNhom(n)}"></span>`;
+/* mã số sinh viên tự nhập: "nhóm_họ tên", ví dụ "3_Nguyễn Văn An" → {nhom, ten, id};
+   id (không dấu, nối gạch) là khóa của người chơi trên đường nối */
+function docMaSo(s){
+  const m = String(s || "").normalize("NFC").trim().match(/^(\d{1,2})\s*[_\-.,\s]\s*(.+)$/u);
+  if(!m) return null;
+  const nhom = +m[1], ten = m[2].replace(/[_\s]+/g, " ").trim().split(" ").map(w => w.charAt(0).toLocaleUpperCase("vi") + w.slice(1).toLocaleLowerCase("vi")).join(" ");
+  const goc = ten.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[đĐ]/g, "d").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  if(!(nhom > 0) || !/\p{L}/u.test(ten) || !goc) return null;
+  return {nhom, ten, id: nhom + "-" + goc, ms: nhom + "_" + ten};
+}
 
 /* ============================================================
    DỮ LIỆU VÀ LUẬT
@@ -198,7 +336,7 @@ function phatManh(nguoi, buoi, daDung){
   }
 
   const nhom = new Map(), nhomCua = {};
-  xao(nguoi.slice()).forEach(p => { nhomCua[p.stt] = p.nhom; if(!nhom.has(p.nhom)) nhom.set(p.nhom, []); nhom.get(p.nhom).push(p.stt); });
+  xao(nguoi.slice()).forEach(p => { nhomCua[p.id] = p.nhom; if(!nhom.has(p.nhom)) nhom.set(p.nhom, []); nhom.get(p.nhom).push(p.id); });
   chon.sort((a, b) => b.m.length - a.m.length);
   const daMa = new Set(), maMoi = () => { let m; do{ m = String(100 + Math.floor(Math.random() * 900)); }while(daMa.has(m)); daMa.add(m); return m; };
   const manh = {}, cau = [];
@@ -214,7 +352,8 @@ function phatManh(nguoi, buoi, daDung){
     cau.push({id: c.id, s: ai});
   });
   const trong = {}; nhom.forEach(ds => ds.forEach(s => trong[s] = nhomCua[s]));
-  return {cau, manh, trong};
+  const ten = {}; nguoi.forEach(p => ten[p.id] = p.ten);
+  return {cau, manh, trong, ten};
 }
 
 /* bảng một vòng: tỷ lệ thành viên ghép xong, bằng nhau thì nhóm hoàn tất sớm hơn xếp trên */
@@ -339,10 +478,10 @@ function veQR(el, text){ if(!el) return; napQR().then(ok => { if(!ok || !el.isCo
    TRANG ĐẦU
    ============================================================ */
 function veDau(){
-  const cu = lay("mn-chu"), vao = lay("mn-vao");
+  const cu = lay("mn-chu"), vao = (v => v && v.ms ? v : null)(lay("mn-vao"));
   $("#s-dau").innerHTML = `<div class="man">
     <div class="logo">${LOGO}<div><h1>Đi tìm một nửa</h1><p class="mo">Câu nói của Hồ Chí Minh trong Giáo trình 2026, mỗi người giữ một mảnh</p></div></div>
-    <div class="o-the"><b>Luật chơi:</b> đọc to mảnh câu của mình, đi tìm người giữ mảnh còn lại, nhập mã của nhau để ghép.
+    <div class="the"><b>Luật chơi:</b> đọc to mảnh câu của mình, đi tìm người giữ mảnh còn lại, nhập mã của nhau để ghép.
       <ul class="luat nho">
         <li>Các mảnh của một câu luôn nằm ở <b>các nhóm khác nhau</b>.</li>
         <li>Câu dài được cắt ba mảnh — <b>câu cần 3 người phối hợp</b>.</li>
@@ -350,8 +489,8 @@ function veDau(){
         <li>Ghép xong thì đi tìm giúp bạn cùng nhóm. Nhóm có tỷ lệ thành viên ghép xong cao hơn xếp trên; bằng nhau thì nhóm hoàn tất sớm hơn xếp trên.</li>
         <li>${CH.soVong} vòng, vòng sau phát câu mới.</li></ul></div>
     <div class="cua">
-      ${vao ? `<button data-k="vaolai"><b>Vào lại phòng ${esc(vao.ma)}</b><span class="mo">STT ${esc(vao.stt)} · nhóm ${esc(vao.nhom)}</span></button>` : ""}
-      <button data-k="vao"><b>Sinh viên — vào phòng</b><span class="mo">Nhập mã phòng trên màn hình, số thứ tự và số nhóm</span></button>
+      ${vao ? `<button data-k="vaolai"><b>Vào lại phòng ${esc(vao.ma)}</b><span class="mo">${esc(vao.ms)}</span></button>` : ""}
+      <button data-k="vao"><b>Sinh viên — vào phòng</b><span class="mo">Nhập mã phòng trên màn hình và mã số (nhóm_họ tên)</span></button>
       <button data-k="tao"><b>Giảng viên — mở phòng</b><span class="mo">Máy chiếu giữ phòng, phát mảnh, tính thứ hạng</span></button>
       ${cu ? `<button data-k="molai"><b>Mở lại phòng ${esc(cu.ma)}</b><span class="mo">Máy chiếu bị tải lại — tiếp tục phòng đang chơi</span></button>` : ""}
       <button data-k="thu"><b>Xem thử trên một máy</b><span class="mo">Máy chiếu và vài điện thoại trong cùng một trang, không cần mạng</span></button>
@@ -360,7 +499,7 @@ function veDau(){
   $$("#s-dau [data-k]").forEach(b => b.onclick = () => {
     const k = b.dataset.k;
     if(k === "vao"){ veVao(); hien("s-vao"); }
-    else if(k === "vaolai") vaoPhong(vao.ma, vao.stt, vao.nhom);
+    else if(k === "vaolai") vaoPhong(vao.ma, vao.ms);
     else if(k === "tao"){ veTao(); hien("s-tao"); }
     else if(k === "molai") moChu(cu);
     else if(k === "thu"){ veThu(); hien("s-thu"); }
@@ -376,11 +515,11 @@ function veTao(){
   const macDinh = lay("mn-buoi") || 8;
   $("#s-tao").innerHTML = `<div class="man"><button class="nut phu nho" id="t-ve">← Trang đầu</button>
     <h2>Mở phòng</h2>
-    <label class="o" for="t-buoi">Buổi đang dạy — game trộn câu của mọi chủ đề từ đầu đến buổi này</label>
+    <div class="bang-nhap"><label class="o" for="t-buoi">Buổi đang dạy — game trộn câu của mọi chủ đề từ đầu đến buổi này</label>
     <select id="t-buoi">${BUOI.map(b => `<option value="${b}"${b === macDinh ? " selected" : ""}>${esc(tenBuoi(b))} · ${choCua(khoBuoi(b, new Set()))} chỗ</option>`).join("")}</select>
     <label class="o" for="t-phut">Phút mỗi vòng</label>
     <input id="t-phut" type="number" min="1" max="15" value="${CH.phut}" inputmode="numeric">
-    <p class="nho mo">"Chỗ" là số người kho câu đủ phát cho một vòng (mỗi mảnh một người). Hai vòng không lặp câu.</p>
+    <p class="nho mo">"Chỗ" là số người kho câu đủ phát cho một vòng (mỗi mảnh một người). Hai vòng không lặp câu.</p></div>
     <div class="hang-nut"><button class="nut nut-lon" id="t-tao">Mở phòng</button></div></div>`;
   $("#t-ve").onclick = veDau;
   $("#t-tao").onclick = () => { const b = +$("#t-buoi").value; luu("mn-buoi", b);
@@ -394,7 +533,7 @@ function taoPhong(o){
 function moChu(h){
   batMang(); H = h; NGUOI = new Map(); CHIA = null; GHEP = {};
   const D = DUONG(H.ma, H.phien);
-  SYNC.collection(D.tv).onSnapshot(s => { NGUOI = new Map(s.docs.map(d => [+d.id, d.data()])); veChieu(); });
+  SYNC.collection(D.tv).onSnapshot(s => { NGUOI = new Map(s.docs.map(d => [d.id, d.data()])); veChieu(); });
   if(H.vong) ngheVong(H.vong);
   clearInterval(nhipChieu); nhipChieu = setInterval(nhip, 500);
   hien("s-chieu"); veChieu();
@@ -407,7 +546,7 @@ function ngheVong(k){
   huyGhep = SYNC.collection(D.ghep(k)).onSnapshot(s => { GHEP = {}; s.docs.forEach(d => GHEP[d.id] = d.data()); veChieu(); });
 }
 function phat(){
-  const nguoi = [...NGUOI.values()].filter(p => p && p.stt && p.nhom);
+  const nguoi = [...NGUOI.values()].filter(p => p && p.id && p.ten && p.nhom);
   if(nguoi.length < 2){ bao("Cần ít nhất 2 người trong phòng"); return; }
   const k = H.vong + 1, chia = phatManh(nguoi, H.buoi, new Set(H.dung));
   chia.k = k; CHIA = chia; GHEP = {};
@@ -428,53 +567,61 @@ function nhip(){
 }
 function thanhNhomChieu(ds){
   const g = {}; ds.forEach(p => g[p.nhom] = (g[p.nhom] || 0) + 1);
-  return Object.keys(g).map(Number).sort((a, b) => a - b).map(n => `<span style="--mau:${mauNhom(n)}">Nhóm ${n} · ${g[n]}</span>`).join("");
+  return Object.keys(g).map(Number).sort((a, b) => a - b).map(n => `<span>${cham(n)}Nhóm ${n} · ${g[n]}</span>`).join("");
 }
 function bangHTML(bang, chung){
-  return `<table class="bd"><tr><th>Hạng</th><th>Nhóm</th><th>Ghép xong</th><th>${chung ? "Cộng tỷ lệ hai vòng" : "Tỷ lệ"}</th><th>${chung ? "Cộng thời gian hoàn tất" : "Hoàn tất lúc"}</th></tr>
-    ${bang.map((o, i) => `<tr class="${i === 0 ? "hang1" : ""}"><td class="so">${i + 1}</td><td><span style="color:${mauNhom(o.nhom)}">■</span> Nhóm ${o.nhom}</td>
-      <td class="so">${o.xong}/${o.co}</td><td class="so">${chung ? o.tl.toFixed(2).replace(".", ",") : pt(o.tl)}</td><td class="so">${chung ? giay(o.cuoi >= 1e9 ? null : o.cuoi) : giay(o.cuoi)}</td></tr>`).join("")}</table>`;
+  return `<div class="the"><table class="bd"><tr><th>Hạng</th><th>Nhóm</th><th>Ghép xong</th><th>${chung ? "Cộng tỷ lệ hai vòng" : "Tỷ lệ"}</th><th>${chung ? "Cộng thời gian hoàn tất" : "Hoàn tất lúc"}</th></tr>
+    ${bang.map((o, i) => `<tr class="${i === 0 ? "hang1" : ""}"><td class="so">${i + 1}</td><td>${cham(o.nhom)} Nhóm ${o.nhom}</td>
+      <td class="so">${o.xong}/${o.co}</td><td class="so">${chung ? o.tl.toFixed(2).replace(".", ",") : pt(o.tl)}</td><td class="so">${chung ? giay(o.cuoi >= 1e9 ? null : o.cuoi) : giay(o.cuoi)}</td></tr>`).join("")}</table></div>`;
+}
+/* bục ba lá sen: hạng 2 – hạng 1 (có hoa sen) – hạng 3 */
+function bucHTML(bang){
+  const bac = [[1, 8, 3], [0, 11, 5], [2, 7, 1.6]].filter(([i]) => bang[i]);
+  return `<div class="buc">${bac.map(([i, w, h]) => `<div class="bac"><div class="la-bac" style="width:${w}em;height:${i ? w : w * 1.2}em">${LA(["#6DC043", "#7BCB4C", "#8FD45E"][i])}${i ? "" : SEN}
+    <div class="so-hang" style="height:${w}em"><span style="font-size:${w * .4}em">${i + 1}</span></div></div><b>${cham(bang[i].nhom)}Nhóm ${bang[i].nhom}</b><span style="height:${h}em"></span></div>`).join("")}</div>`;
 }
 function veChieu(){
   if(!H || $("#s-chieu").hidden) return;
-  const ds = [...NGUOI.values()].filter(p => p && p.stt), url = diaChiGame() + "?p=" + H.ma;
-  const dau = `<div class="chieu-dau">${LOGO.replace("<svg", '<svg style="width:2.6em;height:2.6em"')}<h1>Đi tìm một nửa</h1>
+  const ds = [...NGUOI.values()].filter(p => p && p.id), url = diaChiGame() + "?p=" + H.ma;
+  const dau = `<div class="chieu-dau">${LOGO}<h1>Đi tìm một nửa</h1>
     <span class="mo">${esc(tenBuoi(H.buoi))}</span><span class="mang"></span>
     <button class="nut phu nho" id="c-dong">Đóng phòng</button></div>`;
   let than = "";
   if(H.tt === "cho" || H.tt === "xong"){
     const kho = khoBuoi(H.buoi, new Set(H.dung)), cho = choCua(kho), choDt = choCua(kho.filter(c => c.dt)), thieu = ds.length - cho;
     than = `<div class="cho"><div>
-      ${H.tt === "xong" ? `<h2>Kết quả vòng ${H.vong}</h2>${bangHTML(H.kq[H.vong] || [])}<h2 style="margin-top:1em">Vòng ${H.vong + 1} — câu mới</h2>` : `<h2>Quét mã để vào phòng</h2>`}
+      ${H.tt === "xong" ? `<h2>Kết quả vòng ${H.vong}</h2>${bangHTML(H.kq[H.vong] || [])}<h2 style="margin-top:1em">Vòng ${H.vong + 1} — câu mới</h2>` : `<h2 class="mo">Quét mã để vào phòng</h2>`}
       <p>Mã phòng <span class="ma-phong">${esc(H.ma)}</span></p>
       <p class="mo nho mono">${esc(url)}</p>
-      <p><span class="dem">${ds.length}</span> người đã vào</p>
-      <div class="chip-nhom">${thanhNhomChieu(ds)}</div>
-      <p class="mo">Kho câu${H.vong ? " còn lại" : ""} đủ <b>${cho}</b> chỗ cho vòng này${choDt ? ` — trong đó ${choDt} chỗ là câu dự trữ trên 60 chữ, chỉ phát khi câu ngắn hơn không đủ` : ""}.</p>
+      <div class="dem-o"><span class="dem">${ds.length}</span><div><b>người đã vào</b><div class="chip-nhom">${thanhNhomChieu(ds)}</div></div></div>
+      <p class="mo">Kho câu${H.vong ? " còn lại" : ""} đủ <b style="color:#fff">${cho}</b> chỗ cho vòng này${choDt ? ` — trong đó ${choDt} chỗ là câu dự trữ trên 60 chữ, chỉ phát khi câu ngắn hơn không đủ` : ""}.</p>
       ${thieu > 0 ? `<div class="canh">Thiếu ${thieu} chỗ: ${thieu} người sẽ không có mảnh ở vòng này — đi tìm giúp bạn cùng nhóm.</div>` : ""}
-      <div class="hang-nut"><button class="nut vang nut-lon" id="c-phat" style="font-size:1.1em"${ds.length < 2 ? " disabled" : ""}>Phát mảnh vòng ${H.vong + 1}</button></div>
+      <div class="hang-nut"><button class="nut vang" id="c-phat" style="font-size:1.25em;padding:.6em 1.6em"${ds.length < 2 ? " disabled" : ""}>Phát mảnh vòng ${H.vong + 1}</button></div>
       ${H.tt === "xong" ? `<button class="nut phu nho" id="c-ket">Dừng ở đây — xem kết quả chung</button>` : ""}
-      </div><div class="qr" id="c-qr"></div></div>`;
+      </div><div class="qr-la">${LA()}<div class="qr" id="c-qr"></div></div></div>`;
   }
   else if(H.tt === "choi"){
     const tong = CHIA ? CHIA.cau.length : 0, xong = Object.keys(GHEP).length;
     const bang = CHIA ? bangVong(CHIA, GHEP, H.batDau).sort((a, b) => a.nhom - b.nhom) : [];
     const chua = CHIA ? CHIA.cau.map((c, ci) => ({ci, c})).filter(x => !GHEP[x.ci]) : [];
     const trong = CHIA ? Object.keys(CHIA.trong || {}).length : 0;
-    than = `<div class="chieu-dau" style="margin-top:.6em"><h2 style="flex:1;margin:0">Vòng ${H.vong}</h2><span class="dh-lon" id="c-dh">${mmss(H.het - Date.now())}</span></div>
-      <div class="tong"><i style="width:${tong ? xong / tong * 100 : 0}%"></i></div>
-      <p><b>${xong}/${tong}</b> câu đã ghép${trong ? ` · ${trong} người không có mảnh vòng này` : ""}</p>
-      <div class="luoi-nhom">${bang.map(o => `<div class="o-nhom" style="--mau:${mauNhom(o.nhom)}"><b>Nhóm ${o.nhom}</b>
-        <div class="tl">${pt(o.tl)}</div><span class="mo">${o.xong}/${o.co} ghép xong</span><div class="vach"><i style="width:${o.tl * 100}%"></i></div></div>`).join("")}</div>
-      <div class="hang-nut"><button class="nut phu" id="c-them">+1 phút</button><button class="nut" id="c-het">Kết thúc vòng ngay</button></div>
-      ${chua.length ? `<h3>Câu chưa ghép</h3><p class="mo nho">Thiếu người (vắng, rớt mạng)? Chạm hai lần vào câu để <b>ghép hộ</b>.</p>
-        <div class="chua">${chua.map(x => `<button data-ci="${x.ci}">${x.c.s.map(s => "STT " + s).join(" + ")}</button>`).join("")}</div>` : ""}`;
+    than = `<div class="choi"><div>
+        <div class="da"><span class="vong">Vòng ${H.vong}</span><span class="dh-lon" id="c-dh">${mmss(H.het - Date.now())}</span></div>
+        <div class="tong"><i style="width:${tong ? xong / tong * 100 : 0}%"></i></div>
+        <p class="tong-chu"><b>${xong}/${tong}</b> câu đã ghép${trong ? `<br><span class="mo nho">${trong} người không có mảnh vòng này</span>` : ""}</p>
+        <div class="hang-nut"><button class="nut lam" id="c-them">+1 phút</button><button class="nut do" id="c-het">Kết thúc vòng ngay</button></div>
+      </div><div>
+        <div class="luoi-nhom">${bang.map(o => `<div class="o-nhom"><div class="la-nhom">${laNhom(o.tl, mauNhom(o.nhom))}<div class="tl">${pt(o.tl)}</div></div>
+          <b>${cham(o.nhom)}Nhóm ${o.nhom}</b><span class="mo">${o.xong}/${o.co} ghép xong</span></div>`).join("")}</div>
+        ${chua.length ? `<div class="chua-o"><h3>Câu chưa ghép</h3><p class="mo nho">Thiếu người (vắng, rớt mạng)? Chạm hai lần vào câu để <b style="color:#fff">ghép hộ</b>.</p>
+          <div class="chua">${chua.map(x => `<button data-ci="${x.ci}">${x.c.s.map(s => `${esc((CHIA.ten || {})[s] || s)} · N${CHIA.manh[s][3]}`).join(" + ")}</button>`).join("")}</div></div>` : ""}
+      </div></div>`;
   }
   else if(H.tt === "ket"){
-    const so = Object.keys(H.kq).length;
-    than = `<h2>Kết quả chung${so > 1 ? ` — ${so} vòng` : ""}</h2>${so > 1 ? bangHTML(bangChung(H.kq), true) : bangHTML(H.kq[1] || [])}
+    const so = Object.keys(H.kq).length, bang = so > 1 ? bangChung(H.kq) : H.kq[1] || [];
+    than = `<h2>Kết quả chung${so > 1 ? ` — ${so} vòng` : ""}</h2><div class="ket">${bucHTML(bang)}<div>${bangHTML(bang, so > 1)}
       ${Object.keys(H.kq).map(k => `<details><summary>Vòng ${k}</summary>${bangHTML(H.kq[k])}</details>`).join("")}
-      <p class="mo nho">Xếp theo tỷ lệ thành viên ghép xong; bằng nhau thì nhóm hoàn tất sớm hơn xếp trên.</p>`;
+      <p class="mo nho">Xếp theo tỷ lệ thành viên ghép xong; bằng nhau thì nhóm hoàn tất sớm hơn xếp trên.</p></div></div>`;
   }
   $("#s-chieu").innerHTML = `<div class="chieu">${dau}${than}</div>`;
   veMang();
@@ -498,33 +645,35 @@ let M = null;
 function veVao(loi){
   const cu = lay("mn-vao") || {};
   $("#s-vao").innerHTML = `<div class="man"><button class="nut phu nho" id="v-ve">← Trang đầu</button>
-    <div class="logo">${LOGO}<h1>Đi tìm một nửa</h1></div>
-    <label class="o" for="v-ma">Mã phòng (4 chữ số trên máy chiếu)</label><input id="v-ma" inputmode="numeric" maxlength="4" value="${esc(QS.get("p") || "")}">
-    <label class="o" for="v-stt">Số thứ tự trong danh sách lớp</label><input id="v-stt" type="number" min="1" max="200" inputmode="numeric" value="${esc(cu.stt || "")}">
-    <label class="o" for="v-nhom">Số nhóm</label><input id="v-nhom" type="number" min="1" max="30" inputmode="numeric" value="${esc(cu.nhom || "")}">
+    <div class="logo giua">${LOGO}<h1>Đi tìm một nửa</h1><p class="mo">Câu nói của Hồ Chí Minh trong Giáo trình 2026, mỗi người giữ một mảnh</p></div>
+    <div class="bang-nhap"><label class="o" for="v-ma">Mã phòng (4 chữ số trên máy chiếu)</label><input id="v-ma" inputmode="numeric" maxlength="4" value="${esc(QS.get("p") || "")}" style="font:600 2rem 'IBM Plex Mono',monospace;letter-spacing:.3em;text-align:center">
+    <label class="o" for="v-ms">Mã số (nhóm_họ tên)</label><input id="v-ms" autocomplete="off" autocapitalize="words" spellcheck="false" placeholder="Ví dụ: 3_Nguyễn Văn An" value="${esc(cu.ms || "")}">
+    <p class="nho mo">Số nhóm, dấu gạch dưới, rồi họ tên đầy đủ.</p></div>
     <p class="loi" id="v-loi"${loi ? "" : " hidden"}>${esc(loi || "")}</p>
     <div class="hang-nut"><button class="nut nut-lon" id="v-vao">Vào phòng</button></div></div>`;
   $("#v-ve").onclick = veDau;
   $("#v-vao").onclick = () => {
-    const ma = $("#v-ma").value.replace(/\D/g, ""), stt = parseInt($("#v-stt").value, 10), nhom = parseInt($("#v-nhom").value, 10);
-    if(ma.length !== 4 || !(stt > 0) || !(nhom > 0)){ $("#v-loi").hidden = false; $("#v-loi").textContent = "Điền đủ mã phòng (4 chữ số), số thứ tự và số nhóm."; return; }
-    vaoPhong(ma, stt, nhom);
+    const ma = $("#v-ma").value.replace(/\D/g, ""), ms = $("#v-ms").value, loi = $("#v-loi");
+    if(ma.length !== 4){ loi.hidden = false; loi.textContent = "Mã phòng gồm 4 chữ số trên máy chiếu."; return; }
+    if(!docMaSo(ms)){ loi.hidden = false; loi.textContent = "Mã số chưa đúng mẫu nhóm_họ tên, ví dụ 3_Nguyễn Văn An."; return; }
+    vaoPhong(ma, ms);
   };
 }
-async function vaoPhong(ma, stt, nhom){
+async function vaoPhong(ma, maSo){
+  const ns = docMaSo(maSo); if(!ns){ veVao("Mã số chưa đúng mẫu nhóm_họ tên, ví dụ 3_Nguyễn Văn An."); hien("s-vao"); return; }
   batMang(); hien("s-dt");
-  $("#s-dt").innerHTML = `<div class="man"><p>Đang tìm phòng ${esc(ma)}… <span class="mang"></span></p></div>`; veMang();
+  $("#s-dt").innerHTML = `<div class="man"><div class="cho-pill">Đang tìm phòng ${esc(ma)}… <span class="mang"></span></div></div>`; veMang();
   let cfg = null;
   for(let lan = 0; lan < (THU ? 20 : 3) && !cfg; lan++) cfg = await docMot(`p/${ma}/cfg`, THU ? 1500 : 8000);
   if(!cfg){ veVao(`Không thấy phòng ${ma}. Xem lại mã trên máy chiếu và mạng Wi-Fi.`); hien("s-vao"); return; }
   const may = (lay("mn-may") || Math.random().toString(36).slice(2, 10)); luu("mn-may", may);
-  M = {ma, stt: +stt, nhom: +nhom, may, cfg, lech: (cfg.gio || Date.now()) - Date.now(), chia: null, ghep: {}, k: 0, khoa: 0, doc: lay("mn-doc") || {}};
-  luu("mn-vao", {ma, stt: M.stt, nhom: M.nhom});
+  M = {ma, id: ns.id, ten: ns.ten, nhom: ns.nhom, ms: ns.ms, may, cfg, lech: (cfg.gio || Date.now()) - Date.now(), chia: null, ghep: {}, k: 0, khoa: 0, doc: lay("mn-doc") || {}};
+  luu("mn-vao", {ma, ms: M.ms});
   const D = DUONG(ma, cfg.phien);
-  ghi(D.tvMot(M.stt), {stt: M.stt, nhom: M.nhom, may, luc: Date.now()});
-  SYNC.doc(D.tvMot(M.stt)).onSnapshot(s => { const v = s.data(); M.trung = !!(v && v.may !== M.may); vePhone(); });
+  ghi(D.tvMot(M.id), {id: M.id, ten: M.ten, nhom: M.nhom, may, luc: Date.now()});
+  SYNC.doc(D.tvMot(M.id)).onSnapshot(s => { const v = s.data(); M.trung = !!(v && v.may !== M.may); vePhone(); });
   SYNC.doc(`p/${ma}/cfg`).onSnapshot(s => { if(!s.exists) return; const c = s.data();
-    if(c.phien !== M.cfg.phien){ M = null; vaoPhong(ma, stt, nhom); return; }
+    if(c.phien !== M.cfg.phien){ M = null; vaoPhong(ma, maSo); return; }
     M.cfg = c; if(c.gio) M.lech = c.gio - Date.now(); if(c.vong && c.vong !== M.k) ngheVongPhone(c.vong); vePhone(); });
   setInterval(dongHoPhone, 500);
 }
@@ -541,17 +690,17 @@ function dongHoPhone(){
   e.querySelector(".so").textContent = mmss(con); e.querySelector("i").style.width = Math.max(0, con / tong * 100) + "%";
   e.classList.toggle("cuoi", con <= CH.giayCuoi * 1000);
   const k = $("#p-khoa");
-  if(k){ const s = Math.ceil((M.khoa - Date.now()) / 1000); if(s > 0) k.textContent = `Chưa đúng — chờ ${s} giây rồi nhập lại`; else vePhone(); }
+  if(k){ const s = Math.ceil((M.khoa - Date.now()) / 1000); if(s > 0){ k.textContent = s; $("#p-khoa-t").textContent = `Chờ ${s} giây rồi nhập lại. Không bị trừ điểm.`; } else vePhone(); }
   const x = $("#p-xong");
   if(x && x.disabled){ const s = Math.ceil((M.docDen - Date.now()) / 1000); if(s > 0) x.textContent = `Đọc hết câu… ${s}`; else { x.disabled = false; x.textContent = "Xong — đi tìm giúp bạn cùng nhóm"; } }
 }
 function cauCuaToi(){
-  if(!M.chia || !M.chia.manh[M.stt]) return null;
-  const [ci, i, ma] = M.chia.manh[M.stt], c = M.chia.cau[ci];
+  if(!M.chia || !M.chia.manh[M.id]) return null;
+  const [ci, i, ma] = M.chia.manh[M.id], c = M.chia.cau[ci];
   return {ci, i, ma, c, cau: CAU.get(c.id)};
 }
-function cauDuHTML(t){
-  return `<div class="cau-du"><span class="tick">✓ Ghép xong</span>
+function cauDuHTML(t, gon){
+  return `<div class="the cau-du${gon ? " gon" : ""}">${gon ? "" : SEN}<span class="tick">${gon ? "✓ Câu của mình — đã ghép" : "Sen đã nở — ghép xong!"}</span>
     <blockquote>“${t.cau.m.map((m, j) => j === t.i ? `<mark>${esc(m)}</mark>` : esc(m)).join(" ")}”</blockquote>
     <div class="nguon">Hồ Chí Minh: <i>Toàn tập</i>, ${esc(t.cau.tt)} — dẫn trong Giáo trình 2026</div>
     <div class="y"><b>Dẫn chứng cho ý</b>${esc(t.cau.y)}</div></div>`;
@@ -560,21 +709,21 @@ function nhomToiHTML(){
   if(!M.chia) return "";
   const cung = Object.entries(M.chia.manh).filter(([, v]) => v[3] === M.nhom), chua = cung.filter(([, v]) => !M.ghep[v[0]]).map(([s]) => s);
   return `<div class="o-the"><b>Nhóm ${M.nhom}: ${cung.length - chua.length}/${cung.length} đã ghép</b>
-    ${chua.length ? `<p class="mo">Chưa ghép: STT ${chua.join(" · ")}</p>` : `<p class="mo">Cả nhóm đã ghép xong.</p>`}</div>`;
+    ${chua.length ? `<p class="mo">Chưa ghép: ${chua.map(s => esc((M.chia.ten || {})[s] || s)).join(" · ")}</p>` : `<p class="mo">Cả nhóm đã ghép xong.</p>`}</div>`;
 }
 function vePhone(){
   if(!M || $("#s-dt").hidden) return;
-  const c = M.cfg, mau = mauNhom(M.nhom);
-  const thanh = `<div class="thanh" style="--mau:${mau}"><span>STT ${M.stt} · Nhóm ${M.nhom}</span><span class="sp"></span><span class="mang" style="color:#fff"></span></div>
-    ${M.trung ? `<p class="loi nho">STT ${M.stt} vừa được vào từ một máy khác — kiểm tra lại số thứ tự.</p>` : ""}`;
+  const c = M.cfg;
+  const thanh = `<div class="thanh"><span class="ten">${cham(M.nhom)}${esc(M.ten)} · Nhóm ${M.nhom}</span><span class="sp"></span><span class="mang"></span></div>
+    ${M.trung ? `<p class="loi nho">Mã số ${esc(M.ms)} vừa được vào từ một máy khác — kiểm tra lại số nhóm và họ tên.</p>` : ""}`;
   let than = "";
-  if(c.tt === "cho") than = `<h2>Đã vào phòng ${esc(M.ma)}</h2><p>Chờ giảng viên phát mảnh.</p>
+  if(c.tt === "cho") than = `<h2>Đã vào phòng ${esc(M.ma)}</h2><div class="cho-pill">Chờ giảng viên phát mảnh.</div>
     <p class="mo nho">Khi có mảnh: đọc to mảnh câu của mình, đi tìm người giữ mảnh còn lại ở các nhóm khác, nhập mã của nhau để ghép.</p>`;
   else if(c.tt === "choi"){
-    const dh = `<div class="dongho" id="p-dh"><span>Vòng ${c.vong}</span><span class="so">--:--</span><span class="vach"><i></i></span></div>`;
+    const dh = `<div class="dongho" id="p-dh"><span>Vòng ${c.vong}</span><span class="vach"><i></i></span><span class="so">--:--</span></div>`;
     const t = M.chia && M.k === c.vong ? cauCuaToi() : null;
-    if(!M.chia || M.k !== c.vong) than = dh + `<p>Đang nhận mảnh…</p>`;
-    else if(!t) than = dh + `<div class="o-the"><b>Vòng này không có mảnh</b><p>${M.chia.trong && M.chia.trong[M.stt] ? "Kho câu không đủ cho mọi người ở vòng này." : "Vào phòng sau khi giảng viên đã phát mảnh — chờ vòng sau."} Đi tìm giúp bạn cùng nhóm.</p></div>` + nhomToiHTML();
+    if(!M.chia || M.k !== c.vong) than = dh + `<div class="cho-pill">Đang nhận mảnh…</div>`;
+    else if(!t) than = dh + `<div class="the"><b>Vòng này không có mảnh</b><p>${M.chia.trong && M.chia.trong[M.id] ? "Kho câu không đủ cho mọi người ở vòng này." : "Vào phòng sau khi giảng viên đã phát mảnh — chờ vòng sau."} Đi tìm giúp bạn cùng nhóm.</p></div>` + nhomToiHTML();
     else if(M.ghep[t.ci]){
       const key = M.cfg.phien + ":" + c.vong;
       if(!M.doc[key]){ if(!M.docDen) M.docDen = Date.now() + CH.khoaDoc * 1000;
@@ -582,27 +731,31 @@ function vePhone(){
       else than = dh + cauDuHTML(t) + nhomToiHTML();
     } else {
       const n = t.cau.m.length, khoa = M.khoa > Date.now();
-      than = dh + `<div class="manh" style="--mau:${mau}"><div class="nhan"><span>Mảnh ${t.i + 1} trong ${n}</span>${n === 3 ? `<span class="ba">Câu cần 3 người phối hợp</span>` : ""}</div>
-        <blockquote>“${t.i ? "… " : ""}${esc(t.cau.m[t.i])}${t.i < n - 1 ? " …" : ""}”</blockquote></div>
-        <div class="ma-toi"><span>Mã ghép của mình</span><span class="so">${esc(t.ma)}</span></div>
-        <label class="o">${n === 3 ? "Nhập mã của hai người giữ hai mảnh còn lại" : "Nhập mã của người giữ mảnh còn lại"}</label>
-        ${khoa ? `<div class="khoa" id="p-khoa">Chưa đúng — chờ ${CH.khoaSai} giây rồi nhập lại</div>` :
-          `<div class="nhap">${Array.from({length: n - 1}, (_, j) => `<input class="p-ma" inputmode="numeric" maxlength="3" aria-label="Mã ${j + 1}" value="${esc((M.nhapDo || [])[j] || "")}">`).join("")}</div>
-           <button class="nut nut-lon" id="p-ghep">Ghép</button>`}
-        <p class="mo nho">Các mảnh còn lại ở các nhóm khác — đọc to mảnh của mình để tìm.</p>`;
+      const conKhoa = Math.ceil((M.khoa - Date.now()) / 1000);
+      than = dh + `<div class="the manh"><div class="dau">${laManh(n, t.i)}<div><b>Mảnh ${t.i + 1} trong ${n}</b>${n === 3 ? `<span class="ba">Câu cần 3 người phối hợp</span>` : ""}</div></div>
+        <blockquote>“${t.i ? "… " : ""}${esc(t.cau.m[t.i])}${t.i < n - 1 ? " …" : ""}”</blockquote>
+        <div class="ma-toi"><span>Mã ghép của mình</span><span class="so">${esc(t.ma)}</span></div></div>
+        ${khoa ? `<div class="khoa"><div class="dem-nguoc" id="p-khoa">${conKhoa}</div><b>Chưa đúng mã</b><span id="p-khoa-t">Chờ ${conKhoa} giây rồi nhập lại. Không bị trừ điểm.</span></div>` :
+          `<div class="bang-nhap"><span class="nhan-nhap">${n === 3 ? "Nhập mã của hai người giữ hai mảnh còn lại" : "Nhập mã của người giữ mảnh còn lại"}</span>
+           <div class="nhap">${Array.from({length: n - 1}, (_, j) => `<input class="p-ma" inputmode="numeric" maxlength="3" placeholder="···" autocomplete="off" aria-label="Mã ${j + 1}" value="${esc((M.nhapDo || [])[j] || "")}">`).join("")}</div>
+           <div class="hang-tron"><div><button class="nut-tron do" id="p-xoa" type="button" aria-label="Xóa mã đã nhập"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>Xóa</div>
+             <div><button class="nut-tron xanh" id="p-ghep" type="button" aria-label="Ghép câu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button>Ghép</div></div></div>`}
+        <p class="mo nho giua-chu">Các mảnh còn lại ở các nhóm khác — đọc to mảnh của mình để tìm.</p>`;
     }
   }
   else if(c.tt === "xong" || c.tt === "ket"){
     const ket = c.tt === "ket", bang = ket ? (Object.keys(c.kq || {}).length > 1 ? bangChung(c.kq) : (c.kq || {})[1] || []) : (c.kq || {})[c.vong] || [];
     const hang = bang.findIndex(o => o.nhom === M.nhom), t = M.chia && M.k === c.vong ? cauCuaToi() : null;
-    than = `<h2>${ket ? "Kết thúc" : `Hết vòng ${c.vong}`}</h2>
-      ${hang >= 0 ? `<div class="o-the"><b style="font-size:1.4rem">Nhóm ${M.nhom}: hạng ${hang + 1}/${bang.length}</b><p class="mo">${ket ? "Kết quả chung" : `Vòng ${c.vong}`} — xem bảng trên máy chiếu.</p></div>` : ""}
-      ${t && M.ghep[t.ci] ? cauDuHTML(t) : t ? `<div class="o-the"><b>Câu của vòng này</b><p>“${esc(t.cau.m.join(" "))}”</p><p class="mo nho">Hồ Chí Minh: <i>Toàn tập</i>, ${esc(t.cau.tt)} · ${esc(t.cau.y)}</p></div>` : ""}
-      ${ket ? "" : `<p class="mo">Chờ giảng viên phát mảnh vòng ${c.vong + 1}.</p>`}`;
+    than = `<h1 class="giua-chu">${ket ? "Kết thúc" : `Hết vòng ${c.vong}`}</h1>
+      ${hang >= 0 ? `<div class="hang-la">${LA("#7BCB4C")}<div><span>Nhóm ${M.nhom} xếp</span><span class="lon">hạng ${hang + 1}</span><span>trên ${bang.length} nhóm</span></div></div>
+        <p class="mo giua-chu">${ket ? "Kết quả chung" : `Vòng ${c.vong}`} — xem bảng trên máy chiếu.</p>` : ""}
+      ${t && M.ghep[t.ci] ? cauDuHTML(t, true) : t ? `<div class="the"><b>Câu của vòng này</b><p>“${esc(t.cau.m.join(" "))}”</p><p class="mo nho">Hồ Chí Minh: <i>Toàn tập</i>, ${esc(t.cau.tt)} · ${esc(t.cau.y)}</p></div>` : ""}
+      ${ket ? "" : `<div class="cho-pill">Chờ giảng viên phát mảnh vòng ${c.vong + 1}.</div>`}`;
   }
   $("#s-dt").innerHTML = `<div class="man">${thanh}${than}</div>`;
   veMang(); dongHoPhone();
   const g = $("#p-ghep"); if(g) g.onclick = ghepThu;
+  const xoa = $("#p-xoa"); if(xoa) xoa.onclick = () => { M.nhapDo = []; $$(".p-ma").forEach(e => e.value = ""); const d = $(".p-ma"); if(d) d.focus(); };
   $$(".p-ma").forEach((e, j, all) => { e.oninput = () => { e.value = e.value.replace(/\D/g, "").slice(0, 3); (M.nhapDo = M.nhapDo || [])[j] = e.value;
     if(e.value.length === 3 && all[j + 1]) all[j + 1].focus(); }; e.onkeydown = ev => { if(ev.key === "Enter") ghepThu(); }; });
   const x = $("#p-xong"); if(x) x.onclick = () => { M.doc[M.cfg.phien + ":" + M.cfg.vong] = 1; luu("mn-doc", M.doc); M.docDen = 0; vePhone(); };
@@ -612,11 +765,11 @@ function ghepThu(){
   const ma = $$(".p-ma").map(e => e.value.trim());
   if(ma.some(m => m.length !== 3)){ bao("Nhập đủ mã ba chữ số"); return; }
   const ai = ma.map(m => Object.keys(M.chia.manh).find(s => M.chia.manh[s][2] === m));
-  const dung = ai.every(s => s && +s !== M.stt && M.chia.manh[s][0] === t.ci) && new Set(ai).size === ai.length;
+  const dung = ai.every(s => s && s !== M.id && M.chia.manh[s][0] === t.ci) && new Set(ai).size === ai.length;
   M.nhapDo = [];
   if(!dung){ M.khoa = Date.now() + CH.khoaSai * 1000; vePhone(); return; }
   M.docDen = Date.now() + CH.khoaDoc * 1000;
-  ghi(DUONG(M.ma, M.cfg.phien).ghepMot(M.cfg.vong, t.ci), {luc: bayGio(), boi: M.stt});
+  ghi(DUONG(M.ma, M.cfg.phien).ghepMot(M.cfg.vong, t.ci), {luc: bayGio(), boi: M.id});
 }
 
 /* ============================================================
@@ -626,15 +779,15 @@ function veThu(){
   $("#s-thu").innerHTML = `<div class="man"><button class="nut phu nho" id="x-ve">← Trang đầu</button><h2>Xem thử trên một máy</h2>
     <p>Máy chiếu và các điện thoại mở trong cùng một trang, nói chuyện với nhau ngay trong trình duyệt, không cần mạng.
       Bấm <b>Phát mảnh</b> trên khung máy chiếu, rồi đọc mảnh, nhập mã ở từng điện thoại.</p>
-    <label class="o" for="x-buoi">Buổi</label><select id="x-buoi">${BUOI.map(b => `<option value="${b}"${b === 8 ? " selected" : ""}>${esc(tenBuoi(b))}</option>`).join("")}</select>
+    <div class="bang-nhap"><label class="o" for="x-buoi">Buổi</label><select id="x-buoi">${BUOI.map(b => `<option value="${b}"${b === 8 ? " selected" : ""}>${esc(tenBuoi(b))}</option>`).join("")}</select>
     <label class="o" for="x-n">Số điện thoại (2–16)</label><input id="x-n" type="number" min="2" max="16" value="8">
-    <label class="o" for="x-g">Số nhóm</label><input id="x-g" type="number" min="1" max="6" value="3">
+    <label class="o" for="x-g">Số nhóm</label><input id="x-g" type="number" min="1" max="6" value="3"></div>
     <div class="hang-nut"><button class="nut nut-lon" id="x-mo">Mở</button></div></div>`;
   $("#x-ve").onclick = veDau;
   $("#x-mo").onclick = () => {
     const n = Math.max(2, Math.min(16, +$("#x-n").value || 8)), g = Math.max(1, Math.min(6, +$("#x-g").value || 3)), b = +$("#x-buoi").value;
     const ma = String(9000 + Math.floor(Math.random() * 999)), goc = location.href.split("?")[0].split("#")[0];
-    const dt = Array.from({length: n}, (_, i) => `${goc}?noi=bc&thu=1&ma=${ma}&stt=${i + 1}&nhom=${i % g + 1}`);
+    const dt = Array.from({length: n}, (_, i) => `${goc}?noi=bc&thu=1&ma=${ma}&ms=${encodeURIComponent(`${i % g + 1}_Sinh viên ${i + 1}`)}`);
     $("#s-thu").innerHTML = `<div class="thu-luoi"><iframe class="may-chieu" src="${goc}?noi=bc&thu=1&chieu=${ma}&buoi=${b}" title="Máy chiếu"></iframe>
       ${dt.map((u, i) => `<iframe src="${u}" title="Điện thoại ${i + 1}"></iframe>`).join("")}</div>`;
   };
@@ -645,7 +798,7 @@ function veThu(){
    ============================================================ */
 if(!DB){ document.body.innerHTML = "<p style='padding:2rem'>Khuôn chưa có dữ liệu — chạy <code>python _KHO-DU-LIEU/cong-cu/tao-game-mot-nua.py</code> rồi mở <code>index.html</code>.</p>"; }
 else if(QS.get("chieu") && THU){ taoPhong({ma: QS.get("chieu"), buoi: +QS.get("buoi") || 8, phut: CH.phut}); }
-else if(QS.get("ma") && QS.get("stt") && QS.get("nhom")){ vaoPhong(QS.get("ma"), +QS.get("stt"), +QS.get("nhom")); }
+else if(QS.get("ma") && QS.get("ms")){ vaoPhong(QS.get("ma"), QS.get("ms")); }
 else if(QS.get("p")){ veVao(); hien("s-vao"); }
 else veDau();
 </script>
