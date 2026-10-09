@@ -37,6 +37,15 @@ Ba cách chơi: **một mình** (không cần mạng), **phòng** tối đa 10 n
 
 Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm biệt danh và lựa chọn trong game.
 
+## Đi tìm một nửa
+
+Mỗi sinh viên giữ một mảnh câu Hồ Chí Minh trong Giáo trình 2026; đọc to, đi tìm người giữ mảnh còn lại
+ở nhóm khác, nhập mã của nhau để ghép. Câu dài cắt ba mảnh, cần ba người phối hợp. Máy giảng viên giữ phòng và chiếu.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/mot-nua/
+
+Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm biệt danh và lựa chọn trong game.
+
 ## 1911 — Anh Ba xin làm phụ bếp
 
 Game nhập vai cá nhân trên điện thoại, khoảng 15 phút: vào vai anh Ba xin làm phụ bếp trên con tàu

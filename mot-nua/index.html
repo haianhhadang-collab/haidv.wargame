@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Đi tìm một nửa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --muc:#1F2A44; --muc2:#55607A; --muc3:#8A93A8; --giay:#F5F1E8; --the:#FFFDF8; --the2:#ECE6D8; --vien:#D9D1BF;
+  --do:#B8322A; --vang:#E2A625; --xanh:#2E7D5B; --r:14px;
+  font-size:clamp(16px, .5vw + 12px, 22px); color-scheme:light;
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --muc:#EEF1F7; --muc2:#AEB6C8; --muc3:#7C8599; --giay:#14181F; --the:#1C222C; --the2:#252C38; --vien:#333C4B;
+  --do:#EF6E62; --vang:#F2C14E; --xanh:#5CC495; color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --muc:#EEF1F7; --muc2:#AEB6C8; --muc3:#7C8599; --giay:#14181F; --the:#1C222C; --the2:#252C38; --vien:#333C4B;
+  --do:#EF6E62; --vang:#F2C14E; --xanh:#5CC495; color-scheme:dark; }
+*{ box-sizing:border-box; }
+html,body{ margin:0; background:var(--giay); color:var(--muc); }
+body{ font-family:"Be Vietnam Pro",system-ui,sans-serif; line-height:1.5; -webkit-text-size-adjust:100%; }
+h1,h2,h3{ font-family:"Baloo 2","Be Vietnam Pro",sans-serif; line-height:1.15; margin:.2em 0 .4em; }
+h1{ font-size:2.1rem; } h2{ font-size:1.5rem; } h3{ font-size:1.15rem; }
+p{ margin:.4em 0; }
+[hidden]{ display:none !important; }
+:focus-visible{ outline:2.5px solid var(--vang); outline-offset:2px; }
+.mono{ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+.nho{ font-size:.85rem; } .mo{ color:var(--muc2); }
+.man{ max-width:40rem; margin:0 auto; padding:1rem 1rem 3rem; }
+.nut{ font:600 1rem "Be Vietnam Pro",sans-serif; border:0; border-radius:12px; padding:.75rem 1.1rem; cursor:pointer;
+  background:var(--muc); color:var(--giay); display:inline-flex; align-items:center; justify-content:center; gap:.5rem; }
+.nut.phu{ background:transparent; color:var(--muc); box-shadow:inset 0 0 0 1.5px var(--vien); }
+.nut.vang{ background:var(--vang); color:#1F2A44; }
+.nut:disabled{ opacity:.45; cursor:not-allowed; }
+.nut.nho{ padding:.4rem .75rem; font-size:.85rem; }
+.nut-lon{ width:100%; font-size:1.15rem; padding:1rem; border-radius:16px; }
+.hang-nut{ display:flex; flex-wrap:wrap; gap:.6rem; margin:.8rem 0; }
+label.o{ display:block; font-weight:600; margin:.8rem 0 .25rem; }
+input,select{ font:inherit; color:inherit; background:var(--the); border:1.5px solid var(--vien); border-radius:12px; padding:.65rem .75rem; width:100%; }
+.loi{ color:var(--do); font-weight:600; }
+.o-the{ background:var(--the); border:1px solid var(--vien); border-radius:var(--r); padding:1rem; margin:.8rem 0; }
+.bao{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:var(--muc); color:var(--giay);
+  padding:.6rem 1rem; border-radius:10px; z-index:60; max-width:90vw; font-size:.95rem; }
+.mang{ font-size:.8rem; display:inline-flex; align-items:center; gap:.35rem; color:var(--muc2); }
+.mang .dot{ width:.6rem; height:.6rem; border-radius:50%; background:var(--do); display:inline-block; }
+.mang .dot.on{ background:#5CC495; } .mang .dot.dang{ background:var(--vang); }
+table.bd{ border-collapse:collapse; width:100%; }
+table.bd th,table.bd td{ border-bottom:1px solid var(--vien); padding:.45rem .55rem; text-align:left; }
+table.bd th{ font-size:.8em; color:var(--muc2); font-weight:600; }
+table.bd td.so{ font-family:"IBM Plex Mono",monospace; }
+
+/* ===== Trang đầu ===== */
+.logo{ display:flex; gap:.9rem; align-items:center; margin:1.2rem 0 .4rem; }
+.logo svg{ width:4.6rem; height:4.6rem; flex:none; }
+.logo h1{ margin:0; font-size:2.4rem; }
+.cua{ display:grid; gap:.8rem; margin:1rem 0; }
+.cua button{ text-align:left; background:var(--the); color:var(--muc); border:1px solid var(--vien); border-radius:var(--r);
+  padding:1rem 1.1rem; cursor:pointer; font:inherit; }
+.cua button:hover{ border-color:var(--muc3); }
+.cua b{ font-family:"Baloo 2",sans-serif; font-size:1.25rem; display:block; line-height:1.2; }
+.luat{ padding-left:1.2rem; } .luat li{ margin:.3rem 0; }
+
+/* ===== Mảnh câu ===== */
+.manh{ position:relative; background:var(--the); border:2.5px dashed var(--mau,var(--muc3)); border-radius:18px; padding:1.2rem 1.1rem 1rem; margin:.8rem 0; }
+.manh .nhan{ display:flex; justify-content:space-between; gap:.5rem; flex-wrap:wrap; font-size:.8rem; font-weight:700; color:var(--muc2); text-transform:uppercase; letter-spacing:.03em; }
+.manh .ba{ color:var(--do); }
+.manh blockquote{ margin:.6rem 0 .2rem; font-family:"Baloo 2",sans-serif; font-weight:600; font-size:1.55rem; line-height:1.3; }
+.ma-toi{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; background:var(--muc); color:var(--giay); border-radius:16px; padding:.7rem 1rem; margin:.8rem 0; }
+.ma-toi .so{ font:600 2.2rem "IBM Plex Mono",monospace; letter-spacing:.12em; }
+.nhap{ display:flex; gap:.5rem; margin:.4rem 0; }
+.nhap input{ font:600 1.6rem "IBM Plex Mono",monospace; text-align:center; letter-spacing:.15em; }
+.khoa{ background:color-mix(in srgb,var(--do) 12%,var(--the)); border:1.5px solid var(--do); color:var(--do); border-radius:12px; padding:.6rem .8rem; font-weight:700; text-align:center; }
+.dongho{ display:flex; align-items:center; gap:.7rem; font-weight:600; }
+.dongho .so{ font:600 1.4rem "IBM Plex Mono",monospace; }
+.dongho .vach{ flex:1; height:.5rem; background:var(--the2); border-radius:9px; overflow:hidden; }
+.dongho .vach i{ display:block; height:100%; background:var(--vang); }
+.dongho.cuoi .so{ color:var(--do); } .dongho.cuoi .vach i{ background:var(--do); }
+.thanh{ display:flex; align-items:center; gap:.6rem; flex-wrap:wrap; background:var(--mau,var(--muc)); color:#fff; padding:.5rem .9rem; border-radius:var(--r); font-weight:600; }
+.thanh .sp{ flex:1; }
+.cau-du{ background:var(--the); border:2px solid var(--xanh); border-radius:18px; padding:1.1rem; margin:.8rem 0; }
+.cau-du .tick{ color:var(--xanh); font-weight:800; font-family:"Baloo 2",sans-serif; font-size:1.35rem; }
+.cau-du blockquote{ margin:.5rem 0; font-family:"Baloo 2",sans-serif; font-weight:600; font-size:1.35rem; line-height:1.35; }
+.cau-du blockquote mark{ background:color-mix(in srgb,var(--vang) 45%,transparent); color:inherit; border-radius:4px; padding:0 .1em; }
+.cau-du .nguon{ font-size:.9rem; color:var(--muc2); }
+.cau-du .y{ margin-top:.6rem; background:var(--the2); border-radius:10px; padding:.55rem .75rem; font-size:.95rem; }
+.cau-du .y b{ display:block; font-size:.75rem; text-transform:uppercase; letter-spacing:.03em; color:var(--muc2); }
+
+/* ===== Máy chiếu: chữ co giãn theo bề rộng màn hình ===== */
+#s-chieu{ font-size:clamp(22px, 1.45vw, 44px); }
+.chieu{ padding:1.1em 1.6em 2em; max-width:none; }
+.chieu-dau{ display:flex; align-items:center; gap:1em; flex-wrap:wrap; }
+.chieu-dau h1{ margin:0; font-size:1.9em; flex:1; }
+.cho{ display:grid; grid-template-columns:minmax(0,1fr) auto; gap:1.6em; align-items:start; margin-top:.8em; }
+.qr{ background:#fff; padding:.5em; border-radius:16px; width:13em; }
+.qr svg{ width:100%; height:auto; display:block; }
+.ma-phong{ font:600 3.6em "IBM Plex Mono",monospace; letter-spacing:.12em; line-height:1; }
+.dem{ font:700 2.6em "Baloo 2",sans-serif; line-height:1; }
+.chip-nhom{ display:flex; flex-wrap:wrap; gap:.45em; margin:.6em 0; }
+.chip-nhom span{ background:var(--mau); color:#fff; border-radius:999px; padding:.2em .8em; font-weight:600; }
+.canh{ background:color-mix(in srgb,var(--vang) 22%,var(--the)); border-left:6px solid var(--vang); border-radius:10px; padding:.6em .9em; margin:.7em 0; }
+.dh-lon{ font:600 3.4em "IBM Plex Mono",monospace; line-height:1; }
+.dh-lon.cuoi{ color:var(--do); }
+.luoi-nhom{ display:grid; grid-template-columns:repeat(auto-fill,minmax(11em,1fr)); gap:.7em; margin:1em 0; }
+.o-nhom{ background:var(--the); border:1px solid var(--vien); border-top:8px solid var(--mau); border-radius:var(--r); padding:.6em .8em; }
+.o-nhom b{ font-family:"Baloo 2",sans-serif; font-size:1.3em; }
+.o-nhom .tl{ font:700 2.1em "Baloo 2",sans-serif; line-height:1.05; }
+.o-nhom .vach{ height:.45em; background:var(--the2); border-radius:9px; overflow:hidden; margin-top:.3em; }
+.o-nhom .vach i{ display:block; height:100%; background:var(--mau); }
+.tong{ height:.7em; background:var(--the2); border-radius:9px; overflow:hidden; margin:.5em 0 .2em; }
+.tong i{ display:block; height:100%; background:var(--xanh); transition:width .4s; }
+.chua{ display:flex; flex-wrap:wrap; gap:.4em; margin:.4em 0; }
+.chua button{ font:inherit; font-size:.8em; background:var(--the); color:var(--muc); border:1.5px solid var(--vien); border-radius:10px; padding:.25em .6em; cursor:pointer; }
+.chua button.hoi{ border-color:var(--do); color:var(--do); }
+.hang1 td{ font-weight:700; }
+.chieu table.bd{ font-size:1.05em; }
+
+/* ===== Xem thử trên một máy ===== */
+.thu-luoi{ display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:8px; padding:8px; }
+.thu-luoi iframe{ width:100%; height:560px; border:1px solid var(--vien); border-radius:12px; background:var(--giay); }
+.thu-luoi iframe.may-chieu{ grid-column:1/-1; height:520px; }
+</style>
+</head>
+<body>
+<main>
+  <section id="s-dau"></section>
+  <section id="s-tao" hidden></section>
+  <section id="s-chieu" hidden></section>
+  <section id="s-vao" hidden></section>
+  <section id="s-dt" hidden></section>
+  <section id="s-thu" hidden></section>
+</main>
+<div id="bao" class="bao" hidden></div>
+<script>
+"use strict";
+const DB = {"ten":"Đi tìm một nửa","nguon":"Giáo trình Tư tưởng Hồ Chí Minh 2026","capNhat":"2026-10-09","buoi":{"2":["01"],"3":["01","02"],"4":["01","02"],"5":["01","02","03"],"6":["01","02","03","04"],"7":["01","02","03","04","05"],"8":["01","02","03","04","05","06"],"9":["01","02","03","04","05","06","07","08","09"],"10":["01","02","03","04","05","06","07","08","09","10","11"],"11":["01","02","03","04","05","06","07","08","09","10","11","12","13","14"],"12":["01","02","03","04","05","06","07","08","09","10","11","12","13","14"]},"cau":[{"id":"01-2c5ec","cd":"01","st":38,"m":["Toàn Đảng toàn dân ta đoàn kết phấn đấu,","xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh,","và góp phần xứng đáng vào sự nghiệp cách mạng thế giới"],"dt":false,"tt":"t.15, tr.614","y":"Chương 1 · mục IV.1 — Góp phần nâng cao năng lực tư duy lý luận"},{"id":"02-1e104","cd":"02","st":25,"m":["Chỉ có giai cấp công nhân là dũng cảm nhất, cách mạng nhất,","luôn luôn gan góc đương đầu với bọn đế quốc thực dân"],"dt":false,"tt":"t.12, tr.407","y":"Chương 2 · mục I.1.a — Thực tiễn Việt Nam cuối thế kỷ XIX, đầu thế kỷ XX"},{"id":"02-3a7b4","cd":"02","st":52,"m":["Nước Việt Nam có quyền hưởng tự do và độc lập, và sự thực đã thành một nước tự do và độc lập.","Toàn thể dân Việt Nam quyết đem tất cả tinh thần và lực lượng,","tính mệnh và của cải để giữ vững quyền tự do và độc lập ấy"],"dt":false,"tt":"t.4, tr.3","y":"Chương 2 · mục I.2.a — Giá trị truyền thống tốt đẹp của dân tộc Việt Nam"},{"id":"02-4be75","cd":"02","st":60,"m":["Tuy Khổng Tử là phong kiến và tuy trong học thuyết của Khổng Tử có nhiều điều không đúng","song những điều hay trong đó thì chúng ta nên học.","“Chỉ có những người cách mạng chân chính mới thu thái được những điều hiểu biết quý báu của các đời trước để lại”. Lênin dạy chúng ta như vậy"],"dt":false,"tt":"t.6, tr.356-357","y":"Chương 2 · mục I.2.b — Tinh hoa văn hóa nhân loại"},{"id":"02-65964","cd":"02","st":101,"m":["Đức Phật là đại từ đại bi, cứu khổ cứu nạn, muốn cứu chúng sinh ra khỏi khổ nạn, Người phải hy sinh tranh đấu, diệt lũ ác ma. Nay đồng bào ta đại đoàn kết,","hy sinh của cải xương máu, kháng chiến đến cùng, để đánh tan thực dân phản động, để cứu quốc dân ra khỏi khổ nạn, để giữ quyền thống nhất và độc lập của Tổ quốc.","Thế là chúng ta làm theo lòng đại từ đại bi của Đức Phật Thích Ca, kháng chiến để đưa giống nòi ra khỏi cái khổ ải nô lệ"],"dt":true,"tt":"t.5, tr.228","y":"Chương 2 · mục I.2.b — Tinh hoa văn hóa nhân loại"},{"id":"02-8f656","cd":"02","st":24,"m":["Bây giờ học thuyết nhiều, chủ nghĩa nhiều, nhưng chủ nghĩa chân chính nhất,","chắc chắn nhất, cách mạng nhất là chủ nghĩa Lênin"],"dt":false,"tt":"t.2, tr.289","y":"Chương 2 · mục I.2.c — Chủ nghĩa Mác - Lênin"},{"id":"02-2dac1","cd":"02","st":60,"m":["Chúng tôi giành được thắng lợi đó là do nhiều nhân tố,","nhưng cần phải nhấn mạnh rằng - mà không phải chỉ nhân dịp kỷ niệm lần thứ 100 ngày sinh Lênin - chúng tôi giành được những thắng lợi đó trước hết","là nhờ cái vũ khí không gì thay thế được là chủ nghĩa Mác - Lênin"],"dt":false,"tt":"t.15, tr.589-590","y":"Chương 2 · mục I.2.c — Chủ nghĩa Mác - Lênin"},{"id":"03-0b4f8","cd":"03","st":19,"m":["làm tư sản dân quyền cách mạng","và thổ địa cách mạng để đi tới xã hội cộng sản"],"dt":false,"tt":"t.3, tr.1","y":"Chương 2 · mục II.3 — Thời kỳ 1920 - 1930: Hình thành những nội dung cơ bản tư tưởng về cách mạng Việt Nam"},{"id":"03-cbd3b","cd":"03","st":17,"m":["đánh đổ đế quốc Pháp, phong kiến An Nam","và giai cấp tư sản phản cách mạng"],"dt":false,"tt":"t.3, tr.22","y":"Chương 2 · mục II.3 — Thời kỳ 1920 - 1930: Hình thành những nội dung cơ bản tư tưởng về cách mạng Việt Nam"},{"id":"03-7ebb0","cd":"03","st":38,"m":["Trong lúc này quyền lợi dân tộc giải phóng cao hơn hết thảy.","Chúng ta phải đoàn kết lại đánh đổ bọn đế quốc","và bọn Việt gian đặng cứu giống nòi ra khỏi nước sôi lửa nóng"],"dt":false,"tt":"t.3, tr.230","y":"Chương 2 · mục II.4 — Thời kỳ 1930 - 1941: Vượt qua thử thách, giữ vững đường lối, phương pháp cách mạng Việt Nam đúng đắn, sáng tạo"},{"id":"03-abf15","cd":"03","st":20,"m":["Đến ngày thắng lợi,","nhân dân ta sẽ xây dựng lại đất nước ta đàng hoàng hơn, to đẹp hơn!"],"dt":false,"tt":"t.15, tr.131","y":"Chương 2 · mục II.5 — Thời kỳ 1941 - 1969: Tư tưởng Hồ Chí Minh tiếp tục phát triển, soi đường cho sự nghiệp cách mạng của Đảng và nhân dân ta"},{"id":"03-717ee","cd":"03","st":38,"m":["Toàn Đảng, toàn dân ta đoàn kết phấn đấu,","xây dựng một nước Việt Nam hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh,","và góp phần xứng đáng vào sự nghiệp cách mạng thế giới"],"dt":false,"tt":"t.15, tr.624","y":"Chương 2 · mục II.5 — Thời kỳ 1941 - 1969: Tư tưởng Hồ Chí Minh tiếp tục phát triển, soi đường cho sự nghiệp cách mạng của Đảng và nhân dân ta"},{"id":"04-7fd99","cd":"04","st":37,"m":["Tất cả các dân tộc trên thế giới đều sinh ra bình đẳng;","dân tộc nào cũng có quyền sống, quyền sung sướng và quyền tự do...","Đó là những lẽ phải không ai chối cãi được"],"dt":false,"tt":"t.4, tr.1","y":"Chương 3 · mục I.1.a — Độc lập, tự do là quyền thiêng liêng, bất khả xâm phạm của tất cả các dân tộc"},{"id":"04-191f3","cd":"04","st":22,"m":["a) Đánh đổ đế quốc chủ nghĩa Pháp và bọn phong kiến.","b) Làm cho nước Nam được hoàn toàn độc lập"],"dt":false,"tt":"t.3, tr.1","y":"Chương 3 · mục I.1.a — Độc lập, tự do là quyền thiêng liêng, bất khả xâm phạm của tất cả các dân tộc"},{"id":"04-b5c31","cd":"04","st":43,"m":["Nhân dân chúng tôi thành thật mong muốn hòa bình.","Nhưng nhân dân chúng tôi cũng kiên quyết chiến đấu đến cùng để bảo vệ những quyền thiêng liêng nhất:","Toàn vẹn lãnh thổ cho Tổ quốc và độc lập cho đất nước"],"dt":false,"tt":"t.4, tr.522","y":"Chương 3 · mục I.1.a — Độc lập, tự do là quyền thiêng liêng, bất khả xâm phạm của tất cả các dân tộc"},{"id":"04-ac1e2","cd":"04","st":22,"m":["Không! Chúng ta thà hy sinh tất cả,","chứ nhất định không chịu mất nước, nhất định không chịu làm nô lệ"],"dt":false,"tt":"t.4, tr.534","y":"Chương 3 · mục I.1.a — Độc lập, tự do là quyền thiêng liêng, bất khả xâm phạm của tất cả các dân tộc"},{"id":"04-8e399","cd":"04","st":9,"m":["Không có gì quý","hơn độc lập, tự do"],"dt":false,"tt":"t.15, tr.131","y":"Chương 3 · mục I.1.a — Độc lập, tự do là quyền thiêng liêng, bất khả xâm phạm của tất cả các dân tộc"},{"id":"04-301f0","cd":"04","st":25,"m":["Người ta sinh ra tự do và bình đẳng về quyền lợi,","và phải luôn luôn được tự do và bình đẳng về quyền lợi"],"dt":false,"tt":"t.4, tr.1","y":"Chương 3 · mục I.1.b — Độc lập dân tộc phải gắn liền với tự do, hạnh phúc của nhân dân"},{"id":"04-7d528","cd":"04","st":10,"m":["Đó là những lẽ phải","không ai chối cãi được"],"dt":false,"tt":"t.4, tr.64","y":"Chương 3 · mục I.1.b — Độc lập dân tộc phải gắn liền với tự do, hạnh phúc của nhân dân"},{"id":"04-66ba6","cd":"04","st":47,"m":["Làm cho nước Nam được hoàn toàn độc lập... Thâu tiêu hết các thứ quốc trái...","Thâu hết ruộng đất của đế quốc chủ nghĩa làm của công chia cho dân cày nghèo.","Bỏ sưu thuế cho dân cày nghèo... Thi hành luật ngày làm 8 giờ"],"dt":false,"tt":"t.3, tr.1-2","y":"Chương 3 · mục I.1.b — Độc lập dân tộc phải gắn liền với tự do, hạnh phúc của nhân dân"},{"id":"04-4ad83","cd":"04","st":20,"m":["Nước độc lập mà dân không hưởng hạnh phúc tự do,","thì độc lập cũng chẳng có nghĩa lý gì"],"dt":false,"tt":"t.4, tr.175","y":"Chương 3 · mục I.1.b — Độc lập dân tộc phải gắn liền với tự do, hạnh phúc của nhân dân"},{"id":"04-23446","cd":"04","st":32,"m":["Chúng ta phải thực hiện ngay: 1. Làm cho dân có ăn.","2. Làm cho dân có mặc. 3.","Làm cho dân có chỗ ở. 4. Làm cho dân có học hành"],"dt":false,"tt":"t.4, tr.175","y":"Chương 3 · mục I.1.b — Độc lập dân tộc phải gắn liền với tự do, hạnh phúc của nhân dân"},{"id":"04-f40c1","cd":"04","st":43,"m":["Tôi chỉ có một sự ham muốn, ham muốn tột bậc,","là làm sao cho nước ta được hoàn toàn độc lập, dân ta được hoàn toàn tự do,","đồng bào ai cũng có cơm ăn áo mặc, ai cũng được học hành"],"dt":false,"tt":"t.4, tr.187","y":"Chương 3 · mục I.1.b — Độc lập dân tộc phải gắn liền với tự do, hạnh phúc của nhân dân"},{"id":"04-d88e4","cd":"04","st":26,"m":["Đồng bào Nam Bộ là dân nước Việt Nam. Sông có thể cạn,","núi có thể mòn, song chân lý đó không bao giờ thay đổi"],"dt":false,"tt":"t.4, tr.280","y":"Chương 3 · mục I.1.d — Độc lập dân tộc gắn liền với thống nhất và toàn vẹn lãnh thổ"},{"id":"04-253d4","cd":"04","st":11,"m":["Nước Việt Nam là một,","dân tộc Việt Nam là một"],"dt":false,"tt":"t.4, tr.583","y":"Chương 3 · mục I.1.d — Độc lập dân tộc gắn liền với thống nhất và toàn vẹn lãnh thổ"},{"id":"04-34fc4","cd":"04","st":46,"m":["Dù khó khăn gian khổ đến mấy, nhân dân ta nhất định sẽ hoàn toàn thắng lợi.","Đế quốc Mỹ nhất định phải cút khỏi nước ta.","Tổ quốc ta nhất định sẽ thống nhất. Đồng bào Nam, Bắc nhất định sẽ sum họp một nhà"],"dt":false,"tt":"t.15, tr.612","y":"Chương 3 · mục I.1.d — Độc lập dân tộc gắn liền với thống nhất và toàn vẹn lãnh thổ"},{"id":"05-abe89","cd":"05","st":68,"m":["Cách mệnh Pháp cũng như cách mệnh Mỹ, nghĩa là cách mệnh tư bản, cách mệnh không đến nơi, tiếng là cộng hòa và dân chủ,","kỳ thực trong thì nó tước lục công nông, ngoài thì nó áp bức thuộc địa. Cách mệnh đã 4 lần rồi,","mà nay công nông Pháp hẵng còn phải mưu cách mệnh lần nữa mới hòng thoát khỏi vòng áp bức"],"dt":true,"tt":"t.2, tr.296","y":"Chương 3 · mục I.2.a — Cách mạng giải phóng dân tộc muốn thắng lợi phải đi theo con đường cách mạng vô sản"},{"id":"05-69217","cd":"05","st":66,"m":["Trong thế giới bây giờ chỉ có cách mệnh Nga là đã thành công, và thành công đến nơi,","nghĩa là dân chúng được hưởng cái hạnh phúc tự do, bình đẳng thật, không phải tự do và bình đẳng giả dối như đế quốc chủ nghĩa Pháp khoe khoang bên An Nam...","Nói tóm lại là phải theo chủ nghĩa Mã Khắc Tư và Lênin"],"dt":true,"tt":"t.2, tr.304","y":"Chương 3 · mục I.2.a — Cách mạng giải phóng dân tộc muốn thắng lợi phải đi theo con đường cách mạng vô sản"},{"id":"05-e7b83","cd":"05","st":20,"m":["Muốn cứu nước và giải phóng dân tộc","không có con đường nào khác con đường cách mạng vô sản"],"dt":false,"tt":"t.12, tr.30","y":"Chương 3 · mục I.2.a — Cách mạng giải phóng dân tộc muốn thắng lợi phải đi theo con đường cách mạng vô sản"},{"id":"05-7bb85","cd":"05","st":81,"m":["Luận cương của Lênin làm cho tôi rất cảm động, phấn khởi, sáng tỏ, tin tưởng biết bao! Tôi vui mừng đến phát khóc lên.","Ngồi một mình trong buồng mà tôi nói to lên như đang nói trước quần chúng đông đảo: “Hỡi đồng bào bị đọa đày đau khổ!","Đây là cái cần thiết cho chúng ta, đây là con đường giải phóng chúng ta!”. Từ đó tôi hoàn toàn tin theo Lênin, tin theo Quốc tế thứ ba"],"dt":true,"tt":"t.12, tr.562","y":"Chương 3 · mục I.2.a — Cách mạng giải phóng dân tộc muốn thắng lợi phải đi theo con đường cách mạng vô sản"},{"id":"05-f8ac4","cd":"05","st":17,"m":["thâu hết ruộng đất của đế quốc chủ nghĩa làm của công,","chia cho dân cày nghèo"],"dt":false,"tt":"t.3, tr.2","y":"Chương 3 · mục I.2.a — Cách mạng giải phóng dân tộc muốn thắng lợi phải đi theo con đường cách mạng vô sản"},{"id":"05-08162","cd":"05","st":30,"m":["Chính vì Đảng Lao động Việt Nam là đảng của giai cấp công nhân và nhân dân lao động,","cho nên nó phải là đảng của dân tộc Việt Nam"],"dt":false,"tt":"t.7, tr.41","y":"Chương 3 · mục I.2.b — Cách mạng giải phóng dân tộc, trong điều kiện của Việt Nam, muốn thắng lợi phải do Đảng Cộng sản lãnh đạo"},{"id":"05-b708f","cd":"05","st":15,"m":["cách mệnh là việc chung cả dân chúng","chứ không phải việc một hai người"],"dt":false,"tt":"t.2, tr.283","y":"Chương 3 · mục I.2.c — Cách mạng giải phóng dân tộc phải dựa trên lực lượng đại đoàn kết toàn dân tộc, lấy liên minh công - nông làm nền tảng"},{"id":"05-cb2c0","cd":"05","st":22,"m":["Dân tộc cách mệnh thì chưa phân giai cấp, nghĩa là sĩ,","nông, công, thương đều nhất trí chống lại cường quyền"],"dt":false,"tt":"t.2, tr.287","y":"Chương 3 · mục I.2.c — Cách mạng giải phóng dân tộc phải dựa trên lực lượng đại đoàn kết toàn dân tộc, lấy liên minh công - nông làm nền tảng"},{"id":"05-4994c","cd":"05","st":37,"m":["Bất kỳ đàn ông, đàn bà, bất kỳ người già, người trẻ,","không chia tôn giáo, đảng phái, dân tộc.","Hễ là người Việt Nam thì phải đứng lên đánh thực dân Pháp để cứu Tổ quốc"],"dt":false,"tt":"t.4, tr.534","y":"Chương 3 · mục I.2.c — Cách mạng giải phóng dân tộc phải dựa trên lực lượng đại đoàn kết toàn dân tộc, lấy liên minh công - nông làm nền tảng"},{"id":"05-0b239","cd":"05","st":11,"m":["công nông là người chủ cách mệnh...","là gốc cách mệnh"],"dt":false,"tt":"t.2, tr.288","y":"Chương 3 · mục I.2.c — Cách mạng giải phóng dân tộc phải dựa trên lực lượng đại đoàn kết toàn dân tộc, lấy liên minh công - nông làm nền tảng"},{"id":"05-af656","cd":"05","st":38,"m":["lòng cách mệnh càng bền, chí cách mệnh càng quyết...","công nông là tay không chân rồi, nếu thua thì chỉ mất một cái kiếp khổ,","nếu được thì được cả thế giới, cho nên họ gan góc"],"dt":false,"tt":"t.2, tr.288","y":"Chương 3 · mục I.2.c — Cách mạng giải phóng dân tộc phải dựa trên lực lượng đại đoàn kết toàn dân tộc, lấy liên minh công - nông làm nền tảng"},{"id":"05-e2d35","cd":"05","st":43,"m":["Vận mệnh của giai cấp vô sản thế giới","và đặc biệt là vận mệnh của giai cấp vô sản ở các nước đi xâm lược thuộc địa","gắn chặt với vận mệnh của giai cấp bị áp bức ở các thuộc địa"],"dt":false,"tt":"t.11, tr.295","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-62c0b","cd":"05","st":90,"m":["Chủ nghĩa tư bản là một con đỉa có một cái vòi bám vào giai cấp vô sản ở chính quốc và một cái vòi khác bám vào giai cấp vô sản ở thuộc địa.","Nếu muốn giết con vật ấy, người ta phải đồng thời cắt cả hai vòi. Nếu người ta chỉ cắt một vòi thôi,","thì cái vòi còn lại kia vẫn tiếp tục hút máu của giai cấp vô sản, con vật vẫn tiếp tục sống và cái vòi bị cắt đứt lại sẽ mọc ra"],"dt":true,"tt":"t.2, tr.130","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-5c36a","cd":"05","st":85,"m":["Ngày mà hàng trăm triệu nhân dân châu Á bị tàn sát và áp bức thức tỉnh để gạt bỏ sự bóc lột đê tiện của một bọn thực dân lòng tham không đáy,","họ sẽ hình thành một lực lượng khổng lồ, và trong khi thủ tiêu một trong những điều kiện tồn tại của chủ nghĩa tư bản là chủ nghĩa đế quốc,","họ có thể giúp đỡ những người anh em mình ở phương Tây trong nhiệm vụ giải phóng hoàn toàn"],"dt":true,"tt":"t.1, tr.48","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-0b7d7","cd":"05","st":25,"m":["nọc độc và sức sống của con rắn độc tư bản chủ nghĩa","đang tập trung ở các thuộc địa hơn là ở chính quốc"],"dt":false,"tt":"t.1, tr.296","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-edeca","cd":"05","st":53,"m":["Hỡi anh em ở các thuộc địa!... Anh em phải làm thế nào để được giải phóng?","Vận dụng công thức của Các Mác, chúng tôi xin nói với anh em rằng,","công cuộc giải phóng anh em chỉ có thể thực hiện được bằng sự nỗ lực của bản thân anh em"],"dt":false,"tt":"t.2, tr.137-138","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-bbff3","cd":"05","st":37,"m":["Trong cuộc đấu tranh gian khổ chống kẻ thù của giai cấp và dân tộc,","cần dùng bạo lực cách mạng chống lại bạo lực phản cách mạng,","giành lấy chính quyền và bảo vệ chính quyền"],"dt":false,"tt":"t.15, tr.391","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-2801f","cd":"05","st":23,"m":["Chế độ thực dân, tự bản thân nó,","đã là một hành động bạo lực của kẻ mạnh đối với kẻ yếu rồi"],"dt":false,"tt":"t.1, tr.114","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"05-de0b9","cd":"05","st":43,"m":["Tùy tình hình cụ thể mà quyết định những hình thức đấu tranh cách mạng thích hợp,","sử dụng đúng và khéo kết hợp các hình thức đấu tranh vũ trang","và đấu tranh chính trị để giành thắng lợi cho cách mạng"],"dt":false,"tt":"t.15, tr.391","y":"Chương 3 · mục I.2.d — Cách mạng giải phóng dân tộc cần chủ động, sáng tạo, có khả năng giành thắng lợi trước cách mạng vô sản ở chính quốc"},{"id":"06-dbd0d","cd":"06","st":42,"m":["Nói một cách tóm tắt, mộc mạc,","chủ nghĩa xã hội trước hết nhằm làm cho nhân dân lao động thoát nạn bần cùng,","làm cho mọi người có công ăn việc làm, được ấm no và sống một đời hạnh phúc"],"dt":false,"tt":"t.12, tr.415","y":"Chương 3 · mục II.1.a — Quan niệm của Hồ Chí Minh về chủ nghĩa xã hội"},{"id":"06-584fd","cd":"06","st":141,"m":["Trong xã hội có giai cấp bóc lột thống trị, chỉ có lợi ích cá nhân của một số rất ít người thuộc giai cấp thống trị là được thỏa mãn, còn lợi ích cá nhân của quần chúng lao động thì bị giày xéo. Trái lại,","trong chế độ xã hội chủ nghĩa và cộng sản chủ nghĩa là chế độ do nhân dân lao động làm chủ, thì mỗi người là một bộ phận của tập thể, giữ một vị trí nhất định và đóng góp một phần công lao trong xã hội.","Cho nên lợi ích cá nhân là nằm trong lợi ích của tập thể, là một bộ phận của lợi ích tập thể. Lợi ích chung của tập thể được bảo đảm thì lợi ích riêng của cá nhân mới có điều kiện được thỏa mãn"],"dt":true,"tt":"t.11, tr.610","y":"Chương 3 · mục II.1.a — Quan niệm của Hồ Chí Minh về chủ nghĩa xã hội"},{"id":"06-0d2d9","cd":"06","st":128,"m":["Cách sản xuất và sức sản xuất phát triển và biến đổi mãi, do đó mà tư tưởng của người, chế độ xã hội, v.v., cũng phát triển và biến đổi. Chúng ta đều biết từ đời xưa đến đời nay,","cách sản xuất từ chỗ dùng cành cây, búa đá đã phát triển dần đến máy móc, sức điện, sức nguyên tử. Chế độ xã hội cũng phát triển từ cộng sản nguyên thủy đến chế độ nô lệ, đến chế độ phong kiến,","đến chế độ tư bản chủ nghĩa và ngày nay gần một nửa loài người đang tiến lên chế độ xã hội chủ nghĩa và chế độ cộng sản chủ nghĩa. Sự phát triển và tiến bộ đó không ai ngăn cản được"],"dt":true,"tt":"t.11, tr.600-601","y":"Chương 3 · mục II.1.b — Tiến lên chủ nghĩa xã hội là một tất yếu khách quan"},{"id":"06-ca245","cd":"06","st":35,"m":["chỉ ở trong chế độ xã hội chủ nghĩa","thì mỗi người mới có điều kiện để cải thiện đời sống riêng của mình,","phát huy tính cách riêng và sở trường riêng của mình"],"dt":false,"tt":"t.10, tr.390; t.11, tr.610","y":"Chương 3 · mục II.1.c — Một số đặc trưng cơ bản của xã hội xã hội chủ nghĩa"},{"id":"06-f96b3","cd":"06","st":74,"m":["Cần có sự lãnh đạo của một đảng cách mạng chân chính của giai cấp công nhân, toàn tâm toàn ý phục vụ nhân dân.","Chỉ có sự lãnh đạo của một đảng biết vận dụng một cách sáng tạo chủ nghĩa Mác - Lênin vào điều kiện cụ thể của nước mình","thì mới có thể đưa cách mạng giải phóng dân tộc và cách mạng xã hội chủ nghĩa đến thành công"],"dt":true,"tt":"t.15, tr.391","y":"Chương 3 · mục II.1.c — Một số đặc trưng cơ bản của xã hội xã hội chủ nghĩa"},{"id":"06-897e1","cd":"06","st":14,"m":["Chế độ ta là chế độ dân chủ.","Tức là nhân dân làm chủ"],"dt":false,"tt":"t.13, tr.10","y":"Chương 3 · mục II.2.a — Mục tiêu chủ nghĩa xã hội ở Việt Nam"},{"id":"06-ed990","cd":"06","st":16,"m":["Nước ta là nước dân chủ,","địa vị cao nhất là dân, vì dân là chủ"],"dt":false,"tt":"t.7, tr.434","y":"Chương 3 · mục II.2.a — Mục tiêu chủ nghĩa xã hội ở Việt Nam"},{"id":"06-091c2","cd":"06","st":64,"m":["kinh tế quốc doanh là hình thức sở hữu của toàn dân,","nó lãnh đạo nền kinh tế quốc dân và Nhà nước phải bảo đảm cho nó phát triển ưu tiên... Kinh tế hợp tác xã là hình thức sở hữu tập thể của nhân dân lao động;","Nhà nước đặc biệt khuyến khích, hướng dẫn và giúp đỡ cho nó phát triển"],"dt":true,"tt":"t.12, tr.372; t.12, tr.376; t.12, tr.373; t.12, tr.373","y":"Chương 3 · mục II.2.a — Mục tiêu chủ nghĩa xã hội ở Việt Nam"},{"id":"06-8dac8","cd":"06","st":8,"m":["Xã hội thế nào,","văn nghệ thế ấy"],"dt":false,"tt":"t.9, tr.231","y":"Chương 3 · mục II.2.a — Mục tiêu chủ nghĩa xã hội ở Việt Nam"},{"id":"06-64ff1","cd":"06","st":44,"m":["Muốn tiến lên chủ nghĩa xã hội phải phát triển kinh tế và văn hóa.","Vì sao không nói phát triển văn hóa và kinh tế? Tục ngữ ta có câu:","Có thực mới vực được đạo; vì thế kinh tế phải đi trước"],"dt":false,"tt":"t.12, tr.470","y":"Chương 3 · mục II.2.a — Mục tiêu chủ nghĩa xã hội ở Việt Nam"},{"id":"06-a2bd4","cd":"06","st":66,"m":["Phải triệt để tẩy trừ mọi di tích thuộc địa và ảnh hưởng nô dịch của văn hóa đế quốc. Đồng thời,","phát triển những truyền thống tốt đẹp của văn hóa dân tộc và hấp thụ những cái mới của văn hóa tiến bộ thế giới,","để xây dựng một nền văn hóa Việt Nam có tính chất dân tộc, khoa học và đại chúng"],"dt":true,"tt":"t.7, tr.40; t.7, tr.40","y":"Chương 3 · mục II.2.a — Mục tiêu chủ nghĩa xã hội ở Việt Nam"},{"id":"06-3ae55","cd":"06","st":9,"m":["phải đặt quyền lợi dân","lên trên hết thảy"],"dt":false,"tt":"t.4, tr.51; t.4, tr.21","y":"Chương 3 · mục II.2.b — Động lực của chủ nghĩa xã hội ở Việt Nam"},{"id":"06-bb862","cd":"06","st":10,"m":["địa vị cao nhất là dân,","vì dân là chủ"],"dt":false,"tt":"t.10, tr.457; t.11, tr.93","y":"Chương 3 · mục II.2.b — Động lực của chủ nghĩa xã hội ở Việt Nam"},{"id":"06-4e260","cd":"06","st":18,"m":["những con người của chủ nghĩa xã hội,","có tư tưởng và tác phong xã hội chủ nghĩa"],"dt":false,"tt":"t.13, tr.66; t.13, tr.66","y":"Chương 3 · mục II.2.b — Động lực của chủ nghĩa xã hội ở Việt Nam"},{"id":"06-d1942","cd":"06","st":38,"m":["đặc điểm to nhất của ta trong thời kỳ quá độ","là từ một nước nông nghiệp lạc hậu tiến thẳng lên chủ nghĩa xã hội","không phải kinh qua giai đoạn phát triển tư bản chủ nghĩa"],"dt":false,"tt":"t.12, tr.411","y":"Chương 3 · mục II.3.a — Tính chất, đặc điểm và nhiệm vụ của thời kỳ quá độ"},{"id":"06-7becc","cd":"06","st":15,"m":["học tập lập trường,","quan điểm và phương pháp của chủ nghĩa Mác - Lênin"],"dt":false,"tt":"t.11, tr.95","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-4136a","cd":"06","st":21,"m":["cụ thể hóa chủ nghĩa Mác - Lênin","cho thích hợp với điều kiện hoàn cảnh từng lúc và từng nơi"],"dt":false,"tt":"t.11, tr.95","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-db920","cd":"06","st":29,"m":["Toàn thể dân Việt Nam quyết đem tất cả tinh thần và lực lượng,","tính mệnh và của cải để giữ vững quyền tự do và độc lập ấy"],"dt":false,"tt":"t.4, tr.3","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-d00df","cd":"06","st":9,"m":["thống nhất, độc lập,","dân chủ và giàu mạnh"],"dt":false,"tt":"t.15, tr.624","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-7f119","cd":"06","st":22,"m":["Cách mạng Việt Nam là một bộ phận của lực lượng hòa bình dân chủ,","xã hội chủ nghĩa trên thế giới"],"dt":false,"tt":"t.12, tr.674","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-b6bb0","cd":"06","st":37,"m":["sự đoàn kết giữa lực lượng các nước xã hội chủ nghĩa","và sự đoàn kết nhất trí giữa các đảng cộng sản","và công nhân tất cả các nước có ý nghĩa quan trọng bậc nhất"],"dt":false,"tt":"t.12, tr.674","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-1dc02","cd":"06","st":35,"m":["Ta không thể giống Liên Xô, vì Liên Xô có phong tục tập quán khác,","có lịch sử địa lý khác...","ta có thể đi con đường khác để tiến lên chủ nghĩa xã hội"],"dt":false,"tt":"t.10, tr.391","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-b7dfe","cd":"06","st":59,"m":["Đối với kẻ địch, người cộng sản phải luôn luôn tỉnh táo, giữ vững lập trường,","quyết không được vì hoàn cảnh hòa bình mà mất cảnh giác. Phải luôn sẵn sàng đập tan mọi âm mưu độc ác của kẻ địch,","bảo vệ những thành quả của cách mạng, bảo vệ lao động hòa bình của nhân dân"],"dt":false,"tt":"t.13, tr.68","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-5a1fb","cd":"06","st":22,"m":["Nghe những lời bình luận không đúng, cũng làm thinh,","không biện bác... Ai nói sao, ai làm gì cũng mặc kệ"],"dt":false,"tt":"t.5, tr.298","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"06-982ab","cd":"06","st":23,"m":["phải thay đổi triệt để những nếp sống, thói quen,","ý nghĩ và thành kiến có gốc rễ sâu xa hàng ngàn năm"],"dt":false,"tt":"t.11, tr.92","y":"Chương 3 · mục II.3.b — Một số nguyên tắc xây dựng chủ nghĩa xã hội trong thời kỳ quá độ"},{"id":"07-cd2e2","cd":"07","st":52,"m":["Trước hết phải có đảng cách mệnh, để trong thì vận động và tổ chức dân chúng,","ngoài thì liên lạc với dân tộc bị áp bức và vô sản giai cấp mọi nơi.","Đảng có vững, cách mệnh mới thành công, cũng như người cầm lái có vững thuyền mới chạy"],"dt":false,"tt":"t.2, tr.289","y":"Chương 4 · mục I.1 — Tính tất yếu và vai trò lãnh đạo của Đảng Cộng sản Việt Nam"},{"id":"08-8eff8","cd":"08","st":8,"m":["Đảng ta là đạo đức,","là văn minh"],"dt":false,"tt":"t.12, tr.403","y":"Chương 4 · mục I.2.a — Đảng là đạo đức, là văn minh"},{"id":"08-70f7d","cd":"08","st":69,"m":["là đảng của giai cấp công nhân và nhân dân lao động, nghĩa là những người thợ thuyền,","dân cày và lao động trí óc kiên quyết nhất, hăng hái nhất, trong sạch nhất, tận tâm tận lực phụng sự Tổ quốc và nhân dân.","Những người mà: - Giàu sang không thể quyến rũ, - Nghèo khó không thể chuyển lay, - Uy lực không thể khuất phục"],"dt":true,"tt":"t.7, tr.50","y":"Chương 4 · mục I.2.a — Đảng là đạo đức, là văn minh"},{"id":"08-9ba51","cd":"08","st":50,"m":["Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng,","thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch,","phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân"],"dt":false,"tt":"t.15, tr.611-612","y":"Chương 4 · mục I.2.a — Đảng là đạo đức, là văn minh"},{"id":"08-be44c","cd":"08","st":15,"m":["sẵn sàng vui vẻ làm trâu ngựa,","làm tôi tớ trung thành của nhân dân"],"dt":false,"tt":"t.7, tr.50","y":"Chương 4 · mục I.2.a — Đảng là đạo đức, là văn minh"},{"id":"08-8ea23","cd":"08","st":51,"m":["Một dân tộc, một đảng và mỗi con người, ngày hôm qua là vĩ đại,","có sức hấp dẫn lớn, không nhất định hôm nay và ngày mai vẫn được mọi người yêu mến và ca ngợi,","nếu lòng dạ không trong sáng nữa, nếu sa vào chủ nghĩa cá nhân"],"dt":false,"tt":"t.15, tr.672","y":"Chương 4 · mục I.2.a — Đảng là đạo đức, là văn minh"},{"id":"08-83678","cd":"08","st":66,"m":["Đảng muốn vững thì phải có chủ nghĩa làm cốt, trong đảng ai cũng phải hiểu, ai cũng phải theo chủ nghĩa ấy.","Đảng mà không có chủ nghĩa cũng như người không có trí khôn, tàu không có bàn chỉ nam.","Bây giờ học thuyết nhiều, chủ nghĩa nhiều, nhưng chủ nghĩa chân chính nhất, chắc chắn nhất, cách mệnh nhất là chủ nghĩa Lênin"],"dt":true,"tt":"t.2, tr.289","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-09753","cd":"08","st":43,"m":["Trong Đảng thực hành dân chủ rộng rãi,","thường xuyên và nghiêm chỉnh tự phê bình và phê bình là cách tốt nhất để củng cố sự đoàn kết và thống nhất trong Đảng.","Phải có tình đồng chí thương yêu lẫn nhau"],"dt":false,"tt":"t.15, tr.611","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-d4dc1","cd":"08","st":78,"m":["Đảng tổ chức rất nghiêm, khác với các đảng phái khác và các hội quần chúng. Trong Đảng chỉ kết nạp những phần tử hăng hái nhất,","cách mạng nhất. Đảng có những điều kiện kỷ luật bắt buộc mỗi đảng viên phải theo. Không có kỷ luật sắt không có Đảng.","Đã vào Đảng thì phải theo tư tưởng của Đảng. Đảng đã chỉ thị nghị quyết là phải làm. Không làm thì đuổi ra khỏi Đảng"],"dt":true,"tt":"t.6, tr.367","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-2f7d1","cd":"08","st":44,"m":["Đảng phải giữ kỷ luật rất nghiêm từ trên xuống dưới.","Kỷ luật này là tư tưởng phải nhất trí, hành động phải nhất trí.","Kỷ luật này là do lòng tự giác của đảng viên về nhiệm vụ của họ đối với Đảng"],"dt":false,"tt":"t.5, tr.290","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-cce9c","cd":"08","st":63,"m":["việc cần phải làm trước tiên là chỉnh đốn lại Đảng, làm cho mỗi đảng viên, mỗi đoàn viên,","mỗi chi bộ đều ra sức làm tròn nhiệm vụ đảng giao phó cho mình, toàn tâm toàn ý phục vụ nhân dân.","Làm được như vậy, thì dù công việc to lớn mấy, khó khăn mấy chúng ta cũng nhất định thắng lợi"],"dt":true,"tt":"t.15, tr.616","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-7a7fb","cd":"08","st":22,"m":["Đảng phải chọn lựa những người rất trung thành và rất hăng hái,","đoàn kết họ thành nhóm trung kiên lãnh đạo"],"dt":false,"tt":"t.15, tr.611","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-b76c6","cd":"08","st":13,"m":["Đảng phải luôn luôn tẩy bỏ","những phần tử hủ hóa ra ngoài"],"dt":false,"tt":"t.5, tr.290","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-8c2d0","cd":"08","st":101,"m":["Nhờ đoàn kết chặt chẽ, một lòng một dạ phục vụ giai cấp, phục vụ nhân dân, phục vụ Tổ quốc, cho nên từ ngày thành lập đến nay, Đảng ta đã đoàn kết,","tổ chức và lãnh đạo nhân dân ta hăng hái đấu tranh tiến từ thắng lợi này đến thắng lợi khác. Đoàn kết là một truyền thống cực kỳ quý báu của Đảng và của dân tộc ta.","Các đồng chí từ Trung ương đến các chi bộ cần phải giữ gìn sự đoàn kết nhất trí của Đảng như giữ gìn con ngươi của mắt mình"],"dt":true,"tt":"t.15, tr.616","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-962c0","cd":"08","st":13,"m":["không phải trên trời sa xuống.","Nó ở trong xã hội mà ra"],"dt":false,"tt":"t.5, tr.303","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-fd700","cd":"08","st":32,"m":["Đảng không phải là một tổ chức để làm quan phát tài.","Nó phải làm tròn nhiệm vụ giải phóng dân tộc,","làm cho Tổ quốc giàu mạnh, đồng bào sung sướng"],"dt":false,"tt":"t.5, tr.289","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-3454d","cd":"08","st":17,"m":["Ngoài lợi ích của dân tộc, của Tổ quốc,","thì Đảng không có lợi ích gì khác"],"dt":false,"tt":"t.5, tr.290","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-076ce","cd":"08","st":13,"m":["Đảng ta là một đảng cách mạng,","một đảng vì dân, vì nước"],"dt":false,"tt":"t.5, tr.294","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-65dbb","cd":"08","st":21,"m":["nếu nước độc lập mà dân không hưởng hạnh phúc tự do,","thì độc lập cũng chẳng có nghĩa lý gì"],"dt":false,"tt":"t.4, tr.64","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-09bdb","cd":"08","st":45,"m":["Chúng ta tranh được tự do, độc lập rồi mà dân cứ chết đói,","chết rét, thì tự do, độc lập cũng không làm gì. Dân chỉ biết rõ giá trị của tự do,","của độc lập khi mà dân được ăn no, mặc đủ"],"dt":false,"tt":"t.4, tr.175","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-d1193","cd":"08","st":30,"m":["Đảng không phải làm quan, sai khiến quần chúng mà phải làm đầy tớ cho quần chúng","và phải làm cho ra trò, nếu không quần chúng sẽ đá đít"],"dt":false,"tt":"t.6, tr.367","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-1331c","cd":"08","st":8,"m":["Tiếng dân chính","là truyền lại ý trời"],"dt":false,"tt":"t.1, tr.97","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-53564","cd":"08","st":39,"m":["vì đồng bào ủy thác thì tôi phải gắng sức làm,","cũng như một người lính vâng mệnh lệnh của quốc dân ra trước mặt trận.","Bao giờ đồng bào cho tôi lui, thì tôi rất vui lòng lui"],"dt":false,"tt":"t.4, tr.187","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-d70dd","cd":"08","st":23,"m":["cách xa dân chúng, không liên hệ chặt chẽ với dân chúng,","cũng như đứng lơ lửng giữa trời, nhất định thất bại"],"dt":false,"tt":"t.5, tr.326","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-6526c","cd":"08","st":10,"m":["học hỏi quần chúng nhưng","không theo đuôi quần chúng"],"dt":false,"tt":"t.5, tr.333","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-b4c29","cd":"08","st":41,"m":["sẽ ra sức hoạt động,","góp phần đắc lực vào việc khôi phục lại khối đoàn kết giữa các đảng anh em trên nền tảng chủ nghĩa Mác - Lênin","và chủ nghĩa quốc tế vô sản, có lý có tình"],"dt":false,"tt":"t.15, tr.613","y":"Chương 4 · mục I.2.b — Những vấn đề nguyên tắc trong hoạt động của Đảng"},{"id":"08-7bb94","cd":"08","st":102,"m":["đặt lợi ích của Đảng lên trên hết, lên trước hết. Vì lợi ích của Đảng tức là lợi ích của dân tộc, của Tổ quốc. Vô luận lúc nào, vô luận việc gì,","đảng viên và cán bộ phải đặt lợi ích của Đảng ra trước, lợi ích của cá nhân lại sau... Nếu gặp khi lợi ích chung của Đảng mâu thuẫn với lợi ích riêng của cá nhân,","thì phải kiên quyết hy sinh lợi ích của cá nhân cho lợi ích của Đảng. Khi cần đến tính mệnh của mình cũng phải vui lòng hy sinh cho Đảng"],"dt":true,"tt":"t.5, tr.290-291","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-aad36","cd":"08","st":35,"m":["mỗi kẻ địch bên trong là một bạn đồng minh của kẻ địch bên ngoài.","Địch bên ngoài không đáng sợ.","Địch bên trong đáng sợ hơn, vì nó phá hoại từ trong phá ra"],"dt":false,"tt":"t.5, tr.278","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-2f35c","cd":"08","st":64,"m":["Chúng ta không sợ sai lầm, nhưng đã nhận biết sai lầm thì phải ra sức sửa chữa. Vậy nên,","ai không phạm những lầm lỗi... thì nên chú ý tránh đi, và gắng sức cho thêm tiến bộ. Ai đã phạm những lầm lỗi...","thì phải hết sức sửa chữa... Chúng ta phải ghi sâu những chữ “công bình, chính trực” vào lòng"],"dt":true,"tt":"t.4, tr.66","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-63aa4","cd":"08","st":36,"m":["Đảng không che giấu những khuyết điểm của mình, không sợ phê bình.","Đảng phải nhận khuyết điểm của mình mà tự sửa chữa,","để tiến bộ, và để dạy bảo cán bộ và đảng viên"],"dt":false,"tt":"t.5, tr.290","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-f7eff","cd":"08","st":16,"m":["còn một số ít cán bộ,","đảng viên mà đạo đức, phẩm chất còn thấp kém"],"dt":false,"tt":"t.15, tr.546","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-9d51c","cd":"08","st":106,"m":["Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần, kiệm, liêm, chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch,","phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân. Đoàn viên và thanh niên ta nói chung là tốt, mọi việc đều hăng hái xung phong, không ngại khó khăn,","có chí tiến thủ. Đảng cần phải chăm lo giáo dục đạo đức cách mạng cho họ, đào tạo họ thành những người thừa kế xây dựng chủ nghĩa xã hội vừa “hồng” vừa “chuyên”"],"dt":true,"tt":"t.15, tr.611-612","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-a91d4","cd":"08","st":46,"m":["Cán bộ là những người đem chính sách của Đảng,","của Chính phủ giải thích cho dân chúng hiểu rõ và thi hành. Đồng thời đem tình hình của dân chúng báo cáo cho Đảng,","cho Chính phủ hiểu rõ, để đặt chính sách cho đúng"],"dt":false,"tt":"t.5, tr.309","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"08-21579","cd":"08","st":14,"m":["muôn việc thành công hoặc thất bại,","đều do cán bộ tốt hoặc kém"],"dt":false,"tt":"t.5, tr.280","y":"Chương 4 · mục I.2.c — Xây dựng đội ngũ cán bộ, đảng viên"},{"id":"09-fd7e6","cd":"09","st":21,"m":["Trong nước Việt Nam Dân chủ Cộng hòa của chúng ta,","tất cả mọi quyền lực đều là của nhân dân"],"dt":false,"tt":"t.8, tr.262","y":"Chương 4 · mục II.1.b — Nhà nước của nhân dân"},{"id":"09-b2615","cd":"09","st":21,"m":["đều là công bộc của dân, nghĩa là để gánh việc chung cho dân,","chứ không phải để đè đầu dân"],"dt":false,"tt":"t.4, tr.64-65","y":"Chương 4 · mục II.1.b — Nhà nước của nhân dân"},{"id":"09-07c46","cd":"09","st":34,"m":["Dân làm chủ thì Chủ tịch, bộ trưởng, thứ trưởng,","ủy viên này khác là làm gì? Làm đầy tớ.","Làm đầy tớ cho nhân dân, chứ không phải là làm quan cách mạng"],"dt":false,"tt":"t.10, tr.572","y":"Chương 4 · mục II.1.b — Nhà nước của nhân dân"},{"id":"09-f61eb","cd":"09","st":30,"m":["mong đồng bào giúp đỡ, đôn đốc, kiểm soát và phê bình để làm trọn nhiệm vụ của mình là:","người đầy tớ trung thành tận tụy của nhân dân"],"dt":false,"tt":"t.9, tr.81","y":"Chương 4 · mục II.1.b — Nhà nước của nhân dân"},{"id":"09-e6a02","cd":"09","st":34,"m":["nhân dân có quyền bãi miễn đại biểu Quốc hội","và đại biểu Hội đồng nhân dân nếu những đại biểu ấy tỏ ra","không xứng đáng với sự tín nhiệm của nhân dân"],"dt":false,"tt":"t.12, tr.375","y":"Chương 4 · mục II.1.b — Nhà nước của nhân dân"},{"id":"09-a6f7a","cd":"09","st":13,"m":["nếu Chính phủ làm hại dân","thì dân có quyền đuổi Chính phủ"],"dt":false,"tt":"t.5, tr.75","y":"Chương 4 · mục II.1.b — Nhà nước của nhân dân"},{"id":"09-40693","cd":"09","st":39,"m":["Nước ta là nước dân chủ, nghĩa là nước nhà do nhân dân làm chủ.","Nhân dân có quyền lợi làm chủ,","thì phải có nghĩa vụ làm tròn bổn phận công dân, giữ đúng đạo đức công dân"],"dt":false,"tt":"t.9, tr.258","y":"Chương 4 · mục II.1.c — Nhà nước do nhân dân"},{"id":"09-3f06d","cd":"09","st":22,"m":["Chúng ta là những người lao động làm chủ nước nhà.","Muốn làm chủ được tốt, phải có năng lực làm chủ"],"dt":false,"tt":"t.12, tr.527","y":"Chương 4 · mục II.1.c — Nhà nước do nhân dân"},{"id":"09-a4bc3","cd":"09","st":59,"m":["Các công việc của Chính phủ làm phải nhằm vào một mục đích duy nhất là mưu tự do hạnh phúc cho mọi người.","Cho nên Chính phủ nhân dân bao giờ cũng phải đặt quyền lợi dân lên trên hết thảy.","Việc gì có lợi cho dân thì làm. Việc gì có hại cho dân thì phải tránh"],"dt":false,"tt":"t.4, tr.21","y":"Chương 4 · mục II.1.d — Nhà nước vì nhân dân"},{"id":"09-d1780","cd":"09","st":31,"m":["muốn được dân yêu, muốn được lòng dân,","trước hết phải yêu dân, phải đặt quyền lợi của dân trên hết thảy,","phải có một tinh thần chí công vô tư"],"dt":false,"tt":"t.4, tr.52","y":"Chương 4 · mục II.1.d — Nhà nước vì nhân dân"},{"id":"09-4aa6a","cd":"09","st":25,"m":["chẳng những làm những việc trực tiếp lợi cho dân,","mà cũng có khi làm những việc mới xem qua như là hại đến dân"],"dt":false,"tt":"t.5, tr.285","y":"Chương 4 · mục II.1.d — Nhà nước vì nhân dân"},{"id":"10-58065","cd":"10","st":72,"m":["Cải cách nền pháp lý ở Đông Dương bằng cách cho người bản xứ cũng được quyền hưởng những đảm bảo về mặt pháp luật như người Âu châu;","xóa bỏ hoàn toàn các tòa án đặc biệt dùng làm công cụ để khủng bố và áp bức bộ phận trung thực nhất trong nhân dân An Nam...","Thay chế độ ra các sắc lệnh bằng chế độ ra các đạo luật"],"dt":true,"tt":"t.1, tr.469","y":"Chương 4 · mục II.2.a — Nhà nước hợp hiến, hợp pháp"},{"id":"10-3477b","cd":"10","st":31,"m":["Chúng ta phải có một hiến pháp dân chủ.","Tôi đề nghị Chính phủ tổ chức càng sớm càng","hay cuộc TỔNG TUYỂN CỬ với chế độ phổ thông đầu phiếu"],"dt":false,"tt":"t.4, tr.7","y":"Chương 4 · mục II.2.a — Nhà nước hợp hiến, hợp pháp"},{"id":"10-76766","cd":"10","st":21,"m":["làm sao cho nhân dân biết hưởng quyền dân chủ,","biết dùng quyền dân chủ của mình, dám nói, dám làm"],"dt":false,"tt":"t.15, tr.293","y":"Chương 4 · mục II.2.b — Nhà nước thượng tôn pháp luật"},{"id":"10-9444a","cd":"10","st":32,"m":["Pháp luật Việt Nam tuy khoan hồng với những người biết cải tà quy chính,","nhưng sẽ thẳng tay trừng trị","những tên Việt gian đầu sỏ đã bán nước buôn dân"],"dt":false,"tt":"t.6, tr.49","y":"Chương 4 · mục II.2.b — Nhà nước thượng tôn pháp luật"},{"id":"10-a962d","cd":"10","st":10,"m":["thưởng có khi quá rộng,","mà phạt thì không nghiêm"],"dt":false,"tt":"t.15, tr.225","y":"Chương 4 · mục II.2.b — Nhà nước thượng tôn pháp luật"},{"id":"10-bb3cb","cd":"10","st":35,"m":["Các bạn là những người phụ trách thi hành pháp luật.","Lẽ tất nhiên các bạn cần phải nêu cao cái gương “phụng công,","thủ pháp, chí công vô tư” cho nhân dân noi theo"],"dt":false,"tt":"t.5, tr.473","y":"Chương 4 · mục II.2.b — Nhà nước thượng tôn pháp luật"},{"id":"10-b7387","cd":"10","st":33,"m":["Chính phủ Việt Nam sẽ tha thứ","hay trừng trị họ theo luật pháp tùy theo thái độ của họ hiện nay và về sau.","Nhưng sẽ không có ai bị tàn sát"],"dt":false,"tt":"t.6, tr.437","y":"Chương 4 · mục II.2.c — Pháp quyền nhân nghĩa"},{"id":"10-19031","cd":"10","st":44,"m":["Dân ghét các ông chủ tịch, các ông ủy viên vì cái tật ngông nghênh,","cậy thế, cậy quyền. Những ông này không hiểu nhiệm vụ và chính sách của Việt Minh,","nên khi nắm được chút quyền trong tay vẫn hay lạm dụng"],"dt":false,"tt":"t.4, tr.51","y":"Chương 4 · mục II.3.a — Kiểm soát quyền lực nhà nước"},{"id":"10-56648","cd":"10","st":86,"m":["Công việc của Đảng và Nhà nước ngày càng nhiều. Muốn hoàn thành tốt mọi việc, thì toàn thể đảng viên và cán bộ phải chấp hành nghiêm chỉnh đường lối và chính sách của Đảng.","Và muốn như vậy, thì các cấp ủy đảng phải tăng cường công tác kiểm tra.","Vì kiểm tra có tác dụng thúc đẩy và giáo dục đảng viên và cán bộ làm trọn nhiệm vụ đối với Đảng, đối với Nhà nước, làm gương mẫu tốt cho nhân dân"],"dt":true,"tt":"t.14, tr.362","y":"Chương 4 · mục II.3.a — Kiểm soát quyền lực nhà nước"},{"id":"10-ef4c6","cd":"10","st":20,"m":["Phải tổ chức sự kiểm soát,","mà muốn kiểm soát đúng thì cũng phải có quần chúng giúp mới được"],"dt":false,"tt":"t.5, tr.325","y":"Chương 4 · mục II.3.a — Kiểm soát quyền lực nhà nước"},{"id":"10-b7cb9","cd":"10","st":18,"m":["mọi công tác phải dựa hẳn vào quần chúng,","hoan nghênh quần chúng đôn đốc và kiểm tra"],"dt":false,"tt":"t.8, tr.507","y":"Chương 4 · mục II.3.a — Kiểm soát quyền lực nhà nước"},{"id":"10-c9bc2","cd":"10","st":13,"m":["lấy của công dùng vào việc tư,","quên cả thanh liêm, đạo đức"],"dt":false,"tt":"t.4, tr.65","y":"Chương 4 · mục II.3.b — Phòng, chống tiêu cực trong Nhà nước"},{"id":"10-5a712","cd":"10","st":36,"m":["Tham ô, lãng phí và bệnh quan liêu, dù cố ý hay không,","cũng là bạn đồng minh của thực dân và phong kiến...","Tội lỗi ấy cũng nặng như tội lỗi Việt gian, mật thám"],"dt":false,"tt":"t.7, tr.357-358","y":"Chương 4 · mục II.3.b — Phòng, chống tiêu cực trong Nhà nước"},{"id":"10-5176d","cd":"10","st":44,"m":["Cán bộ các cơ quan, các đoàn thể, cấp cao thì quyền to,","cấp thấp thì quyền nhỏ. Dù to hay nhỏ, có quyền mà thiếu lương tâm là có dịp đục khoét,","có dịp ăn của đút, có dịp “dĩ công vi tư”"],"dt":false,"tt":"t.6, tr.127","y":"Chương 4 · mục II.3.b — Phòng, chống tiêu cực trong Nhà nước"},{"id":"11-461d6","cd":"11","st":39,"m":["Sử dạy cho ta bài học này:","Lúc nào dân ta đoàn kết muôn người như một thì nước ta độc lập, tự do.","Trái lại lúc nào dân ta không đoàn kết thì bị nước ngoài xâm lấn"],"dt":false,"tt":"t.3, tr.256","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-52698","cd":"11","st":8,"m":["Đoàn kết là sức mạnh","của chúng ta"],"dt":false,"tt":"t.9, tr.145","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-2fb03","cd":"11","st":20,"m":["Đoàn kết là một lực lượng vô địch của chúng ta","để khắc phục khó khăn, giành lấy thắng lợi"],"dt":false,"tt":"t.9, tr.177","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-5f796","cd":"11","st":10,"m":["Đoàn kết là sức mạnh,","đoàn kết là thắng lợi"],"dt":false,"tt":"t.14, tr.27","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-fe9a9","cd":"11","st":11,"m":["Đoàn kết là sức mạnh,","là then chốt của thành công"],"dt":false,"tt":"t.14, tr.186","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-18a03","cd":"11","st":29,"m":["Bây giờ còn một điểm rất quan trọng, cũng là điểm mẹ.","Điểm này mà thực hiện tốt thì đẻ ra con cháu đều tốt: Đó là đoàn kết"],"dt":false,"tt":"t.10, tr.589","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-8344f","cd":"11","st":14,"m":["Đoàn kết, đoàn kết, đại đoàn kết Thành công,","thành công, đại thành công"],"dt":false,"tt":"t.13, tr.119","y":"Chương 5 · mục I.1.a — Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng"},{"id":"11-11785","cd":"11","st":23,"m":["Mục đích của Đảng Lao động Việt Nam có thể gồm trong 8 chữ là:","ĐOÀN KẾT TOÀN DÂN, PHỤNG SỰ TỔ QUỐC"],"dt":false,"tt":"t.7, tr.49","y":"Chương 5 · mục I.1.b — Đại đoàn kết toàn dân tộc là một mục tiêu, nhiệm vụ hàng đầu của cách mạng Việt Nam"},{"id":"11-9cc78","cd":"11","st":24,"m":["ai có tài, có đức, có sức, có lòng phụng sự Tổ quốc","và phục vụ nhân dân thì ta đoàn kết với họ"],"dt":false,"tt":"t.9, tr.244","y":"Chương 5 · mục I.2.a — Chủ thể của khối đại đoàn kết toàn dân tộc"},{"id":"11-896ab","cd":"11","st":70,"m":["Đại đoàn kết tức là trước hết phải đoàn kết đại đa số nhân dân, mà đại đa số nhân dân là công nhân,","nông dân và các tầng lớp nhân dân lao động khác. Đó là nền gốc của đại đoàn kết. Nó cũng như cái nền của nhà,","gốc của cây. Nhưng đã có nền vững, gốc tốt, còn phải đoàn kết các tầng lớp nhân dân khác"],"dt":true,"tt":"t.9, tr.244","y":"Chương 5 · mục I.2.b — Nền tảng của khối đại đoàn kết toàn dân tộc"},{"id":"12-62c51","cd":"12","st":29,"m":["Lực lượng chủ yếu trong khối đoàn kết dân tộc là công nông,","cho nên liên minh công nông là nền tảng của Mặt trận dân tộc thống nhất"],"dt":false,"tt":"t.12, tr.417","y":"Chương 5 · mục I.4.b — Nguyên tắc xây dựng và hoạt động của Mặt trận dân tộc thống nhất"},{"id":"12-d4383","cd":"12","st":51,"m":["vì họ là người trực tiếp sản xuất tất cả mọi tài phú làm cho xã hội sống.","Vì họ đông hơn hết, mà cũng bị áp bức bóc lột nặng nề hơn hết.","Vì chí khí cách mạng của họ chắc chắn, bền bỉ hơn của mọi tầng lớp khác"],"dt":false,"tt":"t.10, tr.376","y":"Chương 5 · mục I.4.b — Nguyên tắc xây dựng và hoạt động của Mặt trận dân tộc thống nhất"},{"id":"12-44d09","cd":"12","st":55,"m":["Đoàn kết thực sự nghĩa là mục đích phải nhất trí và lập trường cũng phải nhất trí.","Đoàn kết thực sự nghĩa là vừa đoàn kết, vừa đấu tranh, học những cái tốt của nhau,","phê bình những cái sai của nhau và phê bình trên lập trường thân ái, vì nước, vì dân"],"dt":false,"tt":"t.11, tr.362","y":"Chương 5 · mục I.4.b — Nguyên tắc xây dựng và hoạt động của Mặt trận dân tộc thống nhất"},{"id":"12-66b3f","cd":"12","st":25,"m":["cán phải chịu khó tìm đủ cách giải thích cho họ hiểu rằng:","những việc đó là vì ích lợi của họ mà phải làm"],"dt":false,"tt":"t.5, tr.286","y":"Chương 5 · mục I.5 — Phương thức xây dựng khối đại đoàn kết dân tộc"},{"id":"12-ea625","cd":"12","st":27,"m":["Những đoàn thể ấy là tổ chức của dân, phấn đấu cho dân,","bênh vực quyền của dân, liên lạc mật thiết nhân dân với Chính phủ"],"dt":false,"tt":"t.6, tr.397","y":"Chương 5 · mục I.5 — Phương thức xây dựng khối đại đoàn kết dân tộc"},{"id":"12-eb8ed","cd":"12","st":14,"m":["Đoàn kết, đoàn kết, đại đoàn kết/ Thành công,","thành công, đại thành công!"],"dt":false,"tt":"t.13, tr.119","y":"Chương 5 · mục I.5 — Phương thức xây dựng khối đại đoàn kết dân tộc"},{"id":"12-148de","cd":"12","st":97,"m":["Mặt trận dân tộc thống nhất vẫn là một trong những lực lượng to lớn của cách mạng Việt Nam... Phải đoàn kết tốt các đảng phái, các đoàn thể,","các nhân sĩ trong Mặt trận Tổ quốc Việt Nam, thực hiện hợp tác lâu dài, giúp đỡ lẫn nhau, cùng nhau tiến bộ. Phải đoàn kết các dân tộc anh em,","cùng nhau xây dựng Tổ quốc... Phải đoàn kết chặt chẽ giữa đồng bào lương và đồng bào các tôn giáo, cùng nhau xây dựng đời sống hòa thuận ấm no, xây dựng Tổ quốc"],"dt":true,"tt":"t.13, tr.453-454","y":"Chương 5 · mục I.5 — Phương thức xây dựng khối đại đoàn kết dân tộc"},{"id":"14-eae65","cd":"14","st":90,"m":["Cũng như sông thì có nguồn mới có nước, không có nguồn thì sông cạn. Cây phải có gốc, không có gốc thì cây héo. Người cách mạng phải có đạo đức,","không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân. Vì muốn giải phóng cho dân tộc,","giải phóng cho loài người là một công việc to tát, mà tự mình không có đạo đức, không có căn bản, tự mình đã hủ hóa, xấu xa thì còn làm nổi việc gì?"],"dt":true,"tt":"t.5, tr.292-293","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-a3ddc","cd":"14","st":74,"m":["Làm cách mạng để cải tạo xã hội cũ thành xã hội mới là một sự nghiệp rất vẻ vang,","nhưng nó cũng là một nhiệm vụ rất nặng nề, một cuộc đấu tranh rất phức tạp, lâu dài, gian khổ. Sức có mạnh mới gánh được nặng và đi được xa.","Người cách mạng phải có đạo đức cách mạng làm nền tảng, mới hoàn thành được nhiệm vụ cách mạng vẻ vang"],"dt":true,"tt":"t.11, tr.601","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-15472","cd":"14","st":32,"m":["Trước mặt quần chúng,","không phải ta cứ viết lên trán chữ “cộng sản” mà ta được họ yêu mến.","Quần chúng chỉ quý mến những người có tư cách, đạo đức"],"dt":false,"tt":"t.6, tr.16","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-808c0","cd":"14","st":33,"m":["Người cán bộ cách mạng phải có đạo đức cách mạng...","Mọi việc thành hay là bại,","chủ chốt là do cán bộ có thấm nhuần đạo đức cách mạng, hay là không"],"dt":false,"tt":"t.9, tr.354","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-cdc4d","cd":"14","st":63,"m":["Đại đa số chiến sĩ cách mạng là người có đạo đức: Cả đời hết lòng hết sức phục vụ nhân dân,","sinh hoạt ngày thường thì làm gương mẫu; gian khổ, chất phác, kính trọng của công...","Đạo đức ấy có ảnh hưởng lớn đến sự nghiệp đổi xã hội cũ thành xã hội mới và xây dựng mỹ tục thuần phong"],"dt":true,"tt":"t.11, tr.602-603","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-ee7d0","cd":"14","st":40,"m":["Có đạo đức cách mạng thì khi gặp khó khăn, gian khổ, thất bại,","cũng không sợ sệt, rụt rè, lùi bước...","khi gặp thuận lợi và thành công vẫn giữ vững tinh thần gian khổ, chất phác, khiêm tốn"],"dt":false,"tt":"t.9, tr.354","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-4fb20","cd":"14","st":132,"m":["Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo,","là người đầy tớ thật trung thành của nhân dân. ĐOÀN VIÊN VÀ THANH NIÊN ta nói chung là tốt, mọi việc đều hăng hái xung phong, không ngại khó khăn, có chí tiến thủ.","Đảng cần phải chăm lo giáo dục đạo đức cách mạng cho họ, đào tạo họ thành những người thừa kế xây dựng chủ nghĩa xã hội vừa “hồng” vừa “chuyên”. Bồi dưỡng thế hệ cách mạng cho đời sau là một việc rất quan trọng và rất cần thiết"],"dt":true,"tt":"t.15, tr.622","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-937c5","cd":"14","st":50,"m":["Phải lấy kết quả thiết thực đã góp sức bao nhiêu cho sản xuất và lãnh đạo sản xuất","mà đo ý chí cách mạng của mình. Hãy kiên quyết chống bệnh nói suông,","thói phô trương hình thức, lối làm việc không nhằm mục đích nâng cao sản xuất"],"dt":false,"tt":"t.13, tr.68","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-daea4","cd":"14","st":38,"m":["Dạy cũng như học phải biết chú trọng cả tài lẫn đức.","Đức là đạo đức cách mạng. Đó là cái gốc, rất quan trọng.","Nếu không có đạo đức cách mạng thì có tài cũng vô dụng"],"dt":false,"tt":"t.14, tr.400","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"14-ea20a","cd":"14","st":30,"m":["Tuy năng lực và công việc của mỗi người khác nhau, người làm việc to,","người làm việc nhỏ; nhưng ai giữ được đạo đức đều là người cao thượng"],"dt":false,"tt":"t.9, tr.508","y":"Chương 6 · mục II.1 — Đạo đức là gốc, là nền tảng tinh thần của xã hội, của người cách mạng"},{"id":"13-134ee","cd":"13","st":29,"m":["Đạo đức cũ như người đầu ngược xuống đất chân chổng lên trời.","Đạo đức mới như người hai chân đứng vững được dưới đất, đầu ngẩng lên trời"],"dt":false,"tt":"t.7, tr.220","y":"Chương 6 · mục II.2.a — Trung với nước, hiếu với dân"},{"id":"13-40f73","cd":"13","st":35,"m":["Đạo đức, ngày trước thì chỉ trung với vua, hiếu với cha mẹ.","Ngày nay, thời đại mới, đạo đức cũng phải mới.","Phải trung với nước. Phải hiếu với toàn dân, với đồng bào"],"dt":false,"tt":"t.4, tr.170","y":"Chương 6 · mục II.2.a — Trung với nước, hiếu với dân"},{"id":"13-18bf1","cd":"13","st":26,"m":["Bao nhiêu lợi ích đều vì dân. Bao nhiêu quyền hạn đều của dân...","Nói tóm lại, quyền hành và lực lượng đều ở nơi dân"],"dt":false,"tt":"t.6, tr.232","y":"Chương 6 · mục II.2.a — Trung với nước, hiếu với dân"},{"id":"13-4d857","cd":"13","st":33,"m":["Phải luôn luôn nâng cao chí khí cách mạng “trung với nước,","hiếu với dân, nhiệm vụ nào cũng hoàn thành,","khó khăn nào cũng vượt qua, kẻ thù nào cũng đánh thắng”"],"dt":false,"tt":"t.14, tr.619","y":"Chương 6 · mục II.2.a — Trung với nước, hiếu với dân"},{"id":"13-56829","cd":"13","st":37,"m":["hết lòng hết sức phục vụ nhân dân. Phải yêu kính nhân dân.","Phải thật sự tôn trọng quyền làm chủ của nhân dân.","Tuyệt đối không được lên mặt “quan cách mạng” ra lệnh ra oai"],"dt":false,"tt":"t.13, tr.67","y":"Chương 6 · mục II.2.a — Trung với nước, hiếu với dân"},{"id":"13-7e788","cd":"13","st":57,"m":["Bọn phong kiến ngày xưa nêu ra cần, kiệm, liêm, chính,","nhưng không bao giờ làm mà lại bắt nhân dân phải tuân theo để phụng sự quyền lợi cho chúng. Ngày nay ta đề ra cần, kiệm,","liêm, chính cho cán bộ thực hiện làm gương cho nhân dân theo để lợi cho nước cho dân"],"dt":false,"tt":"t.7, tr.220","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-c6cb0","cd":"13","st":29,"m":["Cần tức là siêng năng, chăm chỉ, cố gắng dẻo dai...","Muốn cho chữ Cần có nhiều kết quả hơn, thì phải có kế hoạch cho mọi công việc"],"dt":false,"tt":"t.6, tr.118","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-92743","cd":"13","st":16,"m":["Lao động là nghĩa vụ thiêng liêng,","là nguồn sống, nguồn hạnh phúc của chúng ta"],"dt":false,"tt":"t.6, tr.122","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-a3bf1","cd":"13","st":30,"m":["Kiệm là thế nào? Là tiết kiệm, không xa xỉ, không hoang phí, không bừa bãi.","CẦN với KIỆM phải đi đôi với nhau, như hai chân của con người"],"dt":false,"tt":"t.6, tr.123","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-eea34","cd":"13","st":74,"m":["Tiết kiệm không phải là bủn xỉn. Khi không nên tiêu xài thì một đồng xu cũng không nên tiêu. Khi có việc đáng làm,","việc ích lợi cho đồng bào, cho Tổ quốc, thì dù bao nhiêu công, tốn bao nhiêu của, cũng vui lòng. Như thế mới đúng là kiệm.","Việc đáng tiêu mà không tiêu, là bủn xỉn, chứ không phải là kiệm. Tiết kiệm phải kiên quyết không xa xỉ"],"dt":true,"tt":"t.6, tr.123","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-f589f","cd":"13","st":28,"m":["là trong sạch, không tham lam... Chữ LIÊM phải đi đôi với chữ KIỆM.","Cũng như chữ KIỆM phải đi với chữ CẦN. Có KIỆM mới LIÊM được"],"dt":false,"tt":"t.6, tr.126","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-8cd11","cd":"13","st":45,"m":["Liêm là không tham địa vị. Không tham tiền tài. Không tham sung sướng.","Không ham người tâng bốc mình. Vì vậy mà quang minh chính đại, không bao giờ hủ hóa.","Chỉ có một thứ ham là ham học, ham làm, ham tiến bộ"],"dt":false,"tt":"t.5, tr.292","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-ee688","cd":"13","st":21,"m":["Chính nghĩa là không tà, nghĩa là thẳng thắn, đứng đắn.","Điều gì không đứng đắn, thẳng thắn, tức là tà"],"dt":false,"tt":"t.6, tr.129","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-c1217","cd":"13","st":67,"m":["ĐỐI VỚI MÌNH - Chớ tự kiêu, tự đại... ĐỐI VỚI NGƯỜI... Chớ nịnh hót người trên. Chớ xem khinh người dưới.","Thái độ phải chân thành, khiêm tốn... Phải thực hành chữ Bác - Ái... ĐỐI VỚI VIỆC... Phải để công việc nước lên trên,","trước việc tư, việc nhà... việc thiện thì dù nhỏ mấy cũng làm. Việc ác thì dù nhỏ mấy cũng tránh"],"dt":true,"tt":"t.6, tr.129-131","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-c776f","cd":"13","st":20,"m":["khi làm bất cứ việc gì cũng đừng nghĩ đến mình trước...,","khi hưởng thụ thì mình nên đi sau"],"dt":false,"tt":"t.5, tr.217","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-4f67a","cd":"13","st":63,"m":["Trước nhất là cán bộ các cơ quan, các đoàn thể, cấp cao thì quyền to, cấp thấp thì quyền nhỏ.","Dù to hay nhỏ, có quyền mà thiếu lương tâm là có dịp đục khoét, có dịp ăn của đút,","có dịp “dĩ công vi tư”. Vì vậy, cán bộ phải thực hành chữ LIÊM trước, để làm kiểu mẫu cho dân"],"dt":true,"tt":"t.6, tr.127","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-331b8","cd":"13","st":28,"m":["Một dân tộc biết cần, kiệm, biết liêm, là một dân tộc giàu về vật chất,","mạnh về tinh thần, là một dân tộc văn minh tiến bộ"],"dt":false,"tt":"t.6, tr.127","y":"Chương 6 · mục II.2.b — Cần, kiệm, liêm, chính, chí công vô tư"},{"id":"13-6df5a","cd":"13","st":31,"m":["làm sao cho nước ta được hoàn toàn độc lập,","dân ta được hoàn toàn tự do,","đồng bào ai cũng có cơm ăn áo mặc, ai cũng được học hành"],"dt":false,"tt":"t.4, tr.187","y":"Chương 6 · mục II.2.c — Thương yêu con người, sống có tình có nghĩa"},{"id":"13-09fc4","cd":"13","st":9,"m":["Phải có tình đồng chí","thương yêu lẫn nhau"],"dt":false,"tt":"t.15, tr.662","y":"Chương 6 · mục II.2.c — Thương yêu con người, sống có tình có nghĩa"},{"id":"13-077cb","cd":"13","st":14,"m":["Quan sơn muôn dặm một nhà,","Bốn phương vô sản đều là anh em!"],"dt":false,"tt":"t.12, tr.670","y":"Chương 6 · mục II.2.d — Tinh thần quốc tế trong sáng"},{"id":"14-3bebf","cd":"14","st":8,"m":["đảng viên đi trước,","làng nước theo sau"],"dt":false,"tt":"t.15, tr.546","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-9acf0","cd":"14","st":44,"m":["Miệng thì nói dân chủ, nhưng làm việc thì họ theo lối “quan” chủ.","Miệng thì nói “phụng sự quần chúng”, nhưng họ làm trái ngược với lợi ích của quần chúng,","trái ngược với phương châm, chính sách của Đảng và Chính phủ"],"dt":false,"tt":"t.7, tr.176","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-e35c9","cd":"14","st":35,"m":["Trước hết, mình phải làm gương, gắng làm gương trong anh em,","và khi đi công tác, gắng làm gương cho dân.","Làm gương về cả ba mặt: Tinh thần, vật chất và văn hóa"],"dt":false,"tt":"t.4, tr.171","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-3b692","cd":"14","st":32,"m":["Nói chung thì các dân tộc phương Đông đều giàu tình cảm,","và đối với họ một tấm gương sống","còn có giá trị hơn một trăm bài diễn văn tuyên truyền"],"dt":false,"tt":"t.1, tr.284","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-c51d1","cd":"14","st":47,"m":["Trước mặt quần chúng, không phải ta cứ viết lên trán chữ “cộng sản” mà ta được họ yêu mến.","Quần chúng chỉ quý mến những người có tư cách, đạo đức.","Muốn hướng dẫn nhân dân, mình phải làm mực thước cho người ta bắt chước"],"dt":false,"tt":"t.6, tr.16","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-95586","cd":"14","st":39,"m":["Lấy gương người tốt, việc tốt để hằng ngày giáo dục lẫn nhau","là một trong những cách tốt nhất để xây dựng Đảng,","xây dựng các tổ chức cách mạng, xây dựng con người mới, cuộc sống mới"],"dt":false,"tt":"t.15, tr.672","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-f12f4","cd":"14","st":50,"m":["Từng giọt nước nhỏ thấm vào lòng đất, chảy về một hướng mới thành suối, thành sông.","Biết bao nhiêu giọt nước nhỏ hợp lại mới thành biển cả... Người tốt, việc tốt nhiều lắm.","Ở đâu cũng có. Ngành, giới nào, địa phương nào, lứa tuổi nào cũng có"],"dt":false,"tt":"t.15, tr.672","y":"Chương 6 · mục II.3.a — Nói đi đôi với làm, nêu gương về đạo đức"},{"id":"14-32aa2","cd":"14","st":11,"m":["Không có ai cái gì cũng tốt,","cái gì cũng hay"],"dt":false,"tt":"t.5, tr.314","y":"Chương 6 · mục II.3.b — Xây đi đôi với chống"},{"id":"14-c8776","cd":"14","st":44,"m":["Mỗi con người đều có thiện và ác ở trong lòng.","Ta phải biết làm cho phần tốt ở trong mỗi con người nảy nở như hoa mùa Xuân và phần xấu bị mất dần đi,","đó là thái độ của người cách mạng"],"dt":false,"tt":"t.15, tr.672","y":"Chương 6 · mục II.3.b — Xây đi đôi với chống"},{"id":"14-5df64","cd":"14","st":20,"m":["Quan liêu, tham ô, lãng phí là tội ác.","Phải tẩy sạch nó để thực hiện cần kiệm liêm chính"],"dt":false,"tt":"t.7, tr.457","y":"Chương 6 · mục II.3.b — Xây đi đôi với chống"},{"id":"14-f556d","cd":"14","st":42,"m":["do cá nhân chủ nghĩa mà phạm nhiều sai lầm...","Phải kiên quyết quét sạch chủ nghĩa cá nhân, nâng cao đạo đức cách mạng,","bồi dưỡng tư tưởng tập thể, tinh thần đoàn kết, tính tổ chức và tính kỷ luật"],"dt":false,"tt":"t.15, tr.547","y":"Chương 6 · mục II.3.b — Xây đi đôi với chống"},{"id":"14-f9367","cd":"14","st":17,"m":["Đấu tranh chống chủ nghĩa cá nhân không","phải là “giày xéo lên lợi ích cá nhân”"],"dt":false,"tt":"t.11, tr.610","y":"Chương 6 · mục II.3.b — Xây đi đôi với chống"},{"id":"14-b959c","cd":"14","st":73,"m":["Chính tâm tu thân tức là cải tạo. Cải tạo cũng phải trường kỳ gian khổ, vì đó là một cuộc cách mạng trong bản thân của mỗi người.","Bồi dưỡng tư tưởng mới để đánh thắng tư tưởng cũ,","đoạn tuyệt với con người cũ để trở thành con người mới không phải là một việc dễ dàng... Dù khó khăn gian khổ, nhưng muốn cải tạo thì nhất định thành công"],"dt":true,"tt":"t.8, tr.300-301","y":"Chương 6 · mục II.3.c — Tu dưỡng đạo đức suốt đời"},{"id":"14-4288f","cd":"14","st":38,"m":["Đạo đức cách mạng không phải trên trời sa xuống. Nó do đấu tranh,","rèn luyện bền bỉ hằng ngày mà phát triển và củng cố.","Cũng như ngọc càng mài càng sáng, vàng càng luyện càng trong"],"dt":false,"tt":"t.11, tr.612","y":"Chương 6 · mục II.3.c — Tu dưỡng đạo đức suốt đời"}]};
+
+/* ============================================================
+   CẤU HÌNH — mọi con số của luật chơi ở một chỗ (thầy chốt 9/10/2026)
+   ============================================================ */
+const CH = {
+  soVong: 2,          // vòng 2 phát câu mới
+  phut: 4,            // phút mỗi vòng (giảng viên đổi được khi tạo phòng)
+  khoaSai: 7,         // giây khóa máy khi nhập mã sai
+  khoaDoc: 5,         // giây khóa nút Xong để đọc câu đầy đủ
+  giayCuoi: 30        // 30 giây cuối đồng hồ đỏ
+};
+const MAU = ["#B8322A", "#2C6FBB", "#2E7D5B", "#C7861B", "#7B3FA0", "#0E8C84", "#C4407E", "#5B6B2E", "#9A5518", "#3D4B5C"];
+const mauNhom = n => MAU[(Math.max(1, n) - 1) % MAU.length];
+
+/* ============================================================
+   TIỆN ÍCH
+   ============================================================ */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const QS = new URLSearchParams(location.search);
+const CHI_BC = QS.get("noi") === "bc";
+const THU = QS.has("thu");
+const xao = a => { for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const luu = (k, v) => { if(THU) return; try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const lay = k => { if(THU) return null; try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
+const bo = k => { try{ localStorage.removeItem(k); }catch(e){} };
+const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
+const giay = ms => { if(ms == null) return "—"; const d = Math.max(0, Math.round(ms / 100)); return String(Math.floor(d / 600)).padStart(2, "0") + ":" + String(Math.floor(d / 10) % 60).padStart(2, "0") + "," + d % 10; };
+let hBao = 0;
+function bao(t, ms = 2600){ const e = $("#bao"); e.textContent = t; e.hidden = false; clearTimeout(hBao); hBao = setTimeout(() => e.hidden = true, ms); }
+function hien(id){ $$("main > section").forEach(s => s.hidden = s.id !== id); window.scrollTo(0, 0); }
+const LOGO = `<svg viewBox="0 0 96 96" aria-hidden="true"><path d="M48 14 L48 82" stroke="currentColor" stroke-width="3" stroke-dasharray="6 6"/>
+  <path d="M44 20 H22 a8 8 0 0 0-8 8 v40 a8 8 0 0 0 8 8 h22 v-12 a6 6 0 0 0 0-12 v-8 a6 6 0 0 1 0-12 z" fill="#B8322A"/>
+  <path d="M52 20 h22 a8 8 0 0 1 8 8 v40 a8 8 0 0 1-8 8 H52 v-12 a6 6 0 0 1 0-12 v-8 a6 6 0 0 0 0-12 z" fill="#E2A625"/></svg>`;
+
+/* ============================================================
+   DỮ LIỆU VÀ LUẬT
+   ============================================================ */
+const CAU = new Map((DB ? DB.cau : []).map(c => [c.id, c]));
+const BUOI = DB ? Object.keys(DB.buoi).map(Number).sort((a, b) => a - b) : [];
+const khoBuoi = (b, daDung) => { const cd = new Set(DB.buoi[b]); return DB.cau.filter(c => cd.has(c.cd) && !daDung.has(c.id)); };
+const choCua = ds => ds.reduce((s, c) => s + c.m.length, 0);
+const tenBuoi = b => { const d = DB.buoi[b]; return `Buổi ${b} — chủ đề ${d[0]}${d.length > 1 ? "–" + d[d.length - 1] : ""}`; };
+
+/* Chọn câu vừa khít số người (câu chính trước, thiếu thì thêm câu dự trữ ngắn trước),
+   rồi phát mảnh sao cho các mảnh của một câu nằm ở các nhóm khác nhau. */
+function phatManh(nguoi, buoi, daDung){
+  const kho = khoBuoi(buoi, daDung);
+  const chinh = xao(kho.filter(c => !c.dt)), du = kho.filter(c => c.dt).sort((a, b) => a.st - b.st);
+  let con = nguoi.length; const chon = [], daManh = new Set();
+  /* hai câu có mảnh giống nhau (giáo trình dẫn một câu ở hai chỗ, dài ngắn khác nhau) không phát chung một vòng */
+  const chuan = m => m.toLowerCase().replace(/[^\p{L}\p{N} ]/gu, "").replace(/\s+/g, " ").trim();
+  const nhat = (ds, chat) => { for(const c of ds){ if(con < 2) return; if(chon.includes(c) || c.m.some(m => daManh.has(chuan(m)))) continue;
+    const n = c.m.length; if(n <= con && !(chat && con - n === 1)){ chon.push(c); con -= n; c.m.forEach(m => daManh.add(chuan(m))); } } };
+  nhat(chinh, true); nhat(du, true); nhat(chinh, false); nhat(du, false);
+  if(con === 1){   /* lẻ một người: đổi một câu hai mảnh lấy một câu ba mảnh còn trống */
+    const ba = chinh.concat(du).find(c => c.m.length === 3 && !chon.includes(c)
+      && !c.m.some(m => daManh.has(chuan(m)))), hai = chon.findIndex(c => c.m.length === 2);
+    if(ba && hai >= 0){ chon[hai].m.forEach(m => daManh.delete(chuan(m))); chon.splice(hai, 1, ba); ba.m.forEach(m => daManh.add(chuan(m))); con = 0; }
+  }
+
+  const nhom = new Map(), nhomCua = {};
+  xao(nguoi.slice()).forEach(p => { nhomCua[p.stt] = p.nhom; if(!nhom.has(p.nhom)) nhom.set(p.nhom, []); nhom.get(p.nhom).push(p.stt); });
+  chon.sort((a, b) => b.m.length - a.m.length);
+  const daMa = new Set(), maMoi = () => { let m; do{ m = String(100 + Math.floor(Math.random() * 900)); }while(daMa.has(m)); daMa.add(m); return m; };
+  const manh = {}, cau = [];
+  chon.forEach((c, ci) => {
+    const daCo = new Set(), ai = [];
+    for(let i = 0; i < c.m.length; i++){
+      let tot = null;
+      nhom.forEach((ds, g) => { if(!ds.length) return; const k = [daCo.has(g) ? 0 : 1, ds.length, Math.random()];
+        if(!tot || k[0] > tot.k[0] || (k[0] === tot.k[0] && (k[1] > tot.k[1] || (k[1] === tot.k[1] && k[2] > tot.k[2])))) tot = {g, k}; });
+      daCo.add(tot.g); ai.push(nhom.get(tot.g).pop());
+    }
+    ai.forEach((s, i) => manh[s] = [ci, i, maMoi(), nhomCua[s]]);
+    cau.push({id: c.id, s: ai});
+  });
+  const trong = {}; nhom.forEach(ds => ds.forEach(s => trong[s] = nhomCua[s]));
+  return {cau, manh, trong};
+}
+
+/* bảng một vòng: tỷ lệ thành viên ghép xong, bằng nhau thì nhóm hoàn tất sớm hơn xếp trên */
+function bangVong(chia, ghep, batDau){
+  const g = {};
+  Object.entries(chia.manh).forEach(([s, [ci, , , n]]) => {
+    const o = g[n] || (g[n] = {nhom: n, co: 0, xong: 0, cuoi: null}); o.co++;
+    const x = ghep[ci]; if(x){ o.xong++; const t = x.luc - batDau; o.cuoi = o.cuoi == null ? t : Math.max(o.cuoi, t); }
+  });
+  return Object.values(g).map(o => Object.assign(o, {tl: o.co ? o.xong / o.co : 0}))
+    .sort((a, b) => b.tl - a.tl || (a.cuoi ?? 1e12) - (b.cuoi ?? 1e12) || a.nhom - b.nhom);
+}
+function bangChung(kq){
+  const g = {};
+  Object.values(kq || {}).forEach(bang => bang.forEach(o => { const x = g[o.nhom] || (g[o.nhom] = {nhom: o.nhom, tl: 0, cuoi: 0, xong: 0, co: 0});
+    x.tl += o.tl; x.cuoi += o.cuoi ?? 1e9; x.xong += o.xong; x.co += o.co; }));
+  return Object.values(g).sort((a, b) => b.tl - a.tl || a.cuoi - b.cuoi || a.nhom - b.nhom);
+}
+const pt = x => Math.round(x * 100) + "%";
+
+/* ============================================================
+   ĐƯỜNG NỐI GIỮA CÁC MÁY (chép từ game Nhanh! / Thước Kẻ — MQTT công cộng,
+   mỗi đường dẫn là một "tài liệu" giữ lại trên máy chủ; ?noi=bc để
+   các tab/khung của một trình duyệt nói chuyện trực tiếp, không cần mạng)
+   ============================================================ */
+const MAY_CHU = [{url: "wss://broker.emqx.io:8084/mqtt"}, {url: "wss://broker.hivemq.com:8884/mqtt"}, {url: "wss://public.cloud.shiftr.io/mqtt", user: "public", pass: "public"}];
+const KHONG_GIAN = "hanu-pol1001/mot-nua/v1/";
+function taoMQTT(cfg, onMsg, onState){
+  let ws = null, ok = false, buf = new Uint8Array(0), pid = 0, ping = null, lui = 1000;
+  const subs = new Set(), cho = new Map(), te = new TextEncoder(), td = new TextDecoder();
+  const vlen = n => { const o = []; do{ let b = n % 128; n = Math.floor(n / 128); if(n > 0) b |= 128; o.push(b); }while(n > 0); return o; };
+  const chu = x => { const b = te.encode(x); return [b.length >> 8, b.length & 255].concat(Array.from(b)); };
+  const goi = (h, body) => { if(!ws || ws.readyState !== 1) return false; ws.send(new Uint8Array([h].concat(vlen(body.length), body))); return true; };
+  const moiId = () => { pid = pid % 65535 + 1; return pid; };
+  function dangKy(f){ const id = moiId(); goi(0x82, [id >> 8, id & 255].concat(chu(f), [1])); return id; }
+  function ketNoi(){
+    try{ ws = new WebSocket(cfg.url, ["mqtt"]); }catch(e){ henLai(); return; }
+    ws.binaryType = "arraybuffer";
+    ws.onopen = () => { let co = 0x02; let pl = chu("mn" + Math.random().toString(36).slice(2, 12));
+      if(cfg.user){ co |= 0x80; pl = pl.concat(chu(cfg.user)); } if(cfg.pass){ co |= 0x40; pl = pl.concat(chu(cfg.pass)); }
+      goi(0x10, chu("MQTT").concat([4, co, 0, 30], pl)); };
+    ws.onmessage = e => { const d = new Uint8Array(e.data), n = new Uint8Array(buf.length + d.length); n.set(buf); n.set(d, buf.length); buf = n; tach(); };
+    ws.onclose = () => { const truoc = ok; ok = false; ws = null; buf = new Uint8Array(0); clearInterval(ping); cho.forEach(f => f(false)); cho.clear(); if(truoc) onState(); henLai(); };
+    ws.onerror = () => { try{ ws && ws.close(); }catch(e){} };
+  }
+  function henLai(){ setTimeout(ketNoi, lui); lui = Math.min(lui * 2, 15000); }
+  function tach(){ for(;;){ if(buf.length < 2) return; let m = 1, len = 0, i = 1, b;
+    do{ if(i >= buf.length) return; b = buf[i++]; len += (b & 127) * m; m *= 128; }while(b & 128);
+    if(buf.length < i + len) return; const h = buf[0], p = buf.slice(i, i + len); buf = buf.slice(i + len); try{ xuLy(h, p); }catch(e){} } }
+  function xuLy(h, p){ const t = h >> 4;
+    if(t === 2){ if(p[1] === 0){ ok = true; lui = 1000; subs.forEach(dangKy); clearInterval(ping); ping = setInterval(() => goi(0xC0, []), 25000); onState(); } else { try{ ws.close(); }catch(e){} } }
+    else if(t === 3){ const qos = (h >> 1) & 3, tl = (p[0] << 8) | p[1]; const topic = td.decode(p.subarray(2, 2 + tl)); let o = 2 + tl;
+      if(qos > 0){ const id = (p[o] << 8) | p[o + 1]; o += 2; goi(0x40, [id >> 8, id & 255]); } onMsg(topic, td.decode(p.subarray(o))); }
+    else if(t === 4 || t === 9){ const id = (p[0] << 8) | p[1], f = cho.get(id); if(f){ cho.delete(id); f(true); } } }
+  const doi = (id, r, ms) => { cho.set(id, r); setTimeout(() => { if(cho.delete(id)) r(false); }, ms); };
+  return { get ok(){ return ok; }, batDau: ketNoi,
+    sub(f){ if(subs.has(f)) return Promise.resolve(true); subs.add(f); if(!ok) return Promise.resolve(false); return new Promise(r => doi(dangKy(f), r, 4000)); },
+    pub(topic, text){ return new Promise(r => { if(!ok) return r(false); const id = moiId();
+      const pl = chu(topic).concat([id >> 8, id & 255], Array.from(te.encode(text))); if(!goi(0x33, pl)) return r(false); doi(id, r, 6000); }); } };
+}
+const SYNC = (() => {
+  const kho = new Map(), nghe = new Set(), may = []; let bc = null, batDauLuc = 0, baoDoi = () => {};
+  const dc = p => KHONG_GIAN + p;
+  const khop = (f, t) => { if(f.endsWith("/+")){ const g = f.slice(0, -1); return t.startsWith(g) && t.length > g.length && !t.slice(g.length).includes("/"); } return f === t; };
+  function nhan(t, text){ if(!t.startsWith(KHONG_GIAN) || !text) return; let r; try{ r = JSON.parse(text); }catch(e){ return; }
+    if(!r || typeof r.t !== "number" || typeof r.v !== "object") return; const cu = kho.get(t); if(cu && cu.t >= r.t) return;
+    kho.set(t, r); nghe.forEach(l => { if(khop(l.f, t)) try{ l.cb(); }catch(e){ console.error(e); } }); }
+  const coMay = () => CHI_BC || may.some(m => m.ok);
+  const cho = (dk, ms) => new Promise(r => { if(dk()) return r(true); const t0 = Date.now(), iv = setInterval(() => { if(dk()){ clearInterval(iv); r(true); } else if(Date.now() - t0 > ms){ clearInterval(iv); r(false); } }, 100); });
+  async function sub(f){ if(bc) bc.postMessage({k: "hoi", f}); await Promise.all(may.map(m => m.sub(f))); }
+  function snap(p){ const t = dc(p), r = kho.get(t); return {exists: !!r, data: () => r ? r.v : undefined}; }
+  let tCuoi = 0;
+  /* ghi ngay vào máy mình (giao diện không phải chờ mạng), rồi gửi đi; mất mạng thì thử lại */
+  async function ghi(p, v){ const t = dc(p), cu = kho.get(t); tCuoi = Math.max(Date.now(), tCuoi + 1, cu ? cu.t + 1 : 0); const moc = tCuoi, tx = JSON.stringify({t: moc, v});
+    nhan(t, tx); if(bc) bc.postMessage({k: "pub", t, tx}); if(CHI_BC) return;
+    for(let lan = 0; lan < 10; lan++){
+      if(!coMay()) await cho(coMay, 8000);
+      const kq = await Promise.all(may.map(m => m.pub(t, tx))); if(kq.some(Boolean)) return;
+      await new Promise(r => setTimeout(r, 1500)); const nay = kho.get(t); if(nay && nay.t !== moc) return; }
+    throw new Error("không gửi được"); }
+  function ngheDoc(p, cb){ const t = dc(p), l = {f: t, cb: () => cb(snap(p))}; nghe.add(l); sub(t); if(kho.has(t)) setTimeout(() => { if(nghe.has(l)) l.cb(); }, 0); return () => nghe.delete(l); }
+  function ngheBo(p, cb){ const f = dc(p) + "/+", g = f.slice(0, -1);
+    const l = {f, cb: () => { const docs = []; kho.forEach((r, t) => { if(khop(f, t)) docs.push({id: t.slice(g.length), data: () => r.v}); }); cb({docs}); }};
+    nghe.add(l); sub(f); setTimeout(() => { if(nghe.has(l)) l.cb(); }, 0); return () => nghe.delete(l); }
+  return { coMay, dangThu: () => !coMay() && Date.now() - batDauLuc < 9000,
+    batDau(onDoi){ baoDoi = onDoi || baoDoi; batDauLuc = Date.now();
+      if("BroadcastChannel" in window){ bc = new BroadcastChannel("mot-nua");
+        bc.onmessage = e => { const d = e.data || {}; if(d.k === "pub") nhan(d.t, d.tx); else if(d.k === "hoi") kho.forEach((r, t) => { if(khop(d.f, t)) bc.postMessage({k: "pub", t, tx: JSON.stringify(r)}); }); }; }
+      if(!CHI_BC) MAY_CHU.forEach(c => { const m = taoMQTT(c, nhan, () => baoDoi()); may.push(m); m.batDau(); });
+      setTimeout(() => baoDoi(), 9500); baoDoi(); },
+    doc: p => ({ set: v => ghi(p, v), onSnapshot: cb => ngheDoc(p, cb) }),
+    collection: p => ({ onSnapshot: cb => ngheBo(p, cb) }) };
+})();
+let MANG = false;
+function batMang(){ if(MANG) return; MANG = true; SYNC.batDau(veMang); setInterval(veMang, 1500); }
+function veMang(){ const on = SYNC.coMay(), dang = !on && SYNC.dangThu();
+  const html = `<span class="dot ${on ? "on" : dang ? "dang" : ""}"></span>` + (on ? (CHI_BC ? "Nối trong máy" : "Đã nối mạng") : dang ? "Đang nối…" : "Mất mạng — kiểm tra Wi-Fi");
+  $$(".mang").forEach(e => e.innerHTML = html); }
+function docMot(p, ms){ return new Promise(r => { let xong = false, huy = () => {};
+  huy = SYNC.doc(p).onSnapshot(s => { if(xong || !s.exists) return; xong = true; setTimeout(() => huy(), 0); r(s.data()); });
+  setTimeout(() => { if(!xong){ xong = true; huy(); r(null); } }, ms); }); }
+const DUONG = (ma, phien) => { const g = `r/${ma}-${phien}`; return {
+  cfg: `p/${ma}/cfg`, tv: `${g}/tv`, tvMot: s => `${g}/tv/${s}`,
+  chia: k => `${g}/v${k}/chia`, ghep: k => `${g}/v${k}/g`, ghepMot: (k, ci) => `${g}/v${k}/g/${ci}` }; };
+const ghi = (p, v) => SYNC.doc(p).set(v).catch(() => bao("Chưa gửi được — kiểm tra mạng"));
+
+/* địa chỉ cho điện thoại: đang chạy trên mạng thì dùng chính nó; chạy từ tệp thì dùng bản trên GitHub Pages */
+const DIA_CHI_WEB = "https://haianhhadang-collab.github.io/haidv.wargame/mot-nua/";
+const laBanWeb = () => /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[::1\])/.test(location.hostname);
+const diaChiGame = () => laBanWeb() ? location.origin + location.pathname.replace(/index\.html$/, "") : DIA_CHI_WEB;
+let hueQR = null;
+function napQR(){
+  if(!hueQR) hueQR = new Promise(r => { if(window.qrcode) return r(true);
+    const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+    sc.onload = () => r(!!window.qrcode); sc.onerror = () => { hueQR = null; r(false); }; document.head.appendChild(sc); });
+  return hueQR;
+}
+function veQR(el, text){ if(!el) return; napQR().then(ok => { if(!ok || !el.isConnected) return;
+  const q = qrcode(0, "M"); q.addData(text); q.make(); el.innerHTML = q.createSvgTag({cellSize: 4, margin: 1}); }); }
+
+/* ============================================================
+   TRANG ĐẦU
+   ============================================================ */
+function veDau(){
+  const cu = lay("mn-chu"), vao = lay("mn-vao");
+  $("#s-dau").innerHTML = `<div class="man">
+    <div class="logo">${LOGO}<div><h1>Đi tìm một nửa</h1><p class="mo">Câu nói của Hồ Chí Minh trong Giáo trình 2026, mỗi người giữ một mảnh</p></div></div>
+    <div class="o-the"><b>Luật chơi:</b> đọc to mảnh câu của mình, đi tìm người giữ mảnh còn lại, nhập mã của nhau để ghép.
+      <ul class="luat nho">
+        <li>Các mảnh của một câu luôn nằm ở <b>các nhóm khác nhau</b>.</li>
+        <li>Câu dài được cắt ba mảnh — <b>câu cần 3 người phối hợp</b>.</li>
+        <li>Nhập sai mã: máy khóa ${CH.khoaSai} giây.</li>
+        <li>Ghép xong thì đi tìm giúp bạn cùng nhóm. Nhóm có tỷ lệ thành viên ghép xong cao hơn xếp trên; bằng nhau thì nhóm hoàn tất sớm hơn xếp trên.</li>
+        <li>${CH.soVong} vòng, vòng sau phát câu mới.</li></ul></div>
+    <div class="cua">
+      ${vao ? `<button data-k="vaolai"><b>Vào lại phòng ${esc(vao.ma)}</b><span class="mo">STT ${esc(vao.stt)} · nhóm ${esc(vao.nhom)}</span></button>` : ""}
+      <button data-k="vao"><b>Sinh viên — vào phòng</b><span class="mo">Nhập mã phòng trên màn hình, số thứ tự và số nhóm</span></button>
+      <button data-k="tao"><b>Giảng viên — mở phòng</b><span class="mo">Máy chiếu giữ phòng, phát mảnh, tính thứ hạng</span></button>
+      ${cu ? `<button data-k="molai"><b>Mở lại phòng ${esc(cu.ma)}</b><span class="mo">Máy chiếu bị tải lại — tiếp tục phòng đang chơi</span></button>` : ""}
+      <button data-k="thu"><b>Xem thử trên một máy</b><span class="mo">Máy chiếu và vài điện thoại trong cùng một trang, không cần mạng</span></button>
+    </div>
+    <p class="nho mo">Kho có ${DB.cau.length} câu Bác nguyên văn. Dữ liệu cập nhật ${esc(DB.capNhat)}.</p></div>`;
+  $$("#s-dau [data-k]").forEach(b => b.onclick = () => {
+    const k = b.dataset.k;
+    if(k === "vao"){ veVao(); hien("s-vao"); }
+    else if(k === "vaolai") vaoPhong(vao.ma, vao.stt, vao.nhom);
+    else if(k === "tao"){ veTao(); hien("s-tao"); }
+    else if(k === "molai") moChu(cu);
+    else if(k === "thu"){ veThu(); hien("s-thu"); }
+  });
+  hien("s-dau");
+}
+
+/* ============================================================
+   MÁY CHIẾU (giảng viên)
+   ============================================================ */
+let H = null, NGUOI = new Map(), CHIA = null, GHEP = {}, huyChia = () => {}, huyGhep = () => {}, nhipChieu = 0;
+function veTao(){
+  const macDinh = lay("mn-buoi") || 8;
+  $("#s-tao").innerHTML = `<div class="man"><button class="nut phu nho" id="t-ve">← Trang đầu</button>
+    <h2>Mở phòng</h2>
+    <label class="o" for="t-buoi">Buổi đang dạy — game trộn câu của mọi chủ đề từ đầu đến buổi này</label>
+    <select id="t-buoi">${BUOI.map(b => `<option value="${b}"${b === macDinh ? " selected" : ""}>${esc(tenBuoi(b))} · ${choCua(khoBuoi(b, new Set()))} chỗ</option>`).join("")}</select>
+    <label class="o" for="t-phut">Phút mỗi vòng</label>
+    <input id="t-phut" type="number" min="1" max="15" value="${CH.phut}" inputmode="numeric">
+    <p class="nho mo">"Chỗ" là số người kho câu đủ phát cho một vòng (mỗi mảnh một người). Hai vòng không lặp câu.</p>
+    <div class="hang-nut"><button class="nut nut-lon" id="t-tao">Mở phòng</button></div></div>`;
+  $("#t-ve").onclick = veDau;
+  $("#t-tao").onclick = () => { const b = +$("#t-buoi").value; luu("mn-buoi", b);
+    taoPhong({buoi: b, phut: Math.max(1, Math.min(15, parseInt($("#t-phut").value, 10) || CH.phut))}); };
+}
+function taoPhong(o){
+  moChu({ma: o.ma || String(1000 + Math.floor(Math.random() * 9000)), phien: Date.now().toString(36),
+    buoi: o.buoi, phut: o.phut, tt: "cho", vong: 0, het: 0, batDau: 0, dung: [], kq: {}});
+  ghiCfg();
+}
+function moChu(h){
+  batMang(); H = h; NGUOI = new Map(); CHIA = null; GHEP = {};
+  const D = DUONG(H.ma, H.phien);
+  SYNC.collection(D.tv).onSnapshot(s => { NGUOI = new Map(s.docs.map(d => [+d.id, d.data()])); veChieu(); });
+  if(H.vong) ngheVong(H.vong);
+  clearInterval(nhipChieu); nhipChieu = setInterval(nhip, 500);
+  hien("s-chieu"); veChieu();
+}
+function ghiCfg(){ luu("mn-chu", H);
+  ghi(DUONG(H.ma, H.phien).cfg, {ma: H.ma, phien: H.phien, buoi: H.buoi, tt: H.tt, vong: H.vong, het: H.het, batDau: H.batDau, kq: H.kq, gio: Date.now()}); }
+function ngheVong(k){
+  const D = DUONG(H.ma, H.phien); huyChia(); huyGhep();
+  huyChia = SYNC.doc(D.chia(k)).onSnapshot(s => { if(s.exists){ CHIA = s.data(); veChieu(); } });
+  huyGhep = SYNC.collection(D.ghep(k)).onSnapshot(s => { GHEP = {}; s.docs.forEach(d => GHEP[d.id] = d.data()); veChieu(); });
+}
+function phat(){
+  const nguoi = [...NGUOI.values()].filter(p => p && p.stt && p.nhom);
+  if(nguoi.length < 2){ bao("Cần ít nhất 2 người trong phòng"); return; }
+  const k = H.vong + 1, chia = phatManh(nguoi, H.buoi, new Set(H.dung));
+  chia.k = k; CHIA = chia; GHEP = {};
+  H.dung = H.dung.concat(chia.cau.map(c => c.id));
+  H.vong = k; H.tt = "choi"; H.batDau = Date.now(); H.het = H.batDau + H.phut * 60000;
+  ghi(DUONG(H.ma, H.phien).chia(k), chia); ngheVong(k); ghiCfg(); veChieu();
+}
+function ketThucVong(){
+  if(!H || H.tt !== "choi") return;
+  H.kq[H.vong] = CHIA ? bangVong(CHIA, GHEP, H.batDau) : [];
+  H.tt = H.vong >= CH.soVong ? "ket" : "xong"; ghiCfg(); veChieu();
+}
+function nhip(){
+  if(!H || H.tt !== "choi") return;
+  const tong = CHIA ? CHIA.cau.length : 0, xong = Object.keys(GHEP).length;
+  if(Date.now() >= H.het || (tong && xong >= tong)) ketThucVong();
+  else { const e = $("#c-dh"); if(e){ const con = H.het - Date.now(); e.textContent = mmss(con); e.classList.toggle("cuoi", con <= CH.giayCuoi * 1000); } }
+}
+function thanhNhomChieu(ds){
+  const g = {}; ds.forEach(p => g[p.nhom] = (g[p.nhom] || 0) + 1);
+  return Object.keys(g).map(Number).sort((a, b) => a - b).map(n => `<span style="--mau:${mauNhom(n)}">Nhóm ${n} · ${g[n]}</span>`).join("");
+}
+function bangHTML(bang, chung){
+  return `<table class="bd"><tr><th>Hạng</th><th>Nhóm</th><th>Ghép xong</th><th>${chung ? "Cộng tỷ lệ hai vòng" : "Tỷ lệ"}</th><th>${chung ? "Cộng thời gian hoàn tất" : "Hoàn tất lúc"}</th></tr>
+    ${bang.map((o, i) => `<tr class="${i === 0 ? "hang1" : ""}"><td class="so">${i + 1}</td><td><span style="color:${mauNhom(o.nhom)}">■</span> Nhóm ${o.nhom}</td>
+      <td class="so">${o.xong}/${o.co}</td><td class="so">${chung ? o.tl.toFixed(2).replace(".", ",") : pt(o.tl)}</td><td class="so">${chung ? giay(o.cuoi >= 1e9 ? null : o.cuoi) : giay(o.cuoi)}</td></tr>`).join("")}</table>`;
+}
+function veChieu(){
+  if(!H || $("#s-chieu").hidden) return;
+  const ds = [...NGUOI.values()].filter(p => p && p.stt), url = diaChiGame() + "?p=" + H.ma;
+  const dau = `<div class="chieu-dau">${LOGO.replace("<svg", '<svg style="width:2.6em;height:2.6em"')}<h1>Đi tìm một nửa</h1>
+    <span class="mo">${esc(tenBuoi(H.buoi))}</span><span class="mang"></span>
+    <button class="nut phu nho" id="c-dong">Đóng phòng</button></div>`;
+  let than = "";
+  if(H.tt === "cho" || H.tt === "xong"){
+    const kho = khoBuoi(H.buoi, new Set(H.dung)), cho = choCua(kho), choDt = choCua(kho.filter(c => c.dt)), thieu = ds.length - cho;
+    than = `<div class="cho"><div>
+      ${H.tt === "xong" ? `<h2>Kết quả vòng ${H.vong}</h2>${bangHTML(H.kq[H.vong] || [])}<h2 style="margin-top:1em">Vòng ${H.vong + 1} — câu mới</h2>` : `<h2>Quét mã để vào phòng</h2>`}
+      <p>Mã phòng <span class="ma-phong">${esc(H.ma)}</span></p>
+      <p class="mo nho mono">${esc(url)}</p>
+      <p><span class="dem">${ds.length}</span> người đã vào</p>
+      <div class="chip-nhom">${thanhNhomChieu(ds)}</div>
+      <p class="mo">Kho câu${H.vong ? " còn lại" : ""} đủ <b>${cho}</b> chỗ cho vòng này${choDt ? ` — trong đó ${choDt} chỗ là câu dự trữ trên 60 chữ, chỉ phát khi câu ngắn hơn không đủ` : ""}.</p>
+      ${thieu > 0 ? `<div class="canh">Thiếu ${thieu} chỗ: ${thieu} người sẽ không có mảnh ở vòng này — đi tìm giúp bạn cùng nhóm.</div>` : ""}
+      <div class="hang-nut"><button class="nut vang nut-lon" id="c-phat" style="font-size:1.1em"${ds.length < 2 ? " disabled" : ""}>Phát mảnh vòng ${H.vong + 1}</button></div>
+      ${H.tt === "xong" ? `<button class="nut phu nho" id="c-ket">Dừng ở đây — xem kết quả chung</button>` : ""}
+      </div><div class="qr" id="c-qr"></div></div>`;
+  }
+  else if(H.tt === "choi"){
+    const tong = CHIA ? CHIA.cau.length : 0, xong = Object.keys(GHEP).length;
+    const bang = CHIA ? bangVong(CHIA, GHEP, H.batDau).sort((a, b) => a.nhom - b.nhom) : [];
+    const chua = CHIA ? CHIA.cau.map((c, ci) => ({ci, c})).filter(x => !GHEP[x.ci]) : [];
+    const trong = CHIA ? Object.keys(CHIA.trong || {}).length : 0;
+    than = `<div class="chieu-dau" style="margin-top:.6em"><h2 style="flex:1;margin:0">Vòng ${H.vong}</h2><span class="dh-lon" id="c-dh">${mmss(H.het - Date.now())}</span></div>
+      <div class="tong"><i style="width:${tong ? xong / tong * 100 : 0}%"></i></div>
+      <p><b>${xong}/${tong}</b> câu đã ghép${trong ? ` · ${trong} người không có mảnh vòng này` : ""}</p>
+      <div class="luoi-nhom">${bang.map(o => `<div class="o-nhom" style="--mau:${mauNhom(o.nhom)}"><b>Nhóm ${o.nhom}</b>
+        <div class="tl">${pt(o.tl)}</div><span class="mo">${o.xong}/${o.co} ghép xong</span><div class="vach"><i style="width:${o.tl * 100}%"></i></div></div>`).join("")}</div>
+      <div class="hang-nut"><button class="nut phu" id="c-them">+1 phút</button><button class="nut" id="c-het">Kết thúc vòng ngay</button></div>
+      ${chua.length ? `<h3>Câu chưa ghép</h3><p class="mo nho">Thiếu người (vắng, rớt mạng)? Chạm hai lần vào câu để <b>ghép hộ</b>.</p>
+        <div class="chua">${chua.map(x => `<button data-ci="${x.ci}">${x.c.s.map(s => "STT " + s).join(" + ")}</button>`).join("")}</div>` : ""}`;
+  }
+  else if(H.tt === "ket"){
+    const so = Object.keys(H.kq).length;
+    than = `<h2>Kết quả chung${so > 1 ? ` — ${so} vòng` : ""}</h2>${so > 1 ? bangHTML(bangChung(H.kq), true) : bangHTML(H.kq[1] || [])}
+      ${Object.keys(H.kq).map(k => `<details><summary>Vòng ${k}</summary>${bangHTML(H.kq[k])}</details>`).join("")}
+      <p class="mo nho">Xếp theo tỷ lệ thành viên ghép xong; bằng nhau thì nhóm hoàn tất sớm hơn xếp trên.</p>`;
+  }
+  $("#s-chieu").innerHTML = `<div class="chieu">${dau}${than}</div>`;
+  veMang();
+  veQR($("#c-qr"), url);
+  const b = id => $(id);
+  if(b("#c-phat")) b("#c-phat").onclick = phat;
+  if(b("#c-ket")) b("#c-ket").onclick = () => { H.tt = "ket"; ghiCfg(); veChieu(); };
+  if(b("#c-them")) b("#c-them").onclick = () => { H.het += 60000; ghiCfg(); };
+  if(b("#c-het")) b("#c-het").onclick = ketThucVong;
+  if(b("#c-dong")) b("#c-dong").onclick = () => { if(!confirm("Đóng phòng " + H.ma + "? Kết quả trên màn hình sẽ mất.")) return;
+    clearInterval(nhipChieu); bo("mn-chu"); H = null; veDau(); };
+  $$("#s-chieu .chua button").forEach(e => e.onclick = () => {
+    if(!e.classList.contains("hoi")){ e.classList.add("hoi"); e.textContent = "Chạm lần nữa: ghép hộ"; return; }
+    ghi(DUONG(H.ma, H.phien).ghepMot(H.vong, e.dataset.ci), {luc: Date.now(), boi: 0, ho: true}); });
+}
+
+/* ============================================================
+   ĐIỆN THOẠI (sinh viên)
+   ============================================================ */
+let M = null;
+function veVao(loi){
+  const cu = lay("mn-vao") || {};
+  $("#s-vao").innerHTML = `<div class="man"><button class="nut phu nho" id="v-ve">← Trang đầu</button>
+    <div class="logo">${LOGO}<h1>Đi tìm một nửa</h1></div>
+    <label class="o" for="v-ma">Mã phòng (4 chữ số trên máy chiếu)</label><input id="v-ma" inputmode="numeric" maxlength="4" value="${esc(QS.get("p") || "")}">
+    <label class="o" for="v-stt">Số thứ tự trong danh sách lớp</label><input id="v-stt" type="number" min="1" max="200" inputmode="numeric" value="${esc(cu.stt || "")}">
+    <label class="o" for="v-nhom">Số nhóm</label><input id="v-nhom" type="number" min="1" max="30" inputmode="numeric" value="${esc(cu.nhom || "")}">
+    <p class="loi" id="v-loi"${loi ? "" : " hidden"}>${esc(loi || "")}</p>
+    <div class="hang-nut"><button class="nut nut-lon" id="v-vao">Vào phòng</button></div></div>`;
+  $("#v-ve").onclick = veDau;
+  $("#v-vao").onclick = () => {
+    const ma = $("#v-ma").value.replace(/\D/g, ""), stt = parseInt($("#v-stt").value, 10), nhom = parseInt($("#v-nhom").value, 10);
+    if(ma.length !== 4 || !(stt > 0) || !(nhom > 0)){ $("#v-loi").hidden = false; $("#v-loi").textContent = "Điền đủ mã phòng (4 chữ số), số thứ tự và số nhóm."; return; }
+    vaoPhong(ma, stt, nhom);
+  };
+}
+async function vaoPhong(ma, stt, nhom){
+  batMang(); hien("s-dt");
+  $("#s-dt").innerHTML = `<div class="man"><p>Đang tìm phòng ${esc(ma)}… <span class="mang"></span></p></div>`; veMang();
+  let cfg = null;
+  for(let lan = 0; lan < (THU ? 20 : 3) && !cfg; lan++) cfg = await docMot(`p/${ma}/cfg`, THU ? 1500 : 8000);
+  if(!cfg){ veVao(`Không thấy phòng ${ma}. Xem lại mã trên máy chiếu và mạng Wi-Fi.`); hien("s-vao"); return; }
+  const may = (lay("mn-may") || Math.random().toString(36).slice(2, 10)); luu("mn-may", may);
+  M = {ma, stt: +stt, nhom: +nhom, may, cfg, lech: (cfg.gio || Date.now()) - Date.now(), chia: null, ghep: {}, k: 0, khoa: 0, doc: lay("mn-doc") || {}};
+  luu("mn-vao", {ma, stt: M.stt, nhom: M.nhom});
+  const D = DUONG(ma, cfg.phien);
+  ghi(D.tvMot(M.stt), {stt: M.stt, nhom: M.nhom, may, luc: Date.now()});
+  SYNC.doc(D.tvMot(M.stt)).onSnapshot(s => { const v = s.data(); M.trung = !!(v && v.may !== M.may); vePhone(); });
+  SYNC.doc(`p/${ma}/cfg`).onSnapshot(s => { if(!s.exists) return; const c = s.data();
+    if(c.phien !== M.cfg.phien){ M = null; vaoPhong(ma, stt, nhom); return; }
+    M.cfg = c; if(c.gio) M.lech = c.gio - Date.now(); if(c.vong && c.vong !== M.k) ngheVongPhone(c.vong); vePhone(); });
+  setInterval(dongHoPhone, 500);
+}
+let huyChiaP = () => {}, huyGhepP = () => {};
+function ngheVongPhone(k){
+  const D = DUONG(M.ma, M.cfg.phien); M.k = k; M.chia = null; M.ghep = {}; huyChiaP(); huyGhepP();
+  huyChiaP = SYNC.doc(D.chia(k)).onSnapshot(s => { if(s.exists){ M.chia = s.data(); vePhone(); } });
+  huyGhepP = SYNC.collection(D.ghep(k)).onSnapshot(s => { const g = {}; s.docs.forEach(d => g[d.id] = d.data()); M.ghep = g; vePhone(); });
+}
+const bayGio = () => Date.now() + (M ? M.lech : 0);
+function dongHoPhone(){
+  const e = $("#p-dh"); if(!e || !M || M.cfg.tt !== "choi") return;
+  const con = M.cfg.het - bayGio(), tong = (M.cfg.het - M.cfg.batDau) || 1;
+  e.querySelector(".so").textContent = mmss(con); e.querySelector("i").style.width = Math.max(0, con / tong * 100) + "%";
+  e.classList.toggle("cuoi", con <= CH.giayCuoi * 1000);
+  const k = $("#p-khoa");
+  if(k){ const s = Math.ceil((M.khoa - Date.now()) / 1000); if(s > 0) k.textContent = `Chưa đúng — chờ ${s} giây rồi nhập lại`; else vePhone(); }
+  const x = $("#p-xong");
+  if(x && x.disabled){ const s = Math.ceil((M.docDen - Date.now()) / 1000); if(s > 0) x.textContent = `Đọc hết câu… ${s}`; else { x.disabled = false; x.textContent = "Xong — đi tìm giúp bạn cùng nhóm"; } }
+}
+function cauCuaToi(){
+  if(!M.chia || !M.chia.manh[M.stt]) return null;
+  const [ci, i, ma] = M.chia.manh[M.stt], c = M.chia.cau[ci];
+  return {ci, i, ma, c, cau: CAU.get(c.id)};
+}
+function cauDuHTML(t){
+  return `<div class="cau-du"><span class="tick">✓ Ghép xong</span>
+    <blockquote>“${t.cau.m.map((m, j) => j === t.i ? `<mark>${esc(m)}</mark>` : esc(m)).join(" ")}”</blockquote>
+    <div class="nguon">Hồ Chí Minh: <i>Toàn tập</i>, ${esc(t.cau.tt)} — dẫn trong Giáo trình 2026</div>
+    <div class="y"><b>Dẫn chứng cho ý</b>${esc(t.cau.y)}</div></div>`;
+}
+function nhomToiHTML(){
+  if(!M.chia) return "";
+  const cung = Object.entries(M.chia.manh).filter(([, v]) => v[3] === M.nhom), chua = cung.filter(([, v]) => !M.ghep[v[0]]).map(([s]) => s);
+  return `<div class="o-the"><b>Nhóm ${M.nhom}: ${cung.length - chua.length}/${cung.length} đã ghép</b>
+    ${chua.length ? `<p class="mo">Chưa ghép: STT ${chua.join(" · ")}</p>` : `<p class="mo">Cả nhóm đã ghép xong.</p>`}</div>`;
+}
+function vePhone(){
+  if(!M || $("#s-dt").hidden) return;
+  const c = M.cfg, mau = mauNhom(M.nhom);
+  const thanh = `<div class="thanh" style="--mau:${mau}"><span>STT ${M.stt} · Nhóm ${M.nhom}</span><span class="sp"></span><span class="mang" style="color:#fff"></span></div>
+    ${M.trung ? `<p class="loi nho">STT ${M.stt} vừa được vào từ một máy khác — kiểm tra lại số thứ tự.</p>` : ""}`;
+  let than = "";
+  if(c.tt === "cho") than = `<h2>Đã vào phòng ${esc(M.ma)}</h2><p>Chờ giảng viên phát mảnh.</p>
+    <p class="mo nho">Khi có mảnh: đọc to mảnh câu của mình, đi tìm người giữ mảnh còn lại ở các nhóm khác, nhập mã của nhau để ghép.</p>`;
+  else if(c.tt === "choi"){
+    const dh = `<div class="dongho" id="p-dh"><span>Vòng ${c.vong}</span><span class="so">--:--</span><span class="vach"><i></i></span></div>`;
+    const t = M.chia && M.k === c.vong ? cauCuaToi() : null;
+    if(!M.chia || M.k !== c.vong) than = dh + `<p>Đang nhận mảnh…</p>`;
+    else if(!t) than = dh + `<div class="o-the"><b>Vòng này không có mảnh</b><p>${M.chia.trong && M.chia.trong[M.stt] ? "Kho câu không đủ cho mọi người ở vòng này." : "Vào phòng sau khi giảng viên đã phát mảnh — chờ vòng sau."} Đi tìm giúp bạn cùng nhóm.</p></div>` + nhomToiHTML();
+    else if(M.ghep[t.ci]){
+      const key = M.cfg.phien + ":" + c.vong;
+      if(!M.doc[key]){ if(!M.docDen) M.docDen = Date.now() + CH.khoaDoc * 1000;
+        than = dh + cauDuHTML(t) + `<button class="nut nut-lon" id="p-xong" disabled>Đọc hết câu…</button>`; }
+      else than = dh + cauDuHTML(t) + nhomToiHTML();
+    } else {
+      const n = t.cau.m.length, khoa = M.khoa > Date.now();
+      than = dh + `<div class="manh" style="--mau:${mau}"><div class="nhan"><span>Mảnh ${t.i + 1} trong ${n}</span>${n === 3 ? `<span class="ba">Câu cần 3 người phối hợp</span>` : ""}</div>
+        <blockquote>“${t.i ? "… " : ""}${esc(t.cau.m[t.i])}${t.i < n - 1 ? " …" : ""}”</blockquote></div>
+        <div class="ma-toi"><span>Mã ghép của mình</span><span class="so">${esc(t.ma)}</span></div>
+        <label class="o">${n === 3 ? "Nhập mã của hai người giữ hai mảnh còn lại" : "Nhập mã của người giữ mảnh còn lại"}</label>
+        ${khoa ? `<div class="khoa" id="p-khoa">Chưa đúng — chờ ${CH.khoaSai} giây rồi nhập lại</div>` :
+          `<div class="nhap">${Array.from({length: n - 1}, (_, j) => `<input class="p-ma" inputmode="numeric" maxlength="3" aria-label="Mã ${j + 1}" value="${esc((M.nhapDo || [])[j] || "")}">`).join("")}</div>
+           <button class="nut nut-lon" id="p-ghep">Ghép</button>`}
+        <p class="mo nho">Các mảnh còn lại ở các nhóm khác — đọc to mảnh của mình để tìm.</p>`;
+    }
+  }
+  else if(c.tt === "xong" || c.tt === "ket"){
+    const ket = c.tt === "ket", bang = ket ? (Object.keys(c.kq || {}).length > 1 ? bangChung(c.kq) : (c.kq || {})[1] || []) : (c.kq || {})[c.vong] || [];
+    const hang = bang.findIndex(o => o.nhom === M.nhom), t = M.chia && M.k === c.vong ? cauCuaToi() : null;
+    than = `<h2>${ket ? "Kết thúc" : `Hết vòng ${c.vong}`}</h2>
+      ${hang >= 0 ? `<div class="o-the"><b style="font-size:1.4rem">Nhóm ${M.nhom}: hạng ${hang + 1}/${bang.length}</b><p class="mo">${ket ? "Kết quả chung" : `Vòng ${c.vong}`} — xem bảng trên máy chiếu.</p></div>` : ""}
+      ${t && M.ghep[t.ci] ? cauDuHTML(t) : t ? `<div class="o-the"><b>Câu của vòng này</b><p>“${esc(t.cau.m.join(" "))}”</p><p class="mo nho">Hồ Chí Minh: <i>Toàn tập</i>, ${esc(t.cau.tt)} · ${esc(t.cau.y)}</p></div>` : ""}
+      ${ket ? "" : `<p class="mo">Chờ giảng viên phát mảnh vòng ${c.vong + 1}.</p>`}`;
+  }
+  $("#s-dt").innerHTML = `<div class="man">${thanh}${than}</div>`;
+  veMang(); dongHoPhone();
+  const g = $("#p-ghep"); if(g) g.onclick = ghepThu;
+  $$(".p-ma").forEach((e, j, all) => { e.oninput = () => { e.value = e.value.replace(/\D/g, "").slice(0, 3); (M.nhapDo = M.nhapDo || [])[j] = e.value;
+    if(e.value.length === 3 && all[j + 1]) all[j + 1].focus(); }; e.onkeydown = ev => { if(ev.key === "Enter") ghepThu(); }; });
+  const x = $("#p-xong"); if(x) x.onclick = () => { M.doc[M.cfg.phien + ":" + M.cfg.vong] = 1; luu("mn-doc", M.doc); M.docDen = 0; vePhone(); };
+}
+function ghepThu(){
+  const t = cauCuaToi(); if(!t || M.khoa > Date.now()) return;
+  const ma = $$(".p-ma").map(e => e.value.trim());
+  if(ma.some(m => m.length !== 3)){ bao("Nhập đủ mã ba chữ số"); return; }
+  const ai = ma.map(m => Object.keys(M.chia.manh).find(s => M.chia.manh[s][2] === m));
+  const dung = ai.every(s => s && +s !== M.stt && M.chia.manh[s][0] === t.ci) && new Set(ai).size === ai.length;
+  M.nhapDo = [];
+  if(!dung){ M.khoa = Date.now() + CH.khoaSai * 1000; vePhone(); return; }
+  M.docDen = Date.now() + CH.khoaDoc * 1000;
+  ghi(DUONG(M.ma, M.cfg.phien).ghepMot(M.cfg.vong, t.ci), {luc: bayGio(), boi: M.stt});
+}
+
+/* ============================================================
+   XEM THỬ TRÊN MỘT MÁY (máy chiếu + điện thoại trong khung, ?noi=bc)
+   ============================================================ */
+function veThu(){
+  $("#s-thu").innerHTML = `<div class="man"><button class="nut phu nho" id="x-ve">← Trang đầu</button><h2>Xem thử trên một máy</h2>
+    <p>Máy chiếu và các điện thoại mở trong cùng một trang, nói chuyện với nhau ngay trong trình duyệt, không cần mạng.
+      Bấm <b>Phát mảnh</b> trên khung máy chiếu, rồi đọc mảnh, nhập mã ở từng điện thoại.</p>
+    <label class="o" for="x-buoi">Buổi</label><select id="x-buoi">${BUOI.map(b => `<option value="${b}"${b === 8 ? " selected" : ""}>${esc(tenBuoi(b))}</option>`).join("")}</select>
+    <label class="o" for="x-n">Số điện thoại (2–16)</label><input id="x-n" type="number" min="2" max="16" value="8">
+    <label class="o" for="x-g">Số nhóm</label><input id="x-g" type="number" min="1" max="6" value="3">
+    <div class="hang-nut"><button class="nut nut-lon" id="x-mo">Mở</button></div></div>`;
+  $("#x-ve").onclick = veDau;
+  $("#x-mo").onclick = () => {
+    const n = Math.max(2, Math.min(16, +$("#x-n").value || 8)), g = Math.max(1, Math.min(6, +$("#x-g").value || 3)), b = +$("#x-buoi").value;
+    const ma = String(9000 + Math.floor(Math.random() * 999)), goc = location.href.split("?")[0].split("#")[0];
+    const dt = Array.from({length: n}, (_, i) => `${goc}?noi=bc&thu=1&ma=${ma}&stt=${i + 1}&nhom=${i % g + 1}`);
+    $("#s-thu").innerHTML = `<div class="thu-luoi"><iframe class="may-chieu" src="${goc}?noi=bc&thu=1&chieu=${ma}&buoi=${b}" title="Máy chiếu"></iframe>
+      ${dt.map((u, i) => `<iframe src="${u}" title="Điện thoại ${i + 1}"></iframe>`).join("")}</div>`;
+  };
+}
+
+/* ============================================================
+   KHỞI ĐỘNG
+   ============================================================ */
+if(!DB){ document.body.innerHTML = "<p style='padding:2rem'>Khuôn chưa có dữ liệu — chạy <code>python _KHO-DU-LIEU/cong-cu/tao-game-mot-nua.py</code> rồi mở <code>index.html</code>.</p>"; }
+else if(QS.get("chieu") && THU){ taoPhong({ma: QS.get("chieu"), buoi: +QS.get("buoi") || 8, phut: CH.phut}); }
+else if(QS.get("ma") && QS.get("stt") && QS.get("nhom")){ vaoPhong(QS.get("ma"), +QS.get("stt"), +QS.get("nhom")); }
+else if(QS.get("p")){ veVao(); hien("s-vao"); }
+else veDau();
+</script>
+</body>
+</html>
