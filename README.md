@@ -59,6 +59,18 @@ Ba chế độ: **Đội 2 người** (một máy, chia trái – phải), **Đ�
 
 Chế độ Đội tự do gửi dữ liệu trận qua máy chủ MQTT công cộng, gồm tên người chơi nhập, vị trí tàu và điểm; hai chế độ còn lại không dùng mạng.
 
+## Về Làng Sen
+
+Mỗi nhóm một máy, đi 6 chặng từ cổng làng về nhà tranh Làng Sen; câu hỏi theo chủ đề của buổi học.
+Mỗi chặng một ngã rẽ (câu Đúng/Sai — chọn sai vào ngõ cụt, thêm 3 bước) và một trạm (câu 5 phương án).
+Đúng ngay lần đầu, không xem gợi ý thì được hoa sen. Máy giảng viên mở phòng và chiếu bảng tổng hợp cả lớp.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/ve-lang/
+
+![Mã QR vào Về Làng Sen](ve-lang/qr-vao-game.png)
+
+Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm số nhóm và tiến độ (chặng, hoa sen, số bước); không có họ tên.
+
 ## 1911 — Anh Ba xin làm phụ bếp
 
 Game nhập vai cá nhân trên điện thoại, khoảng 15 phút: vào vai anh Ba xin làm phụ bếp trên con tàu
