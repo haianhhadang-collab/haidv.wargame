@@ -1,0 +1,765 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Hải Trình Ba Mươi Năm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Be+Vietnam+Pro:wght@400;500;600;700&family=Oswald:wght@500;600&display=swap">
+<style>
+/* Giao diện "rừng tuyết – biển sương" (thiết kế lại 10/10/2026 theo bản vẽ trên bảng Design):
+   trời sương, thân cây xanh rêu, bụi cây xám tím, áo vàng nghệ làm điểm nhấn, chữ tiêu đề vẽ tay. */
+:root{
+  color-scheme: light;
+  --sky:#DCE6E9; --snow:#FBFCFB; --snow2:#F2F5F4; --line:#CCD6D6; --line2:#E1E7E7;
+  --teal:#1E4E4A; --teal2:#2B675F; --teal3:#245E58;
+  --ink:#1D2B2C; --dim:#5B6A6B; --dim2:#4C6261;
+  --bush:#3F3A47; --bush2:#5A5463;
+  --mustard:#C9A040; --mustard-d:#8E6B1E; --mustard-l:#EBCB7A; --mustard-t:#6E5214;
+  --rust:#A3422F; --okline:#A87F22; --okbg:#F6EBCB;
+  --display:"Amatic SC", "Patrick Hand", cursive;
+  --body:"Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --label:"Oswald", "Arial Narrow", "Segoe UI", sans-serif;
+}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{background:var(--sky);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+button,input{font:inherit}
+#scene{position:fixed;inset:0;z-index:0;pointer-events:none}
+#scene svg{display:block;width:100%;height:100%}
+#app{position:relative;z-index:1;min-height:100dvh}
+.chip{background:rgba(255,255,255,.72);color:var(--teal);border:1.5px solid var(--teal);border-radius:999px;padding:7px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.chip[aria-pressed="false"]{color:var(--dim)}
+.chip:focus-visible,.btn:focus-visible,.lane:focus-visible,.opt:focus-visible{outline:3px solid var(--mustard);outline-offset:2px}
+.lbl{font-family:var(--label);font-weight:600;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#4C6B6A;margin:16px 0 8px}
+.ico{display:inline-block;width:1.6em;height:1.3em;vertical-align:middle;flex:none}
+
+/* ---------- màn bắt đầu ---------- */
+.start{position:relative;min-height:100dvh;display:flex;flex-direction:column}
+.start-tools{position:absolute;top:14px;right:clamp(16px,4vw,72px);display:flex;gap:10px;z-index:2}
+.route{display:block;width:100%;height:auto;margin-top:6px}
+.startgrid{flex:1;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(340px,500px);gap:clamp(20px,4vw,64px);
+  padding:0 clamp(16px,5vw,92px) 32px;max-width:1760px;width:100%;margin:0 auto;align-items:start}
+.hero{position:relative;isolation:isolate;color:#fff;margin-top:clamp(8px,4vh,60px);padding:28px 10px 30px 0}
+.hero-bg{position:absolute;inset:-30px -70px -40px -60px;width:calc(100% + 130px);height:calc(100% + 70px);z-index:-1}
+.hero h1 span{white-space:nowrap}
+.hero h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(70px,9vw,150px);line-height:.9;letter-spacing:2px;
+  filter:url(#s-chalk);text-shadow:0 2px 18px rgba(40,34,50,.55);text-wrap:balance}
+.hero .yr{margin-top:16px;font-family:var(--label);font-weight:500;font-size:22px;letter-spacing:8px;color:var(--mustard-l);text-shadow:0 1px 8px rgba(40,34,50,.6)}
+.guide{margin-top:clamp(24px,10vh,150px);max-width:740px;background:rgba(251,252,251,.95);border-radius:12px;padding:18px 24px;box-shadow:0 20px 44px rgba(24,52,55,.16)}
+.guide h2{margin:0 0 8px;font-family:var(--label);font-weight:600;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--teal2)}
+.dots{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:15px;line-height:1.45}
+.dots li{display:flex;gap:10px}
+.dots li::before{content:"";flex:none;width:8px;height:8px;margin-top:7px;border-radius:50%;background:var(--mustard)}
+.panel{background:var(--snow);border-radius:14px;padding:24px 28px 26px;box-shadow:0 26px 60px rgba(20,45,48,.24);margin-top:clamp(0px,2vh,30px)}
+.panel h2{margin:0 0 6px;font-family:var(--display);font-weight:700;font-size:46px;line-height:1;color:var(--teal)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+.opt{display:flex;gap:12px;align-items:flex-start;width:100%;text-align:left;padding:10px 14px;border-radius:10px;border:1.5px solid #D2DADA;background:var(--snow2);color:var(--ink);cursor:pointer}
+.opt .dot{flex:none;width:16px;height:16px;margin-top:3px;border-radius:50%;border:2px solid #9AAAA9}
+.opt[aria-checked="true"]{border:2px solid var(--teal);background:#fff}
+.opt[aria-checked="true"] .dot{border-color:var(--teal);background:var(--mustard);box-shadow:inset 0 0 0 3px #fff}
+.opt b{display:block;font-size:16px}
+.opt small{display:block;font-size:13.5px;line-height:1.4;color:var(--dim)}
+.opts.row3 .opt{display:block;padding:9px 12px}
+.opt[aria-disabled="true"]{border-style:dashed;border-color:#C3CDCD;color:#6B7878;cursor:not-allowed}
+.opt[aria-disabled="true"] small{font-size:12px;line-height:1.3;color:#6B7878}
+.tt{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:8px;font-size:12.5px;color:var(--dim)}
+.tt span{font-family:var(--label);font-size:13px;padding:2px 7px;border-radius:6px;background:#EEF2F1;color:var(--ink)}
+.tt span.t{font-family:var(--body);background:none;padding:0;margin-right:4px;color:var(--dim)}
+.names{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.names.one{grid-template-columns:1fr}
+.field label{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--dim2);margin-bottom:5px}
+.field input{width:100%;font-size:16px;padding:11px 12px;border:1.5px solid #CBD5D5;border-radius:10px;background:#fff;color:var(--ink)}
+.field input:focus{outline:2px solid var(--mustard);border-color:var(--teal)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border:0;border-radius:10px;
+  background:var(--mustard);color:#1E2422;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 3px 0 var(--mustard-d)}
+.btn.go{width:100%;height:56px;margin-top:18px;font-size:19px}
+.btn.line{background:transparent;color:var(--teal);border:1.5px solid var(--teal);box-shadow:none;font-weight:600}
+.btn.sm{min-height:40px;font-size:14px;padding:0 14px}
+.btn.warn{background:var(--rust);color:#fff;box-shadow:none}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.msg{font-size:13.5px;margin:8px 0 0;min-height:1.3em}
+.msg.bad{color:var(--rust)} .msg.good{color:#3E7A3A}
+@media (max-width:1080px){
+  .startgrid{grid-template-columns:1fr}
+  .hero h1{font-size:clamp(56px,13vw,120px)}
+  .hero-bg{inset:-20px -16px -24px -16px;width:calc(100% + 32px);height:calc(100% + 44px)}
+  .guide{margin-top:18px}
+}
+@media (max-width:700px){.route{display:none}.start-tools{position:static;justify-content:flex-end;padding:12px 16px 4px}}
+@media (max-width:520px){.opts.row3,.names{grid-template-columns:1fr}}
+
+/* ---------- khung chung khi chơi ---------- */
+.wrap{max-width:1760px;margin:0 auto;padding:20px clamp(16px,4vw,72px) 40px;display:flex;flex-direction:column;gap:18px}
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:10px 20px}
+.brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.brand h1{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(40px,3.8vw,64px);line-height:1;color:var(--teal)}
+.brand .yr{font-family:var(--label);font-weight:500;font-size:16px;letter-spacing:4px;color:var(--mustard-t)}
+.brand p{flex-basis:100%;margin:0;font-size:15px;color:#3D5554}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+.main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:1fr}}
+
+/* hải đồ */
+.chart{background:#F4F7F6;border-radius:14px;overflow:hidden;box-shadow:0 24px 50px rgba(24,52,55,.18)}
+.chart svg{display:block;width:100%;height:auto}
+.ml{font-family:var(--body);font-weight:600;fill:#1F3B39;text-anchor:middle;paint-order:stroke;stroke:#F4F7F6;stroke-width:4px;stroke-linejoin:round}
+.ml.big{font-weight:700}
+.md{font-family:var(--body);font-weight:400;fill:#3F4E54;text-anchor:middle;paint-order:stroke;stroke:#F4F7F6;stroke-width:3.5px;stroke-linejoin:round}
+.md.hit{fill:#7A2F21;font-weight:600}
+.race{display:grid;grid-template-columns:auto 1fr auto;gap:8px 14px;align-items:center;padding:12px 20px;border-top:1px solid var(--line2);font-size:15px}
+.race .nm{font-weight:600;max-width:16ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:8px;background:#E3E9E9;border-radius:4px;overflow:hidden}
+.bar>div{height:100%;transition:width .45s}
+.race .n{font-family:var(--label);color:var(--dim2)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 22px;padding:10px 20px 14px;border-top:1px solid var(--line2);font-size:14px;color:var(--dim2)}
+.legend span{display:inline-flex;align-items:center;gap:8px}
+.legend svg{flex:none}
+
+/* thẻ câu hỏi — chữ co giãn theo bề rộng thẻ, sàn 22/19px */
+.card{background:var(--snow);border-radius:14px;padding:24px 28px 22px;box-shadow:0 24px 50px rgba(24,52,55,.2);container-type:inline-size}
+.card .eyebrow{display:flex;justify-content:space-between;gap:8px;font-family:var(--label);font-weight:600;font-size:clamp(14px,2.8cqi,24px);letter-spacing:.16em;text-transform:uppercase;color:var(--teal2)}
+.card h2{margin:4px 0 0;font-family:var(--display);font-weight:700;font-size:clamp(44px,11cqi,100px);line-height:1;color:var(--teal)}
+.card .where{margin:2px 0 14px;font-size:clamp(15px,2.9cqi,26px);color:var(--dim)}
+.q{margin:0 0 16px;font-size:clamp(22px,4.8cqi,44px);font-weight:600;line-height:1.35;text-wrap:balance}
+.timer{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.timer .track{flex:1;height:10px;border-radius:5px;background:var(--line2);overflow:hidden}
+.timer .fill{height:100%;width:100%;background:var(--teal3)}
+.timer .fill.low{background:var(--rust)}
+.timer b{font-family:var(--label);font-weight:600;font-size:clamp(26px,6cqi,52px);line-height:1;min-width:1.4em;text-align:right;color:var(--teal);font-variant-numeric:tabular-nums}
+.lanes{display:flex;flex-direction:column;gap:10px}
+.lane{display:grid;grid-template-columns:1.7em 1fr;gap:.6em;align-items:center;width:100%;min-height:3em;text-align:left;padding:.45em .7em;border-radius:10px;
+  border:1.5px solid var(--line);background:var(--snow2);font-size:clamp(19px,4cqi,36px);line-height:1.3;color:var(--ink);cursor:pointer}
+.lane:hover:not(:disabled){border-color:var(--teal);background:#fff}
+.lane .k{display:grid;place-items:center;width:1.6em;height:1.6em;border-radius:50%;border:1.5px solid var(--teal);color:var(--teal);font-family:var(--label);font-size:.75em}
+.lane:disabled{cursor:default;border-color:#DCE2E2;background:#E7EBEB;color:#8E999A;text-decoration:line-through}
+.lane:disabled .k{border-color:currentColor;color:inherit}
+.lane.right{border:2px solid var(--okline);background:var(--okbg);color:var(--ink);text-decoration:none;font-weight:600}
+.lane.right .k{background:var(--mustard);border-color:var(--mustard);color:#1E2422}
+.hint{margin:12px 0 0;font-size:clamp(14px,2.7cqi,22px);color:var(--dim)}
+.hint.alert{color:var(--rust);font-weight:700}
+.who{display:flex;align-items:center;gap:10px;margin:-24px -28px 16px;padding:12px 28px;border-radius:14px 14px 0 0;font-size:clamp(16px,3.4cqi,26px)}
+.who b{font-size:1.1em}
+.who .sc{margin-left:auto;font-family:var(--label);font-size:1em}
+.who .stin{display:none;font-weight:500;opacity:.8}
+.who.c0{background:#F4E7C2;color:var(--ink)} .who.c0 .sc{color:#5A4512}
+.who.c1{background:#2B7C74;color:#fff}
+
+/* ngõ cụt / về đích */
+.dead{background:var(--bush);color:#F2F0F4;border-radius:14px;padding:24px 26px;box-shadow:0 24px 50px rgba(24,30,40,.28);container-type:inline-size}
+.dead .who{margin:-24px -26px 18px;padding:12px 26px}
+.dead .tag{display:flex;align-items:center;gap:10px;font-family:var(--label);font-weight:600;font-size:clamp(14px,2.8cqi,22px);letter-spacing:3px;text-transform:uppercase;color:#E8C774}
+.dead h3{margin:8px 0 12px;font-family:var(--display);font-weight:700;font-size:clamp(48px,12cqi,96px);line-height:1;color:#fff}
+.dead p{margin:0 0 20px;font-size:clamp(18px,3.8cqi,32px);line-height:1.5}
+.dead .cd{display:flex;align-items:center;gap:12px;margin:0;padding-top:14px;border-top:1px solid var(--bush2);font-size:clamp(15px,3cqi,24px);color:#D9D4E0}
+.dead .cd b{font-family:var(--label);color:#fff}
+.pips{display:flex;gap:6px}
+.pips i{width:10px;height:10px;border-radius:50%;border:1.5px solid #8D8698}
+.pips i.on{background:#E8C774;border-color:#E8C774}
+.arrived{position:relative;overflow:hidden;background:var(--teal);color:#F2F7F6;border-radius:14px;padding:24px 26px;box-shadow:0 24px 50px rgba(20,45,48,.3);container-type:inline-size}
+.arrived .lamp{position:absolute;right:12px;top:0;width:clamp(80px,22cqi,140px);height:auto}
+.arrived .tag{font-family:var(--label);font-weight:600;font-size:clamp(14px,2.8cqi,22px);letter-spacing:3px;color:#9FD1CB}
+.arrived h3{margin:8px 0 12px;max-width:60%;font-family:var(--display);font-weight:700;font-size:clamp(48px,12cqi,96px);line-height:.95;color:var(--mustard-l)}
+.arrived p{margin:0;font-size:clamp(18px,3.8cqi,30px);line-height:1.5}
+.arrived .hint{color:#B9D6D2;border-top:1px solid #2F6A64;padding-top:12px;margin-top:16px}
+
+/* ---------- đội 2 người ---------- */
+.duel{min-height:100dvh;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.42fr) minmax(0,1fr);gap:20px;padding:20px 28px;align-items:start}
+.duel .side{min-width:0}
+.duel .mid{display:flex;flex-direction:column;gap:12px}
+.midbar{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.midbar .ttl{display:flex;align-items:baseline;gap:12px}
+.midbar .ttl b{font-family:var(--display);font-weight:700;font-size:clamp(36px,3vw,52px);line-height:1;color:var(--teal)}
+.midbar .ttl span{font-family:var(--label);font-weight:500;font-size:15px;letter-spacing:3px;color:var(--mustard-t);text-transform:uppercase}
+.keys{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 26px;font-size:15px;color:#2E4442}
+.keys span{display:inline-flex;align-items:center;gap:6px}
+.keys kbd{font-family:var(--label);padding:1px 7px;border-radius:5px}
+.keys .c0 kbd{background:#F4E7C2;border:1px solid #E0CC93}
+.keys .c1 kbd{background:#D6EAE7;border:1px solid #A9CEC9}
+@media (max-width:900px) and (orientation:portrait){
+  .duel{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto minmax(0,1fr);height:100dvh;align-items:stretch;padding:8px 10px;gap:8px}
+  .duel .side{overflow:auto}
+  #side2{order:1;transform:rotate(180deg)}
+  .duel .mid{order:2;gap:4px}
+  #side1{order:3}
+  .duel .mid .race,.duel .mid .keys,.duel .mid .legend{display:none}
+  .duel .mid svg{max-height:16vh}
+  .midbar .ttl b{font-size:28px}
+  .midbar .chip{padding:3px 10px;font-size:12px}
+  .duel .card,.duel .dead,.duel .arrived{padding:8px 10px}
+  .duel .who{margin:-8px -10px 6px;padding:6px 10px;font-size:14px}
+  .duel .who .stin{display:inline}
+  .duel .card h2,.duel .card .where{display:none}
+  .duel .card .eyebrow{font-size:11px}
+  .duel .q{font-size:15px;margin:4px 0 6px;line-height:1.3}
+  .duel .timer{margin-bottom:6px}
+  .duel .timer b{font-size:16px}
+  .duel .lanes{gap:6px}
+  .duel .lane{font-size:14px;padding:6px 8px;min-height:40px;line-height:1.25}
+  .duel .dead h3,.duel .arrived h3{font-size:30px}
+  .duel .dead p{font-size:14px;margin-bottom:8px}
+}
+
+/* ---------- kết quả & sổ ---------- */
+.sheet{background:var(--snow);color:var(--ink);border-radius:16px;padding:30px clamp(20px,3vw,40px) 32px;box-shadow:0 28px 64px rgba(20,45,48,.24)}
+.sheet.res{max-width:920px;width:100%;margin:clamp(70px,14vh,150px) auto 0}
+.sheet h2{font-family:var(--label);font-weight:600;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--teal2);margin:22px 0 10px}
+.sheet p{margin:0 0 10px;max-width:70ch}
+.kicker{font-family:var(--label);font-weight:600;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--teal2)}
+.result{margin:4px 0 6px;font-family:var(--display);font-weight:700;font-size:clamp(52px,6vw,80px);line-height:1;color:var(--teal);text-wrap:balance}
+.podium{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin:14px 0 4px}
+.pcard{padding:16px 18px;border-radius:12px;border:1.5px solid #D2DADA;background:#F4F7F6}
+.pcard.win{border:2px solid var(--mustard);background:#FBF5E4}
+.pcard .nm{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px}
+.pill{margin-left:auto;font-size:12.5px;font-weight:600;padding:3px 10px;border-radius:999px;background:var(--mustard);color:#1E2422;white-space:nowrap}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 12px}
+.kv b{display:block;font-family:var(--label);font-weight:600;font-size:32px;line-height:1.1;font-variant-numeric:tabular-nums}
+.kv span{font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--dim)}
+.code{display:inline-block;font-family:var(--label);font-weight:500;font-size:20px;letter-spacing:2px;padding:5px 12px;border-radius:8px;border:1.5px dashed var(--teal);background:#fff;user-select:all}
+.ports{margin:0 0 6px;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:15.5px;line-height:1.45}
+.ports li{display:flex;gap:12px;align-items:flex-start}
+.ports svg{flex:none;margin-top:3px}
+.rowb{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:24px}
+.mark{display:flex;flex-direction:column;align-items:center;gap:4px;margin:28px clamp(16px,4vw,72px) 30px auto;width:max-content;color:var(--teal)}
+.mark i{display:block;width:220px;height:1px;background:#6B958F}
+.mark b{font-family:var(--label);font-weight:600;font-size:17px;letter-spacing:4px}
+.mark small{font-family:var(--label);font-weight:500;font-size:13px;letter-spacing:6px;color:var(--teal2)}
+.tablewrap{overflow-x:auto;margin:8px 0}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{padding:8px;border-bottom:1px solid var(--line2);text-align:left}
+th{font-family:var(--label);font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--dim);font-weight:500}
+td.num{font-family:var(--label);font-variant-numeric:tabular-nums;text-align:right}
+th.num{text-align:right}
+tr.top1 td{background:#F6EBCB}
+.addrow{display:grid;grid-template-columns:1.2fr 1fr auto;gap:10px;align-items:end}
+@media (max-width:620px){.addrow{grid-template-columns:1fr}}
+.confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#F8E6E1;border:1px solid var(--rust);border-radius:10px;padding:8px 12px;font-size:14px;margin-top:10px}
+.note{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line2);padding-top:10px;margin-top:14px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head><body>
+<div id="scene" aria-hidden="true"></div>
+<div id="app"></div>
+
+<script>
+(function(){
+"use strict";
+/* =====================================================================
+   DỮ LIỆU
+   Mỗi câu: {at: trạm đang đứng, q: câu hỏi, o: [[đáp án, 1 nếu đúng | id ngõ cụt], ...], j: số hải trình (chỉ cấp Siêu khó)}
+   Câu thứ i trả lời đúng thì tàu đi tới trạm của câu i+1; câu cuối đi tới Pác Bó.
+   Độ dài câu hỏi: đồng hồ 12–15s ≤ 30 từ · 9–11s ≤ 20 từ · 8s ≤ 12 từ.
+   ===================================================================== */
+const P = {
+  nharong:{n:"Bến Nhà Rồng",x:862,y:418,st:1,dy:26},
+  marseille:{n:"Mác-xây",x:418,y:258,st:1,dy:-14},
+  my:{n:"Hoa Kỳ",x:92,y:196,st:1,dy:-14},
+  london:{n:"Luân Đôn",x:352,y:112,st:1,dy:-14},
+  paris:{n:"Pa-ri",x:404,y:180,st:1,dy:26},
+  moskva:{n:"Mát-xcơ-va",x:640,y:92,st:1,dy:-14},
+  quangchau:{n:"Quảng Châu",x:902,y:210,st:1,dy:-14},
+  xiem:{n:"Xiêm",x:786,y:330,st:1,dy:26},
+  hongkong:{n:"Hồng Kông",x:952,y:262,st:1,dy:26},
+  pacbo:{n:"Pác Bó",x:826,y:246,st:1,dy:-14},
+  singapore:{n:"Xin-ga-po",x:826,y:490,dy:22},
+  colombo:{n:"Cô-lôm-bô",x:698,y:444,dy:22},
+  portsaid:{n:"Po Xai",x:562,y:332,dy:22},
+  lehavre:{n:"Lơ Havơ",x:292,y:160,dy:22},
+  dakar:{n:"Đa-ca",x:196,y:348,dy:22},
+  oran:{n:"Ô-ran",x:330,y:304,dy:22},
+  brussels:{n:"Bruy-xen",x:462,y:130,dy:-12},
+  berlin:{n:"Béc-lin",x:534,y:124,dy:-12},
+  rome:{n:"Rô-ma",x:500,y:268,dy:22},
+  thuonghai:{n:"Thượng Hải",x:962,y:130,dy:-12}
+};
+// Các trạm của chặng đi biển 1911–1917: khi câu hỏi đứng ở đây, nền đổi sang cảnh biển có tàu.
+const SEA = new Set(["nharong","marseille","my","london"]);
+const DEAD = {
+  singapore:"Tháng 6/1911, tàu chở anh phụ bếp Văn Ba ghé cảng này trên đường sang Pháp.",
+  colombo:"Năm 1911, con tàu dừng ở Cô-lôm-bô (Xri Lan-ca) rồi lại nhổ neo đi tiếp.",
+  portsaid:"Năm 1911, tàu đi qua kênh Xuy-ê và cập cảng Po Xai (Ai Cập) chốc lát.",
+  lehavre:"Năm 1911, sau Mác-xây, con tàu còn ghé cảng Lơ Havơ ở miền Bắc nước Pháp.",
+  dakar:"Những năm làm thuỷ thủ, Người đi qua nhiều cảng châu Phi, trong đó có Đa-ca.",
+  oran:"Trên các chuyến tàu quanh Địa Trung Hải và châu Phi, Người từng ghé Ô-ran (An-giê-ri).",
+  brussels:"Khoảng 1927, trên đường rời Liên Xô, Người qua Bỉ rồi lại lên đường.",
+  berlin:"Khoảng 1927, Người đi qua Béc-lin (Đức) nhưng không ở lại lâu.",
+  rome:"Khoảng 1928, Người qua I-ta-li-a để tìm tàu về phương Đông.",
+  thuonghai:"Năm 1933, thoát khỏi nhà tù ở Hồng Kông, Người qua Thượng Hải rồi sang Liên Xô."
+};
+const LEVELS = {
+  de:{name:"Dễ",letter:"D",note:"15 ngã rẽ",legs:[
+ {at:"nharong",q:"Ngày 5/6/1911, Nguyễn Tất Thành rời bến Nhà Rồng trên con tàu nào?",o:[["Amiral Latouche-Tréville",1],["Dumont d'Urville","singapore"],["Porthos","colombo"],["Pháp Hải","portsaid"]]},
+ {at:"nharong",q:"Trên tàu, người thanh niên làm phụ bếp lấy tên là gì?",o:[["Văn Ba",1],["Lý Thụy","singapore"],["Thầu Chín","colombo"],["Tống Văn Sơ","portsaid"]]},
+ {at:"marseille",q:"Tháng 7/1911, tàu cập cảng nào đầu tiên trên đất Pháp?",o:[["Mác-xây",1],["Lơ Havơ","lehavre"],["Boóc-đô","oran"],["Tu-lông","portsaid"]]},
+ {at:"my",q:"Khoảng năm 1912, Người đi tàu sang sống và làm việc ở nước nào?",o:[["Hoa Kỳ",1],["Anh","lehavre"],["Đức","dakar"],["Ý","oran"]]},
+ {at:"london",q:"Ở Luân Đôn (khoảng 1913–1917), Người làm công việc gì để sống?",o:[["Phụ bếp ở khách sạn",1],["Thợ sửa ảnh","lehavre"],["Dạy học","dakar"],["Viết báo thuê","oran"]]},
+ {at:"paris",q:"Năm 1919, Người gửi văn kiện nào tới Hội nghị Véc-xai?",o:[["Yêu sách của nhân dân An Nam",1],["Tuyên ngôn Độc lập","brussels"],["Đường Kách mệnh","rome"],["Bản án chế độ thực dân Pháp","lehavre"]]},
+ {at:"paris",q:"Năm 1920, đọc văn kiện nào, Người tìm thấy con đường cứu nước?",o:[["Luận cương của Lê-nin về vấn đề dân tộc và thuộc địa",1],["Tuyên ngôn của Đảng Cộng sản","brussels"],["Bộ Tư bản","berlin"],["Khế ước xã hội","rome"]]},
+ {at:"paris",q:"Tháng 12/1920, tại Đại hội Tua, Người bỏ phiếu gia nhập tổ chức nào?",o:[["Quốc tế Cộng sản",1],["Quốc tế thứ hai","brussels"],["Hội Quốc liên","berlin"],["Quốc tế Thanh niên","rome"]]},
+ {at:"paris",q:"Năm 1922, Người cùng các đồng chí sáng lập tờ báo nào?",o:[["Người cùng khổ (Le Paria)",1],["Thanh Niên","brussels"],["Cứu Quốc","berlin"],["Việt Nam Độc Lập","rome"]]},
+ {at:"moskva",q:"Tháng 6/1923, Người rời Pháp sang đâu?",o:[["Liên Xô",1],["Đức","berlin"],["Bỉ","brussels"],["Ý","rome"]]},
+ {at:"quangchau",q:"Năm 1925, ở Quảng Châu, Người thành lập tổ chức nào?",o:[["Hội Việt Nam Cách mạng Thanh niên",1],["Tân Việt Cách mạng Đảng","thuonghai"],["Việt Nam Quốc dân Đảng","berlin"],["Mặt trận Việt Minh","colombo"]]},
+ {at:"quangchau",q:"Bài giảng lớp huấn luyện, in năm 1927, là tác phẩm nào?",o:[["Đường Kách mệnh",1],["Nhật ký trong tù","thuonghai"],["Di chúc","singapore"],["Sửa đổi lối làm việc","rome"]]},
+ {at:"xiem",q:"Ở Xiêm (1928–1929), Người mang tên gì?",o:[["Thầu Chín",1],["Văn Ba","singapore"],["Lý Thụy","thuonghai"],["Tống Văn Sơ","colombo"]]},
+ {at:"hongkong",q:"Ngày nào là ngày thành lập Đảng Cộng sản Việt Nam?",o:[["3/2/1930",1],["19/5/1930","thuonghai"],["2/9/1930","singapore"],["19/12/1930","colombo"]]},
+ {at:"pacbo",q:"Ngày 28/1/1941, Người về nước qua biên giới tỉnh nào?",o:[["Cao Bằng",1],["Lạng Sơn","thuonghai"],["Hà Giang","singapore"],["Lào Cai","colombo"]]}
+  ]},
+  kho:{name:"Khó",letter:"K",note:"30 ngã rẽ",legs:[]},
+  sieu:{name:"Siêu khó",letter:"S",note:"66 ngã rẽ · 3 hải trình",legs:[]}
+};
+// Ba chế độ theo màn bắt đầu thầy sửa trên bảng thiết kế (10/10/2026).
+const MODES=[["duel","Đội 2 người","Hai người, một máy"],["solo","Đội tự do","Bao người cũng được"],["study","Ôn tập","Không tính giờ, không đối thủ, không tính điểm."]];
+const MODE_NAME={duel:"Đội 2 người",solo:"Đội tự do",study:"Ôn tập, không tính giờ"};
+const GUIDE=["Trả lời đúng để tới trạm kế tiếp.","Lạc vào đường cụt mất 3 giây.","Lần đầu đúng ngay +2 điểm. Về Pác Bó trước tiên +10.","Hết giờ mà chưa chọn đáp án thì tàu trôi dạt vào một ngõ cụt.","Sĩ số lớp lẻ: Vào đội tự do"];
+
+/* =====================================================================
+   TIỆN ÍCH
+   ===================================================================== */
+const $=s=>document.querySelector(s);
+const app=$("#app");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const words=s=>s.trim().split(/\s+/).length;
+
+function journeys(L){ // [{start,len}]
+  const out=[];L.legs.forEach((q,i)=>{const j=q.j||0;if(!out.length||out[out.length-1].j!==j)out.push({j,start:i,len:0});out[out.length-1].len++});return out;
+}
+function limitFor(L,k){
+  const J=journeys(L).find(g=>k>=g.start&&k<g.start+g.len);const k0=k-J.start,n=J.len;
+  return n<2?15:Math.max(8,15-Math.round(7*k0/(n-1)));
+}
+const nextAt=(L,i)=>i+1<L.legs.length?L.legs[i+1].at:"pacbo";
+function lengthIssues(L){
+  const out=[];L.legs.forEach((q,i)=>{const t=limitFor(L,i),max=t<=8?12:t<=11?20:30;if(words(q.q)>max)out.push(`Câu ${i+1}: ${words(q.q)} từ, giới hạn ${max} (đồng hồ ${t}s)`)});return out;
+}
+function hash(s){let h=2166136261;for(const c of s){h^=c.codePointAt(0);h=Math.imul(h,16777619)>>>0}return h}
+function makeCode(r){const body=`${r.lvl}${r.score}-${r.lost}-${r.secs}`;return body+"-"+(hash(r.name.trim().toLowerCase()+"|"+body)%46656).toString(36).toUpperCase().padStart(3,"0")}
+function readCode(name,code){
+  const m=String(code).trim().toUpperCase().match(/^([DKS])(\d{1,3})-(\d{1,3})-(\d{1,5})-([0-9A-Z]{3})$/);
+  if(!m) return {err:"Mã không đúng dạng. Mã có dạng như D38-2-146-K7Q."};
+  const r={lvl:m[1],score:+m[2],lost:+m[3],secs:+m[4],name:name.trim()};
+  if(!r.name) return {err:"Nhập tên người chơi đúng như lúc chơi."};
+  if(makeCode(r)!==m[0]) return {err:"Mã không khớp với tên này. Kiểm tra lại tên hoặc từng ký tự của mã."};
+  return {r};
+}
+
+/* ---------- âm thanh ---------- */
+let AC=null,soundOn=store.get("ht.sound",true);
+function tone(f,t,d,type,g){if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();if(AC.state==="suspended")AC.resume();const o=AC.createOscillator(),v=AC.createGain();o.type=type||"triangle";o.frequency.value=f;v.gain.setValueAtTime(g||.12,AC.currentTime+t);v.gain.exponentialRampToValueAtTime(.001,AC.currentTime+t+d);o.connect(v).connect(AC.destination);o.start(AC.currentTime+t);o.stop(AC.currentTime+t+d+.02)}catch(e){}}
+const sfx={
+  ok(){[523,659,784].forEach((f,i)=>tone(f,i*.08,.18))},
+  bad(){tone(220,0,.25,"sawtooth",.08);tone(165,.12,.3,"sawtooth",.07)},
+  horn(){tone(196,0,.5,"square",.06);tone(147,.05,.55,"square",.05)},
+  win(){[523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,i*.11,.22,"square",.07))},
+  tick(){tone(880,0,.05,"sine",.05)}
+};
+
+/* =====================================================================
+   HÌNH VẼ: tàu, đèn lồng, cột đá
+   ===================================================================== */
+const COLORS=[{hull:"#C9A040",band:"#C9A040",line:"#A87F22",bar:"#C9A040",tint:"c0",ten:"tàu vàng"},
+              {hull:"#2B7C74",band:"#2B7C74",line:"#2B7C74",bar:"#2B7C74",tint:"c1",ten:"tàu xanh"}];
+function shipG(x,y,hull,band,s){return `<g transform="translate(${x},${y}) scale(${s})"><path d="M-15,3 L15,1 L11,10 L-11,10 Z" fill="${hull}" stroke="#1E2422" stroke-width="1.4" stroke-linejoin="round"/><rect x="-8" y="-4" width="13" height="5" fill="#F3F5F4" stroke="#1E2422" stroke-width="1"/><rect x="-2" y="-11" width="5" height="7" fill="#2F3537"/><rect x="-2" y="-9" width="5" height="2" fill="${band}"/><circle cx="-6" cy="-14" r="3" fill="#8D8698"/><circle cx="-11" cy="-16" r="2.2" fill="#A9A3B3"/></g>`}
+const shipIco=(c,light)=>`<svg class="ico" viewBox="-17 -19 34 30" aria-hidden="true">${shipG(0,0,light?"#9FD1CB":c.hull,c.band,1)}</svg>`;
+const STONE='<path d="M-6,7 V-2 Q-6,-8 0,-8 Q6,-8 6,-2 V7 Z" fill="#F7F9F8" stroke="#6F7C80" stroke-width="1.5" stroke-dasharray="2.5 2"/>';
+const STONE_HIT='<path d="M-6,7 V-2 Q-6,-8 0,-8 Q6,-8 6,-2 V7 Z" fill="#A3422F" stroke="#7A2F21" stroke-width="1.5"/><path d="M-3,-3 L3,3 M3,-3 L-3,3" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>';
+const stoneIco=(hit,c)=>`<svg width="14" height="18" viewBox="-7 -9 14 18" aria-hidden="true">${hit?`<path d="M-6,7 V-2 Q-6,-8 0,-8 Q6,-8 6,-2 V7 Z" fill="${c||"#59656A"}"/>`:STONE}</svg>`;
+const lampIco='<svg width="16" height="20" viewBox="-8 -12 16 22" aria-hidden="true"><rect x="-3" y="-11" width="6" height="3" fill="#2E3436"/><circle r="7" fill="#D4A43A" stroke="#8E6B1E" stroke-width="1"/></svg>';
+
+/* ---------- cảnh nền (svg 1440×900, neo đáy) ---------- */
+const SDEFS=`<defs>
+<linearGradient id="s-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CFDDE0"/><stop offset=".6" stop-color="#E6EDEE"/><stop offset="1" stop-color="#F3F5F4"/></linearGradient>
+<linearGradient id="s-trunk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#143633"/><stop offset=".32" stop-color="#21564F"/><stop offset=".6" stop-color="#2B675F"/><stop offset="1" stop-color="#13312E"/></linearGradient>
+<linearGradient id="s-trunkMid" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#4C7C76"/><stop offset=".5" stop-color="#6B958F"/><stop offset="1" stop-color="#47726D"/></linearGradient>
+<linearGradient id="s-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A3BEC1"/><stop offset=".4" stop-color="#6E9696"/><stop offset="1" stop-color="#2C5753"/></linearGradient>
+<filter id="s-brush" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="7"/><feDisplacementMap in="SourceGraphic" scale="32" xChannelSelector="R" yChannelSelector="G"/></filter>
+<filter id="s-wbrush" x="-20%" y="-50%" width="140%" height="200%"><feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="9" xChannelSelector="R" yChannelSelector="G"/></filter>
+<filter id="s-soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>`;
+const svgWrap=b=>`<svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice">${SDEFS}${b}</svg>`;
+const SKY='<rect width="1440" height="900" fill="url(#s-sky)"/>';
+const FOREST_LOW=`<g fill="#B6C9CC"><rect x="210" y="0" width="22" height="620"/><rect x="520" y="0" width="16" height="610"/><rect x="760" y="0" width="26" height="620"/><rect x="1010" y="0" width="18" height="610"/><rect x="1250" y="0" width="24" height="620"/></g>
+<g fill="url(#s-trunkMid)"><rect x="330" y="0" width="52" height="700"/><rect x="880" y="0" width="58" height="710"/><rect x="1160" y="0" width="44" height="690"/></g>
+<g filter="url(#s-brush)"><g fill="#5E5967"><ellipse cx="120" cy="650" rx="200" ry="110"/><ellipse cx="420" cy="620" rx="230" ry="120"/><ellipse cx="720" cy="650" rx="220" ry="100"/><ellipse cx="1000" cy="610" rx="240" ry="130"/><ellipse cx="1300" cy="640" rx="200" ry="110"/></g>
+<g fill="#47424F"><ellipse cx="40" cy="720" rx="180" ry="70"/><ellipse cx="300" cy="710" rx="200" ry="70"/><ellipse cx="600" cy="725" rx="190" ry="60"/><ellipse cx="900" cy="710" rx="220" ry="75"/><ellipse cx="1200" cy="725" rx="200" ry="60"/><ellipse cx="1440" cy="710" rx="150" ry="70"/></g>
+<g fill="#77717F"><ellipse cx="440" cy="560" rx="80" ry="36"/><ellipse cx="1010" cy="545" rx="90" ry="40"/></g></g>
+<path d="M0,748 Q360,730 720,742 T1440,736 V900 H0 Z" fill="#F2F4F3"/><ellipse cx="720" cy="772" rx="620" ry="20" fill="#D6DEE0" filter="url(#s-soft)"/>
+<path d="M-40,-10 H44 V740 Q48,768 72,784 H-60 Z" fill="url(#s-trunk)"/><path d="M1396,-10 H1480 V790 H1372 Q1392,770 1396,742 Z" fill="url(#s-trunk)"/>`;
+const FOREST_HIGH=`<g fill="#B4C8CB"><rect x="250" y="0" width="24" height="600"/><rect x="470" y="0" width="16" height="590"/><rect x="700" y="0" width="28" height="600"/><rect x="905" y="0" width="20" height="590"/><rect x="1120" y="0" width="26" height="600"/><rect x="1300" y="0" width="18" height="590"/></g>
+<g fill="url(#s-trunkMid)"><rect x="380" y="0" width="54" height="640"/><rect x="800" y="0" width="62" height="650"/><rect x="1220" y="0" width="46" height="630"/></g>
+<g filter="url(#s-brush)"><g fill="#57515F"><ellipse cx="200" cy="370" rx="260" ry="170"/><ellipse cx="530" cy="345" rx="240" ry="150"/><ellipse cx="780" cy="450" rx="220" ry="140"/><ellipse cx="1020" cy="490" rx="220" ry="120"/><ellipse cx="1280" cy="500" rx="220" ry="120"/></g>
+<g fill="#47424F"><ellipse cx="120" cy="470" rx="240" ry="180"/><ellipse cx="410" cy="450" rx="300" ry="190"/><ellipse cx="660" cy="520" rx="220" ry="130"/><ellipse cx="930" cy="560" rx="230" ry="80"/><ellipse cx="1210" cy="575" rx="240" ry="70"/></g>
+<g fill="#3B3743"><ellipse cx="300" cy="570" rx="330" ry="100"/><ellipse cx="60" cy="590" rx="180" ry="80"/><ellipse cx="640" cy="600" rx="200" ry="55"/></g>
+<g fill="#77717F"><ellipse cx="760" cy="350" rx="80" ry="36"/><ellipse cx="1040" cy="400" rx="90" ry="40"/></g></g>
+<path d="M0,618 Q300,592 720,606 T1440,600 V900 H0 Z" fill="#F2F4F3"/>
+<g filter="url(#s-soft)" fill="#D6DEE0"><ellipse cx="420" cy="640" rx="420" ry="20"/><ellipse cx="1100" cy="634" rx="360" ry="16"/></g>
+<path d="M-20,-10 H120 V620 Q124,650 150,668 H-40 Z" fill="url(#s-trunk)"/><path d="M1388,-10 H1480 V680 H1360 Q1384,660 1388,630 Z" fill="url(#s-trunk)"/>`;
+const LAMPS_LIT=(()=>{const xs=[[100,49],[280,59],[460,66],[640,70],[820,69],[1000,66],[1180,58],[1340,49]];
+  return '<path d="M-20,40 Q720,100 1460,40" fill="none" stroke="#2E3436" stroke-width="2"/>'+xs.map(([x,y])=>`<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="0" y2="14" stroke="#2E3436" stroke-width="1.5"/><circle cy="25" r="24" fill="#F2C75C" opacity=".5" filter="url(#s-soft)"/><rect x="-5" y="11" width="10" height="4" rx="1" fill="#2E3436"/><circle cy="25" r="11" fill="#D4A43A"/><ellipse cy="25" rx="5" ry="11" fill="none" stroke="#8E6B1E" stroke-width="1.1"/></g>`).join("")})();
+const portholes=[190,230,270,310,350,390,430,470,510,550,590,630].map(x=>`<circle cx="${x}" cy="826" r="3.5"/>`).join("");
+const BIG_SHIP=`<g filter="url(#s-brush)"><g fill="#5E5967" opacity=".92"><ellipse cx="392" cy="656" rx="28" ry="18"/><ellipse cx="348" cy="646" rx="44" ry="24"/><ellipse cx="288" cy="640" rx="60" ry="28"/><ellipse cx="212" cy="636" rx="74" ry="30"/><ellipse cx="124" cy="634" rx="86" ry="30"/><ellipse cx="30" cy="630" rx="90" ry="28"/></g><g fill="#8D8698" opacity=".8"><ellipse cx="300" cy="626" rx="40" ry="14"/><ellipse cx="150" cy="620" rx="56" ry="14"/></g></g>
+<line x1="200" y1="806" x2="200" y2="650" stroke="#2E3436" stroke-width="3"/><line x1="630" y1="801" x2="630" y2="660" stroke="#2E3436" stroke-width="3"/><line x1="110" y1="806" x2="200" y2="650" stroke="#2E3436" stroke-width="1.2"/><line x1="704" y1="800" x2="630" y2="660" stroke="#2E3436" stroke-width="1.2"/>
+<rect x="392" y="676" width="40" height="64" fill="#2F3537"/><rect x="392" y="688" width="40" height="12" fill="#C9A040"/><rect x="470" y="720" width="64" height="20" fill="#E3EAEA"/><rect x="476" y="726" width="52" height="6" fill="#3A4245"/><rect x="320" y="740" width="180" height="22" fill="#EEF2F2"/>
+<g fill="#3A4245">${[332,356,380,436,460,484].map(x=>`<rect x="${x}" y="746" width="12" height="8"/>`).join("")}</g><rect x="260" y="762" width="300" height="44" fill="#E3EAEA"/><g fill="#3A4245">${[276,302,328,354,380,406,432,458,484,510,536].map(x=>`<rect x="${x}" y="774" width="14" height="10"/>`).join("")}</g>
+<path d="M110,806 L704,800 L672,866 L150,866 Q126,840 110,806 Z" fill="#2F3537"/><path d="M144,852 L678,852 L672,866 L150,866 Z" fill="#8A3B2E"/><path d="M110,806 L704,800" stroke="#4A5356" stroke-width="2"/><g fill="#E8C774">${portholes}</g>
+<path d="M630,662 Q415,730 200,652" fill="none" stroke="#2E3436" stroke-width="1.5"/>
+${[[544,683,0],[458,693,1],[372,691,0],[286,677,1]].map(([x,y,l])=>`<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="0" y2="8" stroke="#2E3436" stroke-width="1.2"/>${l?'<circle cy="15" r="16" fill="#F2C75C" opacity=".5" filter="url(#s-soft)"/>':''}<circle cy="15" r="7" fill="${l?"#D4A43A":"#2F3537"}"/></g>`).join("")}
+<g filter="url(#s-wbrush)"><ellipse cx="400" cy="874" rx="340" ry="14" fill="#3A6662"/><g fill="none" stroke="#DCE7E7" stroke-width="3" stroke-linecap="round"><path d="M690,866 q20,-12 44,-4"/><path d="M140,868 q-40,-6 -80,2"/><path d="M100,880 q-50,-8 -100,4"/><path d="M260,884 q30,-8 60,0"/><path d="M480,886 q30,-8 60,0"/></g></g>`;
+const SEA_BASE=`<g filter="url(#s-brush)" fill="#F1F4F4" opacity=".8"><ellipse cx="180" cy="200" rx="260" ry="40"/><ellipse cx="900" cy="110" rx="320" ry="44"/><ellipse cx="1320" cy="250" rx="220" ry="36"/><ellipse cx="560" cy="420" rx="300" ry="40"/><ellipse cx="1180" cy="520" rx="280" ry="38"/></g>
+<g filter="url(#s-brush)"><path d="M860,764 Q960,700 1060,722 Q1160,676 1270,712 Q1370,690 1470,716 V780 H860 Z" fill="#8FAAAD"/><path d="M-30,766 Q60,730 150,748 Q220,738 280,766 Z" fill="#9DB5B8"/></g>
+<rect x="0" y="760" width="1440" height="140" fill="url(#s-sea)"/><rect x="0" y="754" width="1440" height="10" fill="#E3ECEC" opacity=".7" filter="url(#s-soft)"/>
+<g filter="url(#s-wbrush)" fill="none" stroke-linecap="round"><g stroke="#C6D8D9" stroke-width="2.5"><path d="M820,784 q22,-6 44,0"/><path d="M960,792 q26,-7 52,0"/><path d="M1120,786 q22,-6 44,0"/><path d="M1280,796 q26,-7 52,0"/><path d="M30,790 q22,-6 44,0"/><path d="M880,826 q30,-8 60,0"/><path d="M1060,834 q34,-9 68,0"/><path d="M1240,828 q30,-8 60,0"/><path d="M1380,840 q26,-7 52,0"/></g>
+<g stroke="#2C5753" stroke-width="3"><path d="M760,812 q28,-7 56,0"/><path d="M990,856 q40,-10 80,0"/><path d="M1180,870 q40,-10 80,0"/><path d="M840,880 q36,-9 72,0"/><path d="M1330,880 q30,-8 60,0"/></g></g>
+<g fill="none" stroke="#2E4442" stroke-width="1.8" stroke-linecap="round"><path d="M1180,560 q8,-8 16,0 q8,-8 16,0"/><path d="M1232,586 q6,-6 12,0 q6,-6 12,0"/></g>`;
+const SCENES={
+  rungCao:()=>svgWrap(SKY+FOREST_HIGH),
+  rung:()=>svgWrap(SKY+FOREST_LOW),
+  rungDen:()=>svgWrap(SKY+FOREST_LOW+LAMPS_LIT),
+  bien:()=>svgWrap(SKY+SEA_BASE+BIG_SHIP),
+  bienGiua:()=>svgWrap(SKY+SEA_BASE+`<g transform="translate(374,120) scale(.85)">${BIG_SHIP}</g>`)
+};
+let sceneKind="";
+function setScene(k){if(k===sceneKind)return;sceneKind=k;$("#scene").innerHTML=SCENES[k]()}
+function playScene(){
+  const L=G.L,open=G.players.filter(p=>!p.done);
+  if(!open.length)return "rung";
+  const idx=Math.max(...open.map(p=>p.idx));
+  const sea=idx<L.legs.length&&SEA.has(L.legs[idx].at);
+  return sea?(G.mode==="duel"?"bienGiua":"bien"):"rung";
+}
+
+/* =====================================================================
+   HẢI ĐỒ (viewBox 1000×560): biển, đất liền, dây đèn lồng, cột đá ngõ cụt
+   ===================================================================== */
+const LAND=[[115,215,100,110],[310,410,150,125],[430,180,170,110],[790,190,240,140],[850,390,120,95]];
+const WAVES=[[14,388],[60,458],[24,530],[232,36],[600,22],[500,350],[600,410],[520,500],[640,520],[660,360],[900,528]];
+const MAP_BASE=`<defs><filter id="m-brush" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" seed="11"/><feDisplacementMap in="SourceGraphic" scale="26" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="m-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5"/></filter></defs>
+<rect width="1000" height="560" fill="#C3D6D8"/><g stroke="#A6C0C3" stroke-width="2.2" stroke-linecap="round" fill="none">${WAVES.map(([x,y])=>`<path d="M${x},${y} q9,-6 18,0 q9,-6 18,0"/>`).join("")}</g>
+<g filter="url(#m-brush)" fill="#ADC5C7">${LAND.map(([x,y,a,b])=>`<ellipse cx="${x}" cy="${y}" rx="${a+12}" ry="${b+12}"/>`).join("")}</g>
+<g filter="url(#m-brush)" fill="#EEF0EB">${LAND.map(([x,y,a,b])=>`<ellipse cx="${x}" cy="${y}" rx="${a}" ry="${b}"/>`).join("")}</g>`;
+function routePath(ids,off){
+  let d="";ids.forEach((id,k)=>{const q=P[id],x=q.x+off,y=q.y+off;if(!k){d=`M${x},${y}`;return}
+    const a=P[ids[k-1]],ax=a.x+off,ay=a.y+off,dist=Math.hypot(x-ax,y-ay);d+=` Q${(ax+x)/2},${((ay+y)/2+dist*.12).toFixed(1)} ${x},${y}`});
+  return d;
+}
+function anchor(q){return q.x>930?` x="10" style="text-anchor:end"`:""}
+function drawMap(svg,G,compact){
+  const pls=G?G.players:[];
+  const done=new Set(),hit={};pls.forEach(p=>{p.path.forEach(x=>done.add(x));Object.assign(hit,p.hit)});
+  const fs=compact?{st:24,de:21}:{st:18,de:15};
+  let h=MAP_BASE;
+  pls.forEach((p,i)=>{if(p.path.length>1)h+=`<path d="${routePath(p.path,i*4)}" fill="none" stroke="#F7F2E2" stroke-width="${compact?10:8}" stroke-linecap="round" stroke-linejoin="round"/>`});
+  pls.forEach((p,i)=>{if(p.path.length>1)h+=`<path d="${routePath(p.path,i*4)}" fill="none" stroke="${p.c.line}" stroke-width="${compact?4:3.5}" stroke-linecap="round" stroke-dasharray="9 6"/>`});
+  for(const id in DEAD){const q=P[id],x=hit[id];
+    h+=`<g transform="translate(${q.x},${q.y})">${x?STONE_HIT:STONE}${!compact||x?`<text class="md${x?" hit":""}"${anchor(q)} y="${q.dy<0?-14:fs.de+8}" font-size="${fs.de}">${esc(q.n)}</text>`:""}</g>`}
+  for(const id in P){const q=P[id];if(!q.st)continue;const big=id==="pacbo"||id==="nharong",lit=done.has(id),r=big?12:9;
+    const ly=q.dy<0?-(r+9):r+fs.st+4;
+    h+=`<g transform="translate(${q.x},${q.y})">${lit?`<circle r="${r+8}" fill="#F2C75C" opacity=".6" filter="url(#m-glow)"/>`:""}<rect x="${-r*.42}" y="${-r-4}" width="${r*.84}" height="${big?4:3}" rx="1" fill="#2E3436"/><circle r="${r}" fill="${lit?"#D4A43A":"#2F3537"}"${lit?' stroke="#8E6B1E" stroke-width="1.2"':""}/><ellipse rx="${r*.42}" ry="${r}" fill="none" stroke="${lit?"#9B7826":"#4A5356"}" stroke-width="1.1"/><text class="ml${big?" big":""}"${anchor(q)} y="${ly}" font-size="${big?fs.st+1:fs.st}">${esc(q.n)}</text></g>`}
+  const at={};pls.forEach(p=>{const n=at[p.pos]=(at[p.pos]||0)+1,q=P[p.pos];h+=shipG(q.x+20+(n-1)*24,q.y-22-(n-1)*6,p.c.hull,p.c.band,compact?1.6:1.3)});
+  svg.innerHTML=h;
+}
+function mapBox(G,compact){
+  return `<section class="chart" aria-label="Hải đồ"><svg id="map" viewBox="0 0 1000 560" role="img" aria-label="Hải đồ hành trình 1911–1941"></svg>
+  <div class="race">${G.players.map((p,i)=>`<span class="nm">${esc(p.name)}</span><div class="bar"><div id="bar${i}" style="background:${p.c.bar};width:0"></div></div><span class="n" id="barn${i}">0/${G.L.legs.length}</span>`).join("")}</div>
+  ${compact?"":`<div class="legend"><span>${lampIco}Trạm Người ở lại hoạt động</span><span>${stoneIco()}Ngõ cụt: nơi Người ghé qua rồi đi tiếp</span></div>`}</section>`;
+}
+
+/* =====================================================================
+   VÁN CHƠI
+   ===================================================================== */
+let G=null;
+
+function newPlayer(name,i,opt){
+  return Object.assign({name,i,c:COLORS[i]||COLORS[0],idx:0,pos:"nharong",path:["nharong"],score:0,lost:0,correct:0,hit:{},visited:[],removed:{},order:null,orderFor:-1,busy:false,left:0,timer:null,iv:null,done:false,doneAt:0,won:false,keys:["1","2","3","4"]},opt||{});
+}
+
+function startGame(cfg){
+  stopAll();
+  const L=LEVELS[cfg.level];
+  G={cfg,L,mode:cfg.mode,t0:performance.now(),players:[],timed:cfg.mode!=="study",over:false};
+  if(cfg.mode==="duel"){
+    G.players.push(newPlayer(cfg.n1||"Người chơi 1",0,{keys:["1","2","3","4"]}));
+    G.players.push(newPlayer(cfg.n2||"Người chơi 2",1,{keys:["7","8","9","0"]}));
+  } else {
+    G.players.push(newPlayer(cfg.n1||(cfg.mode==="solo"?"Đội tự do":"Người chơi"),0));
+  }
+  renderPlay();
+  G.players.forEach(p=>ask(p));
+  sfx.horn();
+}
+
+function renderPlay(){
+  if(G.mode==="duel"){
+    const [a,b]=G.players;
+    app.innerHTML=`<div class="duel">
+      <div class="side" id="side1"><div id="panel0"></div></div>
+      <div class="mid"><div class="midbar"><span class="ttl"><b>Hải Trình</b><span>Cấp ${esc(G.L.name)}</span></span><button class="chip" id="quit">Kết thúc ván</button></div>${mapBox(G,true)}
+        <div class="keys"><span class="c0"><b>${esc(a.name)}</b> · phím <kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd></span><span class="c1"><b>${esc(b.name)}</b> · phím <kbd>7</kbd><kbd>8</kbd><kbd>9</kbd><kbd>0</kbd></span></div></div>
+      <div class="side" id="side2"><div id="panel1"></div></div></div>`;
+  } else {
+    app.innerHTML=`<div class="wrap">
+      <header class="top"><div class="brand"><h1>Hải Trình Ba Mươi Năm</h1><span class="yr">1911–1941</span><p>Cấp ${esc(G.L.name)} · ${MODE_NAME[G.mode]}</p></div>
+      <div class="tools">${soundChip()}<button class="chip" id="quit">Kết thúc ván</button></div></header>
+      <div class="main">${mapBox(G,false)}<section id="panel0" aria-live="polite"></section></div></div>`;
+  }
+  G.players.forEach(p=>p.el=document.getElementById("panel"+p.i));
+  $("#quit").onclick=()=>endGame(true);
+  bindSound();
+  redraw();
+}
+function redraw(){
+  setScene(playScene());
+  const svg=document.getElementById("map");if(svg)drawMap(svg,G,G.mode==="duel");
+  const N=G.L.legs.length;
+  G.players.forEach(p=>{const b=document.getElementById("bar"+p.i),n=document.getElementById("barn"+p.i);if(b)b.style.width=(p.idx/N*100)+"%";if(n)n.textContent=p.idx+"/"+N});
+  G.players.forEach(p=>{const s=p.el&&p.el.querySelector(".sc");if(s)s.textContent=p.score+" điểm"});
+}
+const whoBand=(p,st)=>G.mode==="duel"?`<div class="who ${p.c.tint}">${shipIco(p.c,p.i===1)}<b>${esc(p.name)}</b>${st?`<span class="stin">· ${esc(st)}</span>`:""}<span class="sc">${p.score} điểm</span></div>`:"";
+
+function ask(p){
+  if(G.over||p.done)return;
+  const L=G.L,q=L.legs[p.idx],lim=limitFor(L,p.idx),st=P[q.at];
+  if(p.orderFor!==p.idx){p.order=shuffle(q.o);p.orderFor=p.idx}
+  const rem=p.removed[p.idx]||{};
+  const J=journeys(L);const jj=J.find(g=>p.idx>=g.start&&p.idx<g.start+g.len);
+  const jLabel=J.length>1?` · Hải trình ${jj.j+1}`:"";
+  p.el.innerHTML=`<div class="card">${whoBand(p,st.n)}
+    <div class="eyebrow"><span>Ngã rẽ ${p.idx+1} / ${L.legs.length}${jLabel}</span><span>${G.timed?lim+" giây":"Không giới hạn"}</span></div>
+    <h2>${esc(st.n)}</h2><p class="where">Trạm đang đứng${G.mode!=="duel"?` · ${p.score} điểm · lạc ${p.lost} lần`:""}</p>
+    <p class="q">${esc(q.q)}</p>
+    ${G.timed?`<div class="timer"><div class="track"><div class="fill"></div></div><b class="ts">${lim}</b></div>`:""}
+    <div class="lanes">${p.order.map((o,k)=>`<button class="lane" data-k="${k}" ${rem[o[0]]?"disabled":""}><span class="k">${p.keys[k]}</span><span>${esc(o[0])}</span></button>`).join("")}</div>
+    ${G.mode==="duel"?"":`<p class="hint">Chọn một lối đi. Lối sai dẫn vào ngõ cụt.</p>`}
+  </div>`;
+  p.el.querySelectorAll(".lane").forEach(b=>b.onclick=()=>choose(p,+b.dataset.k));
+  p.busy=false;
+  if(G.timed)runTimer(p,lim);
+}
+function runTimer(p,lim){
+  clearInterval(p.timer);
+  const t0=performance.now()+300;let lastSec=lim;
+  p.left=lim;
+  p.timer=setInterval(()=>{
+    const left=Math.max(0,lim-Math.max(0,(performance.now()-t0)/1000));p.left=left;
+    const f=p.el.querySelector(".fill"),s=p.el.querySelector(".ts");
+    if(f){f.style.width=(left/lim*100)+"%";f.classList.toggle("low",left<=3)}
+    const c=Math.ceil(left);if(s)s.textContent=c;
+    if(c<lastSec){lastSec=c;if(c<=3&&c>0&&!G.players.some(o=>o!==p&&!o.done))sfx.tick()}
+    if(left<=0){clearInterval(p.timer);timeout(p)}
+  },100);
+}
+function choose(p,k){
+  if(p.busy||p.done||G.over)return;const o=p.order[k];if(!o)return;
+  const btn=p.el.querySelector(`.lane[data-k="${k}"]`);if(!btn||btn.disabled)return;
+  p.busy=true;clearInterval(p.timer);
+  if(o[1]===1){
+    btn.classList.add("right");
+    const first=!(p.removed[p.idx]&&Object.keys(p.removed[p.idx]).length);
+    let pts=first?2:1;if(G.timed&&first)pts+=Math.min(3,Math.floor(p.left/3));
+    p.score+=pts;if(first)p.correct++;
+    advance(p);sfx.ok();
+    setTimeout(()=>p.idx>=G.L.legs.length?arrive(p):ask(p),650);
+  } else {
+    (p.removed[p.idx]=p.removed[p.idx]||{})[o[0]]=1;
+    deadEnd(p,o[1],false);
+  }
+}
+function advance(p){const to=nextAt(G.L,p.idx);p.idx++;p.pos=to;if(p.path[p.path.length-1]!==to)p.path.push(to);redraw()}
+function timeout(p){
+  if(p.busy||G.over)return;p.busy=true;
+  const rem=p.removed[p.idx]||{};const wrong=p.order.filter(o=>o[1]!==1&&!rem[o[0]]);
+  if(wrong.length){const pick=wrong[Math.random()*wrong.length|0];(p.removed[p.idx]=rem)[pick[0]]=1;deadEnd(p,pick[1],true)}
+  else {const ids=Object.keys(DEAD);deadEnd(p,ids[Math.random()*ids.length|0],true)}
+}
+function deadEnd(p,id,drift){
+  sfx.bad();
+  p.lost++;p.hit[id]=1;if(!p.visited.includes(id))p.visited.push(id);
+  const back=p.pos;p.pos=id;redraw();
+  const total=G.timed?3:2;let n=total;
+  const pips=()=>`<span class="pips" aria-hidden="true">${Array.from({length:total},(_,k)=>`<i class="${k<total-n+1?"on":""}"></i>`).join("")}</span>`;
+  const tagIco=drift?'<svg width="22" height="20" viewBox="-11 -10 22 20" aria-hidden="true"><path d="M-10,-2 Q-5,-6 0,-2 T10,-2 M-10,5 Q-5,1 0,5 T10,5" fill="none" stroke="#E8C774" stroke-width="1.8" stroke-linecap="round"/></svg>'
+    :'<svg width="16" height="20" viewBox="-8 -10 16 20" aria-hidden="true"><path d="M-7,8 V-2 Q-7,-9 0,-9 Q7,-9 7,-2 V8 Z" fill="#A3422F" stroke="#E8C774" stroke-width="1.2"/></svg>';
+  p.el.innerHTML=`<div class="dead" role="status">${whoBand(p,"")}<div class="tag">${tagIco}${drift?"Hết giờ · tàu trôi dạt":"Ngõ cụt"}</div><h3>${esc(P[id].n)}</h3><p>${esc(DEAD[id])}</p><p class="cd">${pips()}<span>Quay về ${esc(P[back].n)} sau <b class="cdn">${n}</b> giây…</span></p></div>`;
+  clearInterval(p.iv);
+  p.iv=setInterval(()=>{n--;const c=p.el.querySelector(".cdn");if(c)c.textContent=n;const pp=p.el.querySelector(".pips");if(pp)pp.outerHTML=pips();if(n<=0){clearInterval(p.iv);if(G.over)return;p.pos=back;redraw();ask(p)}},1000);
+}
+const LAMP_BIG='<svg class="lamp" viewBox="-60 -10 120 150" aria-hidden="true"><defs><filter id="a-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="12"/></filter></defs><line x1="0" y1="-10" x2="0" y2="40" stroke="#0F2725" stroke-width="2"/><circle cy="78" r="56" fill="#F2C75C" opacity=".45" filter="url(#a-glow)"/><rect x="-9" y="38" width="18" height="7" rx="2" fill="#0F2725"/><circle cy="78" r="33" fill="#D4A43A"/><ellipse cy="78" rx="15" ry="33" fill="none" stroke="#8E6B1E" stroke-width="1.6"/><rect x="-7" y="110" width="14" height="5" rx="2" fill="#0F2725"/></svg>';
+function arrive(p){
+  p.done=true;p.doneAt=performance.now();
+  const rivals=G.players.filter(o=>o!==p);
+  if(G.mode==="duel"&&rivals.length&&!rivals.some(o=>o.done)){p.won=true;p.score+=10}
+  redraw();
+  sfx.win();
+  if(p.el)p.el.innerHTML=`<div class="arrived">${LAMP_BIG}<div class="tag">28/1/1941</div><h3>Đã về tới Pác Bó</h3><p>${esc(p.name)} · ${p.score} điểm${p.won?" · về đích trước, +10":""}</p>${G.players.some(o=>!o.done)?`<p class="hint">Đang chờ người còn lại về đích…</p>`:""}</div>`;
+  if(G.players.every(o=>o.done))setTimeout(()=>endGame(false),900);
+}
+function stopAll(){if(!G)return;G.players.forEach(p=>{clearInterval(p.timer);clearInterval(p.iv)})}
+
+function endGame(early){
+  if(!G||G.over)return;G.over=true;stopAll();
+  const now=performance.now();
+  const recs=G.players.map(p=>{
+    const secs=Math.round(((p.done?p.doneAt:now)-G.t0)/1000);
+    const r={name:p.name,lvl:G.L.letter,score:p.score,lost:p.lost,secs,idx:p.idx,total:G.L.legs.length,won:p.won,mode:G.mode,at:Date.now(),src:"Máy này"};
+    r.code=makeCode(r);return r;
+  });
+  if(G.mode!=="study"){const book=store.get("ht.book",[]);recs.forEach(r=>book.push(r));store.set("ht.book",book)}
+  renderResults(recs,early);
+}
+
+/* =====================================================================
+   MÀN KẾT QUẢ
+   ===================================================================== */
+const MARK=`<div class="mark"><svg width="42" height="32" viewBox="-17 -19 34 30" aria-hidden="true"><path d="M-15,3 L15,1 L11,10 L-11,10 Z" fill="none" stroke="#1E4E4A" stroke-width="1.4" stroke-linejoin="round"/><rect x="-8" y="-4" width="13" height="5" fill="none" stroke="#1E4E4A" stroke-width="1.2"/><rect x="-2" y="-11" width="5" height="7" fill="none" stroke="#1E4E4A" stroke-width="1.2"/><circle cx="-6" cy="-14" r="2.5" fill="none" stroke="#1E4E4A" stroke-width="1.1"/></svg><i></i><b>TƯ TƯỞNG HỒ CHÍ MINH</b><i></i><small>POL1001</small></div>`;
+function renderResults(recs,early){
+  setScene("rungDen");
+  const pl=G.players;
+  let head="Hải trình khép lại ở Pác Bó";
+  if(G.mode==="duel"){const w=pl.find(p=>p.won);head=w?`${w.name} về đích trước!`:early?"Ván dừng giữa chừng":"Hai tàu cùng về bến";}
+  else if(G.mode==="solo"){head=pl[0].done?"Hải trình khép lại ở Pác Bó":"Ván dừng giữa chừng";}
+  else {head=pl[0].done?"Ôn tập xong cả hải trình":"Dừng ôn tập"}
+  const ports=[...new Set(pl.flatMap(p=>p.visited))];
+  app.innerHTML=`<div class="wrap" style="padding-bottom:0"><header class="top"><div class="brand"><h1>Hải Trình Ba Mươi Năm</h1><span class="yr">1911–1941</span></div><div class="tools">${soundChip()}</div></header></div>
+  <div style="padding:0 clamp(16px,4vw,72px)"><section class="sheet res">
+    <div class="kicker">Kết quả · cấp ${esc(G.L.name)} · ${MODE_NAME[G.mode]}</div>
+    <p class="result">${esc(head)}</p>
+    <p>${G.mode==="study"?"Chế độ ôn tập không ghi vào Sổ kết quả.":"Kết quả đã ghi vào Sổ kết quả trên máy này. Nếu Trọng tài dùng máy khác, đọc tên và mã kết quả để Trọng tài nhập vào Sổ."}</p>
+    <div class="podium">${pl.map((p,i)=>{const r=recs[i];return `<div class="pcard${p.won?" win":""}"><div class="nm">${shipIco(p.c)}${esc(p.name)}${p.won?`<span class="pill">Về trước · +10</span>`:""}</div>
+      <div class="kv"><div><b>${r.score}</b><span>Điểm</span></div><div><b>${r.lost}</b><span>Lần lạc</span></div><div><b>${p.done?r.secs+"s":r.idx+"/"+r.total}</b><span>${p.done?"Thời gian":"Chặng"}</span></div></div>
+      ${G.mode==="study"?"":`<div style="font-size:12.5px;color:var(--dim);margin-bottom:4px">Mã kết quả</div><span class="code">${r.code}</span>`}</div>`}).join("")}</div>
+    ${ports.length?`<h2>Những bến đã lạc vào, cũng là nơi Người từng ghé qua</h2><ul class="ports">${ports.map(id=>`<li>${stoneIco(true)}<span><b>${esc(P[id].n)}</b>: ${esc(DEAD[id])}</span></li>`).join("")}</ul>`:`<p>Không lạc lần nào. Đi đúng từng chặng của hải trình.</p>`}
+    <div class="rowb"><button class="btn" id="again">Chơi lại</button><button class="btn line" id="home">Về bến xuất phát</button><button class="btn line" id="tobook">Mở Sổ kết quả</button></div>
+  </section></div>${MARK}`;
+  bindSound();
+  $("#again").onclick=()=>startGame(G.cfg);
+  $("#home").onclick=()=>renderStart();
+  $("#tobook").onclick=()=>renderBook();
+}
+
+/* =====================================================================
+   MÀN BẮT ĐẦU
+   ===================================================================== */
+let cfg=Object.assign({level:"de",mode:"duel",n1:"",n2:""},store.get("ht.cfg",{}));
+if(!LEVELS[cfg.level]||!LEVELS[cfg.level].legs.length)cfg.level="de";
+if(cfg.mode==="bot")cfg.mode="solo";
+if(!MODE_NAME[cfg.mode])cfg.mode="duel";
+
+function soundChip(){return `<button class="chip" id="snd" aria-pressed="${soundOn}">Âm thanh: ${soundOn?"bật":"tắt"}</button>`}
+function bindSound(){const b=$("#snd");if(b)b.onclick=()=>{soundOn=!soundOn;store.set("ht.sound",soundOn);b.setAttribute("aria-pressed",soundOn);b.textContent="Âm thanh: "+(soundOn?"bật":"tắt");if(soundOn)sfx.ok()}}
+
+const ROUTE=[["Bến Nhà Rồng",170,72,1],["Mác-xây",300,81],["Hoa Kỳ",430,87],["Luân Đôn",560,91],["Pa-ri",690,93],["Mát-xcơ-va",820,92],["Quảng Châu",950,89],["Xiêm",1080,84],["Hồng Kông",1210,77],["Pác Bó",1340,67,1]];
+const ROUTE_SVG=`<svg class="route" viewBox="0 0 1440 170" aria-label="Mười trạm từ Bến Nhà Rồng tới Pác Bó" role="img"><defs><filter id="r-soft" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter></defs>
+<path d="M-20,56 Q720,130 1460,56" fill="none" stroke="#2E3436" stroke-width="2"/>
+${ROUTE.map(([n,x,y,big])=>big?`<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="0" y2="14" stroke="#2E3436" stroke-width="1.5"/><circle cy="33" r="36" fill="#C9A040" opacity=".45" filter="url(#r-soft)"/><rect x="-6" y="11" width="12" height="5" rx="1" fill="#2E3436"/><circle cy="33" r="19" fill="#C9A040"/><ellipse cy="33" rx="8.5" ry="19" fill="none" stroke="#8E6B1E" stroke-width="1.3"/><text y="74" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-size="15" font-weight="700" fill="#1E4E4A" stroke="#F1F5F5" stroke-width="4" stroke-linejoin="round" paint-order="stroke">${n}</text></g>`
+  :`<g transform="translate(${x},${y})"><line x1="0" y1="0" x2="0" y2="14" stroke="#2E3436" stroke-width="1.5"/><rect x="-5" y="11" width="10" height="5" rx="1" fill="#2E3436"/><circle cy="27" r="13" fill="#2F3537"/><ellipse cy="27" rx="6" ry="13" fill="none" stroke="#4A5356" stroke-width="1.2"/><text y="60" text-anchor="middle" font-family="Be Vietnam Pro, sans-serif" font-size="14" font-weight="600" fill="#1E4E4A" stroke="#F1F5F5" stroke-width="4" stroke-linejoin="round" paint-order="stroke">${n}</text></g>`).join("")}</svg>`;
+const GO_ICO='<svg width="28" height="22" viewBox="-17 -19 34 30" aria-hidden="true"><path d="M-15,3 L15,1 L11,10 L-11,10 Z" fill="none" stroke="#1E2422" stroke-width="1.8" stroke-linejoin="round"/><rect x="-8" y="-4" width="13" height="5" fill="none" stroke="#1E2422" stroke-width="1.5"/><rect x="-2" y="-11" width="5" height="7" fill="none" stroke="#1E2422" stroke-width="1.5"/></svg>';
+
+function renderStart(){
+  stopAll();G=null;setScene("rungCao");
+  const t=LEVELS.de.legs.map((q,i)=>limitFor(LEVELS.de,i));
+  const names=cfg.mode==="duel"
+    ?`<div class="names"><div class="field"><label for="n1">${shipIco(COLORS[0])}Người chơi 1 · tàu vàng</label><input id="n1" maxlength="30" autocomplete="off" value="${esc(cfg.n1)}" placeholder="VD: Nguyễn Văn An"></div>
+      <div class="field"><label for="n2">${shipIco(COLORS[1])}Người chơi 2 · tàu xanh</label><input id="n2" maxlength="30" autocomplete="off" value="${esc(cfg.n2)}" placeholder="VD: Trần Thị Bình"></div></div>`
+    :`<div class="names one"><div class="field"><label for="n1">${shipIco(COLORS[0])}${cfg.mode==="solo"?"Tên đội":"Tên (không bắt buộc)"}</label><input id="n1" maxlength="30" autocomplete="off" value="${esc(cfg.n1)}" placeholder="${cfg.mode==="solo"?"VD: Nhóm 3":"VD: Nguyễn Văn An"}"></div></div>`;
+  app.innerHTML=`<div class="start">
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="s-chalk" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.5" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="s-brushH" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="5"/><feDisplacementMap in="SourceGraphic" scale="34" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+  <div class="start-tools">${soundChip()}<button class="chip" id="bookBtn">Sổ kết quả</button></div>
+  ${ROUTE_SVG}
+  <div class="startgrid">
+    <div>
+      <div class="hero"><svg class="hero-bg" viewBox="0 0 600 400" preserveAspectRatio="none" aria-hidden="true"><g filter="url(#s-brushH)"><ellipse cx="250" cy="170" rx="250" ry="150" fill="#57515F"/><ellipse cx="330" cy="230" rx="260" ry="160" fill="#47424F"/><ellipse cx="220" cy="280" rx="210" ry="110" fill="#3B3743"/></g></svg><h1><span>Hải Trình</span><br><span>Ba Mươi Năm</span></h1><div class="yr">1911 — 1941</div></div>
+      <section class="guide"><h2>Hướng dẫn</h2><ul class="dots">${GUIDE.map(g=>`<li>${esc(g)}</li>`).join("")}</ul></section>
+    </div>
+    <section class="panel" aria-label="Chuẩn bị nhổ neo">
+      <h2>Chuẩn bị nhổ neo</h2>
+      <div class="lbl">Chế độ</div>
+      <div class="opts" role="radiogroup" aria-label="Chế độ" id="modes">${MODES.map(m=>`<button class="opt" role="radio" data-v="${m[0]}" aria-checked="${cfg.mode===m[0]}"><span class="dot"></span><span><b>${m[1]}</b><small>${m[2]}</small></span></button>`).join("")}</div>
+      <div class="lbl">Cấp độ</div>
+      <div class="opts row3" role="radiogroup" aria-label="Cấp độ" id="levels">${Object.entries(LEVELS).map(([k,L])=>{const off=!L.legs.length;return `<button class="opt" role="radio" data-v="${k}" aria-checked="${cfg.level===k}" ${off?'aria-disabled="true"':""}><b>${L.name}</b><small>${off?"Chờ nội dung từ giáo trình":L.note}</small></button>`}).join("")}</div>
+      <div class="tt"><span class="t">Thời gian: Dễ:</span>${[0,3,6,9,12,14].map(i=>`<span>C${i+1} · ${t[i]}s</span>`).join("")}</div>
+      ${names}
+      <p class="msg bad" id="startMsg"></p>
+      <button class="btn go" id="go">${GO_ICO}Nhổ neo</button>
+    </section>
+  </div></div>`;
+  bindSound();
+  $("#bookBtn").onclick=()=>renderBook();
+  const keep=()=>{cfg.n1=$("#n1").value;const n2=$("#n2");if(n2)cfg.n2=n2.value};
+  document.querySelectorAll("#modes .opt").forEach(b=>b.onclick=()=>{keep();cfg.mode=b.dataset.v;renderStart()});
+  document.querySelectorAll("#levels .opt").forEach(b=>b.onclick=()=>{if(b.getAttribute("aria-disabled")==="true"){$("#startMsg").textContent=`Cấp ${LEVELS[b.dataset.v].name} chưa có câu hỏi. Tạm chơi cấp Dễ.`;return}keep();cfg.level=b.dataset.v;renderStart()});
+  $("#go").onclick=()=>{
+    keep();cfg.n1=cfg.n1.trim();cfg.n2=(cfg.n2||"").trim();
+    if(cfg.mode==="solo"&&!cfg.n1){$("#startMsg").textContent="Nhập tên đội để Sổ kết quả ghi đúng đội.";$("#n1").focus();return}
+    if(cfg.mode==="duel"&&!cfg.n1){$("#startMsg").textContent="Nhập tên để Sổ kết quả ghi đúng người.";$("#n1").focus();return}
+    if(cfg.mode==="duel"&&!cfg.n2){$("#startMsg").textContent="Nhập tên người chơi 2.";$("#n2").focus();return}
+    if(cfg.mode==="duel"&&cfg.n1.toLowerCase()===cfg.n2.toLowerCase()){$("#startMsg").textContent="Hai người chơi cần tên khác nhau.";return}
+    store.set("ht.cfg",cfg);startGame(Object.assign({},cfg));
+  };
+}
+
+/* =====================================================================
+   SỔ KẾT QUẢ (Trọng tài / giảng viên)
+   ===================================================================== */
+let bookFilter="all";
+function renderBook(){
+  stopAll();G=null;setScene("rung");
+  const book=store.get("ht.book",[]);
+  const rows=book.map((r,i)=>Object.assign({k:i},r)).filter(r=>bookFilter==="all"||r.lvl===bookFilter)
+    .sort((a,b)=>b.score-a.score||a.secs-b.secs);
+  const lvName={D:"Dễ",K:"Khó",S:"Siêu khó"};
+  const issues=Object.values(LEVELS).filter(L=>L.legs.length).map(L=>[L.name,lengthIssues(L)]);
+  app.innerHTML=`<div class="wrap" style="max-width:1200px">
+  <header class="top"><div class="brand"><h1>Sổ kết quả</h1><p>Hải Trình Ba Mươi Năm · dành cho giảng viên và Trọng tài</p></div>
+  <div class="tools"><button class="chip" id="back">Về bến xuất phát</button></div></header>
+  <section class="sheet">
+    <h2 style="margin-top:0">Nhập mã từ máy khác</h2>
+    <p>Mỗi người chơi trên máy riêng đọc tên và mã kết quả ở màn cuối. Nhập đúng tên như lúc chơi; mã sai tên hoặc sai ký tự sẽ bị từ chối.</p>
+    <div class="addrow"><div class="field"><label for="cname">Tên người chơi</label><input id="cname" maxlength="30" autocomplete="off"></div>
+    <div class="field"><label for="ccode">Mã kết quả</label><input id="ccode" maxlength="20" autocomplete="off" placeholder="D38-2-146-K7Q" style="font-family:var(--label);text-transform:uppercase;letter-spacing:1px"></div>
+    <button class="btn" id="add">Ghi vào sổ</button></div>
+    <p class="msg" id="addMsg"></p>
+
+    <h2>Bảng xếp hạng</h2>
+    <div class="tools">${[["all","Tất cả"],["D","Dễ"],["K","Khó"],["S","Siêu khó"]].map(f=>`<button class="chip" aria-pressed="${bookFilter===f[0]}" data-f="${f[0]}" style="${bookFilter===f[0]?"background:var(--teal);color:#fff":""}">${f[1]}</button>`).join("")}</div>
+    ${rows.length?`<div class="tablewrap"><table><thead><tr><th class="num">#</th><th>Người chơi</th><th>Cấp</th><th class="num">Điểm</th><th class="num">Lạc</th><th class="num">Thời gian</th><th>Nguồn</th><th>Lúc</th></tr></thead><tbody>
+    ${rows.map((r,i)=>`<tr class="${i===0?"top1":""}"><td class="num">${i+1}</td><td>${esc(r.name)}${r.won?` <span class="pill" style="margin-left:6px">Về trước</span>`:""}</td><td>${lvName[r.lvl]||r.lvl}</td><td class="num">${r.score}</td><td class="num">${r.lost}</td><td class="num">${r.secs}s</td><td>${esc(r.src)}</td><td>${new Date(r.at).toLocaleString("vi-VN",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"2-digit"})}</td></tr>`).join("")}
+    </tbody></table></div>`:`<p style="margin-top:12px">Chưa có kết quả nào${bookFilter==="all"?"":" ở cấp này"}. Kết quả từ các ván chơi trên máy này sẽ tự ghi vào đây.</p>`}
+    <div class="rowb" style="margin-top:12px"><button class="btn sm" id="copy" ${book.length?"":"disabled"}>Sao chép bảng (dán vào Excel)</button><button class="btn sm line" id="clear" ${book.length?"":"disabled"}>Xoá sổ</button></div>
+    <div id="confirmBox"></div>
+    <p class="msg" id="copyMsg"></p>
+
+    <h2>Kiểm tra độ dài câu hỏi</h2>
+    ${issues.map(([n,list])=>`<p><b>Cấp ${n}:</b> ${list.length?list.map(esc).join("; "):"mọi câu đều vừa thời gian đọc."}</p>`).join("")}
+    <p class="note">Sổ lưu trong trình duyệt của máy này. Xoá dữ liệu trình duyệt hoặc mở chế độ ẩn danh sẽ mất sổ, nên sao chép bảng sau mỗi buổi.</p>
+  </section></div>`;
+  $("#back").onclick=()=>renderStart();
+  document.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{bookFilter=b.dataset.f;renderBook()});
+  $("#add").onclick=()=>{
+    const m=$("#addMsg");const res=readCode($("#cname").value,$("#ccode").value);
+    if(res.err){m.className="msg bad";m.textContent=res.err;return}
+    const r=Object.assign(res.r,{won:false,mode:"code",at:Date.now(),src:"Nhập mã"});r.code=makeCode(r);
+    const bk=store.get("ht.book",[]);
+    if(bk.some(x=>x.code===r.code&&x.name.toLowerCase()===r.name.toLowerCase())){m.className="msg bad";m.textContent="Mã này đã có trong sổ.";return}
+    bk.push(r);store.set("ht.book",bk);renderBook();const m2=$("#addMsg");m2.className="msg good";m2.textContent=`Đã ghi ${r.name}: ${r.score} điểm.`;$("#cname").focus();
+  };
+  $("#ccode").addEventListener("keydown",e=>{if(e.key==="Enter")$("#add").click()});
+  $("#copy").onclick=()=>{
+    const lines=[["Hạng","Người chơi","Cấp","Điểm","Lần lạc","Thời gian (giây)","Về trước","Nguồn","Lúc"].join("\t")].concat(rows.map((r,i)=>[i+1,r.name,lvName[r.lvl],r.score,r.lost,r.secs,r.won?"Có":"",r.src,new Date(r.at).toLocaleString("vi-VN")].join("\t")));
+    const txt=lines.join("\n");const msg=$("#copyMsg");
+    const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;ta.style.cssText="width:100%;height:120px;font-family:var(--label);font-size:12px";msg.className="msg";msg.textContent="Trình duyệt không cho sao chép tự động. Chọn hết nội dung dưới đây và sao chép:";msg.after(ta);ta.select()};
+    try{navigator.clipboard.writeText(txt).then(()=>{msg.className="msg good";msg.textContent="Đã sao chép. Dán vào Excel hoặc Google Sheets."},fallback)}catch(e){fallback()}
+  };
+  $("#clear").onclick=()=>{
+    $("#confirmBox").innerHTML=`<div class="confirm">Xoá toàn bộ ${book.length} kết quả trên máy này? Không khôi phục được.<button class="btn sm warn" id="yes">Xoá hết</button><button class="btn sm line" id="no">Giữ lại</button></div>`;
+    $("#yes").onclick=()=>{store.set("ht.book",[]);renderBook()};$("#no").onclick=()=>{$("#confirmBox").innerHTML=""};
+  };
+}
+
+/* ---------- phím tắt ---------- */
+document.addEventListener("keydown",e=>{
+  if(!G||G.over)return;if(e.target&&e.target.tagName==="INPUT")return;
+  G.players.forEach(p=>{if(p.done||p.busy)return;const k=p.keys.indexOf(e.key);if(k>=0)choose(p,k)});
+});
+
+renderStart();
+})();
+</script>
+</body></html>
