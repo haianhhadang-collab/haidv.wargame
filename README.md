@@ -65,6 +65,8 @@ Mỗi nhóm một máy, đi 6 chặng từ cổng làng về nhà tranh Làng Se
 Mỗi chặng một ngã rẽ (câu Đúng/Sai — chọn sai vào ngõ cụt, thêm 3 bước) và một trạm (câu 5 phương án).
 Đúng ngay lần đầu, không xem gợi ý thì được hoa sen. Máy giảng viên mở phòng và chiếu bảng tổng hợp cả lớp.
 
+Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame/ve-lang/poster-doc.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/ve-lang/poster-doc.png) — A4 ngang [PDF in](https://haianhhadang-collab.github.io/haidv.wargame/ve-lang/poster-ngang.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/ve-lang/poster-ngang.png).
+
 - **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/ve-lang/
 
 ![Mã QR vào Về Làng Sen](ve-lang/qr-vao-game.png)
