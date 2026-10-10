@@ -1,0 +1,1754 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thước Kẻ Thời Gian</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+/* ===== Giao diện "rừng Việt Bắc": gỗ chạm, giấy dó, cảnh vẽ tay (10/10/2026) =====
+   Biến --muc/--muc2 đổi theo nền: chữ kem trên rừng, chữ nâu mực trên giấy dó. */
+:root{
+  --go:#8A5128; --go-sang:#A9683A; --go-toi:#6E3D1E; --vien-go:#3E2210; --bong-go:#2A170A;
+  --giay:#F4E4BC; --giay2:#FCF4DC; --giay-vien:#CFB27E; --kem:#FCEFD0;
+  --vang:#F2C14E; --cam:#D9622B; --ngoc:#2F7E78; --reu:#7FAE3E; --rung:#1E4A2A; --da:#8C9A92;
+  --do:#B8322A; --xanh:#2F7A3A;
+  --muc:#FCEFD0; --muc2:#CFE3C8; --muc3:#9DBB98;
+  --r:14px;
+  --c-dung:#2F7A3A; --c-gan:#B7860B; --c-thutu:#2C6FBB; --c-sai:#B8322A; --c-chua:#8A7A66; --so-dot:#fff;
+  font-size:clamp(16px, .55vw + 11px, 22px);
+  color-scheme:light;
+}
+/* ngữ cảnh giấy dó: chữ mực nâu */
+.bang-go,.o-the,.vaichip,.dongho,.ban,.the-sk,.chi-tiet,.chon-cap label,.neo-ds,.cua-giay,.giay-bang,.khay .the-sk,.chip,.kq-mt,input,select{
+  --muc:#2B1A0E; --muc2:#6E3D1E; --muc3:#9A7A55; }
+*{ box-sizing:border-box; }
+html{ background:#143A22; }
+body{ margin:0; min-height:100vh; color:var(--muc); font-family:"Be Vietnam Pro",system-ui,sans-serif; line-height:1.55; -webkit-text-size-adjust:100%;
+  background:#143A22 linear-gradient(180deg,#3F8A33 0,#3F8A33 clamp(150px, 20vw, 260px),#2A6430 32rem,#1E4A2A 60rem,#143A22 100rem) no-repeat; position:relative; }
+h1,h2,h3,.tde{ font-family:"Baloo 2","Be Vietnam Pro",sans-serif; line-height:1.15; margin:.2em 0 .35em; }
+h1{ font-size:2rem; } h2{ font-size:1.45rem; } h3{ font-size:1.15rem; }
+p{ margin:.4em 0; }
+.mono{ font-family:"IBM Plex Mono",ui-monospace,monospace; }
+.nho{ font-size:.85rem; } .mo{ color:var(--muc2); }
+[hidden]{ display:none !important; }
+:focus-visible{ outline:3px solid var(--vang); outline-offset:2px; }
+svg.nv{ width:2rem; height:2rem; flex:none; }
+main{ position:relative; z-index:1; }
+
+/* cảnh đầu trang cho các màn điện thoại / trang chữ */
+#canh{ position:absolute; left:0; right:0; top:0; height:clamp(150px, 20vw, 260px); z-index:0; pointer-events:none; overflow:hidden; }
+#canh svg{ width:100%; height:100%; display:block; }
+body[data-man="s-dau"] #canh, body[data-man="s-chieu"] #canh, body[data-man="s-thu"] #canh{ display:none; }
+
+.man{ max-width:46rem; margin:0 auto; padding:1rem 1rem 3rem; }
+/* trang chữ (luật, tạo phòng, vào phòng, ôn tập, xem thử): tấm giấy dó trong khung gỗ */
+.bang-go{ background:var(--giay); color:var(--muc); border:6px solid var(--vien-go); border-radius:22px; padding:1.1rem 1.3rem 1.6rem;
+  box-shadow:0 10px 0 var(--bong-go), 0 24px 40px rgba(11,36,22,.4); margin:4.2rem auto 3rem; position:relative; }
+.bang-go::before{ content:""; position:absolute; left:14px; right:14px; top:-12px; height:10px; border-radius:8px; background:var(--reu); }
+.bang-go > h2:first-of-type{ display:inline-block; margin:.6rem 0 .6rem; padding:.15em .8em .2em; font-weight:800; font-size:1.6rem; color:var(--kem);
+  background:linear-gradient(180deg,var(--go-sang),var(--go-toi)); border:4px solid var(--vien-go); border-radius:12px; box-shadow:0 5px 0 var(--bong-go);
+  text-shadow:0 2px 0 var(--vien-go); }
+.bang-go h3{ color:var(--go-toi); }
+.bang-go .o-the,.bang-go .the-sk,.bang-go .chon-cap label{ background:var(--giay2); }
+
+/* nút = tấm ván gỗ */
+.nut{ font:700 1rem "Be Vietnam Pro",sans-serif; border:3px solid var(--vien-go); border-radius:12px; padding:.62rem 1.1rem; cursor:pointer; min-height:44px;
+  background:linear-gradient(180deg,#8F562B,var(--go-toi)); color:var(--kem); box-shadow:0 5px 0 var(--bong-go);
+  display:inline-flex; align-items:center; justify-content:center; gap:.5rem; transition:transform .08s, box-shadow .08s; }
+.nut:active:not(:disabled){ transform:translateY(3px); box-shadow:0 2px 0 var(--bong-go); }
+.nut.phu{ background:var(--giay); color:#3E2210; }
+.nut.vang{ background:linear-gradient(180deg,#F0B04A,#D98A2B); color:var(--bong-go); }
+.nut:disabled{ opacity:.5; cursor:not-allowed; }
+.nut.nho{ padding:.35rem .8rem; font-size:.85rem; min-height:40px; border-width:2.5px; box-shadow:0 4px 0 var(--bong-go); }
+.nut-lon{ width:100%; font-family:"Baloo 2",sans-serif; font-weight:800; font-size:1.25rem; padding:.8rem 1rem; border-radius:16px; }
+.hang-nut{ display:flex; flex-wrap:wrap; gap:.7rem; margin:.9rem 0; }
+.o-the{ background:var(--giay); color:var(--muc); border:3px solid var(--vien-go); border-radius:var(--r); padding:1rem; margin:.9rem 0; box-shadow:0 5px 0 var(--bong-go); }
+label.o{ display:block; font-weight:700; margin:.8rem 0 .3rem; }
+input,select{ font:inherit; color:var(--muc); background:var(--giay2); border:2.5px solid var(--vien-go); border-radius:10px; padding:.6rem .7rem; width:100%; }
+.loi{ color:var(--do); font-weight:700; }
+.bao{ position:fixed; left:50%; bottom:1.2rem; transform:translateX(-50%); background:linear-gradient(180deg,#8F562B,var(--go-toi)); color:var(--kem);
+  border:3px solid var(--vien-go); box-shadow:0 5px 0 var(--bong-go); padding:.6rem 1rem; border-radius:12px; z-index:60; max-width:90vw; font-size:.95rem; font-weight:600; }
+
+/* ===== Trang đầu: cảnh rừng, biển tên treo, cột biển chỉ đường ===== */
+.dau{ position:relative; min-height:100vh; overflow:hidden; }
+.dau-canh{ position:absolute; inset:0; z-index:0; }
+.dau-canh svg{ width:100%; height:100%; display:block; }
+.dau-luoi{ position:relative; z-index:1; min-height:100vh; max-width:84rem; margin:0 auto; padding:5vh 4vw 4vh;
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(18rem,.85fr); gap:2rem 4vw; align-items:start; }
+.dau-trai{ display:flex; flex-direction:column; align-items:flex-start; gap:1rem; }
+.dau-bien{ position:relative; padding:1.2rem 1.9rem 1.4rem; background:linear-gradient(180deg,var(--go-sang),var(--go) 55%,var(--go-toi)); border:6px solid var(--vien-go);
+  border-radius:22px; box-shadow:0 12px 0 var(--bong-go), 0 24px 40px rgba(11,36,22,.45); margin-top:1.5rem; }
+.dau-bien::before{ content:""; position:absolute; left:10px; right:10px; top:8px; height:10px; border-radius:8px; background:var(--reu); }
+.dau-bien::after{ content:""; position:absolute; left:18%; right:18%; top:calc(-1.5rem - 6px); height:1.5rem;
+  background:linear-gradient(90deg,transparent 0 6px,#C9A462 6px 11px,transparent 11px calc(100% - 11px),#C9A462 calc(100% - 11px) calc(100% - 6px),transparent 0); }
+.dau-bien h1{ margin:0; font-weight:800; font-size:clamp(2.6rem, 5.4vw, 5.6rem); line-height:.95; color:var(--kem); letter-spacing:-.5px;
+  text-shadow:0 5px 0 var(--vien-go), 0 8px 18px rgba(0,0,0,.25); }
+.dau-phu{ margin-left:1.4rem; padding:.35rem 1rem; background:var(--giay); border:3px solid var(--vien-go); border-radius:999px; font-weight:700; font-size:.95rem; color:#3E2210; }
+.cua-giay{ background:var(--giay); color:var(--muc); border:3px solid var(--vien-go); border-radius:var(--r); padding:.8rem 1rem; box-shadow:0 6px 0 var(--bong-go); max-width:34rem; }
+.cua-giay p{ margin:0; }
+.cua-giay .nho{ margin-top:.5rem; }
+#d-khoi:empty{ display:none; }
+#d-khoi .o-the{ margin:.5rem 0; }
+.cua{ position:relative; display:flex; flex-direction:column; gap:1rem; padding-top:.5rem; }
+.cua::before{ content:""; position:absolute; left:calc(50% - 17px); top:-20vh; bottom:-30vh; width:34px; border-radius:10px;
+  background:linear-gradient(90deg,#5E3417,#8A5128 45%,#4A2A14); box-shadow:0 0 0 4px var(--bong-go); z-index:-1; }
+.cua button{ position:relative; text-align:left; display:flex; gap:.9rem; align-items:center; padding:.75rem 1.1rem; cursor:pointer; font:inherit;
+  border:5px solid var(--vien-go); border-radius:16px; background:linear-gradient(180deg,#9A5E30,var(--go-toi)); color:var(--kem); box-shadow:0 7px 0 var(--bong-go); }
+.cua button:nth-child(odd){ transform:rotate(-1.1deg); } .cua button:nth-child(even){ transform:rotate(.9deg); }
+.cua button:first-child{ background:linear-gradient(180deg,#E9A23B,#C9781F); color:var(--bong-go); }
+.cua button:first-child .nho{ color:#3E2210; }
+.cua button:hover{ filter:brightness(1.07); }
+.cua button:active{ box-shadow:0 3px 0 var(--bong-go); translate:0 3px; }
+.cua .huy{ flex:none; width:3.3rem; height:3.3rem; border-radius:50%; background:var(--giay); border:4px solid var(--vien-go); display:grid; place-items:center; }
+.cua svg{ width:2.6rem; height:2.6rem; }
+.cua b{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:1.45rem; display:block; line-height:1.05; }
+.cua .nho{ color:var(--giay); font-weight:500; }
+@media (max-width:820px){
+  .dau-luoi{ grid-template-columns:minmax(0,1fr); padding:4vh 1rem 3rem; }
+  .dau-trai{ align-items:stretch; } .dau-bien{ align-self:flex-start; } .dau-phu{ align-self:flex-start; margin-left:.6rem; }
+  .cua::before{ display:none; }
+  .dau-bien{ margin-top:1rem; }
+}
+.chon-cap{ display:grid; gap:.7rem; }
+.chon-cap label{ display:flex; gap:.7rem; align-items:flex-start; background:var(--giay); color:var(--muc); border:2.5px solid var(--vien-go);
+  border-radius:var(--r); padding:.8rem; cursor:pointer; box-shadow:0 4px 0 var(--bong-go); }
+.chon-cap input{ width:auto; margin-top:.35rem; accent-color:var(--go-toi); }
+.chon-cap label:has(input:checked){ box-shadow:0 0 0 4px var(--vang), 0 4px 0 var(--bong-go); }
+.luat li{ margin:.35rem 0; }
+table.bd{ border-collapse:collapse; width:100%; font-size:.9rem; background:var(--giay2); }
+table.bd th,table.bd td{ border:1.5px solid var(--giay-vien); padding:.35rem .5rem; text-align:left; vertical-align:top; }
+
+/* ===== Thành phần dùng chung ===== */
+.thanh-nhom{ display:flex; align-items:center; gap:.6rem; background:linear-gradient(180deg,#9A5E30,var(--go-toi)); color:var(--kem); padding:.5rem .8rem .5rem .6rem;
+  border:4px solid var(--vien-go); border-radius:var(--r); box-shadow:0 5px 0 var(--bong-go); font-weight:700; flex-wrap:wrap; }
+.thanh-nhom .gay{ flex:none; width:1.6rem; height:2rem; border-radius:4px 7px 7px 4px; border:2.5px solid var(--vien-go); background:var(--nhom); box-shadow:inset 5px 0 0 rgba(0,0,0,.18); }
+.thanh-nhom .sp{ flex:1; font-family:"Baloo 2",sans-serif; font-weight:800; font-size:1.15rem; line-height:1.1; }
+.thanh-nhom .nho{ color:var(--giay); font-weight:500; }
+.mang{ font-size:.8rem; display:inline-flex; align-items:center; gap:.35rem; color:var(--kem); background:rgba(15,46,26,.7); padding:.1rem .55rem; border-radius:999px; }
+.mang:empty{ display:none; }
+.mang .dot{ width:.6rem; height:.6rem; border-radius:50%; background:#E0705F; display:inline-block; }
+.mang .dot.on{ background:#8EDB8A; } .mang .dot.dang{ background:var(--vang); }
+.vaichip{ display:flex; gap:.8rem; align-items:center; background:var(--giay); color:var(--muc); border:3px solid var(--vien-go);
+  border-radius:var(--r); padding:.7rem .9rem; margin:.8rem 0; box-shadow:0 5px 0 var(--bong-go); }
+.vaichip .av{ width:3.6rem; height:3.6rem; border-radius:50%; background:var(--giay2); border:3px solid var(--vien-go); display:grid; place-items:center; flex:none; }
+.vaichip .av svg{ width:3rem; height:3rem; }
+.vaichip small{ color:var(--muc2); display:block; }
+.vaichip b{ font-family:"Baloo 2",sans-serif; font-size:1.4rem; line-height:1.1; }
+.vaichip .khoa{ font-size:.75rem; font-weight:700; color:var(--cam); margin-left:.3rem; }
+.dongho{ display:flex; align-items:center; gap:.7rem; background:var(--giay); color:var(--muc); border:3px solid var(--vien-go); border-radius:var(--r);
+  padding:.5rem .8rem; box-shadow:0 5px 0 var(--bong-go); }
+.dongho svg{ width:2.4rem; height:2.4rem; flex:none; }
+.dongho .so{ font:800 1.8rem/1 "Baloo 2",sans-serif; min-width:4.2ch; color:#3E2210; }
+.dongho .pha{ font-weight:700; font-size:.85rem; color:var(--muc2); }
+.dongho .vach{ flex:1; height:.7rem; background:#E2C996; border:2px solid var(--vien-go); border-radius:9px; overflow:hidden; }
+.dongho .vach i{ display:block; height:100%; background:var(--ngoc); }
+.dongho.cuoi .so{ color:var(--do); } .dongho.cuoi .vach i{ background:var(--do); }
+.dongho.cuoi svg{ animation:rung .35s infinite; }
+@keyframes rung{ 0%,100%{ transform:rotate(0); } 25%{ transform:rotate(-7deg); } 75%{ transform:rotate(7deg); } }
+@media (prefers-reduced-motion:reduce){ .dongho.cuoi svg{ animation:none; } }
+.doi{ display:grid; grid-template-columns:repeat(auto-fill,minmax(5.6rem,1fr)); gap:.5rem; margin:.8rem 0; }
+.ban{ background:var(--giay); color:var(--muc); border:2.5px solid var(--vien-go); border-radius:10px; padding:.35rem; text-align:center; font-size:.72rem; line-height:1.25; box-shadow:0 3px 0 var(--bong-go); }
+.ban svg{ width:2rem; height:2rem; display:block; margin:0 auto .1rem; }
+.ban b{ display:block; font-size:.78rem; }
+.ban.toi{ box-shadow:0 0 0 3px var(--vang), 0 3px 0 var(--bong-go); }
+.ban.xong{ background:#DCEBC8; }
+.ban.vang-mat{ opacity:.45; }
+.neo-ds{ font-size:.9rem; background:linear-gradient(180deg,#B7C2BB,#98A69F); color:var(--muc); border:2.5px solid #2A3A33; border-radius:12px; padding:.5rem .8rem; margin:.7rem 0; box-shadow:0 4px 0 var(--bong-go); }
+.neo-ds b{ font-family:"Baloo 2",sans-serif; font-size:1.05em; }
+.muc-t{ font-family:"Baloo 2",sans-serif; font-weight:800; font-size:1.2rem; margin:1.2rem 0 .4rem; display:flex; align-items:center; gap:.5rem; color:var(--muc);
+  text-shadow:0 2px 0 rgba(20,40,24,.6); }
+.bang-go .muc-t{ text-shadow:none; }
+.bimat{ color:#FFB59A; font-size:.78rem; font-weight:700; letter-spacing:.02em; text-shadow:none; }
+.bang-go .bimat{ color:var(--do); }
+.the-sk{ background:var(--giay); color:var(--muc); border:3px solid var(--vien-go); border-left:9px solid var(--c,var(--muc3)); border-radius:12px;
+  padding:.65rem .8rem; margin:.6rem 0; box-shadow:0 4px 0 var(--bong-go); }
+.the-sk b{ display:block; font-size:1.02rem; line-height:1.3; }
+.the-sk p{ margin:.25rem 0 .45rem; font-size:.88rem; color:var(--muc2); }
+.the-sk .da{ color:var(--ngoc); font-weight:700; font-size:.9rem; }
+/* thẻ manh mối = giấy nhớ vàng ghim đinh cam */
+.manh{ position:relative; background:#F7E08A; color:#2B1A0E; border:2.5px solid var(--vien-go); border-radius:4px 14px 4px 14px; padding:.8rem .9rem .7rem; margin:1rem 0 .8rem;
+  box-shadow:0 4px 0 var(--bong-go); --muc:#2B1A0E; --muc2:#7E4722; }
+.manh:nth-of-type(odd){ transform:rotate(-.5deg); } .manh:nth-of-type(even){ transform:rotate(.4deg); }
+.manh::before{ content:""; position:absolute; left:50%; top:-10px; width:14px; height:14px; margin-left:-7px; border-radius:50%; background:var(--cam); border:2.5px solid var(--vien-go); }
+.manh.nghi{ background:#F4B7A4; }
+.manh .tu{ font-size:.78rem; font-weight:700; color:#7E4722; }
+.manh p{ margin:.1rem 0 .4rem; font-size:1rem; }
+.bang-mt{ display:grid; gap:.6rem; }
+.kq-mt{ font-size:1.05rem; font-weight:600; background:var(--giay); color:var(--muc); border:3px solid var(--vien-go); border-radius:12px; padding:.6rem .8rem; box-shadow:0 4px 0 var(--bong-go); }
+
+/* ===== Cây thước: thanh gỗ chạm dựng đứng, mỗi hàng một năm ===== */
+.thuoc{ position:relative; }
+.th-tong{ display:flex; flex-direction:column; gap:.35rem; background:var(--giay); color:#6E3D1E; border:2.5px solid var(--vien-go); border-radius:12px;
+  padding:.4rem .7rem; margin:.4rem 0 .6rem; font:700 .75rem "Be Vietnam Pro",sans-serif; box-shadow:0 3px 0 var(--bong-go); }
+.th-thanh{ position:relative; flex:1; height:.9rem; border-radius:7px; background:#D9BF8A; border:2px solid var(--vien-go); }
+.th-cua{ position:absolute; top:-6px; bottom:-6px; border-radius:6px; background:rgba(47,126,120,.3); border:2.5px solid var(--ngoc); min-width:6px; }
+.th-thanh b{ position:absolute; top:2px; width:5px; height:5px; margin-left:-2.5px; border-radius:50%; background:#3E2210; }
+.th-thanh b.neo{ background:var(--kem); box-shadow:0 0 0 1.5px #3E2210; }
+.th-nhan{ display:flex; justify-content:space-between; gap:.5rem; }
+.th-xem{ white-space:nowrap; color:var(--ngoc); }
+.bang-go .th-cuon{ background:#E2CC9A; }
+.th-cuon{ position:relative; max-height:min(62vh, 36rem); overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain;
+  border-radius:var(--r); background:rgba(10,30,18,.35); }
+.th-ray{ display:flex; flex-direction:column; padding:.4rem .5rem .4rem 0; }
+.cot{ display:grid; grid-template-columns:4.8rem 1fr; min-height:2.9rem; cursor:pointer; }
+.cot.tk{ min-height:3.4rem; }
+.than{ position:relative; background:linear-gradient(90deg,#6E3D1E,#B9773F 35%,#9A5E30 70%,#5E3417); border-left:3px solid var(--bong-go); border-right:3px solid var(--bong-go); }
+.cot:first-child .than{ border-top:3px solid var(--bong-go); border-radius:12px 12px 0 0; }
+.cot:first-child .than::before{ content:""; position:absolute; left:4px; right:4px; top:3px; height:7px; border-radius:5px; background:var(--reu); }
+.cot:last-child .than{ border-bottom:3px solid var(--bong-go); border-radius:0 0 12px 12px; }
+.than i{ position:absolute; right:0; top:50%; width:.8rem; height:2.5px; background:var(--bong-go); }
+.cot.y5 .than i{ width:1.1rem; } .cot.y10 .than i,.cot.tk .than i{ width:1.4rem; height:3.5px; }
+.than span{ position:absolute; left:.45rem; top:50%; transform:translateY(-50%); font:800 .82rem "Baloo 2",sans-serif; color:#F4E4BC; opacity:.85; }
+.cot.y10 .than span,.cot.tk .than span{ font-size:1rem; opacity:1; color:var(--kem); }
+.chong{ display:flex; flex-wrap:wrap; gap:4px; align-content:center; padding:4px 0 4px .55rem; border-radius:0 10px 10px 0; position:relative; }
+.chong::before{ content:""; position:absolute; left:0; top:50%; width:.55rem; height:2px; background:#C9A462; opacity:.0; }
+.chong:not(:empty)::before{ opacity:1; }
+.cot.dich .chong{ outline:2px dashed rgba(242,193,78,.45); outline-offset:-3px; }
+.cot.dich:hover .chong,.cot.dich:active .chong{ background:rgba(242,193,78,.22); outline-color:var(--vang); }
+.chip{ font:600 .78rem/1.25 "Be Vietnam Pro",sans-serif; color:var(--muc); text-align:left; background:var(--giay); border:2px solid var(--vien-go);
+  border-left:7px solid var(--c); border-radius:7px; padding:4px 7px 4px 5px; cursor:pointer; display:flex; gap:4px; align-items:center;
+  max-width:100%; flex:1 1 11rem; box-shadow:0 2px 0 var(--bong-go); }
+.chip span{ display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.chip svg{ width:1.1rem; height:1.1rem; flex:none; }
+.chip.neo{ background:linear-gradient(180deg,#B7C2BB,#8C9A92); border-color:#2A3A33; border-left-color:#2A3A33; cursor:default; font-weight:700; }
+.chip.neo::before{ content:"◆"; color:#2A3A33; font-size:.8em; }
+.chip.chon{ box-shadow:0 0 0 3px var(--vang), 0 2px 0 var(--bong-go); }
+.goi-y{ font-size:.88rem; background:var(--vang); color:var(--bong-go); border:2.5px solid var(--vien-go); padding:.45rem .75rem; border-radius:10px; margin:.5rem 0; font-weight:700; box-shadow:0 3px 0 var(--bong-go); }
+.khay{ display:flex; gap:.6rem; overflow-x:auto; padding:.8rem .7rem 1rem; background:linear-gradient(180deg,var(--go),#5E3417); border:4px solid var(--bong-go); border-radius:var(--r); position:relative; }
+.khay > p{ color:var(--giay); margin:0; }
+.khay .the-sk{ flex:0 0 13rem; margin:0; cursor:pointer; text-align:left; font:inherit; color:var(--muc); }
+.khay .the-sk.chon{ box-shadow:0 0 0 4px var(--vang), 0 4px 0 var(--bong-go); transform:translateY(-3px); }
+.khay .tu{ font-size:.75rem; font-weight:700; color:var(--muc2); display:flex; align-items:center; gap:.25rem; margin-top:.2rem; }
+.khay .tu svg{ width:1.1rem; height:1.1rem; }
+.chi-tiet{ background:var(--giay); color:var(--muc); border:3px solid var(--vien-go); border-radius:var(--r); padding:.7rem .9rem; margin:.6rem 0; box-shadow:0 4px 0 var(--bong-go); }
+
+/* ===== Kết quả ===== */
+.chong-svg{ width:100%; height:auto; display:block; font-family:"Be Vietnam Pro",sans-serif; --nen-so:var(--giay); }
+.chong-svg .nhan-sk{ font-size:10.5px; fill:currentColor; }
+.chong-svg .truc{ stroke:currentColor; opacity:.45; }
+.cuon-ngang{ overflow-x:auto; } .cuon-ngang > div{ min-width:44rem; }
+.chu-g{ display:flex; flex-wrap:wrap; gap:.4rem 1rem; font-size:.8rem; margin:.4rem 0; }
+.chu-g i{ display:inline-block; width:.8rem; height:.8rem; border-radius:50%; margin-right:.3rem; vertical-align:-1px; }
+.xh{ width:100%; border-collapse:collapse; }
+.xh td,.xh th{ padding:.35rem .5rem; border-bottom:2px dashed var(--giay-vien); text-align:left; }
+.xh .so{ font-family:"Baloo 2",sans-serif; font-weight:800; text-align:right; }
+.ds-kq{ list-style:none; padding:0; margin:.4rem 0; background:var(--giay); color:#2B1A0E; border:3px solid var(--vien-go); border-radius:var(--r); box-shadow:0 4px 0 var(--bong-go); overflow:hidden;
+  --muc:#2B1A0E; --muc2:#6E3D1E; }
+.ds-kq li{ display:grid; grid-template-columns:3.4rem 1fr auto; gap:.5rem; padding:.45rem .6rem; border-bottom:2px dashed var(--giay-vien); align-items:baseline; font-size:.9rem; }
+.ds-kq li:last-child{ border-bottom:0; }
+.ds-kq li.cua-toi{ background:#F7E08A; }
+.ds-kq .nam{ font:800 .95rem "Baloo 2",sans-serif; }
+.nhan-d{ font:700 .78rem "Be Vietnam Pro",sans-serif; padding:.1rem .45rem; border-radius:6px; color:#fff; white-space:nowrap; }
+.nhan-d.dung{ background:var(--c-dung); } .nhan-d.gan{ background:var(--c-gan); } .nhan-d.thuTu{ background:var(--c-thutu); }
+.nhan-d.sai{ background:var(--c-sai); } .nhan-d.chua{ background:var(--c-chua); }
+.bang-lech{ border-collapse:collapse; font-size:.8rem; width:100%; }
+.bang-lech th,.bang-lech td{ border:1.5px solid var(--giay-vien); padding:.2rem .35rem; text-align:center; }
+.bang-lech td:first-child,.bang-lech th:first-child{ text-align:left; }
+.bang-lech td.dung{ background:#BFE0B8; } .bang-lech td.gan{ background:#F2DC92; }
+.bang-lech td.thuTu{ background:#C3D8F0; } .bang-lech td.sai{ background:#F2B9AC; }
+.bang-lech tr.kem td:first-child{ color:var(--do); font-weight:700; }
+
+/* ===== Máy chiếu: cảnh rừng phía sau, biển gỗ, mâm đồng hồ, bảng phấn ===== */
+.chieu{ min-height:100vh; position:relative; }
+.canh-lon{ position:fixed; inset:0; z-index:0; }
+.canh-lon svg{ width:100%; height:100%; display:block; }
+.bang{ --c-dung:#2F7A3A; --c-gan:#B7860B; --c-thutu:#2C6FBB; --c-sai:#B8322A; --c-chua:#8A7A66;
+  position:relative; z-index:1; min-height:100vh; color:var(--muc); padding:1.4vw 2.6vw 1.6vw; font-size:clamp(16px,1.15vw,34px);
+  display:flex; flex-direction:column; gap:1.2vw; }
+.bang h2,.bang h3{ color:inherit; }
+.bang-dau{ display:flex; align-items:flex-start; gap:1.5vw; flex-wrap:wrap; }
+.bien-go{ padding:.55em 1.1em .65em; background:linear-gradient(180deg,var(--go-sang),var(--go-toi)); border:.25em solid var(--vien-go); border-radius:.8em; box-shadow:0 .35em 0 var(--bong-go); color:var(--kem); }
+.bang-dau .ten{ font:800 2.1em/1 "Baloo 2",sans-serif; display:flex; align-items:center; gap:.3em; text-shadow:0 .08em 0 var(--vien-go); }
+.bang-dau .ten svg{ width:1.3em; height:1.3em; }
+.bang-dau .cap{ display:flex; flex-wrap:wrap; gap:.4em; margin-top:.45em; font-weight:700; font-size:.9em; }
+.bang-dau .cap span{ padding:.1em .7em; border-radius:999px; background:var(--giay); color:#3E2210; }
+.bang-dau .cap span.pha{ background:var(--ngoc); color:var(--kem); }
+.bang-dau .sp{ flex:1; }
+.bd-dh{ width:7.6em; height:7.6em; margin:-.3em 0 -1.4em; border-radius:50%; background:radial-gradient(circle at 50% 40%,#B9773F,var(--go-toi) 70%);
+  border:.32em solid var(--vien-go); box-shadow:0 .4em 0 var(--bong-go), 0 .9em 1.4em rgba(11,36,22,.35); display:grid; place-items:center; }
+.bd-dh:empty{ display:none; }
+.bd-dh .mat{ width:5.8em; height:5.8em; border-radius:50%; background:var(--giay); border:.18em solid var(--vien-go); display:flex; flex-direction:column; align-items:center; justify-content:center; color:#3E2210; }
+.bd-dh .mat b{ font:800 1.85em/1 "Baloo 2",sans-serif; }
+.bd-dh .mat small{ font-size:.7em; font-weight:700; color:var(--go-toi); }
+.bd-dh.cuoi .mat b{ color:var(--do); } .bd-dh.cuoi{ animation:rung .35s infinite; }
+@media (prefers-reduced-motion:reduce){ .bd-dh.cuoi{ animation:none; } }
+.bang-dau .ma{ display:flex; flex-direction:column; padding:.45em 1em .5em; background:var(--giay); color:#6E3D1E; border:.25em solid var(--vien-go); border-radius:.8em;
+  box-shadow:0 .35em 0 var(--bong-go); font-weight:700; font-size:.85em; line-height:1.1; }
+.bang-dau .ma b{ font:800 2.6em/1 "Baloo 2",sans-serif; color:#3E2210; letter-spacing:.08em; }
+.bang-dau .mang{ align-self:center; color:var(--kem); background:rgba(15,46,26,.6); padding:.2em .6em; border-radius:999px; }
+.bang-than{ flex:1; }
+.bang-nut{ display:flex; gap:1em; flex-wrap:wrap; align-items:center; }
+.bang .nut{ font-size:1em; }
+.bang .chu-thich{ display:inline-block; padding:.35em .9em; border-radius:999px; background:rgba(15,46,26,.72); color:var(--kem); font-size:.85em; }
+/* tấm giấy dó trong khung gỗ chứa nội dung chính của máy chiếu */
+.giay-bang{ background:linear-gradient(180deg,var(--go),#5E3417); border:.3em solid var(--vien-go); border-radius:1.1em; padding:.7em; box-shadow:0 .5em 0 var(--bong-go), 0 1.2em 2.4em rgba(11,36,22,.4); position:relative; }
+.giay-bang::before{ content:""; position:absolute; left:.8em; right:.8em; top:-.45em; height:.6em; border-radius:.4em; background:var(--reu); }
+.giay-bang > .ruot{ background:var(--giay); color:var(--muc); border:.2em solid var(--vien-go); border-radius:.7em; padding:.8em 1.2em; }
+.giay-bang h3{ margin-top:0; color:#3E2210; }
+.sanh{ display:grid; grid-template-columns:minmax(14em,20em) 1fr; gap:2vw; align-items:start; }
+.qr{ background:#fff; border:.2em solid var(--vien-go); border-radius:12px; padding:.6em; display:inline-block; }
+.qr svg{ display:block; width:100%; height:auto; }
+.sanh .ma-lon{ font:800 4.4em/1 "Baloo 2",sans-serif; color:#3E2210; letter-spacing:.08em; }
+.lop-vo{ display:grid; grid-template-columns:repeat(5,1fr); gap:1vw; }
+.vo{ background:var(--giay2); border:.15em solid var(--vien-go); border-radius:12px; padding:.6em; box-shadow:0 .2em 0 var(--bong-go); }
+.vo .dau-vo{ display:flex; align-items:center; gap:.4em; }
+.vo .gay{ flex:none; width:1.5em; height:1.9em; border-radius:4px 7px 7px 4px; border:.12em solid var(--vien-go); box-shadow:inset .25em 0 0 rgba(0,0,0,.18); }
+.vo b{ font-family:"Baloo 2",sans-serif; font-size:1.2em; line-height:1; }
+.vo .stt{ display:flex; flex-wrap:wrap; gap:.25em; margin-top:.4em; }
+.vo .stt span{ font:700 .78em "Be Vietnam Pro",sans-serif; background:#E9D3A2; border-radius:5px; padding:.05em .4em; }
+.vo .canh-bao{ color:var(--do); font-weight:700; }
+.hang-doi{ font-size:1.15em; display:grid; grid-template-columns:12em 1fr 6em; gap:1em; align-items:center; padding:.45em .2em; border-bottom:.12em dashed var(--giay-vien); }
+.hang-doi:last-child{ border-bottom:0; }
+.hang-doi .ten-doi{ display:flex; align-items:center; gap:.5em; font:800 1.25em/1.05 "Baloo 2",sans-serif; }
+.hang-doi .ten-doi small{ display:block; font:500 .62em "Be Vietnam Pro",sans-serif; color:var(--go-toi); }
+.hang-doi .gay{ flex:none; width:1.3em; height:1.6em; border-radius:4px 7px 7px 4px; border:.12em solid var(--vien-go); background:var(--nhom); box-shadow:inset .22em 0 0 rgba(0,0,0,.18); }
+.trang{ display:flex; gap:.22em; flex-wrap:wrap; align-items:flex-end; }
+.trang i{ width:.85em; height:1.55em; border-radius:.2em .2em .12em .12em; border:.1em dashed #B48A5A; background:#EAD6A6; }
+.trang i.viet{ background:var(--nhom); border:.11em solid var(--vien-go); box-shadow:inset 0 .2em 0 rgba(255,255,255,.35); }
+.hang-doi .tt{ text-align:right; font:800 1.4em "Baloo 2",sans-serif; color:#3E2210; }
+.hang-doi .tt small{ font-size:.65em; color:var(--go); }
+.hang-doi .tt.chot{ font:700 .95em "Be Vietnam Pro",sans-serif; }
+.hang-doi .tt.chot span{ display:inline-block; padding:.25em .8em; border-radius:999px; background:var(--ngoc); color:var(--kem); }
+/* bảng đen phấn trắng cho thước đúng */
+.bang-phan{ background:linear-gradient(180deg,var(--go),#5E3417); border:.3em solid var(--vien-go); border-radius:1.1em; padding:.6em; box-shadow:0 .5em 0 var(--bong-go), 0 1.2em 2.4em rgba(11,36,22,.4); }
+.bang-phan > .ruot{ --c-dung:#F6E27A; --c-gan:#F7B27E; --c-thutu:#9CC8F0; --c-sai:#F29B8A; --c-chua:#A9B4AC; --so-dot:#1A2F23;
+  background:radial-gradient(ellipse at 40% 30%,#2C4A38,#1A2F23 75%); color:#EDEFE6; border:.2em solid var(--bong-go); border-radius:.6em; padding:.6em 1em;
+  box-shadow:inset 0 0 2.5em rgba(0,0,0,.45); }
+.bang-phan .chong-svg{ --nen-so:#1A2F23; }
+.bang .kq-luoi{ display:grid; grid-template-columns:1.5fr 1fr; gap:2vw; align-items:start; }
+.nhac-ke{ background:linear-gradient(180deg,var(--go-sang),var(--go-toi)); color:var(--kem); border:.2em solid var(--vien-go); border-radius:.8em; padding:.6em .9em; box-shadow:0 .3em 0 var(--bong-go); }
+.nhac-ke .mono{ font-family:"Baloo 2",sans-serif; font-weight:800; background:var(--ngoc); padding:0 .4em; border-radius:.3em; }
+
+/* ===== Khoảnh khắc Hội Bảng Đen: chiếm trọn màn hình rồi biến mất ===== */
+#phu{ position:fixed; inset:0; z-index:50; color:var(--kem); display:grid; place-items:center; text-align:center; padding:6vmin; cursor:pointer;
+  background:radial-gradient(circle at 50% 35%,rgba(233,246,238,.35),transparent 55%),linear-gradient(180deg,#3D7C8C,#5E9A8A 50%,#1E4A2A); }
+#phu::before{ content:""; position:absolute; inset:0; pointer-events:none; background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='white' stroke-width='5' stroke-linecap='round' opacity='.6'%3E%3Cpath d='M30 90 C110 50 170 90 150 130 C135 160 95 150 108 122'/%3E%3Cpath d='M230 60 C300 40 370 70 360 110'/%3E%3Cpath d='M20 250 C100 220 190 240 250 220 C300 204 320 222 308 245'/%3E%3Cpath d='M250 320 C310 300 360 320 390 300'/%3E%3C/g%3E%3C/svg%3E") center/100% 100% no-repeat; }
+#phu .vao{ position:relative; }
+#phu svg{ width:28vmin; height:28vmin; filter:drop-shadow(0 1.2vmin 0 rgba(42,23,10,.55)); }
+#phu h2{ font:800 clamp(2.2rem,8vmin,5.4rem)/1.02 "Baloo 2",sans-serif; margin:.2em 0; color:var(--kem); text-shadow:0 .08em 0 var(--bong-go), 0 .15em .4em rgba(0,0,0,.35); }
+#phu p{ font-size:clamp(1rem,3.4vmin,2.2rem); max-width:40ch; margin:0 auto; padding:.5em .9em; border-radius:.6em; background:rgba(20,46,32,.8); font-weight:600; }
+#phu .vao{ animation:vao .45s ease-out; }
+@keyframes vao{ from{ transform:scale(.8) rotate(-4deg); opacity:0; } to{ transform:none; opacity:1; } }
+@media (prefers-reduced-motion:reduce){ #phu .vao{ animation:none; } }
+
+/* ===== Xem thử cả nhóm trên một máy ===== */
+.thu-luoi{ display:flex; flex-wrap:wrap; gap:10px; padding:10px; background:#143A22; min-height:100vh; align-content:flex-start; }
+.thu-luoi iframe{ border:4px solid var(--vien-go); border-radius:16px; background:#1E4A2A; }
+.thu-luoi .may-chieu{ width:100%; height:62vh; }
+.thu-luoi .dt{ width:380px; height:760px; }
+
+@media (max-width:640px){
+  h1{ font-size:1.7rem; }
+  .bang-go{ margin-top:3.4rem; padding:1rem .9rem 1.4rem; }
+  .sanh{ grid-template-columns:1fr; } .lop-vo{ grid-template-columns:repeat(2,1fr); }
+  .hang-doi{ grid-template-columns:1fr; } .hang-doi .tt{ text-align:left; }
+  .bang .kq-luoi{ grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body data-man="s-dau">
+<div id="canh" aria-hidden="true"><svg viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice">
+<defs>
+<linearGradient id="b-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4FA9E0"/><stop offset=".7" stop-color="#A4DBEF"/><stop offset="1" stop-color="#E2F3EA"/></linearGradient>
+<radialGradient id="b-sun" cx="1160" cy="10" r="560" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFF7D6"/><stop offset=".3" stop-color="#FFEFB0" stop-opacity=".45"/><stop offset="1" stop-color="#FFEFB0" stop-opacity="0"/></radialGradient>
+<linearGradient id="b-fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4FBF6" stop-opacity="0"/><stop offset=".5" stop-color="#F4FBF6" stop-opacity=".65"/><stop offset="1" stop-color="#F4FBF6" stop-opacity="0"/></linearGradient>
+<linearGradient id="b-hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A6DA52"/><stop offset=".45" stop-color="#6DB23A"/><stop offset="1" stop-color="#3F8A33"/></linearGradient>
+</defs>
+<rect width="1440" height="400" fill="url(#b-sky)"/>
+<rect width="1440" height="400" fill="url(#b-sun)"/>
+<g fill="#FFFFFF" opacity=".9"><ellipse cx="420" cy="70" rx="90" ry="24"/><ellipse cx="470" cy="54" rx="56" ry="28"/><ellipse cx="1000" cy="110" rx="110" ry="22"/><ellipse cx="1040" cy="94" rx="56" ry="24"/></g>
+<path d="M0 250 C60 150 120 120 170 180 C210 70 280 50 330 150 C370 100 420 90 470 170 C540 40 620 30 680 160 C730 120 780 110 830 180 C900 60 980 50 1040 150 C1090 100 1150 90 1200 160 C1260 70 1340 60 1440 140 L1440 400 L0 400 Z" fill="#A9D2C7"/>
+<path d="M0 290 C80 220 160 210 230 270 C300 200 380 190 450 260 C560 180 660 180 760 270 C850 220 940 215 1010 275 C1100 210 1220 200 1300 260 C1360 230 1410 225 1440 240 L1440 400 L0 400 Z" fill="#7DB79C"/>
+<rect y="230" width="1440" height="130" fill="url(#b-fog)"/>
+<g opacity=".15" fill="#FFF8D8"><polygon points="1160,0 700,400 820,400"/><polygon points="1160,0 960,400 1040,400"/></g>
+<g stroke="#4F8C35" stroke-width="7" stroke-linecap="round" fill="none"><path d="M150 360 C146 290 152 240 164 180"/><path d="M172 360 C174 300 186 250 202 200"/><path d="M1290 360 C1286 290 1294 240 1306 190"/><path d="M1312 360 C1316 300 1330 250 1346 210"/></g>
+<g fill="#5FA63C"><ellipse cx="164" cy="180" rx="36" ry="10" transform="rotate(-25 164 180)"/><ellipse cx="202" cy="200" rx="34" ry="10" transform="rotate(20 202 200)"/><ellipse cx="1306" cy="190" rx="36" ry="10" transform="rotate(-25 1306 190)"/><ellipse cx="1346" cy="210" rx="34" ry="10" transform="rotate(20 1346 210)"/></g>
+<path d="M0 340 C240 312 480 300 720 316 C960 332 1200 306 1440 318 L1440 400 L0 400 Z" fill="url(#b-hill)"/>
+<path d="M0 340 C240 312 480 300 720 316 C960 332 1200 306 1440 318" fill="none" stroke="#C4EA6A" stroke-width="5" opacity=".6"/>
+</svg></div>
+<!-- Nhân vật lấy nguyên từ bộ nhận diện Hội Văn Phòng Phẩm (goi-game-hoc-tap/reference/hoi-van-phong-pham.html) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="c-thuoc" viewBox="0 0 96 96"><title>Thước Kẻ</title>
+ <rect x="8" y="34" width="80" height="28" rx="5" fill="#8CCBB0" stroke="#1B3350" stroke-opacity=".16" stroke-width="1.5"/>
+ <g fill="#2F6B52" opacity=".5">
+  <rect x="16" y="34" width="2.5" height="9"/><rect x="26" y="34" width="2.5" height="6"/>
+  <rect x="36" y="34" width="2.5" height="9"/><rect x="46" y="34" width="2.5" height="6"/>
+  <rect x="56" y="34" width="2.5" height="9"/><rect x="66" y="34" width="2.5" height="6"/>
+  <rect x="76" y="34" width="2.5" height="9"/></g>
+ <circle cx="41" cy="50" r="3.2" fill="#1B3350"/><circle cx="55" cy="50" r="3.2" fill="#1B3350"/>
+ <path d="M42 57 h12" stroke="#1B3350" stroke-width="3" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-kepgiay" viewBox="0 0 96 96"><title>Kẹp Giấy</title>
+ <path d="M30 78 V34 a18 18 0 0 1 36 0 v36 a11 11 0 0 1 -22 0 V54"
+   fill="none" stroke="#8FA6BC" stroke-width="7.5" stroke-linecap="round"/>
+ <circle cx="41" cy="38" r="3.2" fill="#1B3350"/><circle cx="55" cy="38" r="3.2" fill="#1B3350"/>
+ <path d="M41 45 q7 6 14 0" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-giaynho" viewBox="0 0 96 96"><title>Giấy Nhớ</title>
+ <path d="M18 18 H78 V60 L60 78 H18 Z" fill="#F6E486" stroke="#1B3350" stroke-opacity=".16" stroke-width="1.5"/>
+ <path d="M78 60 H60 V78 Z" fill="#DEC85E"/>
+ <circle cx="40" cy="42" r="3.4" fill="#1B3350"/><circle cx="56" cy="42" r="3.4" fill="#1B3350"/>
+ <path d="M41 53 q7 5 14 -1" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-giaynho-m" viewBox="0 0 96 96"><title>Giấy nhớ màu</title>
+ <path d="M18 18 H78 V60 L60 78 H18 Z" fill="currentColor" stroke="#1B3350" stroke-opacity=".18" stroke-width="1.5"/>
+ <path d="M78 60 H60 V78 Z" fill="#000" fill-opacity=".18"/>
+ <circle cx="40" cy="42" r="3.4" fill="#1B3350"/><circle cx="56" cy="42" r="3.4" fill="#1B3350"/>
+ <path d="M41 53 q7 5 14 -1" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-butchi" viewBox="0 0 96 96"><title>Bút Chì</title>
+ <rect x="35" y="10" width="26" height="11" rx="4" fill="#F0A0A8"/>
+ <rect x="35" y="20" width="26" height="5" fill="#B9C2CC"/>
+ <rect x="35" y="24" width="26" height="44" fill="#EFC02E"/>
+ <rect x="35" y="24" width="8" height="44" fill="#F7D763"/>
+ <polygon points="35,68 61,68 48,88" fill="#E4B683"/>
+ <polygon points="42,79 54,79 48,88" fill="#33414E"/>
+ <circle cx="43" cy="43" r="3.4" fill="#1B3350"/><circle cx="55" cy="43" r="3.4" fill="#1B3350"/>
+ <path d="M42 52 q6 6 12 0" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-butchi-m" viewBox="0 0 96 96"><title>Bút chì màu</title>
+ <rect x="35" y="10" width="26" height="11" rx="4" fill="#F0A0A8"/>
+ <rect x="35" y="20" width="26" height="5" fill="#B9C2CC"/>
+ <rect x="35" y="24" width="26" height="44" fill="currentColor"/>
+ <rect x="35" y="24" width="8" height="44" fill="#FFF" fill-opacity=".3"/>
+ <polygon points="35,68 61,68 48,88" fill="#E4B683"/>
+ <polygon points="42,79 54,79 48,88" fill="currentColor"/>
+ <circle cx="43" cy="43" r="3.4" fill="#1B3350"/><circle cx="55" cy="43" r="3.4" fill="#1B3350"/>
+ <path d="M42 52 q6 6 12 0" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-cuctay" viewBox="0 0 96 96"><title>Cục Tẩy</title>
+ <rect x="16" y="30" width="64" height="38" rx="7" fill="#EE9AA2" stroke="#1B3350" stroke-opacity=".16" stroke-width="1.5"/>
+ <path d="M23 30 h50 a7 7 0 0 1 7 7 v7 H16 v-7 a7 7 0 0 1 7 -7 Z" fill="#FBFAF3"/>
+ <circle cx="40" cy="52" r="3.4" fill="#1B3350"/><circle cx="56" cy="52" r="3.4" fill="#1B3350"/>
+ <path d="M40 62 q8 -6 16 0" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-maytinh" viewBox="0 0 96 96"><title>Máy Tính Bỏ Túi</title>
+ <rect x="22" y="12" width="52" height="72" rx="9" fill="#48596B"/>
+ <rect x="28" y="19" width="40" height="22" rx="4" fill="#A9DCB8"/>
+ <circle cx="40" cy="29" r="3" fill="#1B3350"/><circle cx="56" cy="29" r="3" fill="#1B3350"/>
+ <path d="M41 35 h14" stroke="#1B3350" stroke-width="2.6" stroke-linecap="round"/>
+ <g fill="#7C8B9C">
+  <rect x="29" y="47" width="11" height="9" rx="2.5"/><rect x="43" y="47" width="11" height="9" rx="2.5"/><rect x="57" y="47" width="11" height="9" rx="2.5"/>
+  <rect x="29" y="60" width="11" height="9" rx="2.5"/><rect x="43" y="60" width="11" height="9" rx="2.5"/><rect x="57" y="60" width="11" height="9" rx="2.5"/>
+  <rect x="29" y="73" width="25" height="8" rx="2.5"/></g>
+ <rect x="57" y="73" width="11" height="8" rx="2.5" fill="#E8B71E"/>
+</symbol>
+<symbol id="c-butxoa" viewBox="0 0 96 96"><title>Bút Xoá</title>
+ <path d="M27 86 q-2 -10 6 -10 q7 0 6 6 z" fill="#FBFAF3" stroke="#1B3350" stroke-opacity=".16" stroke-width="1.4"/>
+ <rect x="39" y="12" width="18" height="16" rx="4" fill="#CE4132"/>
+ <rect x="43" y="27" width="10" height="7" fill="#C9C6BA"/>
+ <rect x="30" y="32" width="36" height="47" rx="8" fill="#FBFAF3" stroke="#1B3350" stroke-opacity=".2" stroke-width="1.6"/>
+ <circle cx="41" cy="51" r="4" fill="#FFF" stroke="#1B3350" stroke-width="1.4"/>
+ <circle cx="55" cy="51" r="4" fill="#FFF" stroke="#1B3350" stroke-width="1.4"/>
+ <circle cx="43.5" cy="51.5" r="2.1" fill="#1B3350"/><circle cx="57.5" cy="51.5" r="2.1" fill="#1B3350"/>
+ <path d="M40 63 q8 3 15 -3" stroke="#1B3350" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-vo" viewBox="0 0 96 96"><title>Cuốn vở của nhóm</title>
+ <rect x="20" y="12" width="58" height="72" rx="6" fill="currentColor"/>
+ <rect x="20" y="12" width="11" height="72" rx="5" fill="#000" fill-opacity=".2"/>
+ <g fill="#FBFAF3" fill-opacity=".9"><circle cx="25.5" cy="24" r="2.6"/><circle cx="25.5" cy="48" r="2.6"/><circle cx="25.5" cy="72" r="2.6"/></g>
+ <rect x="38" y="22" width="32" height="18" rx="3" fill="#FBFAF3" fill-opacity=".93"/>
+ <g stroke="#1B3350" stroke-opacity=".3" stroke-width="1.6"><path d="M42 29 h24"/><path d="M42 34 h18"/></g>
+ <circle cx="45" cy="58" r="3.4" fill="#1B3350"/><circle cx="61" cy="58" r="3.4" fill="#1B3350"/>
+ <path d="M45 66 q8 6 16 0" stroke="#1B3350" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="c-capsach" viewBox="0 0 96 96"><title>Bác Cặp Sách</title>
+ <path d="M36 34 a12 12 0 0 1 24 0" fill="none" stroke="#7A5330" stroke-width="5" stroke-linecap="round"/>
+ <rect x="14" y="34" width="68" height="48" rx="9" fill="#A97440"/>
+ <path d="M23 34 h50 a9 9 0 0 1 9 9 v13 H14 V43 a9 9 0 0 1 9 -9 Z" fill="#8A5B2E"/>
+ <rect x="42" y="51" width="12" height="10" rx="2.5" fill="#D9B679"/>
+ <circle cx="39" cy="69" r="3.4" fill="#3A2413"/><circle cx="57" cy="69" r="3.4" fill="#3A2413"/>
+ <path d="M40 75 q8 6 16 0" stroke="#3A2413" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="w-trong" viewBox="0 0 96 96"><title>Trống Trường</title>
+ <circle cx="48" cy="9" r="4" fill="#6E7B74"/>
+ <path d="M48 11 L30 28 M48 11 L66 28" stroke="#8A5B2E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+ <rect x="22" y="28" width="52" height="48" rx="9" fill="#A8452F"/>
+ <ellipse cx="48" cy="29" rx="26" ry="7" fill="#E9DFC4"/>
+ <rect x="22" y="46" width="52" height="6" fill="#B08D57"/>
+ <circle cx="40" cy="61" r="3.4" fill="#F3E6D2"/><circle cx="56" cy="61" r="3.4" fill="#F3E6D2"/>
+ <path d="M40 69 q8 6 16 0" stroke="#F3E6D2" stroke-width="3" fill="none" stroke-linecap="round"/>
+</symbol>
+<symbol id="w-bangden" viewBox="0 0 96 96"><title>Bảng Đen</title>
+ <rect x="8" y="20" width="80" height="54" rx="5" fill="#6B4A2A"/>
+ <rect x="14" y="26" width="68" height="42" rx="2" fill="#2A5847"/>
+ <circle cx="40" cy="44" r="3.6" fill="#E8EEE6"/><circle cx="58" cy="44" r="3.6" fill="#E8EEE6"/>
+ <path d="M40 53 q9 7 18 0" stroke="#E8EEE6" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+ <rect x="26" y="74" width="44" height="6" rx="3" fill="#8A5B2E"/>
+ <rect x="32" y="70" width="12" height="5" rx="2" fill="#E8EEE6"/>
+</symbol>
+<symbol id="w-quat" viewBox="0 0 96 96"><title>Quạt Trần</title>
+ <rect x="45" y="6" width="6" height="20" rx="3" fill="#6E7B74"/>
+ <ellipse cx="20" cy="52" rx="19" ry="7" fill="#9BA9A3"/>
+ <ellipse cx="76" cy="52" rx="19" ry="7" fill="#9BA9A3"/>
+ <ellipse cx="48" cy="70" rx="16" ry="6.5" fill="#8B9A94"/>
+ <circle cx="48" cy="46" r="16" fill="#7E8C86"/>
+ <circle cx="42" cy="43" r="3.2" fill="#1B3350"/><circle cx="54" cy="43" r="3.2" fill="#1B3350"/>
+ <path d="M42 52 q6 5 12 0" stroke="#1B3350" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+</symbol>
+</defs></svg>
+
+<main>
+<section class="dau" id="s-dau">
+  <div class="dau-canh" aria-hidden="true"><svg viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs>
+<linearGradient id="dau-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4FA9E0"/><stop offset=".5" stop-color="#9ED8EF"/><stop offset="1" stop-color="#E2F3EA"/></linearGradient>
+<radialGradient id="dau-sun" cx="1160" cy="70" r="560" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFF7D6" stop-opacity="1"/><stop offset=".3" stop-color="#FFEFB0" stop-opacity=".45"/><stop offset="1" stop-color="#FFEFB0" stop-opacity="0"/></radialGradient>
+<linearGradient id="dau-fog" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4FBF6" stop-opacity="0"/><stop offset=".5" stop-color="#F4FBF6" stop-opacity=".7"/><stop offset="1" stop-color="#F4FBF6" stop-opacity="0"/></linearGradient>
+<linearGradient id="dau-hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#A6DA52"/><stop offset=".35" stop-color="#72B83C"/><stop offset="1" stop-color="#2F7A2C"/></linearGradient>
+<linearGradient id="dau-plankTop" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E7B676"/><stop offset="1" stop-color="#C98B4E"/></linearGradient>
+<linearGradient id="dau-plankFront" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#93582C"/><stop offset="1" stop-color="#5E3417"/></linearGradient>
+<linearGradient id="dau-shadeL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0B2416" stop-opacity=".85"/><stop offset="1" stop-color="#0B2416" stop-opacity="0"/></linearGradient>
+<radialGradient id="dau-vig" cx="720" cy="360" r="980" gradientUnits="userSpaceOnUse"><stop offset=".55" stop-color="#0B2416" stop-opacity="0"/><stop offset="1" stop-color="#0B2416" stop-opacity=".55"/></radialGradient>
+</defs>
+<rect width="1440" height="810" fill="url(#dau-sky)"/>
+<rect width="1440" height="810" fill="url(#dau-sun)"/>
+<g fill="#FFFFFF" opacity=".9">
+<ellipse cx="860" cy="150" rx="90" ry="26"/><ellipse cx="910" cy="132" rx="60" ry="32"/><ellipse cx="820" cy="140" rx="46" ry="24"/>
+<ellipse cx="1300" cy="230" rx="110" ry="22"/><ellipse cx="1340" cy="212" rx="56" ry="26"/>
+</g>
+<path d="M0 430 C60 330 120 300 170 360 C210 250 280 230 330 330 C370 280 420 270 470 350 C540 220 620 210 680 340 C730 300 780 290 830 360 C900 240 980 230 1040 330 C1090 280 1150 270 1200 340 C1260 250 1340 240 1440 320 L1440 540 L0 540 Z" fill="#A9D2C7"/>
+<path d="M0 470 C80 400 160 390 230 450 C300 380 380 370 450 440 C560 360 660 360 760 450 C850 400 940 395 1010 455 C1100 390 1220 380 1300 440 C1360 410 1410 405 1440 420 L1440 570 L0 570 Z" fill="#7DB79C"/>
+<rect y="420" width="1440" height="150" fill="url(#dau-fog)"/>
+<g opacity=".16" fill="#FFF8D8">
+<polygon points="1160,40 560,810 720,810"/><polygon points="1160,40 880,810 980,810"/><polygon points="1160,40 1120,810 1190,810"/>
+</g>
+<path d="M0 548 C300 528 600 566 900 546 C1100 534 1300 551 1440 541 L1440 584 C1200 594 1000 578 800 594 C500 608 250 578 0 598 Z" fill="#9ED8E0"/>
+<path d="M120 566 L240 562 M520 574 L600 572 M980 562 L1080 560" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+<g>
+<g stroke="#4F8C35" stroke-width="7" stroke-linecap="round">
+<path d="M650 560 C646 470 652 390 664 300"/><path d="M670 560 C672 470 684 400 700 320"/><path d="M630 560 C618 480 612 420 600 340"/>
+</g>
+<g fill="#5FA63C">
+<ellipse cx="664" cy="300" rx="40" ry="12" transform="rotate(-25 664 300)"/><ellipse cx="700" cy="322" rx="38" ry="11" transform="rotate(20 700 322)"/><ellipse cx="600" cy="340" rx="36" ry="11" transform="rotate(-35 600 340)"/>
+<ellipse cx="640" cy="360" rx="34" ry="10" transform="rotate(15 640 360)"/><ellipse cx="690" cy="380" rx="34" ry="10" transform="rotate(-15 690 380)"/>
+</g>
+<g fill="#3F7F2C">
+<ellipse cx="620" cy="300" rx="30" ry="9" transform="rotate(30 620 300)"/><ellipse cx="715" cy="290" rx="30" ry="9" transform="rotate(-30 715 290)"/>
+</g>
+</g>
+<g>
+<g fill="#4A2A14"><rect x="738" y="500" width="7" height="48"/><rect x="790" y="500" width="7" height="48"/><rect x="842" y="500" width="7" height="48"/><rect x="894" y="500" width="7" height="48"/></g>
+<rect x="722" y="492" width="196" height="12" rx="3" fill="#6B3B1C"/>
+<rect x="738" y="440" width="166" height="54" fill="#9A5E30"/>
+<g stroke="#6B3B1C" stroke-width="2"><path d="M760 440 V494 M782 440 V494 M842 440 V494 M864 440 V494 M886 440 V494"/></g>
+<rect x="804" y="454" width="30" height="40" rx="3" fill="#2A1A10"/>
+<circle cx="770" cy="464" r="12" fill="#2F7E78" stroke="#E8D6A0" stroke-width="3"/>
+<circle cx="874" cy="464" r="12" fill="#2F7E78" stroke="#E8D6A0" stroke-width="3"/>
+<path d="M706 452 L820 360 L934 452 Z" fill="#7FAE3E"/>
+<path d="M706 452 L820 360 L834 372 L728 456 Z" fill="#A7D255"/>
+<path d="M712 452 L934 452 L926 462 L720 462 Z" fill="#4E7A28"/>
+<path d="M800 330 L842 384 M840 330 L798 384" stroke="#6B3B1C" stroke-width="8" stroke-linecap="round"/>
+</g>
+<path d="M0 610 C200 568 420 548 640 566 C860 586 1100 552 1440 566 L1440 810 L0 810 Z" fill="url(#dau-hill)"/>
+<path d="M0 610 C200 568 420 548 640 566 C860 586 1100 552 1440 566" fill="none" stroke="#C4EA6A" stroke-width="5" opacity=".6"/>
+<path d="M200 810 C280 730 420 690 600 660 C720 640 830 610 860 566 L884 568 C870 620 770 660 640 688 C480 722 380 760 360 810 Z" fill="#D9C28C"/>
+<g fill="#EFE3BF"><ellipse cx="420" cy="740" rx="14" ry="6"/><ellipse cx="560" cy="690" rx="10" ry="4"/><ellipse cx="700" cy="652" rx="9" ry="4"/></g>
+<g>
+<g fill="#FFFFFF"><ellipse cx="560" cy="600" rx="18" ry="11"/><circle cx="574" cy="588" r="8"/><ellipse cx="610" cy="610" rx="17" ry="10"/><circle cx="596" cy="598" r="7"/></g>
+<g fill="#F2A23A"><path d="M581 588 l9 2 -9 3 z"/><path d="M589 598 l-9 2 9 3 z"/></g>
+<g fill="#2B1A0E"><circle cx="576" cy="586" r="1.6"/><circle cx="594" cy="596" r="1.6"/></g>
+</g>
+<g transform="rotate(-2.2 520 690)">
+<rect x="40" y="672" width="960" height="34" rx="6" fill="url(#dau-plankFront)"/>
+<rect x="40" y="648" width="960" height="30" rx="8" fill="url(#dau-plankTop)"/>
+<path d="M60 652 C200 656 420 650 600 655 C760 659 900 652 990 656" stroke="#F6D49E" stroke-width="2" fill="none" opacity=".7"/>
+<g stroke="#4A2A14" stroke-width="2" opacity=".8">
+<path d="M71 648 v8 M82 648 v8 M93 648 v8 M105 648 v8 M127 648 v8 M138 648 v8 M150 648 v8 M161 648 v8 M183 648 v8 M195 648 v8 M206 648 v8 M217 648 v8 M240 648 v8 M251 648 v8 M262 648 v8 M273 648 v8 M296 648 v8 M307 648 v8 M318 648 v8 M330 648 v8 M352 648 v8 M363 648 v8 M375 648 v8 M386 648 v8 M408 648 v8 M420 648 v8 M431 648 v8 M442 648 v8 M465 648 v8 M476 648 v8 M487 648 v8 M498 648 v8 M521 648 v8 M532 648 v8 M543 648 v8 M555 648 v8 M577 648 v8 M588 648 v8 M600 648 v8 M611 648 v8 M633 648 v8 M645 648 v8 M656 648 v8 M667 648 v8 M690 648 v8 M701 648 v8 M712 648 v8 M723 648 v8 M746 648 v8 M757 648 v8 M768 648 v8 M780 648 v8 M802 648 v8 M813 648 v8 M825 648 v8 M836 648 v8 M858 648 v8 M870 648 v8 M881 648 v8 M892 648 v8 M915 648 v8 M926 648 v8 M937 648 v8 M948 648 v8"/>
+</g>
+<g stroke="#3A200E" stroke-width="3"><path d="M60 648 v16 M116 648 v12 M172 648 v16 M229 648 v12 M285 648 v16 M341 648 v12 M397 648 v16 M454 648 v12 M510 648 v16 M566 648 v12 M622 648 v16 M679 648 v12 M735 648 v16 M791 648 v12 M847 648 v16 M904 648 v12 M960 648 v16"/></g>
+<g font-family="'Baloo 2', sans-serif" font-weight="800" font-size="19" fill="#FCEFD0" text-anchor="middle">
+<text x="60" y="698">1890</text><text x="172" y="698">1900</text><text x="285" y="698">1910</text><text x="397" y="698">1920</text><text x="510" y="698">1930</text><text x="622" y="698">1940</text><text x="735" y="698">1950</text><text x="847" y="698">1960</text><text x="960" y="698">1970</text>
+</g>
+<g fill="#7FAE3E"><path d="M40 652 C70 640 110 644 130 652 Z"/><path d="M640 652 C670 642 700 644 720 652 Z"/><path d="M930 652 C950 642 980 642 1000 652 Z"/></g>
+<circle cx="32" cy="676" r="30" fill="#D9622B" stroke="#4A2A14" stroke-width="4"/>
+<path d="M32 676 m-14 0 a14 14 0 1 1 14 14 a8 8 0 1 1 -8 -8" fill="none" stroke="#4A2A14" stroke-width="4" stroke-linecap="round"/>
+</g>
+<g transform="translate(296 0)">
+<path d="M-22 664 C-26 632 -18 618 -2 614 C16 612 26 626 22 664 Z" fill="#8C9A92"/>
+<path d="M-18 628 C-10 616 10 612 20 624 C6 622 -6 624 -18 628 Z" fill="#7FAE3E"/>
+<text x="0" y="648" font-family="'Baloo 2', sans-serif" font-weight="800" font-size="13" fill="#FFFFFF" text-anchor="middle">1911</text>
+</g>
+<g transform="translate(679 -18)">
+<path d="M-26 664 C-30 628 -20 612 -2 608 C20 606 30 622 26 664 Z" fill="#8C9A92"/>
+<path d="M-22 624 C-12 610 12 606 24 620 C8 618 -8 620 -22 624 Z" fill="#7FAE3E"/>
+<text x="0" y="648" font-family="'Baloo 2', sans-serif" font-weight="800" font-size="14" fill="#FFFFFF" text-anchor="middle">1945</text>
+</g>
+<g transform="translate(735 498)">
+<path d="M18 128 L10 152 M42 128 L50 152" stroke="#3A200E" stroke-width="7" stroke-linecap="round"/>
+<path d="M2 66 C-22 58 -34 40 -40 24 M58 66 C84 56 96 40 104 22" stroke="#3A200E" stroke-width="7" stroke-linecap="round" fill="none"/>
+<circle cx="-42" cy="20" r="8" fill="#F1C27A" stroke="#3A200E" stroke-width="3"/><circle cx="106" cy="18" r="8" fill="#F1C27A" stroke="#3A200E" stroke-width="3"/>
+<rect x="0" y="16" width="60" height="118" rx="10" fill="#EDB548" stroke="#3A200E" stroke-width="4"/>
+<path d="M0 34 h12 M0 48 h8 M0 62 h12 M0 76 h8 M0 90 h12 M0 104 h8 M0 118 h12" stroke="#3A200E" stroke-width="3"/>
+<circle cx="24" cy="48" r="9" fill="#FFFFFF" stroke="#3A200E" stroke-width="3"/><circle cx="46" cy="48" r="9" fill="#FFFFFF" stroke="#3A200E" stroke-width="3"/>
+<circle cx="26" cy="49" r="4" fill="#1A0F08"/><circle cx="48" cy="49" r="4" fill="#1A0F08"/>
+<path d="M18 36 l12 -4 M40 32 l12 4" stroke="#3A200E" stroke-width="3" stroke-linecap="round"/>
+<path d="M20 64 C26 84 46 84 52 64 Z" fill="#B8322A" stroke="#3A200E" stroke-width="3" stroke-linejoin="round"/>
+<path d="M28 74 C34 70 40 70 46 74 C42 80 32 80 28 74 Z" fill="#F07A6A"/>
+<path d="M-14 18 L30 -12 L74 18 Z" fill="#EBD38E" stroke="#3A200E" stroke-width="4" stroke-linejoin="round"/>
+<path d="M2 12 L30 -6 M58 12 L30 -6 M30 -12 V18" stroke="#B89A52" stroke-width="2"/>
+</g>
+<g stroke="#4A2A14" stroke-linecap="round">
+<path d="M-10 48 C200 30 480 22 740 14" stroke-width="26"/>
+<path d="M-10 48 C200 30 480 22 740 14" stroke="#7A5226" stroke-width="18"/>
+</g>
+<path d="M0 36 C120 26 240 22 330 20 C260 30 160 34 0 44 Z" fill="#7FAE3E"/>
+<g stroke="#C9A462" stroke-width="5"><path d="M118 28 v26 M126 28 v26 M600 12 v26 M608 12 v26"/></g>
+<g stroke="#3E7A2C" stroke-width="4" fill="none" stroke-linecap="round"><path d="M40 44 C44 90 30 120 38 160"/><path d="M690 16 C700 60 690 90 700 130"/></g>
+<g fill="#FFFFFF"><circle cx="38" cy="96" r="4"/><circle cx="34" cy="132" r="4"/><circle cx="696" cy="60" r="4"/><circle cx="694" cy="104" r="4"/></g>
+<g fill="#9CC8F0"><circle cx="44" cy="114" r="3"/><circle cx="702" cy="84" r="3"/></g>
+<rect width="300" height="810" fill="url(#dau-shadeL)"/>
+<g fill="#0F2E1A">
+<path d="M0 810 L0 690 C20 720 30 700 46 740 C52 690 70 680 76 650 C82 700 96 720 110 760 C120 720 140 700 150 690 C150 740 170 760 190 810 Z"/>
+<path d="M1100 810 C1110 770 1130 740 1150 730 C1146 760 1160 780 1170 760 C1180 740 1200 726 1230 720 C1214 750 1220 780 1240 810 Z"/>
+<path d="M500 810 C506 784 520 770 530 764 C530 784 540 796 548 810 Z"/>
+</g>
+<rect x="470" y="700" width="18" height="110" rx="4" fill="#1D3A22"/>
+<path d="M466 724 h26 M466 734 h26" stroke="#3E5A3A" stroke-width="4"/>
+<rect width="1440" height="810" fill="url(#dau-vig)"/>
+</svg></div>
+  <div class="dau-luoi">
+    <div class="dau-trai">
+      <div class="dau-bien"><h1>Thước Kẻ<br>Thời Gian</h1></div>
+      <div class="dau-phu">Hội Văn Phòng Phẩm · Tư tưởng Hồ Chí Minh</div>
+      <div class="cua-giay"><p>Cả nhóm cùng cắm các sự kiện lên <b>một cây thước chia năm</b>. Mỗi người giữ vài thẻ người khác không thấy — chỉ khi ghép lời kể của nhau mới biết cắm vào đâu. Không chỉ biết A trước B, mà phải biết <b>A cách B bao nhiêu năm</b>.</p>
+        <p class="nho mo" id="d-nguon"></p></div>
+      <div id="d-khoi"></div>
+    </div>
+    <nav class="cua" aria-label="Lối vào">
+      <button data-di="vao"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-butchi"/></svg></span><span><b>Vào phòng</b><span class="nho">Sinh viên — mã phòng, nhóm, số thứ tự</span></span></button>
+      <button data-di="tao"><span class="huy"><svg viewBox="0 0 96 96"><use href="#w-bangden"/></svg></span><span><b>Tạo phòng</b><span class="nho">Giảng viên — mở trên máy chiếu</span></span></button>
+      <button data-di="on"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-giaynho"/></svg></span><span><b>Ôn tập một mình</b><span class="nho">Không tính giờ, xem thước đúng sau mỗi lần nộp</span></span></button>
+      <button data-di="luat"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-capsach"/></svg></span><span><b>Luật chơi</b><span class="nho">Vai, cách tính điểm, ba cấp độ</span></span></button>
+      <button data-di="thu"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-kepgiay"/></svg></span><span><b>Xem thử cả nhóm</b><span class="nho">Máy chiếu + điện thoại cả nhóm trên một máy</span></span></button>
+    </nav>
+  </div>
+</section>
+
+<section class="man bang-go" id="s-luat" hidden>
+  <button class="nut phu nho" data-di="dau">← Trang đầu</button>
+  <h2>Luật chơi</h2>
+  <p><b>Một câu:</b> cả nhóm cùng cắm các sự kiện lên một cây thước chia năm; mỗi người giữ vài sự kiện mà người khác không thấy, và chỉ khi ghép lời kể của nhau mới biết cắm vào đâu.</p>
+  <h3>Thẻ</h3>
+  <ul class="luat">
+    <li><b>Thẻ sự kiện</b> chỉ ghi tên và mô tả, <b>không ghi năm</b>. Máy chia đều cho mọi người trong nhóm, trừ Thước Kẻ.</li>
+    <li><b>Thẻ manh mối</b> chỉ Giấy Nhớ có, ví dụ <i>“«Sáng lập Hội Việt Nam Cách mạng Thanh niên» diễn ra 5 năm trước «Thành lập Đảng Cộng sản Việt Nam».”</i> Người giữ manh mối không giữ thẻ sự kiện mà manh mối nhắc tới — muốn dùng phải nói ra.</li>
+    <li><b>Mốc neo</b>: máy cắm sẵn vài sự kiện có năm, mọi người đều thấy.</li>
+  </ul>
+  <h3>Vai trong nhóm</h3>
+  <table class="bd" id="l-vai"></table>
+  <p class="nho mo">Nhóm dưới 6 người thì gộp vai: 3 người = Thước Kẻ kiêm Kẹp Giấy · Giấy Nhớ kiêm Cục Tẩy · Bút Chì kiêm Máy Tính. Nhóm quá 10 người thì người thứ 11 trở đi ngồi xem, không giữ thẻ.</p>
+  <h3>Một ván</h3>
+  <ol class="luat">
+    <li><b>Trống Trường đánh</b>: 30 giây ai nấy đọc thẻ riêng, không cho người khác xem màn hình.</li>
+    <li><b>Thảo luận và cắm thẻ</b>: kể cho nhau nghe, gửi thẻ cho Thước Kẻ. Trên thước chung, mỗi thẻ hiện tên, hình nhân vật và màu của người gửi.</li>
+    <li><b>Sự cố</b> (cấp Khó trở lên, giảng viên bật/tắt): <i>Quạt Trần</i> tráo một thẻ manh mối giữa hai nhóm; <i>Bút Xoá</i> (Siêu khó) trộn một thẻ manh mối sai vào bộ của mỗi nhóm.</li>
+    <li><b>Kẹp Giấy chốt</b> hoặc hết giờ.</li>
+    <li><b>Bảng Đen công bố</b>: máy chiếu kéo thước đúng chồng lên thước của các nhóm, hiện từng thẻ lệch bao nhiêu năm.</li>
+  </ol>
+  <h3>Tính điểm mỗi thẻ</h3>
+  <table class="bd">
+    <tr><th>Đúng năm</th><td id="l-d1"></td></tr>
+    <tr><th>Lệch 1–2 năm</th><td id="l-d2"></td></tr>
+    <tr><th>Sai năm nhưng đúng thứ tự so với hai sự kiện liền trước, liền sau</th><td id="l-d3"></td></tr>
+    <tr><th>Sai cả thứ tự · chưa cắm</th><td>0</td></tr>
+    <tr><th>Rút một thẻ đã cắm (dời chỗ, trả về khay)</th><td id="l-rut"></td></tr>
+    <tr><th>Đánh dấu đúng thẻ manh mối giả của Bút Xoá</th><td id="l-gia"></td></tr>
+  </table>
+  <p class="nho mo">Cấp Dễ thước chia theo thập niên: cắm đúng thập niên được 3 điểm, không có mức lệch 1–2 năm. Điểm trong game chỉ để xếp thứ hạng nhóm của buổi, không ghi vào sổ.</p>
+  <h3>Ba cấp độ</h3>
+  <table class="bd" id="l-cap"></table>
+</section>
+
+<section class="man bang-go" id="s-tao" hidden>
+  <button class="nut phu nho" data-di="dau">← Trang đầu</button>
+  <h2>Tạo phòng</h2>
+  <div class="chon-cap" id="t-cap"></div>
+  <label class="o" for="t-N">Số nhóm</label>
+  <select id="t-N"></select>
+  <label class="o"><input type="checkbox" id="t-suco" checked style="width:auto"> Bật sự cố của Hội Bảng Đen (Quạt Trần, Bút Xoá)</label>
+  <label class="o" for="t-phut">Thời gian thảo luận mỗi chặng (phút)</label>
+  <input id="t-phut" type="number" min="2" max="30" inputmode="numeric">
+  <div class="hang-nut"><button class="nut nut-lon" id="t-tao">Tạo phòng và mở màn máy chiếu</button></div>
+</section>
+
+<section class="man bang-go" id="s-vao" hidden>
+  <button class="nut phu nho" data-di="dau">← Trang đầu</button>
+  <h2>Vào phòng</h2>
+  <label class="o" for="v-ma">Mã phòng</label>
+  <input id="v-ma" inputmode="numeric" maxlength="4" placeholder="4 chữ số trên máy chiếu" autocomplete="off">
+  <label class="o" for="v-doi">Nhóm</label>
+  <select id="v-doi"></select>
+  <label class="o" for="v-stt">Số thứ tự điểm danh (STT)</label>
+  <input id="v-stt" type="number" min="1" max="99" inputmode="numeric" placeholder="VD: 12">
+  <label class="o" for="v-ten">Tên gọi (tùy chọn)</label>
+  <input id="v-ten" maxlength="18" placeholder="VD: Lan">
+  <p class="loi" id="v-loi" hidden></p>
+  <div class="hang-nut"><button class="nut nut-lon" id="v-vao">Vào phòng</button></div>
+</section>
+
+<section class="man" id="s-choi" hidden></section>
+<section class="man bang-go" id="s-on" hidden></section>
+<section class="chieu" id="s-chieu" hidden><div class="canh-lon" aria-hidden="true"></div><div id="c-bang"></div></section>
+<section id="s-thu" hidden></section>
+</main>
+<div id="phu" hidden></div>
+<div id="bao" class="bao" hidden></div>
+
+<script>
+"use strict";
+const DB = {"ten":"Thước Kẻ Thời Gian","nguon":"Giáo trình Tư tưởng Hồ Chí Minh 2026","capNhat":"2026-10-10","ev":[{"id":"e004","nam":1858,"thang":0,"ngay":0,"ten":"Thực dân Pháp xâm lược Việt Nam","moTa":"Thực dân Pháp bắt đầu tiến hành xâm lược Việt Nam; triều đình nhà Nguyễn lần lượt ký các hiệp ước đầu hàng.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.1.a"},{"id":"e007","nam":1890,"thang":5,"ngay":19,"ten":"Hồ Chí Minh ra đời","moTa":"Hồ Chí Minh (lúc nhỏ tên là Nguyễn Sinh Cung) sinh ra trong một gia đình khoa bảng ở Nghệ An.","de":true,"kho":true,"sieu":true,"neo":1,"muc":"Ch.2 II.1"},{"id":"e008","nam":1905,"thang":0,"ngay":0,"ten":"Học Trường Tiểu học Pháp - bản xứ ở Vinh","moTa":"Khi học ở Trường Tiểu học Pháp - bản xứ ở thành phố Vinh, Người đã quan tâm tới khẩu hiệu Tự do - Bình đẳng - Bác ái.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.2.b"},{"id":"e009","nam":1905,"thang":0,"ngay":0,"ten":"Phong trào Đông Du","moTa":"Phong trào Đông Du do Phan Bội Châu khởi xướng, theo khuynh hướng dân chủ tư sản.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.1.a"},{"id":"e010","nam":1906,"thang":0,"ngay":0,"ten":"Phong trào Duy Tân","moTa":"Phong trào Duy Tân do Phan Châu Trinh phát động.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.1.a"},{"id":"e011","nam":1907,"thang":0,"ngay":0,"ten":"Phong trào Đông Kinh nghĩa thục","moTa":"Phong trào Đông Kinh nghĩa thục do Lương Văn Can, Nguyễn Quyền và một số nhân sĩ khác phát động, từ tháng 3 đến tháng 11.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.1.a"},{"id":"e012","nam":1908,"thang":0,"ngay":0,"ten":"Tham gia phong trào chống thuế ở Trung Kỳ","moTa":"Hồ Chí Minh tham gia phong trào chống thuế ở Trung Kỳ, thể hiện rõ tư tưởng yêu nước trong hành động.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.1"},{"id":"e013","nam":1910,"thang":0,"ngay":0,"ten":"Dạy học ở Trường Dục Thanh, Phan Thiết","moTa":"Là thầy giáo ở Trường Dục Thanh, Phan Thiết, Người truyền thụ cho học sinh lòng yêu nước.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.1"},{"id":"e014","nam":1911,"thang":6,"ngay":5,"ten":"Ra đi tìm đường cứu nước","moTa":"Hồ Chí Minh đi ra nước ngoài tìm con đường cứu nước, cứu dân.","de":true,"kho":true,"sieu":true,"neo":1,"muc":"Ch.2 II.1"},{"id":"e015","nam":1914,"thang":0,"ngay":0,"ten":"Chiến tranh thế giới thứ nhất","moTa":"Công nhân Việt Nam trở thành một giai cấp ngay trước Chiến tranh thế giới thứ nhất.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.1.a"},{"id":"e016","nam":1917,"thang":0,"ngay":0,"ten":"Cách mạng Tháng Mười Nga thành công","moTa":"Cách mạng Tháng Mười Nga thành công là thắng lợi đầu tiên của chủ nghĩa Mác - Lênin ở một nước lớn.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 I.1.b"},{"id":"e017","nam":1917,"thang":0,"ngay":0,"ten":"Trở lại Pháp, tham gia phong trào công nhân Pháp","moTa":"Trở lại Pháp, Hồ Chí Minh tham gia phong trào công nhân Pháp đấu tranh chống chủ nghĩa thực dân.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.2"},{"id":"e018","nam":1919,"thang":0,"ngay":0,"ten":"Gia nhập Đảng Xã hội Pháp","moTa":"Người gia nhập Đảng Xã hội của giai cấp công nhân Pháp, tổ chức theo đuổi lý tưởng Tự do, bình đẳng, bác ái.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.2"},{"id":"e019","nam":1919,"thang":3,"ngay":2,"ten":"Quốc tế Cộng sản ra đời","moTa":"Quốc tế Cộng sản ra đời ở Mátxcơva, trở thành Bộ tham mưu lãnh đạo phong trào cách mạng thế giới.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 I.1.b"},{"id":"e020","nam":1919,"thang":6,"ngay":18,"ten":"Gửi Yêu sách của nhân dân An Nam tới Hội nghị Vécxây","moTa":"Lấy tên Nguyễn Ái Quốc, Người gửi Yêu sách của nhân dân An Nam tới Hội nghị Vécxây, đòi quyền tự do, dân chủ cho nhân dân Việt Nam.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.2"},{"id":"e021","nam":1919,"thang":8,"ngay":0,"ten":"Bài Vấn đề dân bản xứ đăng báo L'Humanité","moTa":"Hồ Chí Minh có bài báo Vấn đề dân bản xứ đăng báo L'Humanité.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e022","nam":1920,"thang":7,"ngay":0,"ten":"Đọc Sơ thảo luận cương của Lênin","moTa":"Qua nghiên cứu Sơ thảo lần thứ nhất những luận cương về vấn đề dân tộc và vấn đề thuộc địa của V.I. Lênin, Người tìm thấy con đường cách mạng vô sản.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.2"},{"id":"e023","nam":1920,"thang":11,"ngay":4,"ten":"Bài Ở Đông Dương đăng báo L'Humanité","moTa":"Hồ Chí Minh có bài báo Ở Đông Dương đăng báo L'Humanité.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e024","nam":1920,"thang":12,"ngay":0,"ten":"Đại hội Tua: sáng lập Đảng Cộng sản Pháp","moTa":"Tại Đại hội ở thành phố Tua (từ ngày 25 đến ngày 30/12), Người bỏ phiếu tán thành Quốc tế Cộng sản, tham gia sáng lập Đảng Cộng sản Pháp, trở thành người cộng sản Việt Nam đầu tiên.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.2"},{"id":"e025","nam":1921,"thang":0,"ngay":0,"ten":"Tham gia sáng lập Hội Liên hiệp thuộc địa","moTa":"Hồ Chí Minh tham gia sáng lập Hội Liên hiệp thuộc địa.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e026","nam":1922,"thang":0,"ngay":0,"ten":"Trưởng Tiểu ban Nghiên cứu vấn đề dân tộc thuộc địa","moTa":"Người được bầu là Trưởng Tiểu ban Nghiên cứu vấn đề dân tộc thuộc địa của Đảng Cộng sản Pháp.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e027","nam":1922,"thang":0,"ngay":0,"ten":"Sáng lập báo Le Paria","moTa":"Người sáng lập báo Le Paria bằng tiếng Pháp, vừa làm chủ bút, tổng biên tập, kiêm cả tổ chức phát hành.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e028","nam":1924,"thang":0,"ngay":0,"ten":"Quan điểm Mặt trận thống nhất chính quốc và thuộc địa","moTa":"Hồ Chí Minh đưa ra quan điểm về thành lập “Mặt trận thống nhất của nhân dân chính quốc và thuộc địa” chống chủ nghĩa đế quốc.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.5 II.2.b"},{"id":"e029","nam":1924,"thang":6,"ngay":23,"ten":"Phát biểu tại Đại hội V Quốc tế Cộng sản","moTa":"Tại Đại hội V Quốc tế Cộng sản, trong Phiên họp thứ tám, Hồ Chí Minh phát biểu để thức tỉnh về vấn đề thuộc địa.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.3 I.2.d"},{"id":"e030","nam":1925,"thang":0,"ngay":0,"ten":"Bản án chế độ thực dân Pháp xuất bản ở Pari","moTa":"Tác phẩm Bản án chế độ thực dân Pháp viết bằng tiếng Pháp được xuất bản lần đầu tiên ở Pari.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e031","nam":1925,"thang":6,"ngay":0,"ten":"Sáng lập Hội Việt Nam Cách mạng Thanh niên","moTa":"Hồ Chí Minh sáng lập tổ chức tiền thân của Đảng Cộng sản - Hội Việt Nam Cách mạng Thanh niên, ra báo Thanh niên bằng tiếng Việt.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e032","nam":1927,"thang":0,"ngay":0,"ten":"Tác phẩm Đường cách mệnh","moTa":"Tác phẩm Đường cách mệnh xuất bản ở Quảng Châu, Trung Quốc, chuẩn bị về chính trị, tư tưởng, tổ chức cho sự ra đời của Đảng.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.3"},{"id":"e033","nam":1928,"thang":0,"ngay":0,"ten":"Đại hội VI Quốc tế Cộng sản","moTa":"Đại hội VI Quốc tế Cộng sản thông qua Những luận cương về phong trào cách mạng trong các nước thuộc địa và nửa thuộc địa, mang quan điểm tả khuynh.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.3 I.2.d"},{"id":"e034","nam":1930,"thang":0,"ngay":0,"ten":"Thành lập Đảng Cộng sản Việt Nam","moTa":"Đầu năm, Hồ Chí Minh chủ trì Hội nghị hợp nhất các tổ chức cộng sản Việt Nam thành Đảng Cộng sản Việt Nam.","de":true,"kho":true,"sieu":true,"neo":1,"muc":"Ch.2 II.3"},{"id":"e035","nam":1930,"thang":0,"ngay":0,"ten":"Chánh cương vắn tắt của Đảng","moTa":"Trong Chánh cương vắn tắt của Đảng, Hồ Chí Minh xác định phương hướng: làm tư sản dân quyền cách mạng và thổ địa cách mạng để đi tới xã hội cộng sản.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.3 I.2.a"},{"id":"e036","nam":1930,"thang":10,"ngay":0,"ten":"Hội nghị Trung ương: thủ tiêu Chánh cương, đổi tên Đảng","moTa":"Hội nghị Trung ương Đảng ra Án nghị quyết thủ tiêu Chánh cương, Sách lược và Điều lệ Đảng, lấy tên là Đảng Cộng sản Đông Dương.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e038","nam":1934,"thang":0,"ngay":0,"ten":"Trở lại Liên Xô, học Trường quốc tế Lênin","moTa":"Thoát khỏi nhà tù của thực dân Anh ở Hồng Kông, Hồ Chí Minh trở lại Liên Xô, vào học Trường quốc tế Lênin.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e042","nam":1938,"thang":6,"ngay":6,"ten":"Thư xin Quốc tế Cộng sản cho về nước","moTa":"Hồ Chí Minh gửi thư cho một lãnh đạo Quốc tế Cộng sản, đề nghị cho phép trở về nước hoạt động; đề nghị được chấp nhận.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e043","nam":1938,"thang":10,"ngay":0,"ten":"Rời Liên Xô, qua Trung Quốc","moTa":"Hồ Chí Minh rời Liên Xô, qua Trung Quốc để trở về Việt Nam.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e044","nam":1939,"thang":11,"ngay":0,"ten":"Hội nghị Trung ương: chuyển hướng chiến lược","moTa":"Hội nghị Trung ương Đảng vạch ra sự chuyển hướng chiến lược và sách lược của cách mạng Việt Nam.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e046","nam":1940,"thang":12,"ngay":0,"ten":"Về gần biên giới Việt Nam - Trung Quốc","moTa":"Hồ Chí Minh về gần biên giới Việt Nam - Trung Quốc, liên lạc với Trung ương Đảng Cộng sản Đông Dương, trực tiếp chỉ đạo cách mạng.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e047","nam":1941,"thang":1,"ngay":0,"ten":"Viết sách Con đường giải phóng","moTa":"Người mở lớp huấn luyện cán bộ, viết sách Con đường giải phóng, nêu ra phương pháp cách mạng giành chính quyền.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e048","nam":1941,"thang":1,"ngay":0,"ten":"Hồ Chí Minh về nước","moTa":"Cuối tháng 1, Hồ Chí Minh về nước.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e049","nam":1941,"thang":5,"ngay":0,"ten":"Hội nghị Trung ương tại Pác Bó","moTa":"Tại Pác Bó (Hà Quảng, Cao Bằng), Người chủ trì Hội nghị Ban Chấp hành Trung ương Đảng, đặt nhiệm vụ giải phóng dân tộc lên hàng đầu.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.4"},{"id":"e050","nam":1941,"thang":5,"ngay":19,"ten":"Sáng lập Mặt trận Việt Minh","moTa":"Hồ Chí Minh sáng lập Mặt trận Việt Minh (Việt Nam Độc lập Đồng minh).","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e051","nam":1943,"thang":0,"ngay":0,"ten":"Đề cương văn hóa Việt Nam","moTa":"Đề cương văn hóa Việt Nam của Đảng nêu phương châm xây dựng nền văn hóa mới: dân tộc, khoa học, đại chúng.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 I.3"},{"id":"e052","nam":1943,"thang":8,"ngay":0,"ten":"Quan niệm về văn hóa trong nhà tù Tưởng Giới Thạch","moTa":"Khi còn ở trong nhà tù của Tưởng Giới Thạch, Hồ Chí Minh đưa ra quan niệm nhấn mạnh ý nghĩa của văn hóa.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 I.1.a"},{"id":"e053","nam":1944,"thang":12,"ngay":22,"ten":"Thành lập Đội Việt Nam Tuyên truyền Giải phóng quân","moTa":"Đội Việt Nam Tuyên truyền Giải phóng quân, tiền thân của Quân đội nhân dân Việt Nam, được thành lập.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e058","nam":1945,"thang":8,"ngay":0,"ten":"Cách mạng Tháng Tám thành công","moTa":"Cách mạng Tháng Tám thành công, lật đổ chế độ thuộc địa, nửa phong kiến hơn 80 năm, giành lại độc lập dân tộc.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e059","nam":1945,"thang":8,"ngay":18,"ten":"Lời kêu gọi Tổng khởi nghĩa","moTa":"Chớp đúng thời cơ, Hồ Chí Minh ra Lời kêu gọi Tổng khởi nghĩa giành chính quyền.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e060","nam":1945,"thang":9,"ngay":0,"ten":"Thư gửi học sinh nhân ngày khai trường đầu tiên","moTa":"Hồ Chí Minh viết Thư gửi học sinh nhân ngày khai trường đầu tiên của nước Việt Nam Dân chủ Cộng hòa.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.4 III.1"},{"id":"e061","nam":1945,"thang":9,"ngay":2,"ten":"Đọc Tuyên ngôn độc lập","moTa":"Tại Quảng trường Ba Đình, Hà Nội, Hồ Chí Minh đọc bản Tuyên ngôn độc lập khai sinh ra nước Việt Nam Dân chủ Cộng hòa.","de":true,"kho":true,"sieu":true,"neo":2,"muc":"Ch.2 II.5"},{"id":"e062","nam":1945,"thang":9,"ngay":3,"ten":"Phiên họp đầu tiên của Chính phủ lâm thời","moTa":"Trong phiên họp đầu tiên của Chính phủ lâm thời, Hồ Chí Minh đề nghị tổ chức càng sớm càng hay cuộc Tổng tuyển cử.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.4 II.2.a"},{"id":"e064","nam":1946,"thang":0,"ngay":0,"ten":"Thư gửi đồng bào Nam Bộ","moTa":"Trước âm mưu “Nam Kỳ tự trị”, Hồ Chí Minh khẳng định: Đồng bào Nam Bộ là dân nước Việt Nam.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.3 I.1.d"},{"id":"e065","nam":1946,"thang":0,"ngay":0,"ten":"Lời kêu gọi Liên hợp quốc","moTa":"Trong lời kêu gọi Liên hợp quốc, Hồ Chí Minh khẳng định nhân dân Việt Nam mong muốn hòa bình nhưng kiên quyết chiến đấu bảo vệ độc lập.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.3 I.1.a"},{"id":"e066","nam":1946,"thang":0,"ngay":0,"ten":"Hiến pháp đầu tiên","moTa":"Hồ Chí Minh tham gia lãnh đạo soạn thảo Hiến pháp; Hiến pháp ghi rõ quyền Nghị viện nhân dân kiểm soát và phê bình Chính phủ.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.4 II.2.b"},{"id":"e067","nam":1946,"thang":1,"ngay":6,"ten":"Tổng tuyển cử bầu Quốc hội","moTa":"Cuộc Tổng tuyển cử được tiến hành thắng lợi với chế độ phổ thông đầu phiếu, trực tiếp và bỏ phiếu kín.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.4 II.2.a"},{"id":"e068","nam":1946,"thang":1,"ngay":26,"ten":"Ký lệnh xử tội tham ô, trộm cắp","moTa":"Hồ Chí Minh ký lệnh nói rõ tội tham ô, trộm cắp đến mức cao nhất là tử hình.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.4 II.3.b"},{"id":"e069","nam":1946,"thang":3,"ngay":2,"ten":"Quốc hội khóa I họp phiên đầu tiên","moTa":"Quốc hội khóa I nước Việt Nam Dân chủ Cộng hòa họp phiên đầu tiên; Hồ Chí Minh được bầu làm Chủ tịch Chính phủ liên hiệp đầu tiên.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.4 II.2.a"},{"id":"e071","nam":1946,"thang":11,"ngay":27,"ten":"Sắc lệnh trừng trị tội hối lộ","moTa":"Hồ Chí Minh ký Sắc lệnh ấn định hình phạt tội đưa và nhận hối lộ từ 5 năm đến 20 năm tù khổ sai.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.4 II.3.b"},{"id":"e072","nam":1946,"thang":12,"ngay":19,"ten":"Lời kêu gọi toàn quốc kháng chiến","moTa":"Người ra Lời kêu gọi toàn quốc kháng chiến: thà hy sinh tất cả, chứ nhất định không chịu mất nước, không chịu làm nô lệ.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e073","nam":1947,"thang":0,"ngay":0,"ten":"Thư gửi Hội Phật tử","moTa":"Trong thư gửi Hội Phật tử, Người viết: kháng chiến là làm theo lòng đại từ đại bi của Đức Phật Thích Ca.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 I.2.b"},{"id":"e074","nam":1947,"thang":0,"ngay":0,"ten":"Tác phẩm Sửa đổi lối làm việc","moTa":"Trong tác phẩm Sửa đổi lối làm việc, Người viết: người cách mạng phải có đạo đức, như sông phải có nguồn, cây phải có gốc.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.6 II.1"},{"id":"e075","nam":1947,"thang":9,"ngay":0,"ten":"Trả lời nhà báo Mỹ S. Êli Mâysi","moTa":"Trả lời nhà báo Mỹ, Hồ Chí Minh tuyên bố chính sách đối ngoại: làm bạn với tất cả mọi nước dân chủ và không gây thù oán với một ai.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.5 II.3.a"},{"id":"e076","nam":1950,"thang":5,"ngay":10,"ten":"Bài nói tại Hội nghị Trung ương chuẩn bị Đại hội II","moTa":"Hồ Chí Minh cho rằng: Đảng không phải làm quan, sai khiến quần chúng mà phải làm đầy tớ cho quần chúng.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.4 I.2.b"},{"id":"e077","nam":1951,"thang":2,"ngay":0,"ten":"Đại hội II của Đảng","moTa":"Đại hội II nêu rõ: đường lối chính trị, nền nếp làm việc và đạo đức cách mạng của Đảng là của Hồ Chủ tịch; Người đọc Báo cáo chính trị.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e079","nam":1951,"thang":3,"ngay":3,"ten":"Ra mắt Đảng Lao động Việt Nam","moTa":"Trong lời kết thúc buổi ra mắt Đảng Lao động Việt Nam, Hồ Chí Minh tuyên bố mục đích của Đảng: Đoàn kết toàn dân, phụng sự Tổ quốc.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.5 I.1.b"},{"id":"e080","nam":1952,"thang":0,"ngay":0,"ten":"Bài Chống quan liêu, tham ô, lãng phí","moTa":"Trong bài Chống quan liêu, tham ô, lãng phí, Hồ Chí Minh chỉ rõ: quan liêu, tham ô, lãng phí là tội ác.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 II.3.b"},{"id":"e082","nam":1954,"thang":0,"ngay":0,"ten":"Kháng chiến chống thực dân Pháp thắng lợi","moTa":"Cuộc kháng chiến chống thực dân Pháp thắng lợi, mở ra thời kỳ sụp đổ của hệ thống thuộc địa kiểu cũ; miền Bắc bước vào thời kỳ quá độ.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e083","nam":1954,"thang":0,"ngay":0,"ten":"Ký kết Hiệp định Giơnevơ","moTa":"Hiệp định Giơnevơ được ký kết, đất nước Việt Nam tạm thời bị chia cắt làm hai miền.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.3 I.1.d"},{"id":"e084","nam":1955,"thang":0,"ngay":0,"ten":"Bài Người cán bộ cách mạng","moTa":"Trong bài Người cán bộ cách mạng, Hồ Chí Minh yêu cầu: người cán bộ cách mạng phải có đạo đức cách mạng.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 II.1"},{"id":"e087","nam":1958,"thang":2,"ngay":0,"ten":"“Nước Việt Nam là một, dân tộc Việt Nam là một”","moTa":"Kiên trì đấu tranh thống nhất Tổ quốc, Người khẳng định: Nước Việt Nam là một, dân tộc Việt Nam là một.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.3 I.1.d"},{"id":"e088","nam":1959,"thang":0,"ngay":0,"ten":"Hiến pháp khẳng định Nhà nước dân chủ nhân dân","moTa":"Lời nói đầu Hiến pháp khẳng định Nhà nước dân chủ nhân dân, dựa trên nền tảng liên minh công nông, do giai cấp công nhân lãnh đạo.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.4 II.1.a"},{"id":"e089","nam":1960,"thang":0,"ngay":0,"ten":"Bài nói kỷ niệm 30 năm thành lập Đảng","moTa":"Trong bài nói tại Lễ kỷ niệm 30 năm Ngày thành lập Đảng, Hồ Chí Minh khẳng định: Đảng ta là đạo đức, là văn minh.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.4 I.2.a"},{"id":"e092","nam":1961,"thang":3,"ngay":0,"ten":"Hội nghị bồi dưỡng cán bộ lãnh đạo toàn miền Bắc","moTa":"Tại Hội nghị bồi dưỡng cán bộ lãnh đạo các cấp toàn miền Bắc (từ ngày 12 đến ngày 21/3), Hồ Chí Minh giải thích về tư tưởng, tác phong xã hội chủ nghĩa.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.3 II.2.b"},{"id":"e093","nam":1965,"thang":0,"ngay":0,"ten":"Mỹ tiến hành “Chiến tranh cục bộ”","moTa":"Đế quốc Mỹ ồ ạt đưa quân vào miền Nam tiến hành chiến lược “Chiến tranh cục bộ” và gây chiến tranh phá hoại miền Bắc.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.3 I.1.a"},{"id":"e094","nam":1965,"thang":0,"ngay":0,"ten":"Thư gửi thanh niên","moTa":"Trong Thư gửi thanh niên, Người viết: trung với nước, hiếu với dân, nhiệm vụ nào cũng hoàn thành, khó khăn nào cũng vượt qua, kẻ thù nào cũng đánh thắng.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.6 II.2.a"},{"id":"e095","nam":1966,"thang":7,"ngay":17,"ten":"Lời kêu gọi: Không có gì quý hơn độc lập, tự do","moTa":"Hồ Chí Minh ra Lời kêu gọi đồng bào và chiến sĩ cả nước, nêu chân lý lớn của thời đại: Không có gì quý hơn độc lập, tự do.","de":true,"kho":true,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e097","nam":1969,"thang":2,"ngay":3,"ten":"Nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân","moTa":"Bài báo đăng trên báo Nhân dân; Người bàn về tư cách, đạo đức, chống suy thoái trong cán bộ, đảng viên.","de":false,"kho":true,"sieu":true,"neo":0,"muc":"Ch.4 I.2.c"},{"id":"e098","nam":1969,"thang":7,"ngay":0,"ten":"Trả lời phóng viên báo Granma (Cuba)","moTa":"Khi tiếp và trả lời nữ đồng chí Marta Rôhát, phóng viên báo Granma (Cuba), Người nói: Tôi hiến cả đời tôi cho dân tộc tôi.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 IV.2"},{"id":"e099","nam":1969,"thang":9,"ngay":2,"ten":"Chủ tịch Hồ Chí Minh qua đời","moTa":"Chủ tịch Hồ Chí Minh qua đời; Điếu văn của Ban Chấp hành Trung ương Đảng tôn vinh Người là anh hùng dân tộc vĩ đại.","de":true,"kho":true,"sieu":true,"neo":1,"muc":"Ch.1 I"},{"id":"e100","nam":1975,"thang":0,"ngay":0,"ten":"Cả nước hòa bình, độc lập, thống nhất","moTa":"Cả nước hòa bình, độc lập, thống nhất đi lên chủ nghĩa xã hội.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.2 II.5"},{"id":"e101","nam":1976,"thang":12,"ngay":0,"ten":"Đại hội IV của Đảng","moTa":"Đại hội IV đánh giá Hồ Chí Minh là người sáng lập và rèn luyện Đảng, người khai sinh nền Cộng hòa Dân chủ Việt Nam.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e103","nam":1982,"thang":3,"ngay":0,"ten":"Đại hội V của Đảng","moTa":"Đại hội V nhấn mạnh việc tổ chức học tập có hệ thống tư tưởng, đạo đức, tác phong của Chủ tịch Hồ Chí Minh.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e104","nam":1986,"thang":12,"ngay":0,"ten":"Đại hội VI: đường lối đổi mới","moTa":"Đại hội VI đề ra đường lối đổi mới toàn diện, nhấn mạnh kế thừa di sản tư tưởng và lý luận cách mạng của Chủ tịch Hồ Chí Minh.","de":false,"kho":false,"sieu":true,"neo":1,"muc":"Ch.1 I"},{"id":"e105","nam":1987,"thang":0,"ngay":0,"ten":"UNESCO ra Nghị quyết 24C/18.6.5 về Hồ Chí Minh","moTa":"Khóa họp 24 Đại hội đồng UNESCO ở Pari (từ ngày 20/10 đến ngày 20/11) ra Nghị quyết ghi nhận Hồ Chí Minh là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e107","nam":1991,"thang":0,"ngay":0,"ten":"Đại hội VII: tư tưởng Hồ Chí Minh làm nền tảng","moTa":"Đại hội VII khẳng định: Đảng lấy chủ nghĩa Mác - Lênin và tư tưởng Hồ Chí Minh làm nền tảng tư tưởng, kim chỉ nam cho hành động.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e108","nam":1991,"thang":0,"ngay":0,"ten":"Cương lĩnh xây dựng đất nước thời kỳ quá độ","moTa":"Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên chủ nghĩa xã hội ghi nhận tư tưởng Hồ Chí Minh là nền tảng tư tưởng.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e109","nam":1992,"thang":0,"ngay":0,"ten":"Hiến pháp ghi nhận tư tưởng Hồ Chí Minh làm nền tảng","moTa":"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam ghi nhận chủ nghĩa Mác - Lênin, tư tưởng Hồ Chí Minh làm nền tảng tư tưởng.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e110","nam":1993,"thang":11,"ngay":2,"ten":"Nghị quyết 07-NQ/TW về đại đoàn kết dân tộc","moTa":"Bộ Chính trị khóa VII ra Nghị quyết số 07-NQ/TW “Về đại đoàn kết dân tộc và tăng cường Mặt trận dân tộc thống nhất”.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.5 III.1"},{"id":"e111","nam":1996,"thang":6,"ngay":0,"ten":"Đại hội VIII của Đảng","moTa":"Tại Đại hội VIII, vấn đề đại đoàn kết toàn dân tộc được đặt ở một tầm cao mới.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.5 III.1"},{"id":"e112","nam":1998,"thang":7,"ngay":0,"ten":"Nghị quyết Trung ương 5 khóa VIII về văn hóa","moTa":"Hội nghị lần thứ năm Ban Chấp hành Trung ương khóa VIII ra Nghị quyết xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 IV.1"},{"id":"e113","nam":2001,"thang":4,"ngay":0,"ten":"Đại hội IX của Đảng","moTa":"Tại Đại hội IX, Đảng nhận thức về tư tưởng Hồ Chí Minh một cách đầy đủ hơn.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e114","nam":2006,"thang":4,"ngay":0,"ten":"Đại hội X của Đảng","moTa":"Đại hội X khẳng định tư tưởng Hồ Chí Minh cùng chủ nghĩa Mác - Lênin mãi mãi là nền tảng tư tưởng, kim chỉ nam cho hành động.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e115","nam":2011,"thang":0,"ngay":0,"ten":"Đại hội XI nêu khái niệm tư tưởng Hồ Chí Minh","moTa":"Đại hội đại biểu toàn quốc lần thứ XI của Đảng nêu khái niệm “Tư tưởng Hồ Chí Minh”.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e116","nam":2011,"thang":0,"ngay":0,"ten":"Cương lĩnh (bổ sung, phát triển)","moTa":"Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên chủ nghĩa xã hội được bổ sung, phát triển; khẳng định con người là trung tâm của chiến lược phát triển.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 IV.1"},{"id":"e117","nam":2013,"thang":0,"ngay":0,"ten":"Hiến pháp sửa đổi, bổ sung","moTa":"Hiến pháp nước Cộng hòa xã hội chủ nghĩa Việt Nam được sửa đổi, bổ sung.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e118","nam":2014,"thang":6,"ngay":9,"ten":"Nghị quyết 33-NQ/TW về văn hóa, con người","moTa":"Nghị quyết Hội nghị Trung ương 9 khóa XI về xây dựng và phát triển văn hóa, con người Việt Nam đáp ứng yêu cầu phát triển bền vững đất nước.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.6 IV.1"},{"id":"e119","nam":2021,"thang":0,"ngay":0,"ten":"Đại hội XIII của Đảng","moTa":"Đại hội XIII khẳng định quan điểm chỉ đạo: kiên định và vận dụng, phát triển sáng tạo chủ nghĩa Mác - Lênin, tư tưởng Hồ Chí Minh.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"},{"id":"e120","nam":2021,"thang":10,"ngay":25,"ten":"Kết luận 21-KL/TW về xây dựng, chỉnh đốn Đảng","moTa":"Ban Chấp hành Trung ương Đảng khóa XIII ban hành Kết luận số 21-KL/TW về đẩy mạnh xây dựng, chỉnh đốn Đảng và hệ thống chính trị.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.3 IV.4"},{"id":"e121","nam":2026,"thang":0,"ngay":0,"ten":"Đại hội XIV của Đảng","moTa":"Đại hội XIV tiếp tục khẳng định quan điểm kiên định, vận dụng, phát triển sáng tạo chủ nghĩa Mác - Lênin, tư tưởng Hồ Chí Minh.","de":false,"kho":false,"sieu":true,"neo":0,"muc":"Ch.1 I"}]};
+
+/* ============================================================
+   CẤU HÌNH — mọi con số của luật chơi ở một chỗ
+   ============================================================ */
+const CH = {
+  cap: {
+    de:   {ten: "Dễ",       soSK: 15, don: 10, neo: 3, soMM: 5,  quat: 0, gia: 0, phut: 6,  chang: 1, loc: "de"},
+    kho:  {ten: "Khó",      soSK: 30, don: 1,  neo: 1, soMM: 10, quat: 1, gia: 0, phut: 10, chang: 1, loc: "kho"},
+    sieu: {ten: "Siêu khó", soSK: 66, don: 1,  neo: 1, soMM: 8,  quat: 1, gia: 1, phut: 8,  chang: 3, loc: "sieu"}
+  },
+  xemGiay: 30,                        // Trống Trường: giây đọc thẻ riêng
+  diem: {dung: 3, gan: 2, ganNam: 2, thuTu: 1, gia: 2},
+  truRut: 1,                          // điểm trừ mỗi lần rút một thẻ đã cắm (Cục Tẩy miễn một lần)
+  quatKhoang: [0.35, 0.65],           // Quạt Trần thổi trong khoảng này của thời gian thảo luận
+  toiDaNguoi: 10,                     // quá số này thì ngồi xem
+  giayCuoi: 20                        // 20 giây cuối: trống rung, đồng hồ đỏ
+};
+const NHOM = [["Vở Đỏ","#C43D2E","#D94D3C"],["Vở Cam","#DE6B1F","#E87B2E"],["Vở Vàng","#C79413","#D9A61E"],["Vở Lá","#3E8E41","#4EA658"],
+  ["Vở Ngọc","#0E9488","#14A89A"],["Vở Biển","#2C6FBB","#3D82D0"],["Vở Tím","#7B3FA0","#9159B8"],["Vở Sen","#C4407E","#D9548F"],
+  ["Vở Nâu","#9A5518","#B06A24"],["Vở Than","#333F4A","#8494A3"]];
+const VAI = {
+  TK: {ten: "Thước Kẻ", sym: "c-thuoc", mau: "#2F6B52", mo: "Đội trưởng, giữ cây thước chung — người duy nhất cắm và rút thẻ"},
+  KG: {ten: "Kẹp Giấy", sym: "c-kepgiay", mau: "#6F89A3", mo: "Người duy nhất bấm Chốt nộp bài"},
+  CT: {ten: "Cục Tẩy", sym: "c-cuctay", mau: "#D9677E", mo: "Một lần mỗi ván: cho Thước Kẻ rút một thẻ đã cắm mà không bị trừ điểm"},
+  MT: {ten: "Máy Tính Bỏ Túi", sym: "c-maytinh", mau: "#5A6B7D", mo: "Một lần mỗi ván: hỏi máy hai sự kiện cách nhau bao nhiêu năm"},
+  GN: {ten: "Giấy Nhớ", sym: "c-giaynho", symM: "c-giaynho-m", ban: [["Vàng", "#D9B83A"], ["Xanh", "#5DB89A"], ["Hồng", "#E08AAB"]], mo: "Giữ thẻ manh mối — đọc to cho cả nhóm"},
+  BC: {ten: "Bút Chì", sym: "c-butchi", symM: "c-butchi-m", ban: [["Vàng", "#E8B71E"], ["Xanh", "#2E7FBF"], ["Hồng", "#E0699A"]], mo: "Giữ thẻ sự kiện — kể cho cả nhóm, gửi cho Thước Kẻ"},
+  XEM: {ten: "Người xem", sym: "c-capsach", mau: "#8496A6", mo: "Nhóm đã đủ 10 vai — ngồi cùng nhóm, nghe và góp ý"}
+};
+/* thứ tự bật ghế theo số người (thiết kế: lấp vai cần nhất trước; quá 6 người mới nhân bản, tối đa 3 bản) */
+const GHE = ["TK", "GN", "BC", "KG", "CT", "MT", "GN", "BC", "GN", "BC"];
+
+/* ============================================================
+   TIỆN ÍCH
+   ============================================================ */
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"}[c]));
+const QS = new URLSearchParams(location.search);
+const CHI_BC = QS.get("noi") === "bc";
+const THU = QS.has("thu");
+function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const xao = (a, r) => { for(let i = a.length - 1; i > 0; i--){ const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const bocMot = (a, r) => a[Math.floor(r() * a.length)];
+const bam = s => { let h = 2166136261; for(const c of String(s)){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+const luu = (k, v) => { if(THU) return; try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} };
+const lay = k => { if(THU) return null; try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } };
+const bo = k => { try{ localStorage.removeItem(k); }catch(e){} };
+const mmss = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return String(Math.floor(s / 60)).padStart(2, "0") + ":" + String(s % 60).padStart(2, "0"); };
+const svg = (id, cls = "nv", mau) => `<svg class="${cls}" viewBox="0 0 96 96"${mau ? ` style="color:${mau}"` : ""}><use href="#${id}"/></svg>`;
+let hBao = 0;
+function bao(t, ms = 2600){ const e = $("#bao"); e.textContent = t; e.hidden = false; clearTimeout(hBao); hBao = setTimeout(() => e.hidden = true, ms); }
+let hPhu = 0;
+function phu(sym, tieuDe, loi, ms = 3000){
+  const e = $("#phu");
+  e.innerHTML = `<div class="vao">${svg(sym, "")}<h2>${esc(tieuDe)}</h2>${loi ? `<p>${esc(loi)}</p>` : ""}</div>`;
+  e.hidden = false; clearTimeout(hPhu); hPhu = setTimeout(() => e.hidden = true, ms);
+}
+$("#phu").onclick = () => $("#phu").hidden = true;
+function hien(id){ $$("main > section").forEach(s => s.hidden = s.id !== id); document.body.dataset.man = id; window.scrollTo(0, 0); }
+
+/* ============================================================
+   DỮ LIỆU VÀ LUẬT
+   ============================================================ */
+const EV = new Map((DB ? DB.ev : []).map(e => [e.id, e]));
+const E = id => EV.get(id);
+const soSanh = (a, b) => a.nam - b.nam || a.thang - b.thang || a.ngay - b.ngay;
+const oCua = (y, don) => Math.floor(y / don) * don;
+const nhanO = (y, don) => don === 10 ? `thập niên ${y}` : `năm ${y}`;
+/* mốc neo luôn lộ năm chính xác — manh mối tính bằng năm, kể cả khi thước chia theo thập niên */
+const neoDs = ch => ch.neo.map(id => `«${esc(E(id).ten)}» — <b>${E(id).nam}</b>`).join(" · ");
+
+/* rút sự kiện cho một ván, chia chặng, chọn mốc neo — mọi máy tính lại được từ cùng một seed */
+function taoVan(cap, seed){
+  const c = CH.cap[cap], r = rng(seed);
+  const kho = DB.ev.filter(e => e[c.loc]), luon = kho.filter(e => e.neo >= 2);   /* mốc neo ưu tiên nhất luôn có mặt */
+  const ds = kho.length > c.soSK ? luon.concat(xao(kho.filter(e => e.neo < 2), r).slice(0, c.soSK - luon.length)) : kho.slice();
+  ds.sort(soSanh);
+  const chang = [], n = ds.length;
+  let dau = 0;
+  for(let i = 0; i < c.chang; i++){
+    let cuoi = i === c.chang - 1 ? n : Math.round((i + 1) * n / c.chang);
+    while(cuoi < n && cuoi > dau && ds[cuoi].nam === ds[cuoi - 1].nam) cuoi++;   /* không cắt đôi một năm */
+    const phan = ds.slice(dau, cuoi); dau = cuoi;
+    if(!phan.length) continue;
+    const neo = chonNeo(phan, c.neo, r);
+    chang.push({ids: phan.map(e => e.id), neo, tu: oCua(phan[0].nam, 10), den: oCua(phan[phan.length - 1].nam, 10) + 9});
+  }
+  return {cap, don: c.don, chang};
+}
+function chonNeo(ds, k, r){
+  const out = [], n = ds.length;
+  const qs = k === 1 ? [0.5] : Array.from({length: k}, (_, i) => (i + 0.5) / k);
+  for(const q of qs){
+    const dich = q * (n - 1); let tot = null, diem = -1e9;
+    ds.forEach((e, i) => { if(out.includes(e.id)) return;
+      const d = k === 1 ? (e.neo || 0) * 100 - Math.abs(i - dich) : (e.neo || 0) * 30 - Math.abs(i - dich) * 12;
+      if(d + r() > diem){ diem = d + r(); tot = e.id; } });
+    if(tot) out.push(tot);
+  }
+  return out;
+}
+function cauKhoangCach(x, y, d, r, coHuong){
+  const X = `«${E(x).ten}»`, Y = `«${E(y).ten}»`;
+  if(d === 0) return {loai: "cungnam", ev: [x, y], text: `${X} và ${Y} diễn ra trong cùng một năm.`};
+  if(!coHuong && r() < 0.3) return {loai: "cach", ev: [x, y], text: `${X} và ${Y} cách nhau ${Math.abs(d)} năm.`};
+  return {loai: "truocsau", ev: [x, y], text: d < 0 ? `${X} diễn ra ${-d} năm trước ${Y}.` : `${X} diễn ra ${d} năm sau ${Y}.`};
+}
+/* Manh mối nối dần từ mốc neo: mỗi manh mối nối một sự kiện với một sự kiện đã suy ra được,
+   nên cả bộ manh mối luôn giải được. Thẻ giả của Bút Xoá nối hai sự kiện đã suy ra được —
+   đối chiếu là thấy vô lý. */
+function taoManhMoi(ch, soMM, coGia, r, tien){
+  const neo = ch.neo, tu = ch.ids.filter(id => !neo.includes(id));
+  const biet = neo.slice(), ds = [];
+  const dem = {}; ch.ids.forEach(id => { const y = E(id).nam; dem[y] = (dem[y] || 0) + 1; });
+  const namDoi = Object.keys(dem).filter(y => dem[y] >= 2).map(Number);
+  let con = Math.min(soMM, tu.length);
+  if(namDoi.length && soMM >= 4){
+    const y = bocMot(namDoi, r);
+    ds.push({loai: "dem", ev: ch.ids.filter(id => E(id).nam === y), text: `Trong bộ thẻ ván này có đúng ${dem[y]} sự kiện thuộc năm ${y}.`}); con--;
+  }
+  for(const x of xao(tu.slice(), r).slice(0, con)){
+    const e = E(x);
+    if(e.mm && e.mm.length){ ds.push({loai: "tay", ev: [x], text: bocMot(e.mm, r)}); biet.push(x); continue; }
+    const gan = biet.slice().sort((a, b) => Math.abs(E(a).nam - e.nam) - Math.abs(E(b).nam - e.nam)).slice(0, 3);
+    const y = bocMot(gan, r);
+    ds.push(cauKhoangCach(x, y, e.nam - E(y).nam, r)); biet.push(x);
+  }
+  if(coGia){
+    const ung = biet.filter(id => !neo.includes(id) && !(E(id).mm || []).length);
+    if(ung.length && biet.length > 1){
+      const a = bocMot(ung, r), b = bocMot(biet.filter(id => id !== a), r);
+      const d = E(a).nam - E(b).nam, d2 = d + (r() < .5 ? -1 : 1) * (3 + Math.floor(r() * 5));
+      ds.push(Object.assign(cauKhoangCach(a, b, d2, r, true), {gia: true}));
+    }
+  }
+  xao(ds, r);
+  ds.forEach((m, i) => m.id = `${tien}m${i + 1}`);
+  return ds;
+}
+/* Chia vai, thẻ sự kiện, thẻ manh mối cho một nhóm. stts đã theo thứ tự ghế. */
+function chiaNhom(stts, ch, cap, suCo, seed, doi){
+  const r = rng(seed), c = CH.cap[cap];
+  const nguoi = stts.map((s, i) => ({stt: s, vai: [i < GHE.length ? GHE[i] : "XEM"]}));
+  const co = v => nguoi.find(p => p.vai[0] === v);
+  const gop = (v, ...uu) => { if(co(v)) return; for(const u of uu){ const p = co(u); if(p){ p.vai.push(v); return; } } };
+  gop("KG", "TK"); gop("CT", "GN", "TK"); gop("MT", "BC", "GN", "TK"); gop("GN", "TK");
+  ["GN", "BC"].forEach(v => { const ds = nguoi.filter(p => p.vai[0] === v); ds.forEach((p, i) => { p.ban = i; p.soBan = ds.length; }); });
+  let giuThe = nguoi.filter(p => p.vai[0] !== "TK" && p.vai[0] !== "XEM"); if(!giuThe.length) giuThe = [nguoi[0]];
+  const giuMM = nguoi.filter(p => p.vai.includes("GN"));
+  const mm = taoManhMoi(ch, c.soMM, !!(c.gia && suCo), r, `n${doi}-`);
+  const MM = {}; giuMM.forEach(p => MM[p.stt] = []);
+  mm.forEach((m, i) => MM[giuMM[i % giuMM.length].stt].push(m));
+  const THE = {}; giuThe.forEach(p => THE[p.stt] = []);
+  for(const id of xao(ch.ids.filter(id => !ch.neo.includes(id)), r)){
+    const vuong = s => (MM[s] || []).some(m => m.ev.includes(id));
+    let ung = giuThe.filter(p => !vuong(p.stt)); if(!ung.length) ung = giuThe;
+    ung.sort((a, b) => THE[a.stt].length - THE[b.stt].length); THE[ung[0].stt].push(id);
+  }
+  const vai = {}; nguoi.forEach(p => vai[p.stt] = {vai: p.vai, ban: p.ban || 0, soBan: p.soBan || 1});
+  return {vai, the: THE, mm: MM, thuTu: nguoi.map(p => p.stt)};
+}
+/* manh mối đang nằm trong tay một người, sau các lần Quạt Trần tráo */
+function mmHienTai(chia, quat, doi, stt){
+  let ds = ((chia && chia.mm[stt]) || []).map(m => Object.assign({}, m));
+  for(const q of quat || []){
+    if(q.a.doi === doi && q.a.stt === stt){ ds = ds.filter(m => m.id !== q.a.mm.id); ds.push(Object.assign({tuNhom: q.b.doi}, q.b.mm)); }
+    if(q.b.doi === doi && q.b.stt === stt){ ds = ds.filter(m => m.id !== q.b.mm.id); ds.push(Object.assign({tuNhom: q.a.doi}, q.a.mm)); }
+  }
+  return ds;
+}
+/* thẻ manh mối cả nhóm đang nghi là giả: lần đánh dấu mới nhất của các Giấy Nhớ */
+function giaCuaNhom(vai){
+  let moi = null; Object.values(vai || {}).forEach(v => { if(v && v.gia && (!moi || v.gia.luc > moi.luc)) moi = v.gia; });
+  return moi ? moi.cid : null;
+}
+/* Chấm một thước. cam: {id: vị trí (năm, hoặc năm đầu thập niên)} */
+function cham(ch, don, cam, rut, dungGia){
+  const vt = id => ch.neo.includes(id) ? oCua(E(id).nam, don) : (cam && cam[id] != null ? cam[id] : null);
+  const xep = ch.ids.slice().sort((a, b) => soSanh(E(a), E(b)));
+  const ct = {}, dem = {dung: 0, gan: 0, thuTu: 0, sai: 0, chua: 0}; let tho = 0;
+  xep.forEach((id, i) => {
+    if(ch.neo.includes(id)) return;
+    const p = vt(id), y = E(id).nam, o = oCua(y, don);
+    if(p == null){ ct[id] = {loai: "chua", d: 0}; dem.chua++; return; }
+    const lech = p - o; let loai;
+    if(lech === 0) loai = "dung";
+    else if(don === 1 && Math.abs(lech) <= CH.diem.ganNam) loai = "gan";
+    else {
+      let truoc = null, sau = null;
+      for(let j = i - 1; j >= 0; j--){ const q = xep[j]; if(E(q).nam < y && vt(q) != null){ truoc = q; break; } }
+      for(let j = i + 1; j < xep.length; j++){ const q = xep[j]; if(E(q).nam > y && vt(q) != null){ sau = q; break; } }
+      /* cùng ô thật thì được đứng cùng ô; khác ô thật thì phải đứng hẳn trước/sau */
+      const okT = !truoc || (oCua(E(truoc).nam, don) < o ? vt(truoc) < p : vt(truoc) <= p);
+      const okS = !sau || (oCua(E(sau).nam, don) > o ? p < vt(sau) : p <= vt(sau));
+      loai = (truoc || sau) && okT && okS ? "thuTu" : "sai";
+    }
+    const d = {dung: CH.diem.dung, gan: CH.diem.gan, thuTu: CH.diem.thuTu, sai: 0}[loai];
+    ct[id] = {loai, d, lech, p}; tho += d; dem[loai]++;
+  });
+  const truRut = (rut || 0) * CH.truRut, thuong = dungGia ? CH.diem.gia : 0;
+  return {ct, dem, tho, truRut, thuong, tong: Math.max(0, tho - truRut + thuong), toiDa: (ch.ids.length - ch.neo.length) * CH.diem.dung};
+}
+
+/* ============================================================
+   NHÂN VẬT CỦA MỘT NGƯỜI
+   ============================================================ */
+function hinhNguoi(p){
+  const v = p.vai[0], V = VAI[v];
+  if(V.ban){ const [tenMau, mau] = V.ban[p.ban % 3]; return {sym: p.ban ? V.symM : V.sym, mau, symMau: p.ban ? mau : null, ten: V.ten + " " + tenMau}; }
+  return {sym: V.sym, mau: V.mau, symMau: null, ten: V.ten};
+}
+function tenVai(p){
+  const h = hinhNguoi(p), v = p.vai[0], V = VAI[v];
+  const ban = V.ban && p.soBan > 1 ? ` ${p.ban + 1} / ${p.soBan}` : "";
+  const kiem = p.vai.slice(1).map(x => VAI[x].ten);
+  return {chinh: h.ten + ban, kiem, docQuyen: !V.ban && v !== "XEM"};
+}
+const avatar = (p, cls = "nv") => { const h = hinhNguoi(p); return svg(h.sym, cls, h.symMau); };
+
+/* ============================================================
+   ĐƯỜNG NỐI GIỮA CÁC MÁY (chép từ game Nhanh! — MQTT công cộng,
+   mỗi đường dẫn là một "tài liệu" giữ lại trên máy chủ; ?noi=bc để
+   các tab/khung của một trình duyệt nói chuyện trực tiếp, không cần mạng)
+   ============================================================ */
+const MAY_CHU = [{url: "wss://broker.emqx.io:8084/mqtt"}, {url: "wss://broker.hivemq.com:8884/mqtt"}, {url: "wss://public.cloud.shiftr.io/mqtt", user: "public", pass: "public"}];
+const KHONG_GIAN = "hanu-pol1001/thuoc-ke/v1/";
+function taoMQTT(cfg, onMsg, onState){
+  let ws = null, ok = false, buf = new Uint8Array(0), pid = 0, ping = null, lui = 1000;
+  const subs = new Set(), cho = new Map(), te = new TextEncoder(), td = new TextDecoder();
+  const vlen = n => { const o = []; do{ let b = n % 128; n = Math.floor(n / 128); if(n > 0) b |= 128; o.push(b); }while(n > 0); return o; };
+  const chu = x => { const b = te.encode(x); return [b.length >> 8, b.length & 255].concat(Array.from(b)); };
+  const goi = (h, body) => { if(!ws || ws.readyState !== 1) return false; ws.send(new Uint8Array([h].concat(vlen(body.length), body))); return true; };
+  const moiId = () => { pid = pid % 65535 + 1; return pid; };
+  function dangKy(f){ const id = moiId(); goi(0x82, [id >> 8, id & 255].concat(chu(f), [1])); return id; }
+  function ketNoi(){
+    try{ ws = new WebSocket(cfg.url, ["mqtt"]); }catch(e){ henLai(); return; }
+    ws.binaryType = "arraybuffer";
+    ws.onopen = () => { let co = 0x02; let pl = chu("tkt" + Math.random().toString(36).slice(2, 12));
+      if(cfg.user){ co |= 0x80; pl = pl.concat(chu(cfg.user)); } if(cfg.pass){ co |= 0x40; pl = pl.concat(chu(cfg.pass)); }
+      goi(0x10, chu("MQTT").concat([4, co, 0, 30], pl)); };
+    ws.onmessage = e => { const d = new Uint8Array(e.data), n = new Uint8Array(buf.length + d.length); n.set(buf); n.set(d, buf.length); buf = n; tach(); };
+    ws.onclose = () => { const truoc = ok; ok = false; ws = null; buf = new Uint8Array(0); clearInterval(ping); cho.forEach(f => f(false)); cho.clear(); if(truoc) onState(); henLai(); };
+    ws.onerror = () => { try{ ws && ws.close(); }catch(e){} };
+  }
+  function henLai(){ setTimeout(ketNoi, lui); lui = Math.min(lui * 2, 15000); }
+  function tach(){ for(;;){ if(buf.length < 2) return; let m = 1, len = 0, i = 1, b;
+    do{ if(i >= buf.length) return; b = buf[i++]; len += (b & 127) * m; m *= 128; }while(b & 128);
+    if(buf.length < i + len) return; const h = buf[0], p = buf.slice(i, i + len); buf = buf.slice(i + len); try{ xuLy(h, p); }catch(e){} } }
+  function xuLy(h, p){ const t = h >> 4;
+    if(t === 2){ if(p[1] === 0){ ok = true; lui = 1000; subs.forEach(dangKy); clearInterval(ping); ping = setInterval(() => goi(0xC0, []), 25000); onState(); } else { try{ ws.close(); }catch(e){} } }
+    else if(t === 3){ const qos = (h >> 1) & 3, tl = (p[0] << 8) | p[1]; const topic = td.decode(p.subarray(2, 2 + tl)); let o = 2 + tl;
+      if(qos > 0){ const id = (p[o] << 8) | p[o + 1]; o += 2; goi(0x40, [id >> 8, id & 255]); } onMsg(topic, td.decode(p.subarray(o))); }
+    else if(t === 4 || t === 9){ const id = (p[0] << 8) | p[1], f = cho.get(id); if(f){ cho.delete(id); f(true); } } }
+  const doi = (id, r, ms) => { cho.set(id, r); setTimeout(() => { if(cho.delete(id)) r(false); }, ms); };
+  return { get ok(){ return ok; }, batDau: ketNoi,
+    sub(f){ if(subs.has(f)) return Promise.resolve(true); subs.add(f); if(!ok) return Promise.resolve(false); return new Promise(r => doi(dangKy(f), r, 4000)); },
+    pub(topic, text){ return new Promise(r => { if(!ok) return r(false); const id = moiId();
+      const pl = chu(topic).concat([id >> 8, id & 255], Array.from(te.encode(text))); if(!goi(0x33, pl)) return r(false); doi(id, r, 6000); }); } };
+}
+const SYNC = (() => {
+  const kho = new Map(), nghe = new Set(), may = []; let bc = null, batDauLuc = 0, baoDoi = () => {};
+  const dc = p => KHONG_GIAN + p;
+  const khop = (f, t) => { if(f.endsWith("/+")){ const g = f.slice(0, -1); return t.startsWith(g) && t.length > g.length && !t.slice(g.length).includes("/"); } return f === t; };
+  function nhan(t, text){ if(!t.startsWith(KHONG_GIAN) || !text) return; let r; try{ r = JSON.parse(text); }catch(e){ return; }
+    if(!r || typeof r.t !== "number" || typeof r.v !== "object") return; const cu = kho.get(t); if(cu && cu.t >= r.t) return;
+    kho.set(t, r); nghe.forEach(l => { if(khop(l.f, t)) try{ l.cb(); }catch(e){ console.error(e); } }); }
+  const coMay = () => CHI_BC || may.some(m => m.ok);
+  const cho = (dk, ms) => new Promise(r => { if(dk()) return r(true); const t0 = Date.now(), iv = setInterval(() => { if(dk()){ clearInterval(iv); r(true); } else if(Date.now() - t0 > ms){ clearInterval(iv); r(false); } }, 100); });
+  async function sub(f){ if(bc) bc.postMessage({k: "hoi", f}); await Promise.all(may.map(m => m.sub(f))); }
+  function snap(p){ const t = dc(p), r = kho.get(t); return {exists: !!r, data: () => r ? r.v : undefined}; }
+  let tCuoi = 0;
+  /* ghi ngay vào máy mình (giao diện không phải chờ mạng), rồi gửi đi; mất mạng thì thử lại */
+  async function ghi(p, v){ const t = dc(p), cu = kho.get(t); tCuoi = Math.max(Date.now(), tCuoi + 1, cu ? cu.t + 1 : 0); const moc = tCuoi, tx = JSON.stringify({t: moc, v});
+    nhan(t, tx); if(bc) bc.postMessage({k: "pub", t, tx}); if(CHI_BC) return;
+    for(let lan = 0; lan < 10; lan++){
+      if(!coMay()) await cho(coMay, 8000);
+      const kq = await Promise.all(may.map(m => m.pub(t, tx))); if(kq.some(Boolean)) return;
+      await new Promise(r => setTimeout(r, 1500)); const nay = kho.get(t); if(nay && nay.t !== moc) return; }
+    throw new Error("không gửi được"); }
+  function ngheDoc(p, cb){ const t = dc(p), l = {f: t, cb: () => cb(snap(p))}; nghe.add(l); sub(t); if(kho.has(t)) setTimeout(() => { if(nghe.has(l)) l.cb(); }, 0); return () => nghe.delete(l); }
+  function ngheBo(p, cb){ const f = dc(p) + "/+", g = f.slice(0, -1);
+    const l = {f, cb: () => { const docs = []; kho.forEach((r, t) => { if(khop(f, t)) docs.push({id: t.slice(g.length), data: () => r.v}); }); cb({docs}); }};
+    nghe.add(l); sub(f); setTimeout(() => { if(nghe.has(l)) l.cb(); }, 0); return () => nghe.delete(l); }
+  return { coMay, dangThu: () => !coMay() && Date.now() - batDauLuc < 9000,
+    batDau(onDoi){ baoDoi = onDoi || baoDoi; batDauLuc = Date.now();
+      if("BroadcastChannel" in window){ bc = new BroadcastChannel("thuoc-ke");
+        bc.onmessage = e => { const d = e.data || {}; if(d.k === "pub") nhan(d.t, d.tx); else if(d.k === "hoi") kho.forEach((r, t) => { if(khop(d.f, t)) bc.postMessage({k: "pub", t, tx: JSON.stringify(r)}); }); }; }
+      if(!CHI_BC) MAY_CHU.forEach(c => { const m = taoMQTT(c, nhan, () => baoDoi()); may.push(m); m.batDau(); });
+      setTimeout(() => baoDoi(), 9500); baoDoi(); },
+    doc: p => ({ set: v => ghi(p, v), onSnapshot: cb => ngheDoc(p, cb) }),
+    collection: p => ({ onSnapshot: cb => ngheBo(p, cb) }) };
+})();
+let MANG = false;
+function batMang(){ if(MANG) return; MANG = true; SYNC.batDau(veMang); setInterval(veMang, 1500); }
+function veMang(){ const on = SYNC.coMay(), dang = !on && SYNC.dangThu();
+  const html = `<span class="dot ${on ? "on" : dang ? "dang" : ""}"></span>` + (on ? (CHI_BC ? "Nối trong máy" : "Đã nối mạng") : dang ? "Đang nối…" : "Mất mạng — kiểm tra Wi-Fi");
+  $$(".mang").forEach(e => e.innerHTML = html); }
+function docMot(p, ms){ return new Promise(r => { let xong = false, huy = () => {};
+  huy = SYNC.doc(p).onSnapshot(s => { if(xong || !s.exists) return; xong = true; setTimeout(() => huy(), 0); r(s.data()); });
+  setTimeout(() => { if(!xong){ xong = true; huy(); r(null); } }, ms); }); }
+const DUONG = (ma, phien) => { const g = `r/${ma}-${phien}`; return {
+  cfg: `p/${ma}/cfg`, tv: `${g}/tv`, tvMot: (d, s) => `${g}/tv/${d}-${s}`,
+  chia: (k, d) => `${g}/c${k}/n${d}/chia`, suco: k => `${g}/c${k}/suco`,
+  gui: (k, d) => `${g}/c${k}/n${d}/gui`, guiMot: (k, d, s) => `${g}/c${k}/n${d}/gui/${s}`,
+  thuoc: (k, d) => `${g}/c${k}/n${d}/thuoc`,
+  vai: (k, d) => `${g}/c${k}/n${d}/vai`, vaiMot: (k, d, s) => `${g}/c${k}/n${d}/vai/${s}`,
+  kq: `${g}/kq` }; };
+
+/* địa chỉ cho điện thoại: đang chạy trên mạng thì dùng chính nó; chạy từ tệp thì dùng bản trên GitHub Pages */
+const DIA_CHI_WEB = "https://haianhhadang-collab.github.io/haidv.wargame/thuoc-ke/";
+const laBanWeb = () => /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[::1\])/.test(location.hostname);
+const diaChiGame = () => laBanWeb() ? location.origin + location.pathname.replace(/index\.html$/, "") : DIA_CHI_WEB;
+let hueQR = null;
+function napQR(){
+  if(!hueQR) hueQR = new Promise(r => { if(window.qrcode) return r(true);
+    const sc = document.createElement("script"); sc.src = "https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js";
+    sc.onload = () => r(!!window.qrcode); sc.onerror = () => { hueQR = null; r(false); }; document.head.appendChild(sc); });
+  return hueQR;
+}
+function veQR(el, text){ if(!el) return; napQR().then(ok => { if(!ok || !el.isConnected) return;
+  const q = qrcode(0, "M"); q.addData(text); q.make(); el.innerHTML = q.createSvgTag({cellSize: 4, margin: 1}); el.hidden = false; }); }
+
+/* ============================================================
+   CÂY THƯỚC (dùng cho Thước Kẻ và cho ôn tập)
+   ============================================================ */
+function Thuoc(host, ch, don, onCham){
+  const cot = []; for(let y = oCua(ch.tu, don); y <= ch.den; y += don) cot.push(y);
+  const y0 = cot[0], y1 = cot[cot.length - 1] + don, pt = y => ((y - y0) / (y1 - y0) * 100).toFixed(2) + "%";
+  host.innerHTML = `<div class="thuoc"><div class="th-tong"><div class="th-nhan"><span>${y0}</span><span class="th-xem"></span><span>${y1 - 1}</span></div><div class="th-thanh"><i class="th-cua"></i><span class="th-cham"></span></div></div>
+    <div class="th-cuon"><div class="th-ray">${cot.map(y =>
+    `<div class="cot${don === 10 ? " tk" : y % 10 === 0 ? " y10" : y % 5 === 0 ? " y5" : ""}" data-y="${y}"><div class="than"><i></i><span>${don === 10 ? `${y}–${String(y + 9).slice(2)}` : y}</span></div><div class="chong"></div></div>`).join("")}</div></div></div>`;
+  const map = new Map(); host.querySelectorAll(".cot").forEach(c => map.set(+c.dataset.y, c));
+  host.querySelector(".th-ray").addEventListener("click", e => {
+    const chip = e.target.closest(".chip"); if(chip){ onCham(null, chip.dataset.id); return; }
+    const c = e.target.closest(".cot"); if(c) onCham(+c.dataset.y, null); });
+  const cuon = host.querySelector(".th-cuon"), cua = host.querySelector(".th-cua"), xem = host.querySelector(".th-xem"), cham = host.querySelector(".th-cham");
+  /* thanh nhỏ phía trên: đoạn năm đang thấy trong khung cuộn + chấm các thẻ đã cắm */
+  const tong = () => { const a = cuon.scrollTop, b = a + cuon.clientHeight; let dau = null, cuoi = null;
+    map.forEach((c, y) => { const t = c.offsetTop, d = t + c.offsetHeight; if(d > a + 4 && t < b - 4){ if(dau == null) dau = y; cuoi = y; } });
+    if(dau == null) return;
+    cua.style.left = pt(dau); cua.style.width = `calc(${pt(cuoi + don)} - ${pt(dau)})`;
+    xem.textContent = `Đang xem ${dau}–${don === 10 ? cuoi + 9 : cuoi}`; };
+  cuon.addEventListener("scroll", () => requestAnimationFrame(tong), {passive: true});
+  requestAnimationFrame(tong);
+  return {
+    ve(chips, dich){
+      map.forEach(c => { c.querySelector(".chong").innerHTML = ""; c.classList.toggle("dich", !!dich); });
+      chips.forEach(x => { const c = map.get(x.y); if(c) c.querySelector(".chong").insertAdjacentHTML("beforeend",
+        `<button class="chip ${x.cls || ""}" data-id="${esc(x.id)}" style="--c:${x.mau || "var(--muc3)"}" title="${esc(x.title || "")}">${x.hinh || ""}<span>${esc(x.ten)}</span></button>`); });
+      cham.innerHTML = chips.map(x => `<b class="${(x.cls || "").includes("neo") ? "neo" : ""}" style="left:${pt(x.y + don / 2)}"></b>`).join("");
+      tong();
+    },
+    toi(y){ const c = map.get(oCua(y, don)); if(c) cuon.scrollTop = c.offsetTop - cuon.clientHeight / 2 + c.offsetHeight / 2; tong(); }
+  };
+}
+
+/* ============================================================
+   KẾT QUẢ: thước đúng chồng lên thước các nhóm + bảng lệch
+   ============================================================ */
+const TEN_LOAI = {dung: "Đúng", gan: "Lệch 1–2 năm", thuTu: "Đúng thứ tự", sai: "Sai", chua: "Chưa cắm"};
+function chuGiai(don){ return `<div class="chu-g"><span><i style="background:var(--c-dung)"></i>${don === 10 ? "Đúng thập niên" : "Đúng năm"} · ${CH.diem.dung}</span>`
+  + (don === 1 ? `<span><i style="background:var(--c-gan)"></i>Lệch 1–2 năm · ${CH.diem.gan}</span>` : "")
+  + `<span><i style="background:var(--c-thutu)"></i>Sai ${don === 10 ? "thập niên" : "năm"}, đúng thứ tự · ${CH.diem.thuTu}</span><span><i style="background:var(--c-sai)"></i>Sai cả thứ tự · 0</span><span>◆ mốc neo</span></div>`; }
+/* Mỗi sự kiện mang một số theo thứ tự thời gian đúng; thước vẽ số, bảng ghi số kèm tên —
+   chỗ dày sự kiện (1919–1920, 1945–1946) không bị chữ chồng lên nhau. */
+const soThuTu = ch => { const o = {}; ch.ids.slice().sort((a, b) => soSanh(E(a), E(b))).forEach((id, i) => o[id] = i + 1); return o; };
+function svgChong(ch, don, hang){
+  const W = 1000, L = 120, R = 12, tu = oCua(ch.tu, don), span = ch.den - tu + 1, so = soThuTu(ch);
+  const xo = y => L + (oCua(y, don) - tu + don / 2) / span * (W - L - R);
+  const xb = y => L + (y - tu) / span * (W - L - R);
+  const xep = ch.ids.slice().sort((a, b) => soSanh(E(a), E(b)));
+  const cao = {}, tang = {}; xep.forEach(id => { const o = oCua(E(id).nam, don); tang[id] = cao[o] = (cao[o] || 0) + 1; });
+  const buoc = 15, dauH = Math.max(...Object.values(cao)) * buoc + 18, rh = 34, Hh = dauH + hang.length * rh + 16;
+  let s = `<svg class="chong-svg" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Thước đúng chồng lên thước của các nhóm">`;
+  for(let y = Math.ceil(tu / 10) * 10; y <= ch.den + 1; y += 10)
+    s += `<line x1="${xb(y)}" x2="${xb(y)}" y1="6" y2="${Hh - 12}" stroke="currentColor" opacity=".13"/>`
+      + (xb(y) > W - 30 ? "" : `<text x="${xb(y) + 2}" y="${Hh - 2}" font-size="10" fill="currentColor" opacity=".7" font-family="IBM Plex Mono,monospace">${y}</text>`);
+  const ay = dauH;
+  s += `<text x="${L - 8}" y="${ay + 4}" text-anchor="end" font-size="12" font-weight="700" fill="currentColor">Thước đúng</text>`
+    + `<line class="truc" x1="${L}" x2="${W - R}" y1="${ay}" y2="${ay}" stroke-width="2"/>`;
+  xep.forEach(id => { const x = xo(E(id).nam), y = ay - (tang[id] - 1) * buoc - 8, neo = ch.neo.includes(id);
+    s += `<g><title>${so[id]}. ${esc(E(id).ten)} — ${E(id).nam}${neo ? " (mốc neo)" : ""}</title>`
+      + (neo ? `<rect x="${x - 6.5}" y="${y - 6.5}" width="13" height="13" rx="2" transform="rotate(45 ${x} ${y})" fill="currentColor"/>` : `<circle cx="${x}" cy="${y}" r="6.8" fill="currentColor"/>`)
+      + `<text x="${x}" y="${y + 3}" text-anchor="middle" font-size="8" font-weight="700" fill="var(--nen-so,#12271E)" font-family="IBM Plex Mono,monospace">${so[id]}</text></g>`; });
+  hang.forEach((h, i) => {
+    const y0 = dauH + (i + 1) * rh, dem = {};
+    s += `<text x="${L - 8}" y="${y0 + 4}" text-anchor="end" font-size="12" font-weight="700" fill="${h.mau || "currentColor"}">${esc(h.ten)}</text>`
+      + `<line class="truc" x1="${L}" x2="${W - R}" y1="${y0}" y2="${y0}"/>`;
+    ch.neo.forEach(id => { const x = xo(E(id).nam); s += `<rect x="${x - 3.5}" y="${y0 - 3.5}" width="7" height="7" transform="rotate(45 ${x} ${y0})" fill="currentColor" opacity=".6"/>`; });
+    xep.forEach(id => { const c = h.ct[id]; if(!c || c.loai === "chua") return;
+      const xt = xo(E(id).nam), xp = xo(c.p), m = `var(--c-${c.loai === "thuTu" ? "thutu" : c.loai})`;
+      const k = dem[c.p] = (dem[c.p] || 0) + 1, yp = y0 - Math.min(k - 1, 3) * 5;
+      if(c.loai !== "dung") s += `<line x1="${xt}" y1="${y0 - rh + 8}" x2="${xp}" y2="${yp}" stroke="${m}" stroke-width="1.3" opacity=".75"/>`;
+      s += `<g><title>${so[id]}. ${esc(E(id).ten)}: cắm ${nhanO(c.p, don)}, đúng ${nhanO(oCua(E(id).nam, don), don)}</title><circle cx="${xp}" cy="${yp}" r="6" fill="${m}"/>`
+        + `<text x="${xp}" y="${yp + 2.8}" text-anchor="middle" font-size="7.5" font-weight="700" fill="var(--so-dot)" font-family="IBM Plex Mono,monospace">${so[id]}</text></g>`; });
+  });
+  return s + "</svg>";
+}
+const oLech = (c, don) => !c || c.loai === "chua" ? "—" : c.lech === 0 ? "✓" : (c.lech > 0 ? "+" : "−") + Math.abs(c.lech);
+function bangLech(ch, don, hang){
+  const so = soThuTu(ch), xep = ch.ids.filter(id => !ch.neo.includes(id)).sort((a, b) => soSanh(E(a), E(b)));
+  /* thẻ đáng giảng lại: nhiều nhóm trượt (0 điểm) nhất, rồi lệch trung bình lớn nhất */
+  const truot = id => hang.filter(h => !h.ct[id] || h.ct[id].d === 0).length;
+  const lech = id => { const l = hang.map(h => h.ct[id]).filter(c => c && c.loai !== "chua"); return l.length ? l.reduce((s, c) => s + Math.abs(c.lech), 0) / l.length : 0; };
+  const kem = new Set(xep.filter(id => truot(id) > 0).sort((a, b) => truot(b) - truot(a) || lech(b) - lech(a)).slice(0, 3));
+  return {kem: [...kem], html: `<table class="bang-lech"><tr><th>Sự kiện</th><th>Năm</th>${hang.map(h => `<th style="color:${h.mau}">${esc(h.ngan || h.ten)}</th>`).join("")}</tr>`
+    + xep.map(id => `<tr class="${kem.has(id) ? "kem" : ""}"><td><b class="mono">${so[id]}</b> ${esc(E(id).ten)}</td><td class="mono">${E(id).nam}</td>${hang.map(h => { const c = h.ct[id]; return `<td class="${c ? c.loai : ""}">${oLech(c, don)}</td>`; }).join("")}</tr>`).join("") + "</table>"};
+}
+function dsKetQua(ch, don, ct, cuaToi){
+  const so = soThuTu(ch), xep = ch.ids.slice().sort((a, b) => soSanh(E(a), E(b)));
+  return `<ul class="ds-kq">${xep.map(id => { const neo = ch.neo.includes(id), c = ct[id];
+    const nhan = neo ? `<span class="nhan-d chua">mốc neo</span>` : `<span class="nhan-d ${c.loai}">${c.loai === "chua" ? "chưa cắm" : (c.lech === 0 ? "✓" : "cắm " + (don === 10 ? c.p + "s" : c.p)) + " · " + c.d}</span>`;
+    return `<li class="${cuaToi && cuaToi.includes(id) ? "cua-toi" : ""}"><span class="nam">${don === 10 ? oCua(E(id).nam, 10) + "s" : E(id).nam}</span><span><b class="mono">${so[id]}</b> ${esc(E(id).ten)}</span>${nhan}</li>`; }).join("")}</ul>`;
+}
+
+/* ============================================================
+   TRANG ĐẦU, LUẬT, TẠO PHÒNG, VÀO PHÒNG
+   ============================================================ */
+function veDau(){
+  $("#d-nguon").textContent = DB ? `${DB.ev.length} sự kiện có năm, lấy từ ${DB.nguon} · cập nhật ${DB.capNhat}` : "";
+  const k = $("#d-khoi"), h = lay("thuoc-ke-chu"), t = lay("thuoc-ke-toi");
+  let html = "";
+  if(h && Date.now() - h.tao < 12 * 3600e3 && h.tt !== "dong") html += `<div class="o-the"><b>Phòng ${esc(h.ma)} đang mở</b> <span class="nho mo">(${esc(CH.cap[h.cap].ten)}, máy này là máy chiếu)</span><div class="hang-nut"><button class="nut nho" id="d-mo-chieu">Mở lại màn máy chiếu</button><button class="nut phu nho" id="d-dong">Đóng phòng</button></div></div>`;
+  if(t && Date.now() - (t.luc || 0) < 12 * 3600e3) html += `<div class="o-the"><b>Vào lại phòng ${esc(t.ma)}</b> <span class="nho mo">Nhóm ${t.doi} · STT ${t.stt}</span><div class="hang-nut"><button class="nut nho" id="d-vao-lai">Vào lại</button></div></div>`;
+  k.innerHTML = html;
+  if($("#d-mo-chieu")) $("#d-mo-chieu").onclick = () => khoiPhucChu(h);
+  if($("#d-dong")) $("#d-dong").onclick = () => { batMang(); SYNC.doc(`p/${h.ma}/cfg`).set({ma: h.ma, phien: h.phien, tao: h.tao, tt: "dong"}).catch(() => {}); bo("thuoc-ke-chu"); veDau(); };
+  if($("#d-vao-lai")) $("#d-vao-lai").onclick = () => vaoPhong(t.ma, t.doi, t.stt, t.ten || "");
+}
+function veLuat(){
+  const dong = [["TK", "×1"], ["KG", "×1"], ["GN", "×3"], ["BC", "×3"], ["CT", "×1"], ["MT", "×1"]];
+  $("#l-vai").innerHTML = `<tr><th>Vai</th><th>Quyền trong trò này</th><th>Tối đa</th></tr>` + dong.map(([v, n]) =>
+    `<tr><td>${svg(VAI[v].sym)} <b>${VAI[v].ten}</b></td><td>${esc(VAI[v].mo)}</td><td>${n}</td></tr>`).join("");
+  $("#l-d1").textContent = CH.diem.dung; $("#l-d2").textContent = CH.diem.gan; $("#l-d3").textContent = CH.diem.thuTu;
+  $("#l-rut").textContent = "−" + CH.truRut + " cho nhóm (Cục Tẩy miễn một lần)"; $("#l-gia").textContent = "+" + CH.diem.gia + " cho cả nhóm";
+  $("#l-cap").innerHTML = `<tr><th>Cấp</th><th>Số sự kiện</th><th>Đặc điểm</th></tr>` + Object.values(CH.cap).map(c =>
+    `<tr><td><b>${c.ten}</b></td><td>${c.soSK}</td><td>${moTaCap(c)}</td></tr>`).join("");
+}
+const moTaCap = c => [c.chang > 1 ? `chia ${c.chang} chặng liên tiếp, điểm chặng trước giữ lại` : "", c.don === 10 ? "thước chia theo thập niên" : "thước chia theo năm",
+  `${c.neo} mốc neo${c.chang > 1 ? " mỗi chặng" : ""}`, `${c.soMM} thẻ manh mối${c.chang > 1 ? " mỗi chặng" : ""}`,
+  c.quat || c.gia ? "sự cố: " + [c.quat ? "Quạt Trần" : "", c.gia ? "Bút Xoá" : ""].filter(Boolean).join(" + ") : "không có sự cố",
+  `${c.phut} phút thảo luận${c.chang > 1 ? " mỗi chặng" : ""}`].filter(Boolean).join(" · ");
+$$("[data-di]").forEach(b => b.addEventListener("click", () => {
+  const di = b.dataset.di;
+  if(di === "dau"){ veDau(); hien("s-dau"); }
+  else if(di === "luat"){ veLuat(); hien("s-luat"); }
+  else if(di === "tao"){ veTao(); hien("s-tao"); }
+  else if(di === "vao"){ hien("s-vao"); }
+  else if(di === "on"){ veChonOn(); hien("s-on"); }
+  else if(di === "thu"){ veThu(); hien("s-thu"); }
+}));
+function veTao(){
+  $("#t-cap").innerHTML = Object.entries(CH.cap).map(([k, c], i) => `<label><input type="radio" name="t-cap" value="${k}"${i === 1 ? " checked" : ""}><span><b>${c.ten}</b> · ${c.soSK} sự kiện<br><span class="nho mo">${moTaCap(c)}</span></span></label>`).join("");
+  $("#t-N").innerHTML = Array.from({length: 9}, (_, i) => `<option value="${i + 2}"${i + 2 === 10 ? " selected" : ""}>${i + 2} nhóm</option>`).join("");
+  const dongBo = () => { const c = CH.cap[$('input[name="t-cap"]:checked').value]; $("#t-phut").value = c.phut;
+    $("#t-suco").disabled = !(c.quat || c.gia); $("#t-suco").parentElement.style.opacity = $("#t-suco").disabled ? .45 : 1; };
+  $$('input[name="t-cap"]').forEach(r => r.onchange = dongBo); dongBo();
+}
+$("#t-tao").onclick = () => { const cap = $('input[name="t-cap"]:checked').value;
+  taoPhong({cap, N: +$("#t-N").value, suCo: $("#t-suco").checked && !$("#t-suco").disabled, phut: Math.max(1, +$("#t-phut").value || CH.cap[cap].phut)}); };
+$("#v-doi").innerHTML = Array.from({length: 10}, (_, i) => `<option value="${i + 1}">Nhóm ${i + 1} · ${NHOM[i][0]}</option>`).join("");
+$("#v-ma").addEventListener("input", e => e.target.value = e.target.value.replace(/\D/g, "").slice(0, 4));
+$("#v-vao").onclick = () => { const ma = $("#v-ma").value.trim(), stt = parseInt($("#v-stt").value, 10), l = $("#v-loi");
+  if(!/^\d{4}$/.test(ma)){ l.hidden = false; l.textContent = "Mã phòng gồm 4 chữ số."; return; }
+  if(!(stt >= 1 && stt <= 99)){ l.hidden = false; l.textContent = "Nhập số thứ tự điểm danh của bạn (1–99)."; return; }
+  l.hidden = true; vaoPhong(ma, +$("#v-doi").value, stt, $("#v-ten").value.trim()); };
+
+/* ============================================================
+   MÁY CHIẾU — giảng viên giữ phòng
+   ============================================================ */
+let H = null;
+function taoPhong(o){
+  batMang();
+  const ma = o.ma || String(1000 + Math.floor(Math.random() * 9000));
+  const seed = Math.floor(Math.random() * 2 ** 31);
+  H = {ma, phien: Math.random().toString(36).slice(2, 8), cap: o.cap, N: o.N, suCo: !!o.suCo, phut: o.phut, seed, tao: Date.now(),
+       tt: "cho", k: 0, ghe: {}, chia: {}, doiChoi: [], chotLuc: {}, suco: {quat: []}, kq: [], het: 0, quatLuc: 0, quatHen: 0};
+  moChu();
+}
+function khoiPhucChu(h){ batMang(); H = Object.assign({}, h); moChu(); }
+function moChu(){
+  H.D = DUONG(H.ma, H.phien); H.van = taoVan(H.cap, H.seed); H.tv = {}; H.thuoc = {}; H.vai = {}; H.huy = []; H.lanGhi = 0;
+  SYNC.collection(H.D.tv).onSnapshot(s => { const o = {}; s.docs.forEach(x => { const v = x.data(); if(v && v.doi) o[x.id] = v; }); H.tv = o; if(H.tt === "cho") veChieu(); });
+  if(H.tt !== "cho") ngheChang();
+  ghiCfg(); hien("s-chieu"); veChieu();
+}
+function cfgChu(){ return {ma: H.ma, phien: H.phien, tao: H.tao, cap: H.cap, N: H.N, suCo: H.suCo, phut: H.phut, seed: H.seed,
+  tt: H.tt, k: H.k, soChang: H.van.chang.length, conLai: Math.max(0, H.het - Date.now()), doi: H.doiChoi, chot: H.chotLuc}; }
+function ghiCfg(){ H.lanGhi = Date.now();
+  const {D, van, tv, thuoc, vai, huy, lanGhi, ...giu} = H; luu("thuoc-ke-chu", giu);
+  return SYNC.doc(H.D.cfg).set(cfgChu()).catch(() => bao("Chưa gửi được — kiểm tra mạng")); }
+function ngheChang(){
+  H.huy.forEach(f => f()); H.huy = []; H.thuoc = {}; H.vai = {};
+  for(const d of H.doiChoi){
+    H.huy.push(SYNC.doc(H.D.thuoc(H.k, d)).onSnapshot(s => { H.thuoc[d] = s.exists ? s.data() : null; veChieuNhe(); }));
+    H.huy.push(SYNC.collection(H.D.vai(H.k, d)).onSnapshot(s => { const o = {}; s.docs.forEach(x => o[x.id] = x.data()); H.vai[d] = o;
+      const c = Object.values(o).find(v => v && v.chot);
+      if(c && !H.chotLuc[d] && (H.tt === "choi" || H.tt === "xem")){ H.chotLuc[d] = c.chot.luc; ghiCfg(); }
+      veChieuNhe(); }));
+  }
+}
+function batDauChang(){
+  const k = H.k, ch = H.van.chang[k], theoDoi = {};
+  Object.values(H.tv).forEach(v => { if(v.doi >= 1 && v.doi <= H.N) (theoDoi[v.doi] = theoDoi[v.doi] || []).push(v.stt); });
+  const doi = Object.keys(theoDoi).map(Number).sort((a, b) => a - b);
+  if(!doi.length){ bao("Chưa có nhóm nào vào phòng."); return; }
+  H.doiChoi = doi; H.chotLuc = {};
+  for(const d of doi){
+    const cu = (H.ghe[d] || []).filter(s => theoDoi[d].includes(s));
+    const moi = theoDoi[d].filter(s => !cu.includes(s)).sort((a, b) => a - b);
+    H.ghe[d] = cu.concat(k === 0 && !cu.length ? xao(moi, rng(H.seed ^ (d * 7919))) : moi);   /* vai giữ nguyên qua các chặng */
+    H.chia[d] = chiaNhom(H.ghe[d], ch, H.cap, H.suCo, (H.seed ^ bam(k + ":" + d)) >>> 0, d);
+    SYNC.doc(H.D.chia(k, d)).set(H.chia[d]);
+  }
+  const c = CH.cap[H.cap];
+  H.suco = {quat: []}; SYNC.doc(H.D.suco(k)).set(H.suco);
+  H.quatHen = H.suCo && c.quat && doi.length >= 2 ? CH.quatKhoang[0] + Math.random() * (CH.quatKhoang[1] - CH.quatKhoang[0]) : 0; H.quatLuc = 0;
+  H.tt = "xem"; H.het = Date.now() + CH.xemGiay * 1000;
+  ngheChang(); ghiCfg(); veChieu();
+  phu("w-trong", "Trống Trường đánh!", `${CH.xemGiay} giây đọc thẻ riêng — không cho bạn khác xem màn hình.`, 3500);
+}
+const tatCaChot = () => H.doiChoi.length && H.doiChoi.every(d => H.chotLuc[d]);
+function nhipChu(){
+  if(!H) return;
+  const now = Date.now();
+  if(H.tt === "xem" && now >= H.het){
+    H.tt = "choi"; H.het = now + H.phut * 60000; H.quatLuc = H.quatHen ? now + H.quatHen * H.phut * 60000 : 0;
+    ghiCfg(); veChieu(); phu("w-trong", "Bắt đầu!", "Kể cho nhau nghe thẻ của mình. Gửi thẻ cho Thước Kẻ.", 2500);
+  } else if(H.tt === "choi"){
+    if(H.quatLuc && now >= H.quatLuc){ H.quatLuc = 0; quatTran(); }
+    if(now >= H.het || tatCaChot()){ const ca = tatCaChot(); H.tt = "het"; H.het = now; ghiCfg(); veChieu();
+      phu("w-trong", ca ? "Mọi nhóm đã chốt" : "Hết giờ!", "Chờ Bảng Đen công bố.", 2600); }
+    else if(now - H.lanGhi > 5000) ghiCfg();
+  } else if(H.tt === "xem" && now - H.lanGhi > 5000) ghiCfg();
+  dongHoChieu();
+}
+setInterval(nhipChu, 500);
+function nguoiCoMM(d){ const c = H.chia[d]; return c ? Object.keys(c.vai).map(Number).filter(s => mmHienTai(c, H.suco.quat, d, s).length) : []; }
+function quatTran(){
+  const co = H.doiChoi.filter(d => nguoiCoMM(d).length); if(co.length < 2) return;
+  const [a, b] = xao(co.slice(), Math.random);
+  const lay1 = d => { const ds = nguoiCoMM(d), s = ds[Math.floor(Math.random() * ds.length)], mm = mmHienTai(H.chia[d], H.suco.quat, d, s);
+    const m = Object.assign({}, mm[Math.floor(Math.random() * mm.length)]); delete m.tuNhom; return {doi: d, stt: s, mm: m}; };
+  H.suco = {quat: H.suco.quat.concat([{luc: Date.now(), a: lay1(a), b: lay1(b)}])};
+  SYNC.doc(H.D.suco(H.k)).set(H.suco); ghiCfg();
+  phu("w-quat", "Quạt Trần thổi!", `Nhóm ${a} và Nhóm ${b} bị tráo cho nhau một thẻ manh mối.`, 4200);
+}
+function timMM(cid){
+  if(!cid) return null;
+  for(const d of Object.keys(H.chia)) for(const ds of Object.values(H.chia[d].mm)) for(const m of ds) if(m.id === cid) return m;
+  return null;
+}
+function ketQuaDoi(d){
+  const ch = H.van.chang[H.k], vai = H.vai[d] || {}, th = H.thuoc[d] || {};
+  const chot = (Object.values(vai).find(v => v && v.chot) || {}).chot;
+  const cam = chot ? chot.cam || {} : th.cam || {}, rut = chot ? chot.rut || 0 : th.rut || 0, gia = chot ? chot.gia : giaCuaNhom(vai);
+  const m = timMM(gia), k = cham(ch, H.van.don, cam, rut, !!(m && m.gia));
+  return {doi: d, cam, rut, gia: gia || null, dungGia: !!(m && m.gia), tong: k.tong, tho: k.tho, truRut: k.truRut, thuong: k.thuong, dem: k.dem, chotLuc: H.chotLuc[d] || null};
+}
+function congBo(){
+  H.kq[H.k] = H.doiChoi.map(ketQuaDoi);
+  SYNC.doc(H.D.kq).set({kq: H.kq});
+  H.tt = "cong-bo"; ghiCfg(); veChieu();
+  phu("w-bangden", "Bảng Đen công bố", "Thước đúng chồng lên thước của các nhóm.", 2400);
+}
+function xepHang(){
+  const tong = {}; H.kq.forEach(ds => (ds || []).forEach(r => { tong[r.doi] = tong[r.doi] || {doi: r.doi, diem: 0, chang: [], chot: 0};
+    tong[r.doi].diem += r.tong; tong[r.doi].chang.push(r.tong); tong[r.doi].chot += r.chotLuc || 9e15; }));
+  return Object.values(tong).sort((a, b) => b.diem - a.diem || a.chot - b.chot);
+}
+const tenNhom = d => `Nhóm ${d}`;
+const mauNhom = (d, toi) => NHOM[(d - 1) % 10][toi ? 2 : 1];
+function dongHoChieu(){
+  const e = $("#c-dh"); if(!e || !H) return;
+  const con = H.tt === "xem" || H.tt === "choi" ? H.het - Date.now() : 0;
+  e.innerHTML = H.tt === "xem" || H.tt === "choi" ? `<div class="mat"><b>${mmss(con)}</b><small>${H.tt === "xem" ? "đọc thẻ riêng" : "còn lại"}</small></div>` : "";
+  e.classList.toggle("cuoi", H.tt === "choi" && con <= CH.giayCuoi * 1000);
+}
+let hNhe = 0;
+function veChieuNhe(){ if(H && (H.tt === "xem" || H.tt === "choi" || H.tt === "het")){ clearTimeout(hNhe); hNhe = setTimeout(veChieu, 120); } }
+function veChieu(){
+  if(!H) return;
+  const c = CH.cap[H.cap], el = $("#c-bang"), soCh = H.van.chang.length;
+  const nhanPha = {cho: "Chờ vào phòng", xem: "Đọc thẻ riêng", choi: "Thảo luận và cắm thẻ", het: "Chờ công bố", "cong-bo": "Bảng Đen công bố"}[H.tt] || "";
+  let than = "", nut = "";
+  if(H.tt === "cho"){
+    const url = diaChiGame();
+    than = `<div class="giay-bang"><div class="ruot"><div class="sanh"><div><div class="qr" id="c-qr" hidden></div><p style="margin:.6em 0 .2em">Vào <b>${esc(url.replace(/^https?:\/\//, ""))}</b></p><p>Mã phòng</p><div class="ma-lon">${esc(H.ma)}</div>
+      <p class="nho mo" style="margin-top:1em">Chọn đúng <b>nhóm</b>, nhập <b>STT điểm danh</b>. Vai được chia khi bắt đầu.</p></div>
+      <div class="lop-vo">${Array.from({length: H.N}, (_, i) => { const d = i + 1, tv = Object.values(H.tv).filter(v => v.doi === d).sort((a, b) => a.stt - b.stt);
+        return `<div class="vo"><div class="dau-vo"><span class="gay" style="background:${mauNhom(d)}"></span><div><b>${tenNhom(d)}</b><div class="nho mo">${NHOM[i][0]} · ${tv.length} người</div></div></div>
+          <div class="stt">${tv.map(v => `<span>${v.stt}</span>`).join("")}</div>${tv.length && tv.length < 3 ? `<div class="nho canh-bao">Dưới 3 người — phải kiêm nhiều vai</div>` : ""}${tv.length > CH.toiDaNguoi ? `<div class="nho canh-bao">Quá ${CH.toiDaNguoi} người — người thừa ngồi xem</div>` : ""}</div>`; }).join("")}</div></div></div></div>`;
+    const soNguoi = Object.keys(H.tv).length;
+    nut = `<button class="nut vang" id="c-bd"${soNguoi ? "" : " disabled"}>Bắt đầu${soCh > 1 ? " chặng 1" : ""} · ${soNguoi} người đã vào</button><button class="nut phu" id="c-dong">Đóng phòng</button>`;
+  } else if(H.tt === "xem" || H.tt === "choi" || H.tt === "het"){
+    const ch = H.van.chang[H.k], tong = ch.ids.length - ch.neo.length;
+    than = `<p style="margin:.2em 0 1em"><span class="chu-thich">Mỗi hàng: số thẻ nhóm đã cắm lên thước. Máy chiếu không hiện vị trí, để các nhóm không chép nhau.</span></p><div class="giay-bang"><div class="ruot">`
+      + H.doiChoi.map(d => { const th = H.thuoc[d] || {}, n = Object.keys(th.cam || {}).length, chot = H.chotLuc[d];
+        return `<div class="hang-doi" style="--nhom:${mauNhom(d)}"><div class="ten-doi"><span class="gay"></span><span>${tenNhom(d)}<small>${NHOM[(d - 1) % 10][0]}</small></span></div>
+          <div class="trang">${Array.from({length: tong}, (_, i) => `<i class="${i < n ? "viet" : ""}"></i>`).join("")}</div>
+          <div class="tt ${chot ? "chot" : ""}">${chot ? "<span>✓ Đã chốt</span>" : `${n}<small> / ${tong}</small>`}</div></div>`; }).join("") + `</div></div>`;
+    nut = H.tt === "het" ? `<button class="nut vang" id="c-cb" style="font-size:1.3em">${svg("w-bangden", "nv")} Bảng Đen công bố</button>`
+      : `<button class="nut" id="c-them">+1 phút</button><button class="nut" id="c-hetgio">Hết giờ ngay</button>`;
+  } else if(H.tt === "cong-bo"){
+    than = veCongBoChieu();
+    nut = H.k + 1 < soCh ? `<button class="nut vang" id="c-tiep">Sang chặng ${H.k + 2} / ${soCh}</button>` : "";
+    nut += `<button class="nut phu" id="c-ve">Về trang đầu</button>`;
+  }
+  el.innerHTML = `<div class="bang"><header class="bang-dau"><div class="bien-go"><div class="ten">${svg("c-thuoc", "")}Thước Kẻ Thời Gian</div>
+    <div class="cap"><span>Cấp ${c.ten}</span>${soCh > 1 ? `<span>Chặng ${H.k + 1} / ${soCh}</span>` : ""}<span class="pha">${nhanPha}</span></div></div><div class="sp"></div>
+    <div id="c-dh" class="bd-dh"></div><div class="sp"></div><span class="mang nho"></span><div class="ma">Mã phòng<b>${esc(H.ma)}</b></div></header>
+    <div class="bang-than">${than}</div><footer class="bang-nut">${nut}<span class="sp" style="flex:1"></span><button class="nut phu nho" id="c-tm">Toàn màn hình</button></footer></div>`;
+  if($("#c-qr")) veQR($("#c-qr"), diaChiGame() + "?ma=" + H.ma);
+  const bam1 = (id, f) => { const b = $(id); if(b) b.onclick = f; };
+  bam1("#c-bd", batDauChang);
+  bam1("#c-dong", () => { H.tt = "dong"; ghiCfg(); bo("thuoc-ke-chu"); H = null; veDau(); hien("s-dau"); });
+  bam1("#c-them", () => { H.het += 60000; ghiCfg(); });
+  bam1("#c-hetgio", () => { H.het = Date.now(); });
+  bam1("#c-cb", congBo);
+  bam1("#c-tiep", () => { H.k++; batDauChang(); });
+  bam1("#c-ve", () => { veDau(); hien("s-dau"); });
+  bam1("#c-tm", () => { if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(() => {}); });
+  dongHoChieu(); veMang();
+}
+function veCongBoChieu(){
+  const ch = H.van.chang[H.k], don = H.van.don, kq = H.kq[H.k] || [];
+  const hang = kq.map(r => ({ten: tenNhom(r.doi), ngan: "N" + r.doi, mau: mauNhom(r.doi, true), ct: cham(ch, don, r.cam, r.rut, r.dungGia).ct}));
+  const bl = bangLech(ch, don, hang), xh = xepHang(), nhieu = H.van.chang.length > 1;
+  return `<div class="bang-phan"><div class="ruot">${chuGiai(don)}${svgChong(ch, don, hang)}</div></div>
+    <div class="kq-luoi" style="margin-top:1.6vw"><div class="giay-bang"><div class="ruot"><h3>Từng thẻ lệch bao nhiêu ${don === 10 ? "năm (thập niên)" : "năm"}</h3>${bl.html}</div></div>
+    <div><div class="giay-bang"><div class="ruot"><h3>Xếp hạng${nhieu ? ` sau chặng ${H.k + 1}` : ""}</h3><table class="xh"><tr><th>#</th><th>Nhóm</th>${nhieu ? "<th class='so'>Chặng này</th>" : ""}<th class="so">Điểm</th></tr>
+    ${xh.map((t, i) => { const r = kq.find(x => x.doi === t.doi);
+      return `<tr><td>${i + 1}</td><td style="color:${mauNhom(t.doi)};font-weight:800">${tenNhom(t.doi)}<div class="nho mo" style="font-weight:500">${r ? `${r.dem.dung} đúng · ${r.dem.gan} lệch ít · ${r.dem.thuTu} đúng thứ tự · ${r.dem.sai + r.dem.chua} trượt${r.truRut ? ` · rút −${r.truRut}` : ""}${r.dungGia ? ` · bắt được Bút Xoá +${r.thuong}` : ""}` : ""}</div></td>${nhieu ? `<td class="so">${r ? r.tong : "—"}</td>` : ""}<td class="so"><b>${t.diem}</b></td></tr>`; }).join("")}</table></div></div>
+    ${bl.kem.length ? `<div class="nhac-ke" style="margin-top:1.4em"><b>Cả lớp lệch nhiều nhất — nên giảng lại:</b><br>${bl.kem.map(id => `${esc(E(id).ten)} (<span class="mono">${E(id).nam}</span>)`).join("<br>")}</div>` : ""}
+    <p class="nho" style="margin-top:1em"><span class="chu-thich">Điểm game chỉ để xếp thứ hạng nhóm của buổi, không ghi vào sổ.</span></p></div></div>`;
+}
+
+/* ============================================================
+   ĐIỆN THOẠI SINH VIÊN
+   ============================================================ */
+let M = null;
+async function vaoPhong(ma, doi, stt, ten){
+  batMang(); hien("s-choi");
+  $("#s-choi").innerHTML = `<div class="o-the">Đang tìm phòng ${esc(ma)}… <span class="mang nho"></span></div>`;
+  let cfg = null;
+  for(let lan = 0; lan < (THU ? 20 : 1) && !cfg; lan++){ cfg = await docMot(`p/${ma}/cfg`, THU ? 1500 : 9000); }
+  if(!cfg || !cfg.phien || cfg.tt === "dong" || Date.now() - cfg.tao > 12 * 3600e3){
+    $("#s-choi").innerHTML = `<div class="o-the"><p class="loi">Không thấy phòng ${esc(ma)} đang mở.</p><p>Kiểm tra lại mã trên máy chiếu và Wi-Fi.</p><button class="nut" data-ve>← Nhập lại</button></div>`;
+    $("#s-choi [data-ve]").onclick = () => hien("s-vao"); return; }
+  if(doi > cfg.N){ hien("s-vao"); $("#v-loi").hidden = false; $("#v-loi").textContent = `Phòng này chỉ có ${cfg.N} nhóm.`; return; }
+  M = {ma, doi, stt, ten, phien: cfg.phien, D: DUONG(ma, cfg.phien), cfg: null, cfgLuc: 0, k: -1, chia: null, gui: {}, thuoc: null, vai: {},
+       suco: {quat: [], nap: false}, tv: {}, kq: null, sel: null, huy: [], daHien: new Set(), khung: null, thuocUI: null};
+  SYNC.doc(M.D.tvMot(doi, stt)).set({doi, stt, ten, luc: Date.now()}).catch(() => {});
+  luu("thuoc-ke-toi", {ma, doi, stt, ten, luc: Date.now()});
+  SYNC.doc(M.D.cfg).onSnapshot(s => { if(s.exists) nhanCfg(s.data()); });
+  SYNC.collection(M.D.tv).onSnapshot(s => { const o = {}; s.docs.forEach(x => o[x.id] = x.data()); M.tv = o; vePhone(); });
+  SYNC.doc(M.D.kq).onSnapshot(s => { M.kq = s.exists ? s.data().kq : null; vePhone(); });
+  document.documentElement.style.setProperty("--nhom", mauNhom(doi));
+  vePhone();
+}
+function nhanCfg(c){
+  if(c.phien !== M.phien){ if(c.tt === "dong" || c.tao > M.cfg?.tao) { M.cfg = {tt: "dong"}; vePhone(); } return; }
+  const cu = M.cfg; M.cfg = c; M.cfgLuc = performance.now();
+  if(c.tt !== "cho" && c.tt !== "dong" && c.k !== M.k) ngheChangPhone(c.k);
+  const khoa = c.tt + ":" + c.k;
+  if(!M.daHien.has(khoa)){ M.daHien.add(khoa); if(cu) khoanhKhac(c); }
+  vePhone();
+}
+function khoanhKhac(c){
+  if(c.tt === "xem") phu("w-trong", "Trống Trường đánh!", `${CH.xemGiay} giây đọc thẻ của mình. Không cho bạn khác xem màn hình.`, 3500);
+  else if(c.tt === "choi") phu("w-trong", "Bắt đầu!", "Kể cho nhau nghe · gửi thẻ cho Thước Kẻ.", 2200);
+  else if(c.tt === "het") phu("w-trong", "Hết giờ!", "Thước của nhóm đã được nộp. Nhìn lên máy chiếu.", 2600);
+  else if(c.tt === "cong-bo") phu("w-bangden", "Bảng Đen công bố", "Nhìn lên máy chiếu.", 2200);
+}
+function ngheChangPhone(k){
+  M.huy.forEach(f => f()); M.huy = []; M.k = k; M.chia = null; M.gui = {}; M.thuoc = null; M.vai = {}; M.suco = {quat: [], nap: false}; M.sel = null; M.khung = null; M.thuocUI = null;
+  const D = M.D, d = M.doi;
+  M.huy.push(SYNC.doc(D.chia(k, d)).onSnapshot(s => { if(s.exists){ M.chia = s.data(); vePhone(); } }));
+  M.huy.push(SYNC.collection(D.gui(k, d)).onSnapshot(s => { const o = {}; s.docs.forEach(x => o[x.id] = x.data()); M.gui = o; vePhone(); }));
+  M.huy.push(SYNC.doc(D.thuoc(k, d)).onSnapshot(s => { M.thuoc = s.exists ? s.data() : null; vePhone(); }));
+  M.huy.push(SYNC.collection(D.vai(k, d)).onSnapshot(s => { const o = {}; s.docs.forEach(x => o[x.id] = x.data()); M.vai = o; vePhone(); }));
+  M.huy.push(SYNC.doc(D.suco(k)).onSnapshot(s => { const q = s.exists ? (s.data().quat || []) : [];
+    const moi = M.suco.nap && q.length > M.suco.quat.length ? q[q.length - 1] : null; M.suco = {quat: q, nap: true}; if(moi) baoQuat(moi); vePhone(); }));
+}
+function baoQuat(q){
+  const d = M.doi, toi = (q.a.doi === d && q.a.stt === M.stt) || (q.b.doi === d && q.b.stt === M.stt);
+  if(q.a.doi !== d && q.b.doi !== d){ phu("w-quat", "Quạt Trần thổi!", `Nhóm ${q.a.doi} và Nhóm ${q.b.doi} bị tráo một thẻ manh mối. Nhóm mình an toàn.`, 2600); return; }
+  const kia = q.a.doi === d ? q.b.doi : q.a.doi;
+  phu("w-quat", "Quạt Trần thổi!", toi ? `Một thẻ manh mối của bạn bay sang Nhóm ${kia}; bạn nhận một thẻ của Nhóm ${kia}.` : `Nhóm mình vừa bị tráo một thẻ manh mối với Nhóm ${kia}.`, 4200);
+}
+const conLai = () => M.cfg ? Math.max(0, (M.cfg.conLai || 0) - (performance.now() - M.cfgLuc)) : 0;
+const chotNhom = () => { const v = Object.values(M.vai).find(x => x && x.chot); return v ? v.chot : null; };
+const khoaTay = () => !M.cfg || M.cfg.tt !== "choi" || !!chotNhom();
+const nguoiVai = v => { if(!M.chia) return null; const s = Object.keys(M.chia.vai).find(s => M.chia.vai[s].vai.includes(v)); return s == null ? null : +s; };
+const ghiVai = patch => SYNC.doc(M.D.vaiMot(M.k, M.doi, M.stt)).set(Object.assign({}, M.vai[M.stt] || {}, patch)).catch(() => bao("Chưa gửi được — kiểm tra mạng"));
+const ghiThuoc = v => SYNC.doc(M.D.thuoc(M.k, M.doi)).set(v).catch(() => bao("Chưa gửi được — kiểm tra mạng"));
+const thuocNay = () => Object.assign({cam: {}, rut: 0, xin: null, tay: false}, M.thuoc || {});
+const nguoiGui = id => { for(const [s, g] of Object.entries(M.gui)) if(g && (g.ids || []).includes(id)) return +s; return null; };
+const daGui = () => { const all = []; Object.values(M.gui).forEach(g => (g && g.ids || []).forEach(id => { if(!all.includes(id)) all.push(id); })); return all; };
+
+function vePhone(){
+  if(!M) return;
+  const el = $("#s-choi"), c = M.cfg;
+  if(!c){ el.innerHTML = `<div class="o-the">Đang vào phòng ${esc(M.ma)}… <span class="mang nho"></span></div>`; return; }
+  if(c.tt === "dong"){ el.innerHTML = `<div class="o-the"><h3>Phòng đã đóng</h3><button class="nut" id="p-ve">Về trang đầu</button></div>`; $("#p-ve").onclick = () => { bo("thuoc-ke-toi"); veDau(); hien("s-dau"); }; return; }
+  if(c.tt === "cho"){ veChoPhone(); return; }
+  if(!M.chia){ el.innerHTML = thanhNhom() + `<div class="o-the">Đang chia thẻ…</div>`; M.khung = null; veMang(); return; }
+  const toi = M.chia.vai[M.stt];
+  if(!toi || toi.vai[0] === "XEM"){ veXemPhone(toi); return; }
+  if(c.tt === "cong-bo"){ veKetQuaPhone(); return; }
+  veChoiPhone(toi);
+}
+function thanhNhom(){
+  const c = CH.cap[M.cfg && M.cfg.cap] || {ten: ""};
+  return `<div class="thanh-nhom" style="--nhom:${mauNhom(M.doi)}"><span class="gay"></span><span class="sp">${tenNhom(M.doi)} · ${NHOM[(M.doi - 1) % 10][0]}</span><span class="nho">Phòng ${esc(M.ma)} · ${c.ten}${M.cfg && M.cfg.soChang > 1 ? ` · chặng ${M.cfg.k + 1}/${M.cfg.soChang}` : ""}</span></div><div style="text-align:right;margin:.2rem 0"><span class="mang"></span></div>`;
+}
+function veChoPhone(){
+  M.khung = null;
+  const ban = Object.values(M.tv).filter(v => v.doi === M.doi).sort((a, b) => a.stt - b.stt);
+  $("#s-choi").innerHTML = thanhNhom() + `<div class="vaichip"><div class="av">${svg("c-capsach", "")}</div><div><small>Đã vào phòng · STT ${M.stt}${M.ten ? " · " + esc(M.ten) : ""}</small><b>Chờ giảng viên bắt đầu</b></div></div>
+    <div class="muc-t">Nhóm mình đã có ${ban.length} người</div>
+    <div class="doi">${ban.map(v => `<div class="ban ${v.stt === M.stt ? "toi" : ""}">${svg("c-vo", "nv", mauNhom(M.doi))}<b>STT ${v.stt}</b>${esc(v.ten || "")}${v.stt === M.stt ? " (bạn)" : ""}</div>`).join("")}</div>
+    ${ban.length < 3 ? `<p class="nho mo">Nhóm dưới 3 người vẫn chơi được nhưng mỗi người phải kiêm nhiều vai — gọi bạn cùng nhóm mở máy đi.</p>` : ""}
+    <p class="nho mo">Vai được máy chia ngẫu nhiên khi giảng viên bấm Bắt đầu.</p>
+    <button class="nut phu nho" id="p-doi-nhom">Vào nhầm nhóm / STT?</button>`;
+  $("#p-doi-nhom").onclick = () => { bo("thuoc-ke-toi"); M = null; hien("s-vao"); };
+  veMang();
+}
+function veXemPhone(toi){
+  M.khung = null;
+  $("#s-choi").innerHTML = thanhNhom() + `<div class="vaichip"><div class="av">${svg("c-capsach", "")}</div><div><small>Ván này bạn là</small><b>Người xem</b><small>${toi ? "Nhóm đã đủ 10 vai." : "Bạn vào sau khi máy đã chia thẻ."} Ngồi cùng nhóm, nghe và góp ý — chặng/ván sau sẽ có vai.</small></div></div>` + doiHTML() + neoHTML();
+  veMang();
+}
+function vaiChipHTML(toi){
+  const t = tenVai(toi);
+  return `<div class="vaichip"><div class="av">${avatar(toi, "")}</div><div><small>Ván này bạn là</small><b>${esc(t.chinh)}</b>${t.docQuyen ? `<span class="khoa">◆ duy nhất</span>` : ""}
+    ${t.kiem.length ? `<small>kiêm ${t.kiem.map(esc).join(", ")}</small>` : ""}<small>${esc(VAI[toi.vai[0]].mo)}</small></div></div>`;
+}
+function doiHTML(){
+  if(!M.chia) return "";
+  const th = thuocNay(), soCam = Object.keys(th.cam).length, gui = M.gui, ch = CH_HIEN();
+  const tong = ch.ids.length - ch.neo.length;
+  return `<div class="doi">${M.chia.thuTu.map(s => { const p = M.chia.vai[s], t = tenVai(p), tv = M.tv[M.doi + "-" + s] || {};
+    const cua = (M.chia.the[s] || []).length, g = ((gui[s] || {}).ids || []).length;
+    const tt = p.vai[0] === "TK" ? `cắm ${soCam}/${tong}` : p.vai[0] === "XEM" ? "ngồi xem" : `gửi ${g}/${cua}`;
+    return `<div class="ban ${s === M.stt ? "toi" : ""} ${p.vai[0] !== "TK" && cua && g >= cua ? "xong" : ""}">${avatar(p)}<b>${esc(t.chinh)}</b>STT ${s}${tv.ten ? " · " + esc(tv.ten) : ""}${s === M.stt ? " (bạn)" : ""}<br>${tt}</div>`; }).join("")}</div>`;
+}
+const CH_HIEN = () => taoVanNho(M.cfg).chang[M.cfg.k];
+let _van = {k: null, v: null};
+function taoVanNho(c){ const k = c.cap + ":" + c.seed; if(_van.k !== k) _van = {k, v: taoVan(c.cap, c.seed)}; return _van.v; }
+function neoHTML(){
+  const c = M.cfg, van = taoVanNho(c), ch = van.chang[c.k];
+  return `<div class="neo-ds">Mốc neo (máy cắm sẵn): ${neoDs(ch)}</div>`;
+}
+function veChoiPhone(toi){
+  const el = $("#s-choi"), c = M.cfg, khungMoi = M.k + ":" + M.stt;
+  if(M.khung !== khungMoi){
+    M.khung = khungMoi; M.thuocUI = null;
+    el.innerHTML = thanhNhom() + vaiChipHTML(toi) + `<div class="dongho" id="p-dh"></div><div id="p-doi"></div><div id="p-neo"></div>
+      <div id="p-tk"></div><div id="p-kg"></div><div id="p-mm"></div><div id="p-the"></div><div id="p-mt"></div><div id="p-ct"></div>`;
+    $("#p-neo").innerHTML = neoHTML();
+    if(toi.vai.includes("TK")) dungThuocTK();
+  }
+  $("#p-doi").innerHTML = doiHTML();
+  if(toi.vai.includes("TK")) veTK(toi);
+  $("#p-kg").innerHTML = toi.vai.includes("KG") ? kgHTML() : "";
+  $("#p-mm").innerHTML = toi.vai.includes("GN") ? mmHTML() : "";
+  $("#p-the").innerHTML = (M.chia.the[M.stt] || []).length ? theHTML() : "";
+  $("#p-mt").innerHTML = toi.vai.includes("MT") ? mtHTML() : "";
+  $("#p-ct").innerHTML = toi.vai.includes("CT") && nguoiVai("TK") !== M.stt ? ctHTML() : "";
+  ganNutPhone(toi); dongHoPhone(); veMang();
+  kiemDuyetTay(toi);
+}
+function dongHoPhone(){
+  const e = $("#p-dh"); if(!e || !M || !M.cfg) return;
+  const c = M.cfg, con = conLai(), chot = chotNhom();
+  const pha = chot ? "Nhóm đã chốt" : c.tt === "xem" ? "Đọc thẻ riêng" : c.tt === "choi" ? "Thảo luận" : "Hết giờ";
+  const dai = c.tt === "xem" ? CH.xemGiay * 1000 : c.phut * 60000;
+  e.innerHTML = `${svg("w-trong", "")}<div><div class="pha">${pha}</div><div class="so">${c.tt === "xem" || c.tt === "choi" ? mmss(con) : "00:00"}</div></div><div class="vach"><i style="width:${c.tt === "xem" || c.tt === "choi" ? Math.min(100, con / dai * 100) : 0}%"></i></div>`;
+  e.classList.toggle("cuoi", c.tt === "choi" && !chot && con <= CH.giayCuoi * 1000);
+}
+setInterval(() => { if(M && M.khung) dongHoPhone(); }, 250);
+
+/* --- thẻ sự kiện của mình --- */
+function theHTML(){
+  const ids = M.chia.the[M.stt] || [], g = (M.gui[M.stt] || {}).ids || [], h = hinhNguoi(M.chia.vai[M.stt]), khoa = khoaTay(), laTK = M.chia.vai[M.stt].vai.includes("TK");
+  return `<div class="muc-t">Thẻ sự kiện của bạn <span class="bimat">◆ Chỉ mình bạn đọc được</span></div>
+    <p class="nho mo">Không ghi năm. Kể cho cả nhóm nghe — ai nhớ năm? Manh mối của Giấy Nhớ nói gì?</p>
+    ${ids.map(id => `<div class="the-sk" style="--c:${h.mau}"><b>${esc(E(id).ten)}</b><p>${esc(E(id).moTa)}</p>
+      ${laTK ? "" : g.includes(id) ? `<span class="da">✓ Đã gửi cho Thước Kẻ</span>` : `<button class="nut nho" data-gui="${id}"${khoa ? " disabled" : ""}>Gửi cho Thước Kẻ</button>`}</div>`).join("")}`;
+}
+/* --- Giấy Nhớ: thẻ manh mối --- */
+function mmHTML(){
+  const ds = mmHienTai(M.chia, M.suco.quat, M.doi, M.stt), coGia = CH.cap[M.cfg.cap].gia && M.cfg.suCo;
+  const giaNhom = giaCuaNhom(M.vai), toi = (M.vai[M.stt] || {}).gia, khoa = khoaTay();
+  const dauGia = giaNhom && !ds.some(m => m.id === giaNhom) ? `<p class="nho mo">Một Giấy Nhớ khác trong nhóm đang đánh dấu một thẻ nghi giả. Nhóm chỉ đánh dấu được một thẻ — bấm ở thẻ của bạn sẽ thay thẻ đó.</p>` : "";
+  return `<div class="muc-t">${svg("c-giaynho")}Thẻ manh mối <span class="bimat">◆ Chỉ mình bạn đọc được</span></div>
+    <p class="nho mo">Đọc to cho cả nhóm. Bạn không giữ thẻ sự kiện mà manh mối nhắc tới — người khác giữ.${coGia ? " <b>Bút Xoá đã trộn một thẻ sai</b> vào bộ manh mối của nhóm: đối chiếu để tìm ra." : ""}</p>${dauGia}
+    ${ds.length ? ds.map(m => `<div class="manh ${giaNhom === m.id ? "nghi" : ""}">${m.tuNhom ? `<div class="tu">Quạt Trần thổi tới từ Nhóm ${m.tuNhom}</div>` : ""}<p>${esc(m.text)}</p>
+      ${coGia ? (giaNhom === m.id ? `<button class="nut phu nho" data-bo-gia${khoa ? " disabled" : ""}>Bỏ nghi</button> <span class="loi nho">Nhóm đang nghi thẻ này là giả</span>` : `<button class="nut phu nho" data-gia="${m.id}"${khoa ? " disabled" : ""}>Nghi là thẻ giả</button>`) : ""}</div>`).join("")
+      : `<p class="mo">Quạt Trần đã thổi mất thẻ manh mối của bạn.</p>`}`;
+}
+/* --- Kẹp Giấy: chốt --- */
+function kgHTML(){
+  const ch = CH_HIEN(), th = thuocNay(), tong = ch.ids.length - ch.neo.length, soCam = Object.keys(th.cam).length, chuaGui = tong - daGui().length, chot = chotNhom();
+  if(chot) return `<div class="o-the"><b>✓ Nhóm đã chốt.</b> Thước đã nộp: ${Object.keys(chot.cam || {}).length}/${tong} thẻ.</div>`;
+  return `<div class="o-the">${svg("c-kepgiay")} <b>Chỉ bạn bấm được nút Chốt.</b><p class="nho">Thước đang có <b>${soCam}/${tong}</b> thẻ. ${chuaGui > 0 ? `Nhóm còn <b>${chuaGui}</b> thẻ chưa gửi cho Thước Kẻ.` : "Mọi thẻ đã được gửi."} Chốt rồi không sửa được nữa.</p>
+    <button class="nut nut-lon vang" id="p-chot"${khoaTay() ? " disabled" : ""}>${M.xacChot ? "Chạm lần nữa để chốt — không sửa được nữa" : "Chốt nộp bài cho cả nhóm"}</button></div>`;
+}
+/* --- Máy Tính Bỏ Túi --- */
+function mtHTML(){
+  const ch = CH_HIEN(), mt = (M.vai[M.stt] || {}).mt;
+  if(mt){ const d = Math.abs(E(mt.a).nam - E(mt.b).nam);
+    return `<div class="muc-t">${svg("c-maytinh")}Máy Tính Bỏ Túi — đã dùng</div><div class="kq-mt">«${esc(E(mt.a).ten)}» và «${esc(E(mt.b).ten)}» ${d === 0 ? "diễn ra trong cùng một năm" : `cách nhau ${d} năm`}.</div><p class="nho mo">Nói cho cả nhóm nghe.</p>`; }
+  const ds = ch.ids.slice().sort((a, b) => E(a).ten.localeCompare(E(b).ten, "vi"));
+  const opt = ds.map(id => `<option value="${id}">${esc(E(id).ten)}</option>`).join("");
+  return `<div class="muc-t">${svg("c-maytinh")}Máy Tính Bỏ Túi · dùng một lần</div><p class="nho mo">Chọn hai sự kiện bất kỳ trong ván — máy trả lời chúng cách nhau bao nhiêu năm (không nói cái nào trước).</p>
+    <div class="bang-mt"><select id="p-mt-a"><option value="">— Sự kiện thứ nhất —</option>${opt}</select><select id="p-mt-b"><option value="">— Sự kiện thứ hai —</option>${opt}</select>
+    <button class="nut" id="p-mt"${khoaTay() ? " disabled" : ""}>Hỏi máy (dùng quyền duy nhất)</button></div>`;
+}
+/* --- Cục Tẩy --- */
+function ctHTML(){
+  const th = thuocNay();
+  if(th.tay) return `<div class="muc-t">${svg("c-cuctay")}Cục Tẩy — đã dùng quyền</div>`;
+  if(th.xin) return `<div class="muc-t">${svg("c-cuctay")}Cục Tẩy</div><div class="o-the">Thước Kẻ xin rút thẻ <b>«${esc(E(th.xin.id).ten)}»</b> về khay mà <b>không bị trừ điểm</b>. Bạn chỉ có một lần trong ván.
+    <div class="hang-nut"><button class="nut vang" id="p-ct-ok"${khoaTay() ? " disabled" : ""}>Đồng ý tẩy</button></div></div>`;
+  return `<div class="muc-t">${svg("c-cuctay")}Cục Tẩy · dùng một lần</div><p class="nho mo">Khi Thước Kẻ cắm nhầm, mỗi lần rút thẻ nhóm bị trừ ${CH.truRut} điểm. Thước Kẻ có thể xin bạn tẩy miễn phí — bạn quyết định. Chưa có yêu cầu.</p>`;
+}
+function ganNutPhone(toi){
+  $$("#s-choi [data-gui]").forEach(b => b.onclick = () => { const cu = (M.gui[M.stt] || {}).ids || [];
+    SYNC.doc(M.D.guiMot(M.k, M.doi, M.stt)).set({ids: cu.concat([b.dataset.gui])}).catch(() => bao("Chưa gửi được — kiểm tra mạng")); });
+  $$("#s-choi [data-gia]").forEach(b => b.onclick = () => ghiVai({gia: {cid: b.dataset.gia, luc: Date.now()}}));
+  $$("#s-choi [data-bo-gia]").forEach(b => b.onclick = () => ghiVai({gia: {cid: null, luc: Date.now()}}));
+  const chot = $("#p-chot");
+  if(chot) chot.onclick = () => {
+    if(!M.xacChot){ M.xacChot = true; vePhone(); setTimeout(() => { M.xacChot = false; vePhone(); }, 4000); return; }
+    M.xacChot = false; const th = thuocNay();
+    ghiVai({chot: {luc: Date.now(), cam: th.cam, rut: th.rut, gia: giaCuaNhom(M.vai)}}); };
+  const mt = $("#p-mt");
+  if(mt) mt.onclick = () => { const a = $("#p-mt-a").value, b = $("#p-mt-b").value;
+    if(!a || !b || a === b){ bao("Chọn hai sự kiện khác nhau."); return; } ghiVai({mt: {a, b, luc: Date.now()}}); };
+  const ok = $("#p-ct-ok");
+  if(ok) ok.onclick = () => { const th = thuocNay(); if(th.xin) ghiVai({ct: {id: th.xin.id, luc: Date.now()}}); };
+}
+
+/* --- Thước Kẻ: cây thước chung --- */
+function dungThuocTK(){
+  const ch = CH_HIEN(), don = taoVanNho(M.cfg).don;
+  $("#p-tk").innerHTML = `<div class="muc-t">${svg("c-thuoc")}Cây thước của nhóm</div><div id="p-goi-y"></div><div id="p-thuoc"></div><div id="p-chitiet"></div>
+    <div class="muc-t" style="font-size:1rem">Khay thẻ bạn bè đã gửi</div><div class="khay" id="p-khay"></div>`;
+  M.thuocUI = Thuoc($("#p-thuoc"), ch, don, (y, id) => chamThuocTK(y, id));
+  setTimeout(() => M.thuocUI && M.thuocUI.toi(E(ch.neo[0]).nam), 50);
+}
+function chipsTK(ch, don, cam){
+  const chips = ch.neo.map(id => ({id, y: oCua(E(id).nam, don), ten: E(id).ten, cls: "neo", title: "Mốc neo"}));
+  Object.entries(cam).forEach(([id, y]) => { const s = nguoiGui(id), p = s != null ? M.chia.vai[s] : null, h = p ? hinhNguoi(p) : null;
+    chips.push({id, y, ten: E(id).ten, mau: h ? h.mau : null, hinh: p ? avatar(p) : "", cls: M.sel && M.sel.id === id ? "chon" : "", title: E(id).ten}); });
+  return chips;
+}
+function veTK(toi){
+  if(!M.thuocUI) return;
+  const ch = CH_HIEN(), don = taoVanNho(M.cfg).don, th = thuocNay(), khoa = khoaTay();
+  if(M.sel && M.sel.tu === "cam" && th.cam[M.sel.id] == null) M.sel = null;
+  if(M.sel && M.sel.tu === "khay" && th.cam[M.sel.id] != null) M.sel = null;
+  const dich = !khoa && M.sel && (M.sel.tu === "khay" || M.sel.doi);
+  M.thuocUI.ve(chipsTK(ch, don, th.cam), dich);
+  $("#p-goi-y").innerHTML = khoa ? (M.cfg.tt === "xem" ? `<div class="goi-y">Đang đọc thẻ — chưa cắm được.</div>` : "")
+    : dich ? `<div class="goi-y">Chạm vào vạch ${don === 10 ? "thập niên" : "năm"} để cắm «${esc(E(M.sel.id).ten)}»${M.sel.doi ? ` · dời chỗ trừ ${CH.truRut} điểm` : ""}</div>`
+    : `<div class="nho mo" style="margin:.3rem 0">Chạm một thẻ trong khay, rồi chạm vào vạch ${don === 10 ? "thập niên" : "năm"} để cắm. Kéo lên xuống để xem hết thước.</div>`;
+  const khay = daGui().filter(id => th.cam[id] == null);
+  $("#p-khay").innerHTML = khay.length ? khay.map(id => { const s = nguoiGui(id), p = M.chia.vai[s], h = hinhNguoi(p), tv = M.tv[M.doi + "-" + s] || {};
+    return `<button class="the-sk ${M.sel && M.sel.id === id ? "chon" : ""}" data-khay="${id}" style="--c:${h.mau}"${khoa ? " disabled" : ""}><b>${esc(E(id).ten)}</b><p>${esc(E(id).moTa)}</p><span class="tu">${avatar(p)}${esc(h.ten)} · STT ${s}${tv.ten ? " " + esc(tv.ten) : ""}</span></button>`; }).join("")
+    : `<p class="nho mo">Chưa có thẻ nào chờ cắm. Bạn bè bấm “Gửi cho Thước Kẻ” thì thẻ hiện ở đây.</p>`;
+  $$("#p-khay [data-khay]").forEach(b => b.onclick = () => { if(khoaTay()) return; const id = b.dataset.khay; M.sel = M.sel && M.sel.id === id ? null : {id, tu: "khay"}; vePhone(); });
+  /* chi tiết thẻ đang chọn trên thước */
+  const ct = $("#p-chitiet");
+  if(M.sel && M.sel.tu === "cam" && !khoa){
+    const id = M.sel.id, s = nguoiGui(id), p = s != null ? M.chia.vai[s] : null, ctTK = toi.vai.includes("CT"), coCT = nguoiVai("CT") != null;
+    ct.innerHTML = `<div class="chi-tiet"><b>${esc(E(id).ten)}</b> <span class="mo nho">đang ở ${nhanO(th.cam[id], don)}${p ? " · " + esc(hinhNguoi(p).ten) + " gửi" : ""}</span><p class="nho">${esc(E(id).moTa)}</p>
+      <div class="hang-nut"><button class="nut nho" id="tk-doi">Dời sang ${don === 10 ? "thập niên" : "năm"} khác · −${CH.truRut}</button><button class="nut phu nho" id="tk-rut">Rút về khay · −${CH.truRut}</button>
+      ${!th.tay && coCT ? (ctTK ? `<button class="nut vang nho" id="tk-tay">Dùng quyền Cục Tẩy: rút miễn phí</button>` : th.xin ? `<span class="nho">Đang chờ Cục Tẩy đồng ý… <button class="nut phu nho" id="tk-thoi">Thôi</button></span>` : `<button class="nut vang nho" id="tk-xin">Xin Cục Tẩy rút miễn phí</button>`) : ""}
+      <button class="nut phu nho" id="tk-bo">Đóng</button></div></div>`;
+    const b = (q, f) => { const x = $(q); if(x) x.onclick = f; };
+    b("#tk-doi", () => { M.sel.doi = true; vePhone(); });
+    b("#tk-rut", () => { const t = thuocNay(); delete t.cam[id]; t.rut++; M.sel = null; ghiThuoc(t); });
+    b("#tk-tay", () => { const t = thuocNay(); delete t.cam[id]; t.tay = true; t.xin = null; M.sel = null; ghiThuoc(t); });
+    b("#tk-xin", () => { const t = thuocNay(); t.xin = {id, luc: Date.now()}; ghiThuoc(t); });
+    b("#tk-thoi", () => { const t = thuocNay(); t.xin = null; ghiThuoc(t); });
+    b("#tk-bo", () => { M.sel = null; vePhone(); });
+  } else ct.innerHTML = thuocNay().xin && !khoa ? `<div class="goi-y">Đang chờ Cục Tẩy đồng ý rút «${esc(E(thuocNay().xin.id).ten)}»…</div>` : "";
+}
+function chamThuocTK(y, id){
+  if(khoaTay()) return;
+  const th = thuocNay();
+  if(id){ if(th.cam[id] == null) return; M.sel = M.sel && M.sel.id === id ? null : {id, tu: "cam"}; vePhone(); return; }
+  if(y == null || !M.sel) return;
+  if(M.sel.tu === "khay"){ th.cam[M.sel.id] = y; M.sel = null; ghiThuoc(th); }
+  else if(M.sel.tu === "cam" && M.sel.doi){ if(th.cam[M.sel.id] !== y){ th.cam[M.sel.id] = y; th.rut++; } M.sel = null; ghiThuoc(th); }
+}
+/* Thước Kẻ tự thực hiện lệnh tẩy khi Cục Tẩy đồng ý (chỉ máy Thước Kẻ ghi thước) */
+function kiemDuyetTay(toi){
+  if(!toi.vai.includes("TK")) return;
+  const th = thuocNay(); if(!th.xin || th.tay) return;
+  const sCT = nguoiVai("CT"), ct = sCT != null ? (M.vai[sCT] || {}).ct : null;
+  if(ct && ct.id === th.xin.id && ct.luc >= th.xin.luc){ delete th.cam[th.xin.id]; th.tay = true; th.xin = null; ghiThuoc(th); }
+}
+
+/* --- kết quả trên điện thoại --- */
+function veKetQuaPhone(){
+  M.khung = null;
+  const c = M.cfg, van = taoVanNho(c), ch = van.chang[c.k], don = van.don, kq = (M.kq || [])[c.k] || [];
+  const r = kq.find(x => x.doi === M.doi);
+  let than = `<div class="o-the">Đang chờ Bảng Đen công bố…</div>`;
+  if(r){
+    const k = cham(ch, don, r.cam, r.rut, r.dungGia), hang = [...kq].sort((a, b) => b.tong - a.tong || (a.chotLuc || 9e15) - (b.chotLuc || 9e15)).findIndex(x => x.doi === M.doi) + 1;
+    const toiThe = M.chia.the[M.stt] || [], mm = mmHienTai(M.chia, M.suco.quat, M.doi, M.stt);
+    than = `<div class="o-the"><h2 style="margin:0">${k.tong} điểm · hạng ${hang}/${kq.length}${c.soChang > 1 ? ` (chặng ${c.k + 1})` : ""}</h2>
+      <p class="nho">${k.dem.dung} thẻ đúng ${don === 10 ? "thập niên" : "năm"} · ${k.dem.gan} lệch 1–2 năm · ${k.dem.thuTu} đúng thứ tự · ${k.dem.sai} sai · ${k.dem.chua} chưa cắm${k.truRut ? ` · rút thẻ −${k.truRut}` : ""}${k.thuong ? ` · bắt được thẻ giả của Bút Xoá +${k.thuong}` : ""}</p></div>
+      ${chuGiai(don)}<div class="o-the cuon-ngang"><div>${svgChong(ch, don, [{ten: tenNhom(M.doi), mau: mauNhom(M.doi), ct: k.ct}])}</div></div>
+      <div class="muc-t">Thước đúng — thẻ của bạn được tô vàng</div>${dsKetQua(ch, don, k.ct, toiThe)}
+      ${mm.length ? `<div class="muc-t">Thẻ manh mối của bạn</div>${mm.map(m => `<div class="manh ${m.gia ? "nghi" : ""}"><p>${esc(m.text)}</p>${m.gia ? `<span class="loi nho">Thẻ giả của Bút Xoá</span>` : ""}</div>`).join("")}` : ""}`;
+  }
+  $("#s-choi").innerHTML = thanhNhom() + than + (c.k + 1 < c.soChang ? `<p class="mo">Chờ giảng viên mở chặng ${c.k + 2}.</p>` : `<button class="nut phu" id="p-ve">Về trang đầu</button>`);
+  if($("#p-ve")) $("#p-ve").onclick = () => { veDau(); hien("s-dau"); };
+  veMang();
+}
+
+/* ============================================================
+   ÔN TẬP MỘT MÌNH — không tính giờ, thấy mọi thẻ và mọi manh mối
+   ============================================================ */
+let O = null;
+function veChonOn(){
+  $("#s-on").innerHTML = `<button class="nut phu nho" data-ve-dau>← Trang đầu</button><h2>Ôn tập một mình</h2>
+    <p>Một mình cắm cả bộ thẻ. Không tính giờ, không trừ điểm khi dời thẻ. Nộp xong xem được toàn bộ thước đúng.</p>
+    <div class="chon-cap">${Object.entries(CH.cap).map(([k, c], i) => `<label><input type="radio" name="o-cap" value="${k}"${i === 0 ? " checked" : ""}><span><b>${c.ten}</b> · ${c.soSK} sự kiện<br><span class="nho mo">${c.don === 10 ? "thước chia theo thập niên" : "thước chia theo năm"} · ${c.neo} mốc neo${c.chang > 1 ? ` mỗi chặng · ${c.chang} chặng` : ""} · ${c.soMM} manh mối</span></span></label>`).join("")}</div>
+    <div class="hang-nut"><button class="nut nut-lon" id="o-bd">Bắt đầu</button></div>`;
+  $("#s-on [data-ve-dau]").onclick = () => { veDau(); hien("s-dau"); };
+  $("#o-bd").onclick = () => { const cap = $('input[name="o-cap"]:checked').value, seed = Math.floor(Math.random() * 2 ** 31);
+    O = {cap, seed, van: taoVan(cap, seed), k: 0, diem: []}; vaoChangOn(); };
+}
+function vaoChangOn(){
+  const ch = O.van.chang[O.k];
+  O.cam = {}; O.sel = null; O.nop = null;
+  O.mm = taoManhMoi(ch, CH.cap[O.cap].soMM, false, rng((O.seed ^ ((O.k + 1) * 104729)) >>> 0), "o");
+  O.thu = xao(ch.ids.filter(id => !ch.neo.includes(id)), rng(O.seed + O.k));
+  const don = O.van.don, soCh = O.van.chang.length;
+  $("#s-on").innerHTML = `<button class="nut phu nho" id="o-thoat">← Thôi</button>
+    <h2>Ôn tập · ${CH.cap[O.cap].ten}${soCh > 1 ? ` · chặng ${O.k + 1}/${soCh}` : ""}</h2>
+    <div class="neo-ds">Mốc neo: ${neoDs(ch)}</div>
+    <details open><summary class="muc-t" style="cursor:pointer">Thẻ manh mối (${O.mm.length})</summary>${O.mm.map(m => `<div class="manh"><p>${esc(m.text)}</p></div>`).join("")}</details>
+    <div id="o-goi-y"></div><div id="o-thuoc"></div><div id="o-chitiet"></div>
+    <div class="muc-t" style="font-size:1rem">Khay thẻ <span class="nho mo" id="o-dem"></span></div><div class="khay" id="o-khay"></div>
+    <div class="hang-nut"><button class="nut nut-lon" id="o-nop">Nộp bài</button></div><div id="o-kq"></div>`;
+  $("#o-thoat").onclick = () => { O = null; veChonOn(); };
+  O.ui = Thuoc($("#o-thuoc"), ch, don, (y, id) => chamOn(y, id));
+  setTimeout(() => O && O.ui.toi(E(ch.neo[0]).nam), 50);
+  $("#o-nop").onclick = nopOn;
+  veOn();
+}
+function veOn(){
+  const ch = O.van.chang[O.k], don = O.van.don, khoa = !!O.nop;
+  const chips = ch.neo.map(id => ({id, y: oCua(E(id).nam, don), ten: E(id).ten, cls: "neo"}))
+    .concat(Object.entries(O.cam).map(([id, y]) => ({id, y, ten: E(id).ten, mau: khoa ? `var(--c-${O.nop.ct[id].loai === "thuTu" ? "thutu" : O.nop.ct[id].loai})` : "var(--muc2)", cls: O.sel && O.sel.id === id ? "chon" : ""})));
+  const dich = !khoa && !!O.sel;
+  O.ui.ve(chips, dich);
+  $("#o-goi-y").innerHTML = khoa ? "" : dich ? `<div class="goi-y">Chạm vào vạch ${don === 10 ? "thập niên" : "năm"} để cắm «${esc(E(O.sel.id).ten)}»</div>` : `<p class="nho mo">Chạm một thẻ, rồi chạm vào vạch ${don === 10 ? "thập niên" : "năm"}. Chạm thẻ đã cắm để dời.</p>`;
+  const khay = O.thu.filter(id => O.cam[id] == null);
+  $("#o-dem").textContent = `còn ${khay.length} / ${O.thu.length}`;
+  $("#o-khay").innerHTML = khay.map(id => `<button class="the-sk ${O.sel && O.sel.id === id ? "chon" : ""}" data-k="${id}"${khoa ? " disabled" : ""}><b>${esc(E(id).ten)}</b><p>${esc(E(id).moTa)}</p></button>`).join("") || `<p class="nho mo">Đã cắm hết.</p>`;
+  $$("#o-khay [data-k]").forEach(b => b.onclick = () => { const id = b.dataset.k; O.sel = O.sel && O.sel.id === id ? null : {id}; veOn(); });
+  $("#o-chitiet").innerHTML = O.sel && O.cam[O.sel.id] != null && !khoa ? `<div class="chi-tiet"><b>${esc(E(O.sel.id).ten)}</b> <span class="nho mo">đang ở ${nhanO(O.cam[O.sel.id], don)} — chạm vạch khác để dời</span><p class="nho">${esc(E(O.sel.id).moTa)}</p><button class="nut phu nho" id="o-rut">Rút về khay</button></div>` : "";
+  if($("#o-rut")) $("#o-rut").onclick = () => { delete O.cam[O.sel.id]; O.sel = null; veOn(); };
+  $("#o-nop").hidden = khoa;
+}
+function chamOn(y, id){
+  if(O.nop) return;
+  if(id){ if(O.cam[id] == null) return; O.sel = O.sel && O.sel.id === id ? null : {id}; veOn(); return; }
+  if(y == null || !O.sel) return; O.cam[O.sel.id] = y; O.sel = null; veOn();
+}
+function nopOn(){
+  const ch = O.van.chang[O.k], don = O.van.don, soCh = O.van.chang.length;
+  const k = cham(ch, don, O.cam, 0, false); O.nop = k; O.diem[O.k] = k.tong;
+  const tong = O.diem.reduce((s, x) => s + (x || 0), 0);
+  veOn();
+  $("#o-kq").innerHTML = `<div class="o-the"><h2 style="margin:0">${k.tong} / ${k.toiDa} điểm${soCh > 1 ? ` · cộng dồn ${tong}` : ""}</h2>
+    <p class="nho">${k.dem.dung} đúng · ${k.dem.gan} lệch 1–2 năm · ${k.dem.thuTu} đúng thứ tự · ${k.dem.sai} sai · ${k.dem.chua} chưa cắm</p></div>
+    ${chuGiai(don)}<div class="o-the cuon-ngang"><div>${svgChong(ch, don, [{ten: "Bạn", ct: k.ct}])}</div></div><div class="muc-t">Thước đúng</div>${dsKetQua(ch, don, k.ct)}
+    <div class="hang-nut"><button class="nut phu" id="o-lai">Làm lại chặng này</button>${O.k + 1 < soCh ? `<button class="nut" id="o-tiep">Sang chặng ${O.k + 2}</button>` : ""}<button class="nut" id="o-moi">Ván mới</button></div>`;
+  $("#o-lai").onclick = () => { O.diem[O.k] = 0; vaoChangOn(); };
+  if($("#o-tiep")) $("#o-tiep").onclick = () => { O.k++; vaoChangOn(); };
+  $("#o-moi").onclick = () => { const seed = Math.floor(Math.random() * 2 ** 31); O = {cap: O.cap, seed, van: taoVan(O.cap, seed), k: 0, diem: []}; vaoChangOn(); };
+  $("#o-kq").scrollIntoView({behavior: "smooth", block: "start"});
+}
+
+/* ============================================================
+   XEM THỬ CẢ NHÓM TRÊN MỘT MÁY (máy chiếu + điện thoại trong khung)
+   ============================================================ */
+const THU_MAX = 16;
+function veThu(){
+  $("#s-thu").innerHTML = `<div class="man bang-go"><button class="nut phu nho" data-ve-dau>← Trang đầu</button><h2>Xem thử cả nhóm trên một máy</h2>
+    <p>Mở màn máy chiếu và điện thoại của một nhóm trong cùng trang — các khung nói chuyện với nhau ngay trong trình duyệt, không cần mạng. Bấm <b>Bắt đầu</b> trên khung máy chiếu, rồi chơi thử từng điện thoại.</p>
+    <div class="chon-cap">${Object.entries(CH.cap).map(([k, c], i) => `<label><input type="radio" name="x-cap" value="${k}"${i === 0 ? " checked" : ""}><span><b>${c.ten}</b></span></label>`).join("")}</div>
+    <label class="o" for="x-sn">Số nhóm</label><select id="x-sn">${[1, 2, 3, 4].map(n => `<option${n === 2 ? " selected" : ""}>${n}</option>`).join("")}</select>
+    <div id="x-nhom"></div>
+    <p class="nho mo">Mỗi nhóm bao nhiêu người cũng được (1–12): nhóm dưới 6 người thì một người kiêm nhiều vai, quá 10 người thì người thừa ngồi xem. Tối đa ${THU_MAX} điện thoại một lần xem thử.</p>
+    <p class="loi" id="x-loi" hidden></p>
+    <div class="hang-nut"><button class="nut nut-lon" id="x-bd">Mở</button></div></div>`;
+  $("#s-thu [data-ve-dau]").onclick = () => { veDau(); hien("s-dau"); };
+  const macDinh = [5, 3, 4, 6];
+  const veNhom = () => { const sn = +$("#x-sn").value, cu = $$("#x-nhom input").map(e => +e.value);
+    $("#x-nhom").innerHTML = Array.from({length: sn}, (_, i) => `<label class="o" for="x-n${i + 1}">Nhóm ${i + 1} · ${NHOM[i][0]} — số người</label><input id="x-n${i + 1}" type="number" min="1" max="12" inputmode="numeric" value="${cu[i] || macDinh[i]}">`).join(""); };
+  $("#x-sn").onchange = veNhom; veNhom();
+  $("#x-bd").onclick = () => {
+    const cap = $('input[name="x-cap"]:checked').value, ma = String(9000 + Math.floor(Math.random() * 999));
+    const co = $$("#x-nhom input").map(e => Math.max(1, Math.min(12, parseInt(e.value, 10) || 1)));
+    const tong = co.reduce((a, b) => a + b, 0);
+    if(tong > THU_MAX){ $("#x-loi").hidden = false; $("#x-loi").textContent = `Tổng ${tong} điện thoại — quá nhiều khung cho một trang (tối đa ${THU_MAX}).`; return; }
+    const goc = location.href.split("?")[0].split("#")[0];
+    const may = [];
+    co.forEach((n, i) => { for(let s = 1; s <= n; s++) may.push(`${goc}?noi=bc&thu=1&ma=${ma}&doi=${i + 1}&stt=${(i + 1) * 20 + s}&ten=${encodeURIComponent("Bạn " + s)}`); });
+    $("#s-thu").innerHTML = `<div class="thu-luoi"><iframe class="may-chieu" src="${goc}?noi=bc&thu=1&chieu=${ma}&cap=${cap}&N=${co.length}" title="Máy chiếu"></iframe>${may.map((u, i) => `<iframe class="dt" src="${u}" title="Điện thoại ${i + 1}"></iframe>`).join("")}</div>`;
+  };
+}
+
+/* ============================================================
+   KHỞI ĐỘNG
+   ============================================================ */
+const CANH_LON = `<svg viewBox="0 0 1440 810" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<defs>
+<linearGradient id="cl-sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4FA9E0"/><stop offset=".55" stop-color="#A4DBEF"/><stop offset="1" stop-color="#E2F3EA"/></linearGradient>
+<radialGradient id="cl-sun2" cx="1240" cy="40" r="520" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FFF7D6"/><stop offset=".3" stop-color="#FFEFB0" stop-opacity=".4"/><stop offset="1" stop-color="#FFEFB0" stop-opacity="0"/></radialGradient>
+<linearGradient id="cl-hill2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9CD44E"/><stop offset="1" stop-color="#2F7A2C"/></linearGradient>
+</defs>
+<rect width="1440" height="810" fill="url(#cl-sky2)"/>
+<rect width="1440" height="810" fill="url(#cl-sun2)"/>
+<path d="M0 300 C80 200 150 190 210 260 C260 150 340 140 400 240 C470 170 540 170 600 250 C680 140 760 130 830 240 C900 180 980 180 1040 250 C1120 150 1220 140 1290 230 C1360 190 1410 190 1440 210 L1440 520 L0 520 Z" fill="#A9D2C7"/>
+<path d="M0 380 C120 320 240 310 330 370 C440 300 560 300 660 370 C780 310 900 305 1000 375 C1120 310 1260 300 1440 360 L1440 600 L0 600 Z" fill="#7DB79C"/>
+<path d="M0 560 C260 520 520 510 760 530 C1000 550 1220 520 1440 530 L1440 810 L0 810 Z" fill="url(#cl-hill2)"/>
+<g fill="#0F2E1A">
+<path d="M0 810 L0 700 C20 730 34 710 48 750 C56 700 72 690 80 660 C86 710 100 730 116 770 C124 730 146 712 158 700 C158 750 176 772 196 810 Z"/>
+<path d="M1260 810 C1272 770 1290 744 1314 736 C1310 764 1322 782 1334 762 C1344 742 1366 728 1400 722 C1384 752 1400 784 1440 790 L1440 810 Z"/>
+</g>
+</svg>`;
+$("#s-chieu .canh-lon").innerHTML = CANH_LON;
+if(!DB){ document.body.innerHTML = "<p style='padding:2rem'>Khuôn chưa có dữ liệu — chạy <code>python _KHO-DU-LIEU/cong-cu/tao-game-thuoc-ke.py</code> rồi mở <code>index.html</code>.</p>"; }
+else if(QS.get("chieu") && THU){ taoPhong({ma: QS.get("chieu"), cap: QS.get("cap") || "de", N: +QS.get("N") || 1, suCo: true, phut: CH.cap[QS.get("cap") || "de"].phut}); }
+else if(QS.get("ma") && QS.get("doi") && QS.get("stt")){ vaoPhong(QS.get("ma"), +QS.get("doi"), +QS.get("stt"), QS.get("ten") || ""); }
+else { veDau(); if(QS.get("ma")){ $("#v-ma").value = QS.get("ma").replace(/\D/g, "").slice(0, 4); hien("s-vao"); } }
+</script>
+</body>
+</html>

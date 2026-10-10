@@ -37,6 +37,18 @@ Ba cách chơi: **một mình** (không cần mạng), **phòng** tối đa 10 n
 
 Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm biệt danh và lựa chọn trong game.
 
+## Thước Kẻ Thời Gian
+
+Cả nhóm cùng cắm các sự kiện lên một cây thước chia năm; mỗi người giữ vài thẻ người khác không thấy.
+Không chỉ biết A trước B mà phải biết A cách B bao nhiêu năm. Ba cấp: Dễ (15 sự kiện, thước theo thập niên),
+Khó (30), Siêu khó (66, ba chặng). Máy giảng viên giữ phòng và chiếu; có chế độ ôn tập một mình.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/thuoc-ke/
+
+![Mã QR vào Thước Kẻ Thời Gian](thuoc-ke/qr-vao-game.png)
+
+Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm số nhóm, số thứ tự điểm danh, tên gọi tùy chọn và thao tác trong game (gửi thẻ, cắm thẻ, chốt); không có họ tên đầy đủ hay mã sinh viên.
+
 ## Đi tìm một nửa
 
 Mỗi sinh viên giữ một mảnh câu Hồ Chí Minh trong Giáo trình 2026; đọc to, đi tìm người giữ mảnh còn lại
