@@ -232,6 +232,25 @@ tr.top1 td{background:#F6EBCB}
 @media (max-width:620px){.addrow{grid-template-columns:1fr}}
 .confirm{display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:#F8E6E1;border:1px solid var(--rust);border-radius:10px;padding:8px 12px;font-size:14px;margin-top:10px}
 .note{font-size:12.5px;color:var(--dim);border-top:1px solid var(--line2);padding-top:10px;margin-top:14px}
+.net{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--dim2)}
+.net i{width:9px;height:9px;border-radius:50%;background:#B0B8B8;display:inline-block}
+.net i.on{background:#3E9A68}.net i.dang{background:var(--mustard)}
+.lobby{max-width:760px;width:100%;margin:clamp(40px,10vh,120px) auto 0}
+.roomcode{font-family:var(--label);font-weight:600;font-size:clamp(64px,11vw,110px);letter-spacing:.18em;color:var(--teal);line-height:1}
+.plist{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0;padding:0;list-style:none}
+.plist li{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--snow2);border:1.5px solid var(--line);font-weight:600}
+.plist li.me{border-color:var(--teal);background:#fff}
+.btn2{display:flex;gap:10px}.btn2 .btn{flex:1;height:56px;margin-top:18px;font-size:18px}
+@media (max-width:860px){.main #panel0{order:-1}}
+@media (max-width:600px){
+  .wrap{padding-top:10px;gap:10px}
+  .top{gap:6px 10px;align-items:center}
+  .brand h1{font-size:30px}.brand .yr{display:none}.brand p{font-size:13px}
+  .tools .chip{padding:4px 12px;font-size:13px}
+  .card{padding:14px 14px 12px}.card h2{font-size:36px}.card .where{margin-bottom:8px}
+  .q{margin-bottom:10px}.timer{margin-bottom:10px}
+  .lanes{gap:7px}.lane{min-height:2.4em;padding:.3em .55em}
+}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head><body>
@@ -301,8 +320,106 @@ const LEVELS = {
  {at:"hongkong",q:"Ngày nào là ngày thành lập Đảng Cộng sản Việt Nam?",o:[["3/2/1930",1],["19/5/1930","thuonghai"],["2/9/1930","singapore"],["19/12/1930","colombo"]]},
  {at:"pacbo",q:"Ngày 28/1/1941, Người về nước qua biên giới tỉnh nào?",o:[["Cao Bằng",1],["Lạng Sơn","thuonghai"],["Hà Giang","singapore"],["Lào Cai","colombo"]]}
   ]},
-  kho:{name:"Khó",letter:"K",note:"30 ngã rẽ",legs:[]},
-  sieu:{name:"Siêu khó",letter:"S",note:"66 ngã rẽ · 3 hải trình",legs:[]}
+  kho:{name:"Khó",letter:"K",note:"30 ngã rẽ",legs:[
+ {at:"nharong",q:"Cụ Nguyễn Sinh Sắc thường dạy các con điều gì, thể hiện nhân cách có ảnh hưởng lớn tới Hồ Chí Minh thuở niên thiếu?",o:[["Đừng lấy phong cách nhà quan làm phong cách nhà ta",1],["Học chữ để thi đỗ, ra làm quan","singapore"],["Giữ nếp nhà quan để làm gương","colombo"],["Trung với vua là trên hết","portsaid"]]},
+ {at:"nharong",q:"Năm 1908, Hồ Chí Minh thể hiện rõ tư tưởng yêu nước bằng hành động nào?",o:[["Tham gia phong trào chống thuế ở Trung Kỳ",1],["Tham gia phong trào Đông Du","singapore"],["Dạy học ở Trường Dục Thanh","colombo"],["Tham gia Đông Kinh nghĩa thục","portsaid"]]},
+ {at:"nharong",q:"Năm 1910, Hồ Chí Minh là thầy giáo ở trường nào, dành hết tâm huyết truyền thụ cho học sinh lòng yêu nước?",o:[["Trường Dục Thanh, Phan Thiết",1],["Trường Tiểu học Pháp - bản xứ, Vinh","singapore"],["Đông Kinh nghĩa thục, Hà Nội","colombo"],["Trường quốc tế Lênin","portsaid"]]},
+ {at:"nharong",q:"Không đi theo phương pháp cứu nước của các bậc tiền bối, Hồ Chí Minh ra nước ngoài nhằm mục đích gì?",o:[["Tìm hiểu sức mạnh kẻ thù, học kinh nghiệm thế giới",1],["Đi theo phương pháp của Phan Bội Châu","singapore"],["Du học để về làm quan bảo hộ","colombo"],["Vận động Pháp cải cách theo lối Duy Tân","portsaid"]]},
+ {at:"marseille",q:"Qua hành trình đến nhiều nước từ năm 1911 đến năm 1917, ở Hồ Chí Minh hình thành nhận thức mới nào?",o:[["Nhân dân lao động các nước có thể là bạn của nhau",1],["Người Pháp ở đâu cũng là kẻ thù của ta","portsaid"],["Nước đế quốc nào cũng có thể giúp ta","oran"],["Chỉ công nhân Pháp mới bị bóc lột","lehavre"]]},
+ {at:"my",q:"Trên hành trình sang phương Tây, Hồ Chí Minh kế thừa quan điểm nhân quyền, dân quyền trong văn kiện nào của Mỹ?",o:[["Tuyên ngôn độc lập năm 1776",1],["Tuyên ngôn nhân quyền và dân quyền năm 1791","dakar"],["Tuyên ngôn của Hội Liên hiệp thuộc địa","oran"],["Yêu sách của nhân dân An Nam","lehavre"]]},
+ {at:"my",q:"Theo Hồ Chí Minh, cách mạng Pháp và cách mạng Mỹ là “cách mệnh không đến nơi” vì sao?",o:[["Trong tước lục công nông, ngoài áp bức thuộc địa",1],["Chưa nêu khẩu hiệu tự do, bình đẳng","dakar"],["Do giai cấp công nhân lãnh đạo","oran"],["Chỉ diễn ra trong thời gian ngắn","lehavre"]]},
+ {at:"london",q:"Năm 1917, sự kiện nào ảnh hưởng sâu sắc tới Hồ Chí Minh trong việc lựa chọn con đường cứu nước?",o:[["Cách mạng Tháng Mười Nga thắng lợi",1],["Quốc tế Cộng sản ra đời","lehavre"],["Chiến tranh thế giới thứ nhất kết thúc","brussels"],["Đảng Cộng sản Pháp thành lập","berlin"]]},
+ {at:"paris",q:"Năm 1917, trở lại Pháp, Hồ Chí Minh tham gia hoạt động nào?",o:[["Phong trào công nhân Pháp chống chủ nghĩa thực dân",1],["Sáng lập Hội Liên hiệp thuộc địa","brussels"],["Sáng lập Đảng Cộng sản Pháp","berlin"],["Gửi Yêu sách tới Hội nghị Vécxây","rome"]]},
+ {at:"paris",q:"Năm 1919, Hồ Chí Minh gia nhập Đảng Xã hội Pháp vì theo Người, đảng này theo đuổi lý tưởng nào?",o:[["Tự do, bình đẳng, bác ái",1],["Độc lập, tự do, hạnh phúc","brussels"],["Dân tộc, dân quyền, dân sinh","berlin"],["Cần, kiệm, liêm, chính","lehavre"]]},
+ {at:"paris",q:"Hai nội dung chính của bản Yêu sách của nhân dân An Nam gửi Hội nghị Vécxây năm 1919 là gì?",o:[["Bình đẳng pháp lý; tự do, dân chủ",1],["Độc lập hoàn toàn; ruộng đất cho dân cày","brussels"],["Lập chính phủ cộng hòa; quân đội riêng","rome"],["Xóa bỏ thuế; ngày làm 8 giờ","lehavre"]]},
+ {at:"paris",q:"Ngày 18/6/1919, thay mặt những người Việt Nam yêu nước ở Pháp, Người gửi Yêu sách tới Hội nghị Vécxây với tên gọi nào?",o:[["Nguyễn Ái Quốc",1],["Nguyễn Tất Thành","berlin"],["Nguyễn Sinh Cung","rome"],["Hồ Chí Minh","brussels"]]},
+ {at:"paris",q:"Bản Sơ thảo lần thứ nhất những luận cương về vấn đề dân tộc và vấn đề thuộc địa của V.I. Lênin được trình bày tại đâu?",o:[["Đại hội II Quốc tế Cộng sản",1],["Đại hội V Quốc tế Cộng sản","berlin"],["Đại hội VI Quốc tế Cộng sản","rome"],["Đại hội Tua của Đảng Xã hội Pháp","lehavre"]]},
+ {at:"paris",q:"Đọc Luận cương của Lênin (7/1920), Người kể lại: “Từ đó tôi hoàn toàn tin theo Lênin, tin theo…” tổ chức nào?",o:[["Quốc tế thứ ba",1],["Quốc tế thứ hai","brussels"],["Đảng Xã hội Pháp","berlin"],["Hội Liên hiệp thuộc địa","rome"]]},
+ {at:"paris",q:"Tại Đại hội Tua (12/1920), việc Hồ Chí Minh bỏ phiếu tán thành Quốc tế Cộng sản đánh dấu bước ngoặt nào?",o:[["Yêu nước kết hợp với lập trường cách mạng vô sản",1],["Từ bỏ chủ nghĩa yêu nước, theo chủ nghĩa quốc tế","brussels"],["Chuyển sang con đường cách mạng tư sản","rome"],["Bắt đầu gia nhập Đảng Xã hội Pháp","lehavre"]]},
+ {at:"paris",q:"Năm 1921, Hồ Chí Minh tham gia sáng lập tổ chức nào ở Pháp?",o:[["Hội Liên hiệp thuộc địa",1],["Hội Việt Nam Cách mạng Thanh niên","brussels"],["Hội Liên hiệp các dân tộc bị áp bức","berlin"],["Hội Phản đế đồng minh","rome"]]},
+ {at:"paris",q:"Năm 1922, Hồ Chí Minh được bầu giữ chức vụ nào trong Đảng Cộng sản Pháp?",o:[["Trưởng Tiểu ban Nghiên cứu vấn đề dân tộc thuộc địa",1],["Tổng Bí thư Đảng Cộng sản Pháp","brussels"],["Tổng biên tập báo L'Humanité","berlin"],["Đại biểu Quốc hội Pháp","lehavre"]]},
+ {at:"moskva",q:"Đại hội V Quốc tế Cộng sản (1924): vận mệnh vô sản chính quốc gắn chặt với ai?",o:[["Giai cấp bị áp bức ở các thuộc địa",1],["Giai cấp tư sản ở chính quốc","berlin"],["Giai cấp địa chủ phong kiến","rome"],["Các nước đế quốc đồng minh","brussels"]]},
+ {at:"moskva",q:"Bản án chế độ thực dân Pháp được xuất bản lần đầu ở đâu, năm nào?",o:[["Pari, năm 1925",1],["Quảng Châu, năm 1927","berlin"],["Mátxcơva, năm 1924","rome"],["Hồng Kông, năm 1930","brussels"]]},
+ {at:"quangchau",q:"Tổ chức tiền thân của Đảng Cộng sản do Người sáng lập tháng 6/1925 ra tờ báo nào?",o:[["Báo Thanh niên",1],["Báo Le Paria","thuonghai"],["Báo L'Humanité","singapore"],["Báo Cứu quốc","colombo"]]},
+ {at:"quangchau",q:"Theo Đường cách mệnh, cách mạng trước hết phải có cái gì?",o:[["Đảng cách mệnh",1],["Quân đội cách mệnh","thuonghai"],["Sự giúp đỡ của nước ngoài","singapore"],["Mặt trận dân tộc thống nhất","colombo"]]},
+ {at:"quangchau",q:"Trong Đường cách mệnh, Người ví đảng có vững thì cách mệnh mới thành công, cũng như điều gì?",o:[["Người cầm lái có vững thuyền mới chạy",1],["Nhà có móng vững mới cao","thuonghai"],["Nước có nguồn mới chảy xa","singapore"],["Cây có rễ sâu mới tốt","colombo"]]},
+ {at:"quangchau",q:"Đường cách mệnh coi chủ nghĩa nào là “chân chính nhất, chắc chắn nhất, cách mệnh nhất”?",o:[["Chủ nghĩa Lênin",1],["Chủ nghĩa Tam dân","thuonghai"],["Chủ nghĩa Găngđi","singapore"],["Học thuyết Khổng Tử","colombo"]]},
+ {at:"hongkong",q:"Đầu năm 1930, Hồ Chí Minh chủ trì hội nghị nào?",o:[["Hội nghị hợp nhất các tổ chức cộng sản",1],["Hội nghị Trung ương tháng 10/1930","thuonghai"],["Đại hội VI Quốc tế Cộng sản","singapore"],["Đại hội Tua","colombo"]]},
+ {at:"hongkong",q:"Cương lĩnh chính trị đầu tiên xác định lực lượng nòng cốt của cách mạng là gì?",o:[["Liên minh công nông",1],["Giai cấp tư sản dân tộc","thuonghai"],["Tầng lớp trí thức","singapore"],["Địa chủ yêu nước","colombo"]]},
+ {at:"hongkong",q:"Hội nghị Trung ương 10/1930 đổi tên Đảng thành gì?",o:[["Đảng Cộng sản Đông Dương",1],["Đảng Lao động Việt Nam","thuonghai"],["Hội Việt Nam Cách mạng Thanh niên","singapore"],["Việt Nam Độc lập Đồng minh","colombo"]]},
+ {at:"moskva",q:"Năm 1934, Người trở lại Liên Xô, học trường nào?",o:[["Trường quốc tế Lênin",1],["Trường Dục Thanh","berlin"],["Trường Đảng Cộng sản Pháp","rome"],["Viện Hàn lâm Khoa học Liên Xô","brussels"]]},
+ {at:"pacbo",q:"Sách Con đường giải phóng (1/1941) nêu ra vấn đề gì?",o:[["Phương pháp cách mạng giành chính quyền",1],["Đường lối kháng chiến lâu dài","thuonghai"],["Xây dựng chủ nghĩa xã hội","singapore"],["Tổ chức Đảng Cộng sản Pháp","colombo"]]},
+ {at:"pacbo",q:"Hội nghị Trung ương 5/1941 đặt nhiệm vụ nào lên hàng đầu?",o:[["Giải phóng dân tộc",1],["Cách mạng điền địa","thuonghai"],["Đấu tranh giai cấp","singapore"],["Xây dựng chủ nghĩa xã hội","colombo"]]},
+ {at:"pacbo",q:"Hồ Chí Minh sáng lập Mặt trận Việt Minh ngày nào?",o:[["19/5/1941",1],["22/12/1944","thuonghai"],["18/8/1945","singapore"],["19/5/1930","colombo"]]}
+  ]},
+  sieu:{name:"Siêu khó",letter:"S",note:"66 ngã rẽ · 3 hải trình",legs:[
+ {at:"nharong",q:"Câu “Quan trường là nô lệ trong những người nô lệ, lại càng nô lệ hơn” là tâm sự của ai?",o:[["Cụ Nguyễn Sinh Sắc",1],["Phan Bội Châu","singapore"],["Phan Châu Trinh","colombo"],["Hoàng Hoa Thám","portsaid"]],j:0},
+ {at:"nharong",q:"Ngay từ khi học ở Trường Tiểu học Pháp - bản xứ ở Vinh (1905), Hồ Chí Minh đã quan tâm tới khẩu hiệu nào?",o:[["Tự do - Bình đẳng - Bác ái",1],["Độc lập - Tự do - Hạnh phúc","singapore"],["Dân tộc - Dân quyền - Dân sinh","colombo"],["Cần - Kiệm - Liêm - Chính","portsaid"]],j:0},
+ {at:"nharong",q:"Trong các phong trào yêu nước đầu thế kỷ XX, Hồ Chí Minh trực tiếp tham gia phong trào nào?",o:[["Phong trào chống thuế ở Trung Kỳ (1908)",1],["Phong trào Đông Du (1905 - 1909)","singapore"],["Phong trào Duy Tân (1906 - 1908)","colombo"],["Đông Kinh nghĩa thục (1907)","portsaid"]],j:0},
+ {at:"nharong",q:"Điểm đặc biệt của tuổi trẻ Hồ Chí Minh là gì, khiến Người không đi theo khuynh hướng cứu nước của các bậc tiền bối?",o:[["Suy ngẫm sâu sắc về Tổ quốc và thời cuộc",1],["Say mê khoa cử để ra làm quan","singapore"],["Khâm phục nên đi theo các bậc tiền bối","colombo"],["Chủ trương dựa vào Pháp để cải cách","portsaid"]],j:0},
+ {at:"nharong",q:"“Tôi muốn đi ra nước ngoài, xem nước Pháp và các nước khác…” thể hiện chí hướng gì của Người?",o:[["Tìm đường cứu nước ở phương Tây",1],["Theo khuynh hướng của Phan Châu Trinh","singapore"],["Sang Pháp học để làm quan","colombo"],["Sinh sống lâu dài ở nước ngoài","portsaid"]],j:0},
+ {at:"marseille",q:"Qua hành trình 1911–1917, Người nhận thức chủ nghĩa đế quốc, bọn thực dân ở đâu cũng là gì?",o:[["Kẻ bóc lột, kẻ thù của nhân dân lao động",1],["Người khai hóa văn minh cho thuộc địa","portsaid"],["Đồng minh của giai cấp công nhân","oran"],["Kẻ thù riêng của dân tộc Việt Nam","dakar"]],j:0},
+ {at:"marseille",q:"Trong thời kỳ 1911–1920, việc “trước hết” Hồ Chí Minh làm được trên con đường hình thành tư tưởng cứu nước là gì?",o:[["Xác định đúng bản chất, tội ác của chủ nghĩa thực dân",1],["Tham gia sáng lập Đảng Cộng sản Pháp","portsaid"],["Đọc Luận cương của Lênin","oran"],["Gửi Yêu sách tới Hội nghị Vécxây","lehavre"]],j:0},
+ {at:"my",q:"Hồ Chí Minh kế thừa quan điểm nhân quyền, dân quyền từ những bản tuyên ngôn nào?",o:[["Mỹ năm 1776 và Pháp năm 1791",1],["Pháp năm 1776 và Mỹ năm 1791","dakar"],["Nga năm 1917 và Pháp năm 1789","oran"],["Anh năm 1776 và Nga năm 1917","lehavre"]],j:0},
+ {at:"my",q:"Qua tìm hiểu thực tế ở các nước phương Tây, vì sao Hồ Chí Minh không chọn con đường cách mạng tư sản?",o:[["Vì đó là “cách mệnh không đến nơi”",1],["Vì cách mạng tư sản chưa từng thành công","dakar"],["Vì Quốc tế Cộng sản yêu cầu","oran"],["Vì nước ta không có giai cấp tư sản","lehavre"]],j:0},
+ {at:"london",q:"Hai nhà văn nào “có thể nói là những người đỡ đầu văn học” cho Hồ Chí Minh?",o:[["Phrăngxơ và Lép Tônxtôi",1],["Huygô và Zola","lehavre"],["Sexpia và Lỗ Tấn","brussels"],["Vônte và Rútxô","berlin"]],j:0},
+ {at:"london",q:"Theo Hồ Chí Minh, trong thế giới bấy giờ chỉ có cuộc cách mệnh nào “đã thành công, và thành công đến nơi”?",o:[["Cách mệnh Nga",1],["Cách mệnh Pháp","lehavre"],["Cách mệnh Mỹ","brussels"],["Cách mệnh Anh","berlin"]],j:0},
+ {at:"paris",q:"Ngày 2/3/1919, tổ chức nào ra đời ở Mátxcơva, trở thành Bộ tham mưu của cách mạng thế giới?",o:[["Quốc tế Cộng sản",1],["Hội Liên hiệp thuộc địa","brussels"],["Đảng Cộng sản Pháp","berlin"],["Quốc tế thứ hai","rome"]],j:0},
+ {at:"paris",q:"Bản Yêu sách năm 1919 được đánh giá là gì trên diễn đàn quốc tế?",o:[["Tiếng nói chính nghĩa đầu tiên",1],["Cương lĩnh cách mạng đầu tiên","brussels"],["Lời tuyên chiến với thực dân Pháp","rome"],["Văn kiện được Hội nghị chấp nhận","lehavre"]],j:0},
+ {at:"paris",q:"Bản Yêu sách năm 1919 đòi thay chế độ ra các sắc lệnh bằng chế độ nào?",o:[["Chế độ ra các đạo luật",1],["Chế độ quân chủ lập hiến","berlin"],["Chế độ tự trị","rome"],["Chế độ bảo hộ","brussels"]],j:0},
+ {at:"paris",q:"Ý nghĩa nổi bật của bản Yêu sách 1919 đối với tư tưởng Hồ Chí Minh là gì?",o:[["Lần đầu hình thành tư tưởng về quyền dân tộc thuộc địa",1],["Người trở thành người cộng sản","brussels"],["Tìm thấy con đường cách mạng vô sản","berlin"],["Mở đầu xây dựng chủ nghĩa xã hội","lehavre"]],j:0},
+ {at:"paris",q:"Bài “Vấn đề dân bản xứ” (8/1919) của Người đăng trên báo nào?",o:[["L'Humanité",1],["Le Paria","berlin"],["Thanh niên","rome"],["Cứu quốc","brussels"]],j:0},
+ {at:"paris",q:"“Hỡi đồng bào bị đọa đày đau khổ!…” Người thốt lên khi đọc văn kiện nào?",o:[["Luận cương của Lênin về dân tộc, thuộc địa",1],["Tuyên ngôn của Hội Liên hiệp thuộc địa","brussels"],["Tuyên ngôn nhân quyền và dân quyền","rome"],["Chánh cương vắn tắt của Đảng","lehavre"]],j:0},
+ {at:"paris",q:"Người kể lại cảm xúc khi đọc Luận cương của Lênin trong bài viết nào?",o:[["Con đường dẫn tôi đến chủ nghĩa Lênin",1],["Con đường giải phóng","berlin"],["Đường cách mệnh","rome"],["Bản án chế độ thực dân Pháp","brussels"]],j:0},
+ {at:"paris",q:"Với lá phiếu tại Đại hội Tua, Hồ Chí Minh trở thành ai?",o:[["Người cộng sản Việt Nam đầu tiên",1],["Người sáng lập Quốc tế Cộng sản","brussels"],["Tổng Bí thư Đảng Cộng sản Pháp","berlin"],["Đảng viên đầu tiên của Đảng Xã hội Pháp","lehavre"]],j:0},
+ {at:"paris",q:"Tuyên ngôn Hội Liên hiệp thuộc địa: công cuộc giải phóng thuộc địa dựa vào đâu?",o:[["Sự nỗ lực của bản thân anh em",1],["Sự giúp đỡ của chính quốc","berlin"],["Lòng tốt của nhà cầm quyền Pháp","rome"],["Sự che chở của các nước lớn","brussels"]],j:0},
+ {at:"paris",q:"Năm 1922, Người làm Trưởng Tiểu ban của đảng nào?",o:[["Đảng Cộng sản Pháp",1],["Đảng Xã hội Pháp","brussels"],["Đảng Cộng sản Liên Xô","berlin"],["Đảng Cộng sản Đông Dương","rome"]],j:0},
+ {at:"paris",q:"Báo Le Paria nhằm thức tỉnh điều gì ở thuộc địa?",o:[["Tinh thần giải phóng dân tộc",1],["Lòng trung thành với nước Pháp","berlin"],["Tinh thần cải lương","rome"],["Phong trào khoa cử","lehavre"]],j:0},
+ {at:"moskva",q:"Theo Hồ Chí Minh, “nọc độc và sức sống” của con rắn độc tư bản chủ nghĩa tập trung ở đâu?",o:[["Ở các thuộc địa hơn là ở chính quốc",1],["Ở chính quốc hơn là ở thuộc địa","berlin"],["Ở các nước phong kiến phương Đông","rome"],["Ở các đảng của Quốc tế thứ hai","brussels"]],j:1},
+ {at:"moskva",q:"Theo Hồ Chí Minh, nếu thờ ơ về vấn đề cách mạng ở thuộc địa thì chẳng khác gì việc làm nào?",o:[["Đánh chết rắn đằng đuôi",1],["Nước xa không cứu được lửa gần","berlin"],["Xây lầu trên nền cát","rome"],["Tàu đi không có bàn chỉ nam","brussels"]],j:1},
+ {at:"moskva",q:"Từ năm 1924, Hồ Chí Minh đưa ra quan điểm thành lập mặt trận nào chống chủ nghĩa đế quốc?",o:[["Mặt trận thống nhất của nhân dân chính quốc và thuộc địa",1],["Mặt trận Việt Minh","berlin"],["Mặt trận Dân chủ Đông Dương","rome"],["Hội Phản đế đồng minh","brussels"]],j:1},
+ {at:"moskva",q:"Trong Bản án chế độ thực dân Pháp (1925), ví chủ nghĩa tư bản như con đỉa hai vòi, Người khẳng định điều gì?",o:[["Phải đồng thời cắt cả hai vòi",1],["Chỉ cần cắt vòi ở chính quốc","berlin"],["Chỉ cần cắt vòi ở thuộc địa","rome"],["Chờ vòi ở chính quốc tự đứt","brussels"]],j:1},
+ {at:"quangchau",q:"Giáo trình xác định Hội Việt Nam Cách mạng Thanh niên (6/1925) do Hồ Chí Minh sáng lập là tổ chức gì?",o:[["Tổ chức tiền thân của Đảng Cộng sản",1],["Mặt trận dân tộc thống nhất đầu tiên","thuonghai"],["Chi bộ của Đảng Cộng sản Pháp","singapore"],["Tổ chức theo xu hướng dân chủ tư sản","colombo"]],j:1},
+ {at:"quangchau",q:"Tổ chức nào do Người tham gia sáng lập tại Trung Quốc là hình thức sơ khai của mặt trận thống nhất các dân tộc bị áp bức?",o:[["Hội Liên hiệp các dân tộc bị áp bức",1],["Hội Liên hiệp thuộc địa","thuonghai"],["Hội Việt Nam Cách mạng Thanh niên","singapore"],["Hội Phản đế đồng minh","colombo"]],j:1},
+ {at:"quangchau",q:"Trong Đường cách mệnh, Hồ Chí Minh tổng kết kinh nghiệm các cuộc cách mạng, đặc biệt là từ kinh nghiệm cuộc cách mạng nào?",o:[["Cách mạng Tháng Mười Nga",1],["Đại Cách mạng Pháp 1789","thuonghai"],["Cách mạng tư sản Mỹ","singapore"],["Cách mạng tư sản Anh","colombo"]],j:1},
+ {at:"quangchau",q:"Theo Đường cách mệnh, lực lượng cách mạng giải phóng dân tộc là ai, nòng cốt là gì?",o:[["Toàn thể nhân dân, nòng cốt là liên minh công nông",1],["Giai cấp công nhân, nòng cốt là đảng viên","thuonghai"],["Trí thức yêu nước, nòng cốt là thanh niên","singapore"],["Toàn thể nhân dân, nòng cốt là tư sản","colombo"]],j:1},
+ {at:"quangchau",q:"Trong Đường cách mệnh, Người giải thích công nông “gan góc” vì lẽ nào?",o:[["Thua chỉ mất kiếp khổ, được thì được cả thế giới",1],["Được Quốc tế Cộng sản trực tiếp vũ trang","thuonghai"],["Có học vấn cao nhất trong xã hội","singapore"],["Sở hữu nhiều ruộng đất nhất","colombo"]],j:1},
+ {at:"quangchau",q:"Đường cách mệnh viết: “Đảng mà không có chủ nghĩa cũng như người không có trí khôn, tàu không có…” gì?",o:[["Bàn chỉ nam",1],["Người cầm lái","thuonghai"],["Cánh buồm","singapore"],["Mỏ neo","colombo"]],j:1},
+ {at:"quangchau",q:"Bàn về tư cách người cách mệnh trong Đường cách mệnh, Hồ Chí Minh yêu cầu điều gì?",o:[["Nói thì phải làm",1],["Đảng viên đi trước, làng nước theo sau","thuonghai"],["Dĩ bất biến, ứng vạn biến","singapore"],["Không có gì quý hơn độc lập, tự do","colombo"]],j:1},
+ {at:"quangchau",q:"Phẩm chất nào Hồ Chí Minh đề cập từ Đường cách mệnh cho đến Di chúc?",o:[["Cần, kiệm, liêm, chính, chí công vô tư",1],["Tự do, bình đẳng, bác ái","thuonghai"],["Dân tộc, dân quyền, dân sinh","singapore"],["Trung với vua, hiếu với cha","colombo"]],j:1},
+ {at:"quangchau",q:"Đường cách mệnh (1927) chuẩn bị về những mặt nào cho sự ra đời của Đảng?",o:[["Chính trị, tư tưởng, tổ chức",1],["Quân sự, kinh tế, ngoại giao","thuonghai"],["Tài chính, vũ khí, căn cứ","singapore"],["Văn hóa, giáo dục, báo chí","colombo"]],j:1},
+ {at:"quangchau",q:"Đường cách mệnh: đảng cách mệnh “trong thì vận động và tổ chức dân chúng, ngoài thì” làm gì?",o:[["Liên lạc với dân tộc bị áp bức, vô sản mọi nơi",1],["Cầu viện các nước đế quốc","thuonghai"],["Đàm phán với chính quyền thực dân","singapore"],["Gia nhập Quốc tế thứ hai","colombo"]],j:1},
+ {at:"xiem",q:"Đại hội VI Quốc tế Cộng sản (1928): giải phóng thuộc địa chỉ hoàn toàn thực hiện khi nào?",o:[["Vô sản thắng lợi ở các nước tư bản tiên tiến",1],["Thuộc địa tự giành độc lập trước","thuonghai"],["Liên minh công nông được xây dựng","singapore"],["Có mặt trận dân tộc thống nhất","colombo"]],j:1},
+ {at:"xiem",q:"Trái với Đại hội VI, Hồ Chí Minh cho rằng cách mạng thuộc địa có thể làm gì?",o:[["Giành thắng lợi trước cách mạng ở chính quốc",1],["Chỉ thắng lợi sau cách mạng chính quốc","thuonghai"],["Phụ thuộc hoàn toàn vào chính quốc","singapore"],["Thắng lợi mà không cần Đảng lãnh đạo","colombo"]],j:1},
+ {at:"xiem",q:"Phong trào yêu nước Việt Nam chuyển sang xu hướng cộng sản rõ nhất từ năm nào?",o:[["Năm 1925",1],["Năm 1919","thuonghai"],["Năm 1911","singapore"],["Năm 1908","colombo"]],j:1},
+ {at:"xiem",q:"Theo Hồ Chí Minh, Đảng Cộng sản Việt Nam ra đời là kết quả kết hợp những yếu tố nào?",o:[["Mác - Lênin, phong trào công nhân và yêu nước",1],["Mác - Lênin và phong trào công nhân","thuonghai"],["Mác - Lênin và phong trào nông dân","singapore"],["Phong trào yêu nước và tư sản dân tộc","colombo"]],j:1},
+ {at:"xiem",q:"Giai đoạn 1920–1930 hình thành nội dung gì của tư tưởng Người?",o:[["Nội dung cơ bản về cách mạng Việt Nam",1],["Tư tưởng yêu nước, chí hướng tìm đường","thuonghai"],["Tư tưởng cứu nước theo đường vô sản","singapore"],["Giữ vững đường lối trước thử thách","colombo"]],j:1},
+ {at:"xiem",q:"Mục tiêu, phương hướng 1920–1930 thể hiện rõ trong văn kiện nào?",o:[["Cương lĩnh chính trị đầu tiên của Đảng",1],["Yêu sách của nhân dân An Nam","thuonghai"],["Con đường giải phóng","singapore"],["Án nghị quyết tháng 10/1930","colombo"]],j:1},
+ {at:"hongkong",q:"Cương lĩnh chính trị đầu tiên nêu: làm tư sản dân quyền cách mạng và thổ địa cách mạng để đi tới đâu?",o:[["Xã hội cộng sản",1],["Chế độ cộng hòa tư sản","thuonghai"],["Chính phủ Liên bang Đông Dương","singapore"],["Chế độ quân chủ lập hiến","colombo"]],j:2},
+ {at:"hongkong",q:"Cương lĩnh chính trị đầu tiên xác định cách mạng phải đánh đổ những đối tượng nào?",o:[["Đế quốc Pháp, phong kiến, tư sản phản cách mạng",1],["Đế quốc Pháp và toàn bộ giai cấp tư sản","thuonghai"],["Toàn bộ địa chủ và phú nông","singapore"],["Phong kiến An Nam và trung nông","colombo"]],j:2},
+ {at:"hongkong",q:"Chánh cương vắn tắt chỉ nêu thâu ruộng đất của đế quốc chia cho dân cày nghèo, chưa nêu chủ trương nào?",o:[["Người cày có ruộng",1],["Thi hành luật ngày làm 8 giờ","thuonghai"],["Làm cho nước Nam hoàn toàn độc lập","singapore"],["Bỏ sưu thuế cho dân cày nghèo","colombo"]],j:2},
+ {at:"hongkong",q:"Vì sao Chánh cương vắn tắt không đặt nhiệm vụ chống phong kiến ngang hàng với chống đế quốc?",o:[["Nước thuộc địa phải đặt giải phóng dân tộc lên đầu",1],["Quốc tế Cộng sản yêu cầu như vậy","thuonghai"],["Việt Nam không còn giai cấp địa chủ","singapore"],["Nông dân không ủng hộ cách mạng","colombo"]],j:2},
+ {at:"hongkong",q:"Theo Sách lược vắn tắt, với phú nông, trung, tiểu địa chủ và tư sản chưa rõ mặt phản cách mạng, Đảng chủ trương thế nào?",o:[["Lợi dụng, ít ra làm cho họ trung lập",1],["Đánh đổ ngay cùng với đế quốc","thuonghai"],["Kết nạp họ vào Đảng","singapore"],["Tịch thu toàn bộ tài sản","colombo"]],j:2},
+ {at:"hongkong",q:"Cương lĩnh chính trị đầu tiên thể hiện sự vận dụng sáng tạo chủ nghĩa Mác - Lênin trong giải quyết mối quan hệ nào?",o:[["Giai cấp - dân tộc - quốc tế",1],["Kinh tế - chính trị - văn hóa","thuonghai"],["Đảng - Nhà nước - nhân dân","singapore"],["Công nhân - nông dân - trí thức","colombo"]],j:2},
+ {at:"hongkong",q:"Thành lập Đảng với Cương lĩnh đúng đắn, Hồ Chí Minh đã chấm dứt cuộc khủng hoảng nào kéo dài từ cuối thế kỷ XIX?",o:[["Khủng hoảng về đường lối cứu nước và tổ chức lãnh đạo",1],["Khủng hoảng kinh tế thế giới","thuonghai"],["Khủng hoảng trong Quốc tế Cộng sản","singapore"],["Khủng hoảng của triều đình phong kiến","colombo"]],j:2},
+ {at:"hongkong",q:"Hội nghị Trung ương 10/1930 phê phán Hội nghị hợp nhất “chỉ lo đến việc phản đế, mà quên mất” điều gì?",o:[["Lợi ích giai cấp tranh đấu",1],["Lợi ích dân tộc","thuonghai"],["Việc xây dựng mặt trận","singapore"],["Việc đoàn kết quốc tế","colombo"]],j:2},
+ {at:"hongkong",q:"Án nghị quyết của Hội nghị Trung ương 10/1930 chủ trương gì đối với các văn kiện của Hội nghị hợp nhất?",o:[["Thủ tiêu Chánh cương, Sách lược và Điều lệ",1],["Bổ sung, hoàn thiện Chánh cương","thuonghai"],["Giữ nguyên, chỉ đổi tên Đảng","singapore"],["Gửi Quốc tế Cộng sản phê chuẩn","colombo"]],j:2},
+ {at:"hongkong",q:"Tư tưởng mới mẻ của Hồ Chí Minh trong Cương lĩnh chính trị đầu tiên bị một số người phê phán, coi là gì?",o:[["“Hữu khuynh”, “dân tộc chủ nghĩa”",1],["“Tả khuynh”, “giáo điều”","thuonghai"],["“Cải lương”, “thỏa hiệp”","singapore"],["“Quốc tế chủ nghĩa”, “cơ hội”","colombo"]],j:2},
+ {at:"hongkong",q:"Những nhìn nhận sai lầm về Hồ Chí Minh trong Quốc tế Cộng sản và Đảng Cộng sản Đông Dương chịu ảnh hưởng quan điểm nào?",o:[["Giáo điều tả khuynh của Đại hội VI",1],["Hữu khuynh của Đảng Xã hội Pháp","thuonghai"],["Cải lương của Quốc tế thứ hai","singapore"],["Chủ nghĩa Tam dân của Tôn Trung Sơn","colombo"]],j:2},
+ {at:"hongkong",q:"Tháng 11/1930, Mặt trận dân tộc thống nhất mang tên gọi nào?",o:[["Hội Phản đế đồng minh",1],["Mặt trận Dân chủ Đông Dương","thuonghai"],["Việt Nam Độc lập Đồng minh","singapore"],["Mặt trận Thống nhất nhân dân phản đế Đông Dương","colombo"]],j:2},
+ {at:"hongkong",q:"Thoát khỏi nhà tù của thực dân nào ở Hồng Kông, năm 1934 Người trở lại Liên Xô?",o:[["Thực dân Anh",1],["Thực dân Pháp","thuonghai"],["Phát xít Nhật","singapore"],["Quân Tưởng","colombo"]],j:2},
+ {at:"moskva",q:"Sau Trường quốc tế Lênin, Người làm nghiên cứu sinh tại viện nào của Quốc tế Cộng sản?",o:[["Viện Nghiên cứu các vấn đề dân tộc và thuộc địa",1],["Viện Hàn lâm Khoa học Liên Xô","berlin"],["Viện Nghiên cứu kinh tế thế giới","rome"],["Viện Triết học Mátxcơva","brussels"]],j:2},
+ {at:"moskva",q:"Trong những năm 1934–1938 ở Liên Xô, tình cảnh của Hồ Chí Minh thế nào?",o:[["Vẫn bị hiểu lầm về hoạt động và quan điểm",1],["Được bầu làm Tổng Bí thư của Đảng","berlin"],["Trực tiếp lãnh đạo khởi nghĩa trong nước","rome"],["Bị giam trong nhà tù thực dân Anh","brussels"]],j:2},
+ {at:"moskva",q:"Năm 1938, Người viết: “Đừng để tôi sống quá lâu trong tình trạng không hoạt động…” để đề nghị gì?",o:[["Cho phép trở về nước hoạt động",1],["Được học tiếp Trường quốc tế Lênin","berlin"],["Được sang Pháp hoạt động","rome"],["Được thôi làm cán bộ Quốc tế","brussels"]],j:2},
+ {at:"moskva",q:"Tháng 10/1938, Hồ Chí Minh rời Liên Xô, đi đường nào để về Việt Nam?",o:[["Qua Trung Quốc",1],["Qua Pháp","berlin"],["Qua Ấn Độ","rome"],["Qua Nhật Bản","brussels"]],j:2},
+ {at:"pacbo",q:"Tháng 12/1940, về gần biên giới Việt - Trung, Người liên lạc với tổ chức nào?",o:[["Trung ương Đảng Cộng sản Đông Dương",1],["Hội Việt Nam Cách mạng Thanh niên","thuonghai"],["Đảng Cộng sản Pháp","singapore"],["Hội Liên hiệp thuộc địa","colombo"]],j:2},
+ {at:"pacbo",q:"Gần biên giới (12/1940 – 1/1941), Người mở lớp huấn luyện cán bộ và viết sách nào?",o:[["Con đường giải phóng",1],["Đường cách mệnh","thuonghai"],["Bản án chế độ thực dân Pháp","singapore"],["Con đường dẫn tôi đến chủ nghĩa Lênin","colombo"]],j:2},
+ {at:"pacbo",q:"Tại Hội nghị Trung ương 5/1941, Người chủ trì với tư cách gì?",o:[["Cán bộ Quốc tế Cộng sản",1],["Tổng Bí thư Đảng Cộng sản Đông Dương","thuonghai"],["Chủ tịch nước Việt Nam Dân chủ Cộng hòa","singapore"],["Đại biểu Đảng Cộng sản Pháp","colombo"]],j:2},
+ {at:"pacbo",q:"Nghị quyết Trung ương 5/1941: quyền lợi bộ phận, giai cấp phải đặt dưới điều gì?",o:[["Sự sinh tử, tồn vong của quốc gia, dân tộc",1],["Lợi ích của Quốc tế Cộng sản","thuonghai"],["Quyền lợi của giai cấp công nhân","singapore"],["Sự lãnh đạo của Mặt trận","colombo"]],j:2},
+ {at:"pacbo",q:"Sự chuyển hướng 1939–1941 thực chất là trở về quan điểm nào?",o:[["Quan điểm Hồ Chí Minh trong Cương lĩnh đầu tiên",1],["Quan điểm Đại hội VI Quốc tế Cộng sản","thuonghai"],["Án nghị quyết Trung ương 10/1930","singapore"],["Đường lối của Đảng Xã hội Pháp","colombo"]],j:2},
+ {at:"pacbo",q:"Hội nghị 5/1941 chủ trương lập chính phủ nào?",o:[["Chính phủ nhân dân nước Việt Nam Dân chủ Cộng hòa",1],["Chính phủ Liên bang Cộng hòa Dân chủ Đông Dương","thuonghai"],["Chính phủ Xôviết công nông","singapore"],["Chính phủ quân chủ lập hiến","colombo"]],j:2},
+ {at:"pacbo",q:"Việt Minh là tên gọi tắt của tổ chức nào?",o:[["Việt Nam Độc lập Đồng minh",1],["Việt Nam Cách mạng Thanh niên","thuonghai"],["Hội Liên hiệp quốc dân Việt Nam","singapore"],["Mặt trận Dân chủ Đông Dương","colombo"]],j:2}
+  ]}
 };
 // Ba chế độ theo màn bắt đầu thầy sửa trên bảng thiết kế (10/10/2026).
 const MODES=[["duel","Đội 2 người","Hai người, một máy"],["solo","Đội tự do","Bao người cũng được"],["study","Ôn tập","Không tính giờ, không đối thủ, không tính điểm."]];
@@ -453,13 +570,166 @@ function drawMap(svg,G,compact){
   for(const id in P){const q=P[id];if(!q.st)continue;const big=id==="pacbo"||id==="nharong",lit=done.has(id),r=big?12:9;
     const ly=q.dy<0?-(r+9):r+fs.st+4;
     h+=`<g transform="translate(${q.x},${q.y})">${lit?`<circle r="${r+8}" fill="#F2C75C" opacity=".6" filter="url(#m-glow)"/>`:""}<rect x="${-r*.42}" y="${-r-4}" width="${r*.84}" height="${big?4:3}" rx="1" fill="#2E3436"/><circle r="${r}" fill="${lit?"#D4A43A":"#2F3537"}"${lit?' stroke="#8E6B1E" stroke-width="1.2"':""}/><ellipse rx="${r*.42}" ry="${r}" fill="none" stroke="${lit?"#9B7826":"#4A5356"}" stroke-width="1.1"/><text class="ml${big?" big":""}"${anchor(q)} y="${ly}" font-size="${big?fs.st+1:fs.st}">${esc(q.n)}</text></g>`}
-  const at={};pls.forEach(p=>{const n=at[p.pos]=(at[p.pos]||0)+1,q=P[p.pos];h+=shipG(q.x+20+(n-1)*24,q.y-22-(n-1)*6,p.c.hull,p.c.band,compact?1.6:1.3)});
+  const at={};pls.concat(G&&G.others?G.others:[]).forEach(p=>{const n=at[p.pos]=(at[p.pos]||0)+1,q=P[p.pos];h+=shipG(q.x+20+(n-1)*24,q.y-22-(n-1)*6,p.c.hull,p.c.band,compact?1.6:1.3)});
   svg.innerHTML=h;
 }
 function mapBox(G,compact){
   return `<section class="chart" aria-label="Hải đồ"><svg id="map" viewBox="0 0 1000 560" role="img" aria-label="Hải đồ hành trình 1911–1941"></svg>
-  <div class="race">${G.players.map((p,i)=>`<span class="nm">${esc(p.name)}</span><div class="bar"><div id="bar${i}" style="background:${p.c.bar};width:0"></div></div><span class="n" id="barn${i}">0/${G.L.legs.length}</span>`).join("")}</div>
+  <div class="race" id="race"></div>
   ${compact?"":`<div class="legend"><span>${lampIco}Trạm Người ở lại hoạt động</span><span>${stoneIco()}Ngõ cụt: nơi Người ghé qua rồi đi tiếp</span></div>`}</section>`;
+}
+
+/* =====================================================================
+   ĐƯỜNG NỐI GIỮA CÁC MÁY — chế độ Đội tự do (mỗi người một máy, cùng một phòng).
+   Chép nguyên khối của game Đi tìm một nửa / Nhanh!: MQTT công cộng, mỗi đường dẫn là một "tài liệu"
+   giữ lại trên máy chủ; ?noi=bc để các tab của một trình duyệt nói chuyện trực tiếp, không cần mạng.
+   ===================================================================== */
+const QS=new URLSearchParams(location.search);
+const CHI_BC=QS.get("noi")==="bc";
+const MAY_CHU = [{url: "wss://broker.emqx.io:8084/mqtt"}, {url: "wss://broker.hivemq.com:8884/mqtt"}, {url: "wss://public.cloud.shiftr.io/mqtt", user: "public", pass: "public"}];
+const KHONG_GIAN = "hanu-pol1001/hai-trinh/v1/";
+function taoMQTT(cfg, onMsg, onState){
+  let ws = null, ok = false, buf = new Uint8Array(0), pid = 0, ping = null, lui = 1000;
+  const subs = new Set(), cho = new Map(), te = new TextEncoder(), td = new TextDecoder();
+  const vlen = n => { const o = []; do{ let b = n % 128; n = Math.floor(n / 128); if(n > 0) b |= 128; o.push(b); }while(n > 0); return o; };
+  const chu = x => { const b = te.encode(x); return [b.length >> 8, b.length & 255].concat(Array.from(b)); };
+  const goi = (h, body) => { if(!ws || ws.readyState !== 1) return false; ws.send(new Uint8Array([h].concat(vlen(body.length), body))); return true; };
+  const moiId = () => { pid = pid % 65535 + 1; return pid; };
+  function dangKy(f){ const id = moiId(); goi(0x82, [id >> 8, id & 255].concat(chu(f), [1])); return id; }
+  function ketNoi(){
+    try{ ws = new WebSocket(cfg.url, ["mqtt"]); }catch(e){ henLai(); return; }
+    ws.binaryType = "arraybuffer";
+    ws.onopen = () => { let co = 0x02; let pl = chu("ht" + Math.random().toString(36).slice(2, 12));
+      if(cfg.user){ co |= 0x80; pl = pl.concat(chu(cfg.user)); } if(cfg.pass){ co |= 0x40; pl = pl.concat(chu(cfg.pass)); }
+      goi(0x10, chu("MQTT").concat([4, co, 0, 30], pl)); };
+    ws.onmessage = e => { const d = new Uint8Array(e.data), n = new Uint8Array(buf.length + d.length); n.set(buf); n.set(d, buf.length); buf = n; tach(); };
+    ws.onclose = () => { const truoc = ok; ok = false; ws = null; buf = new Uint8Array(0); clearInterval(ping); cho.forEach(f => f(false)); cho.clear(); if(truoc) onState(); henLai(); };
+    ws.onerror = () => { try{ ws && ws.close(); }catch(e){} };
+  }
+  function henLai(){ setTimeout(ketNoi, lui); lui = Math.min(lui * 2, 15000); }
+  function tach(){ for(;;){ if(buf.length < 2) return; let m = 1, len = 0, i = 1, b;
+    do{ if(i >= buf.length) return; b = buf[i++]; len += (b & 127) * m; m *= 128; }while(b & 128);
+    if(buf.length < i + len) return; const h = buf[0], p = buf.slice(i, i + len); buf = buf.slice(i + len); try{ xuLy(h, p); }catch(e){} } }
+  function xuLy(h, p){ const t = h >> 4;
+    if(t === 2){ if(p[1] === 0){ ok = true; lui = 1000; subs.forEach(dangKy); clearInterval(ping); ping = setInterval(() => goi(0xC0, []), 25000); onState(); } else { try{ ws.close(); }catch(e){} } }
+    else if(t === 3){ const qos = (h >> 1) & 3, tl = (p[0] << 8) | p[1]; const topic = td.decode(p.subarray(2, 2 + tl)); let o = 2 + tl;
+      if(qos > 0){ const id = (p[o] << 8) | p[o + 1]; o += 2; goi(0x40, [id >> 8, id & 255]); } onMsg(topic, td.decode(p.subarray(o))); }
+    else if(t === 4 || t === 9){ const id = (p[0] << 8) | p[1], f = cho.get(id); if(f){ cho.delete(id); f(true); } } }
+  const doi = (id, r, ms) => { cho.set(id, r); setTimeout(() => { if(cho.delete(id)) r(false); }, ms); };
+  return { get ok(){ return ok; }, batDau: ketNoi,
+    sub(f){ if(subs.has(f)) return Promise.resolve(true); subs.add(f); if(!ok) return Promise.resolve(false); return new Promise(r => doi(dangKy(f), r, 4000)); },
+    pub(topic, text){ return new Promise(r => { if(!ok) return r(false); const id = moiId();
+      const pl = chu(topic).concat([id >> 8, id & 255], Array.from(te.encode(text))); if(!goi(0x33, pl)) return r(false); doi(id, r, 6000); }); } };
+}
+const SYNC = (() => {
+  const kho = new Map(), nghe = new Set(), may = []; let bc = null, batDauLuc = 0, baoDoi = () => {};
+  const dc = p => KHONG_GIAN + p;
+  const khop = (f, t) => { if(f.endsWith("/+")){ const g = f.slice(0, -1); return t.startsWith(g) && t.length > g.length && !t.slice(g.length).includes("/"); } return f === t; };
+  function nhan(t, text){ if(!t.startsWith(KHONG_GIAN) || !text) return; let r; try{ r = JSON.parse(text); }catch(e){ return; }
+    if(!r || typeof r.t !== "number" || typeof r.v !== "object") return; const cu = kho.get(t); if(cu && cu.t >= r.t) return;
+    kho.set(t, r); nghe.forEach(l => { if(khop(l.f, t)) try{ l.cb(); }catch(e){ console.error(e); } }); }
+  const coMay = () => CHI_BC || may.some(m => m.ok);
+  const cho = (dk, ms) => new Promise(r => { if(dk()) return r(true); const t0 = Date.now(), iv = setInterval(() => { if(dk()){ clearInterval(iv); r(true); } else if(Date.now() - t0 > ms){ clearInterval(iv); r(false); } }, 100); });
+  async function sub(f){ if(bc) bc.postMessage({k: "hoi", f}); await Promise.all(may.map(m => m.sub(f))); }
+  function snap(p){ const t = dc(p), r = kho.get(t); return {exists: !!r, data: () => r ? r.v : undefined}; }
+  let tCuoi = 0;
+  /* ghi ngay vào máy mình (giao diện không phải chờ mạng), rồi gửi đi; mất mạng thì thử lại */
+  async function ghi(p, v){ const t = dc(p), cu = kho.get(t); tCuoi = Math.max(Date.now(), tCuoi + 1, cu ? cu.t + 1 : 0); const moc = tCuoi, tx = JSON.stringify({t: moc, v});
+    nhan(t, tx); if(bc) bc.postMessage({k: "pub", t, tx}); if(CHI_BC) return;
+    for(let lan = 0; lan < 10; lan++){
+      if(!coMay()) await cho(coMay, 8000);
+      const kq = await Promise.all(may.map(m => m.pub(t, tx))); if(kq.some(Boolean)) return;
+      await new Promise(r => setTimeout(r, 1500)); const nay = kho.get(t); if(nay && nay.t !== moc) return; }
+    throw new Error("không gửi được"); }
+  function ngheDoc(p, cb){ const t = dc(p), l = {f: t, cb: () => cb(snap(p))}; nghe.add(l); sub(t); if(kho.has(t)) setTimeout(() => { if(nghe.has(l)) l.cb(); }, 0); return () => nghe.delete(l); }
+  function ngheBo(p, cb){ const f = dc(p) + "/+", g = f.slice(0, -1);
+    const l = {f, cb: () => { const docs = []; kho.forEach((r, t) => { if(khop(f, t)) docs.push({id: t.slice(g.length), data: () => r.v}); }); cb({docs}); }};
+    nghe.add(l); sub(f); setTimeout(() => { if(nghe.has(l)) l.cb(); }, 0); return () => nghe.delete(l); }
+  return { coMay, dangThu: () => !coMay() && Date.now() - batDauLuc < 9000,
+    batDau(onDoi){ baoDoi = onDoi || baoDoi; batDauLuc = Date.now();
+      if("BroadcastChannel" in window){ bc = new BroadcastChannel("hai-trinh");
+        bc.onmessage = e => { const d = e.data || {}; if(d.k === "pub") nhan(d.t, d.tx); else if(d.k === "hoi") kho.forEach((r, t) => { if(khop(d.f, t)) bc.postMessage({k: "pub", t, tx: JSON.stringify(r)}); }); }; }
+      if(!CHI_BC) MAY_CHU.forEach(c => { const m = taoMQTT(c, nhan, () => baoDoi()); may.push(m); m.batDau(); });
+      setTimeout(() => baoDoi(), 9500); baoDoi(); },
+    doc: p => ({ set: v => ghi(p, v), onSnapshot: cb => ngheDoc(p, cb) }),
+    collection: p => ({ onSnapshot: cb => ngheBo(p, cb) }) };
+})();
+let MANG = false;
+function batMang(){ if(MANG) return; MANG = true; SYNC.batDau(veMang); setInterval(veMang, 1500); }
+function veMang(){ const on = SYNC.coMay(), dang = !on && SYNC.dangThu();
+  const html = `<i class="${on ? "on" : dang ? "dang" : ""}"></i>` + (on ? (CHI_BC ? "Nối trong máy" : "Đã nối mạng") : dang ? "Đang nối…" : "Mất mạng — kiểm tra Wi-Fi");
+  document.querySelectorAll(".net").forEach(e => e.innerHTML = html); }
+function docMot(p, ms){ return new Promise(r => { let xong = false, huy = () => {};
+  huy = SYNC.doc(p).onSnapshot(s => { if(xong || !s.exists) return; xong = true; setTimeout(() => huy(), 0); r(s.data()); });
+  setTimeout(() => { if(!xong){ xong = true; huy(); r(null); } }, ms); }); }
+
+/* ---------- phòng ---------- */
+const myId=Math.random().toString(36).slice(2,10);
+const PAL=["#C9A040","#2B7C74","#A3422F","#4F6D8F","#7A5C86","#6E7D3A","#B88A5A","#59656A"];
+function roomColor(id){const h=PAL[hash(id)%PAL.length];return {hull:h,band:h,line:h==="#C9A040"?"#A87F22":h,bar:h,tint:"c0"}}
+let R=null;
+function leaveRoom(){if(!R)return;R.unsub.forEach(f=>{try{f()}catch(e){}});R=null}
+const choMang=ms=>new Promise(r=>{if(SYNC.coMay())return r(true);const t0=Date.now(),iv=setInterval(()=>{if(SYNC.coMay()){clearInterval(iv);r(true)}else if(Date.now()-t0>ms){clearInterval(iv);r(false)}},150)});
+async function taoPhong(ten,bao){
+  batMang();bao("Đang nối mạng…");
+  if(!await choMang(10000)){bao("Chưa nối được mạng. Kiểm tra Wi-Fi rồi bấm lại.",1);return}
+  let ma="";
+  for(let lan=0;lan<6;lan++){ma=String(1000+Math.floor(Math.random()*9000));const c=await docMot(`p/${ma}/cfg`,1200);if(!c||Date.now()-(c.tao||0)>6*3600e3)break;}
+  const phien=Math.random().toString(36).slice(2,8);
+  try{await SYNC.doc(`p/${ma}/cfg`).set({level:cfg.level,phien,tao:Date.now(),host:myId})}catch(e){bao("Không tạo được phòng, thử lại.",1);return}
+  vaoPhongDaCo(ma,phien,cfg.level,true,ten);
+}
+async function vaoPhong(ten,ma,bao){
+  batMang();bao("Đang tìm phòng "+ma+"…");
+  if(!await choMang(10000)){bao("Chưa nối được mạng. Kiểm tra Wi-Fi rồi bấm lại.",1);return}
+  const c=await docMot(`p/${ma}/cfg`,6000);
+  if(!c||!c.phien||Date.now()-(c.tao||0)>6*3600e3){bao("Không thấy phòng "+ma+". Kiểm tra lại mã.",1);return}
+  if(!LEVELS[c.level]||!LEVELS[c.level].legs.length){bao("Phòng dùng cấp độ máy này chưa có.",1);return}
+  const bat=await docMot(`r/${ma}-${c.phien}/bat`,1500);
+  if(bat){bao("Phòng "+ma+" đã nhổ neo. Xin chủ phòng mở phòng mới.",1);return}
+  vaoPhongDaCo(ma,c.phien,c.level,false,ten);
+}
+function vaoPhongDaCo(ma,phien,level,host,ten){
+  leaveRoom();
+  R={ma,phien,level,host,ten,base:`r/${ma}-${phien}`,players:{},tt:{},stage:"cho",unsub:[]};
+  SYNC.doc(`${R.base}/nguoi/${myId}`).set({ten,vao:Date.now()}).catch(()=>{});
+  R.unsub.push(SYNC.collection(`${R.base}/nguoi`).onSnapshot(q=>{if(!R)return;R.players={};q.docs.forEach(d=>{const v=d.data();if(v&&v.ten)R.players[d.id]=v});if(R.stage==="cho")renderLobby()}));
+  R.unsub.push(SYNC.doc(`${R.base}/bat`).onSnapshot(sn=>{if(!R||!sn.exists||R.stage!=="cho")return;R.stage="choi";startGame({mode:"solo",level:R.level,n1:R.ten})}));
+  R.unsub.push(SYNC.collection(`${R.base}/tt`).onSnapshot(q=>{if(!R)return;R.tt={};q.docs.forEach(d=>{const v=d.data();if(v)R.tt[d.id]=v});capNhatPhong()}));
+  renderLobby();
+}
+function renderLobby(){
+  setScene("rungCao");
+  const ds=Object.entries(R.players).sort((a,b)=>(a[1].vao||0)-(b[1].vao||0));
+  app.innerHTML=`<div style="padding:0 clamp(16px,4vw,72px)"><section class="sheet lobby">
+    <div class="kicker">Đội tự do · cấp ${esc(LEVELS[R.level].name)}</div>
+    <p class="result" style="margin-bottom:4px">Phòng chờ</p>
+    <p>Mã phòng — các bạn khác chọn <b>Đội tự do</b>, nhập mã này rồi bấm <b>Vào phòng</b>:</p>
+    <div class="roomcode">${R.ma}</div>
+    <div class="net" style="margin-top:8px"></div>
+    <h2>Đã lên tàu (${ds.length})</h2>
+    <ul class="plist">${ds.map(([id,v])=>`<li class="${id===myId?"me":""}">${shipIco(roomColor(id))}${esc(v.ten)}${id===myId?" (bạn)":""}</li>`).join("")}</ul>
+    <div class="rowb">${R.host?`<button class="btn" id="startRoom">${GO_ICO}Nhổ neo cả phòng</button>`:`<p style="margin:0;font-weight:600;color:var(--teal2)">Chờ chủ phòng nhổ neo…</p>`}<button class="btn line" id="leave">Rời phòng</button></div>
+  </section></div>`;
+  veMang();
+  const st=$("#startRoom");if(st)st.onclick=()=>{st.disabled=true;SYNC.doc(`${R.base}/bat`).set({luc:Date.now()}).catch(()=>{st.disabled=false})};
+  $("#leave").onclick=()=>renderStart();
+}
+function pushState(p){
+  if(!G||!G.room||p!==G.players[0])return;
+  SYNC.doc(`${G.room.base}/tt/${myId}`).set({ten:p.name,idx:p.idx,pos:p.pos,score:p.score,lost:p.lost,done:p.done,won:p.won,secs:p.done?Math.round((p.doneAt-G.t0)/1000):0}).catch(()=>{});
+}
+function capNhatPhong(){
+  if(!G||!G.room||G.room!==R)return;
+  G.others=Object.entries(R.tt).filter(([id,t])=>id!==myId&&P[t.pos]).map(([id,t])=>({name:t.ten,idx:t.idx|0,pos:t.pos,c:roomColor(id),done:!!t.done}));
+  if(!G.over)redraw();
+  const el=document.getElementById("roomRank");if(el)el.innerHTML=roomRankHTML();
+}
+function roomRankHTML(){
+  const N=G.L.legs.length;
+  const all=Object.entries(R?R.tt:{}).map(([id,t])=>Object.assign({me:id===myId},t));
+  all.sort((a,b)=>(b.done-a.done)||(a.done?a.secs-b.secs:b.idx-a.idx)||b.score-a.score);
+  return `<div class="tablewrap"><table><thead><tr><th class="num">#</th><th>Người chơi</th><th class="num">Điểm</th><th class="num">Lạc</th><th>Chặng / thời gian</th></tr></thead><tbody>${all.map((t,i)=>`<tr class="${i===0?"top1":""}"><td class="num">${i+1}</td><td>${esc(t.ten)}${t.me?" <b>(bạn)</b>":""}${t.won?' <span class="pill" style="margin-left:6px">Về trước · +10</span>':""}</td><td class="num">${t.score}</td><td class="num">${t.lost}</td><td>${t.done?`Về đích · ${t.secs}s`:`${t.idx}/${N} · đang đi`}</td></tr>`).join("")}</tbody></table></div>`;
 }
 
 /* =====================================================================
@@ -479,10 +749,12 @@ function startGame(cfg){
     G.players.push(newPlayer(cfg.n1||"Người chơi 1",0,{keys:["1","2","3","4"]}));
     G.players.push(newPlayer(cfg.n2||"Người chơi 2",1,{keys:["7","8","9","0"]}));
   } else {
-    G.players.push(newPlayer(cfg.n1||(cfg.mode==="solo"?"Đội tự do":"Người chơi"),0));
+    G.players.push(newPlayer(cfg.n1||"Người chơi",0,cfg.mode==="solo"&&R?{c:roomColor(myId)}:{}));
   }
+  if(cfg.mode==="solo"&&R){G.room=R;G.others=[]}
   renderPlay();
   G.players.forEach(p=>ask(p));
+  pushState(G.players[0]);capNhatPhong();
   sfx.horn();
 }
 
@@ -496,20 +768,26 @@ function renderPlay(){
       <div class="side" id="side2"><div id="panel1"></div></div></div>`;
   } else {
     app.innerHTML=`<div class="wrap">
-      <header class="top"><div class="brand"><h1>Hải Trình Ba Mươi Năm</h1><span class="yr">1911–1941</span><p>Cấp ${esc(G.L.name)} · ${MODE_NAME[G.mode]}</p></div>
+      <header class="top"><div class="brand"><h1>Hải Trình Ba Mươi Năm</h1><span class="yr">1911–1941</span><p>Cấp ${esc(G.L.name)} · ${MODE_NAME[G.mode]}${G.room?` · phòng <b>${G.room.ma}</b> · <span class="net"></span>`:""}</p></div>
       <div class="tools">${soundChip()}<button class="chip" id="quit">Kết thúc ván</button></div></header>
       <div class="main">${mapBox(G,false)}<section id="panel0" aria-live="polite"></section></div></div>`;
   }
   G.players.forEach(p=>p.el=document.getElementById("panel"+p.i));
   $("#quit").onclick=()=>endGame(true);
   bindSound();
+  if(G.room)veMang();
   redraw();
+}
+function renderRace(){
+  const el=document.getElementById("race");if(!el)return;const N=G.L.legs.length;
+  let rows=G.players.map(p=>({name:p.name,idx:p.idx,c:p.c,me:!!G.room}));
+  if(G.others&&G.others.length){rows=rows.concat(G.others.slice().sort((a,b)=>b.idx-a.idx).slice(0,7));rows.sort((a,b)=>b.idx-a.idx)}
+  el.innerHTML=rows.map(r=>`<span class="nm"${r.me?' style="color:var(--teal)"':""}>${esc(r.name)}${r.me?" (bạn)":""}</span><div class="bar"><div style="background:${r.c.bar};width:${r.idx/N*100}%"></div></div><span class="n">${r.idx}/${N}</span>`).join("");
 }
 function redraw(){
   setScene(playScene());
   const svg=document.getElementById("map");if(svg)drawMap(svg,G,G.mode==="duel");
-  const N=G.L.legs.length;
-  G.players.forEach(p=>{const b=document.getElementById("bar"+p.i),n=document.getElementById("barn"+p.i);if(b)b.style.width=(p.idx/N*100)+"%";if(n)n.textContent=p.idx+"/"+N});
+  renderRace();
   G.players.forEach(p=>{const s=p.el&&p.el.querySelector(".sc");if(s)s.textContent=p.score+" điểm"});
 }
 const whoBand=(p,st)=>G.mode==="duel"?`<div class="who ${p.c.tint}">${shipIco(p.c,p.i===1)}<b>${esc(p.name)}</b>${st?`<span class="stin">· ${esc(st)}</span>`:""}<span class="sc">${p.score} điểm</span></div>`:"";
@@ -562,7 +840,7 @@ function choose(p,k){
     deadEnd(p,o[1],false);
   }
 }
-function advance(p){const to=nextAt(G.L,p.idx);p.idx++;p.pos=to;if(p.path[p.path.length-1]!==to)p.path.push(to);redraw()}
+function advance(p){const to=nextAt(G.L,p.idx);p.idx++;p.pos=to;if(p.path[p.path.length-1]!==to)p.path.push(to);redraw();pushState(p)}
 function timeout(p){
   if(p.busy||G.over)return;p.busy=true;
   const rem=p.removed[p.idx]||{};const wrong=p.order.filter(o=>o[1]!==1&&!rem[o[0]]);
@@ -572,21 +850,22 @@ function timeout(p){
 function deadEnd(p,id,drift){
   sfx.bad();
   p.lost++;p.hit[id]=1;if(!p.visited.includes(id))p.visited.push(id);
-  const back=p.pos;p.pos=id;redraw();
+  const back=p.pos;p.pos=id;redraw();pushState(p);
   const total=G.timed?3:2;let n=total;
   const pips=()=>`<span class="pips" aria-hidden="true">${Array.from({length:total},(_,k)=>`<i class="${k<total-n+1?"on":""}"></i>`).join("")}</span>`;
   const tagIco=drift?'<svg width="22" height="20" viewBox="-11 -10 22 20" aria-hidden="true"><path d="M-10,-2 Q-5,-6 0,-2 T10,-2 M-10,5 Q-5,1 0,5 T10,5" fill="none" stroke="#E8C774" stroke-width="1.8" stroke-linecap="round"/></svg>'
     :'<svg width="16" height="20" viewBox="-8 -10 16 20" aria-hidden="true"><path d="M-7,8 V-2 Q-7,-9 0,-9 Q7,-9 7,-2 V8 Z" fill="#A3422F" stroke="#E8C774" stroke-width="1.2"/></svg>';
   p.el.innerHTML=`<div class="dead" role="status">${whoBand(p,"")}<div class="tag">${tagIco}${drift?"Hết giờ · tàu trôi dạt":"Ngõ cụt"}</div><h3>${esc(P[id].n)}</h3><p>${esc(DEAD[id])}</p><p class="cd">${pips()}<span>Quay về ${esc(P[back].n)} sau <b class="cdn">${n}</b> giây…</span></p></div>`;
   clearInterval(p.iv);
-  p.iv=setInterval(()=>{n--;const c=p.el.querySelector(".cdn");if(c)c.textContent=n;const pp=p.el.querySelector(".pips");if(pp)pp.outerHTML=pips();if(n<=0){clearInterval(p.iv);if(G.over)return;p.pos=back;redraw();ask(p)}},1000);
+  p.iv=setInterval(()=>{n--;const c=p.el.querySelector(".cdn");if(c)c.textContent=n;const pp=p.el.querySelector(".pips");if(pp)pp.outerHTML=pips();if(n<=0){clearInterval(p.iv);if(G.over)return;p.pos=back;redraw();pushState(p);ask(p)}},1000);
 }
 const LAMP_BIG='<svg class="lamp" viewBox="-60 -10 120 150" aria-hidden="true"><defs><filter id="a-glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="12"/></filter></defs><line x1="0" y1="-10" x2="0" y2="40" stroke="#0F2725" stroke-width="2"/><circle cy="78" r="56" fill="#F2C75C" opacity=".45" filter="url(#a-glow)"/><rect x="-9" y="38" width="18" height="7" rx="2" fill="#0F2725"/><circle cy="78" r="33" fill="#D4A43A"/><ellipse cy="78" rx="15" ry="33" fill="none" stroke="#8E6B1E" stroke-width="1.6"/><rect x="-7" y="110" width="14" height="5" rx="2" fill="#0F2725"/></svg>';
 function arrive(p){
   p.done=true;p.doneAt=performance.now();
   const rivals=G.players.filter(o=>o!==p);
   if(G.mode==="duel"&&rivals.length&&!rivals.some(o=>o.done)){p.won=true;p.score+=10}
-  redraw();
+  if(G.room&&Object.keys(G.room.players).length>1&&!Object.entries(G.room.tt).some(([id,t])=>id!==myId&&t.done)){p.won=true;p.score+=10}
+  redraw();pushState(p);
   sfx.win();
   if(p.el)p.el.innerHTML=`<div class="arrived">${LAMP_BIG}<div class="tag">28/1/1941</div><h3>Đã về tới Pác Bó</h3><p>${esc(p.name)} · ${p.score} điểm${p.won?" · về đích trước, +10":""}</p>${G.players.some(o=>!o.done)?`<p class="hint">Đang chờ người còn lại về đích…</p>`:""}</div>`;
   if(G.players.every(o=>o.done))setTimeout(()=>endGame(false),900);
@@ -598,7 +877,7 @@ function endGame(early){
   const now=performance.now();
   const recs=G.players.map(p=>{
     const secs=Math.round(((p.done?p.doneAt:now)-G.t0)/1000);
-    const r={name:p.name,lvl:G.L.letter,score:p.score,lost:p.lost,secs,idx:p.idx,total:G.L.legs.length,won:p.won,mode:G.mode,at:Date.now(),src:"Máy này"};
+    const r={name:p.name,lvl:G.L.letter,score:p.score,lost:p.lost,secs,idx:p.idx,total:G.L.legs.length,won:p.won,mode:G.mode,at:Date.now(),src:G.room?"Phòng "+G.room.ma:"Máy này"};
     r.code=makeCode(r);return r;
   });
   if(G.mode!=="study"){const book=store.get("ht.book",[]);recs.forEach(r=>book.push(r));store.set("ht.book",book)}
@@ -625,11 +904,12 @@ function renderResults(recs,early){
     <div class="podium">${pl.map((p,i)=>{const r=recs[i];return `<div class="pcard${p.won?" win":""}"><div class="nm">${shipIco(p.c)}${esc(p.name)}${p.won?`<span class="pill">Về trước · +10</span>`:""}</div>
       <div class="kv"><div><b>${r.score}</b><span>Điểm</span></div><div><b>${r.lost}</b><span>Lần lạc</span></div><div><b>${p.done?r.secs+"s":r.idx+"/"+r.total}</b><span>${p.done?"Thời gian":"Chặng"}</span></div></div>
       ${G.mode==="study"?"":`<div style="font-size:12.5px;color:var(--dim);margin-bottom:4px">Mã kết quả</div><span class="code">${r.code}</span>`}</div>`}).join("")}</div>
+    ${G.room?`<h2>Bảng xếp hạng phòng ${G.room.ma}</h2><div id="roomRank">${roomRankHTML()}</div>`:""}
     ${ports.length?`<h2>Những bến đã lạc vào, cũng là nơi Người từng ghé qua</h2><ul class="ports">${ports.map(id=>`<li>${stoneIco(true)}<span><b>${esc(P[id].n)}</b>: ${esc(DEAD[id])}</span></li>`).join("")}</ul>`:`<p>Không lạc lần nào. Đi đúng từng chặng của hải trình.</p>`}
-    <div class="rowb"><button class="btn" id="again">Chơi lại</button><button class="btn line" id="home">Về bến xuất phát</button><button class="btn line" id="tobook">Mở Sổ kết quả</button></div>
+    <div class="rowb"><button class="btn" id="again">${G.room?"Ván mới":"Chơi lại"}</button><button class="btn line" id="home">Về bến xuất phát</button><button class="btn line" id="tobook">Mở Sổ kết quả</button></div>
   </section></div>${MARK}`;
   bindSound();
-  $("#again").onclick=()=>startGame(G.cfg);
+  $("#again").onclick=()=>G.room?renderStart():startGame(G.cfg);
   $("#home").onclick=()=>renderStart();
   $("#tobook").onclick=()=>renderBook();
 }
@@ -653,12 +933,15 @@ ${ROUTE.map(([n,x,y,big])=>big?`<g transform="translate(${x},${y})"><line x1="0"
 const GO_ICO='<svg width="28" height="22" viewBox="-17 -19 34 30" aria-hidden="true"><path d="M-15,3 L15,1 L11,10 L-11,10 Z" fill="none" stroke="#1E2422" stroke-width="1.8" stroke-linejoin="round"/><rect x="-8" y="-4" width="13" height="5" fill="none" stroke="#1E2422" stroke-width="1.5"/><rect x="-2" y="-11" width="5" height="7" fill="none" stroke="#1E2422" stroke-width="1.5"/></svg>';
 
 function renderStart(){
-  stopAll();G=null;setScene("rungCao");
+  stopAll();G=null;leaveRoom();setScene("rungCao");
   const t=LEVELS.de.legs.map((q,i)=>limitFor(LEVELS.de,i));
   const names=cfg.mode==="duel"
     ?`<div class="names"><div class="field"><label for="n1">${shipIco(COLORS[0])}Người chơi 1 · tàu vàng</label><input id="n1" maxlength="30" autocomplete="off" value="${esc(cfg.n1)}" placeholder="VD: Nguyễn Văn An"></div>
       <div class="field"><label for="n2">${shipIco(COLORS[1])}Người chơi 2 · tàu xanh</label><input id="n2" maxlength="30" autocomplete="off" value="${esc(cfg.n2)}" placeholder="VD: Trần Thị Bình"></div></div>`
-    :`<div class="names one"><div class="field"><label for="n1">${shipIco(COLORS[0])}${cfg.mode==="solo"?"Tên đội":"Tên (không bắt buộc)"}</label><input id="n1" maxlength="30" autocomplete="off" value="${esc(cfg.n1)}" placeholder="${cfg.mode==="solo"?"VD: Nhóm 3":"VD: Nguyễn Văn An"}"></div></div>`;
+    :cfg.mode==="solo"
+    ?`<div class="names"><div class="field"><label for="n1">${shipIco(COLORS[0])}Tên của bạn</label><input id="n1" maxlength="30" autocomplete="off" value="${esc(cfg.n1)}" placeholder="VD: Nguyễn Văn An"></div>
+      <div class="field"><label for="room">Mã phòng (vào phòng có sẵn)</label><input id="room" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="VD: 4821" style="font-family:var(--label);letter-spacing:3px"></div></div>`
+    :`<div class="names one"><div class="field"><label for="n1">${shipIco(COLORS[0])}Tên (không bắt buộc)</label><input id="n1" maxlength="30" autocomplete="off" value="${esc(cfg.n1)}" placeholder="VD: Nguyễn Văn An"></div></div>`;
   app.innerHTML=`<div class="start">
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="s-chalk" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="3"/><feDisplacementMap in="SourceGraphic" scale="3.5" xChannelSelector="R" yChannelSelector="G"/></filter><filter id="s-brushH" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="5"/><feDisplacementMap in="SourceGraphic" scale="34" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
   <div class="start-tools">${soundChip()}<button class="chip" id="bookBtn">Sổ kết quả</button></div>
@@ -677,7 +960,7 @@ function renderStart(){
       <div class="tt"><span class="t">Thời gian: Dễ:</span>${[0,3,6,9,12,14].map(i=>`<span>C${i+1} · ${t[i]}s</span>`).join("")}</div>
       ${names}
       <p class="msg bad" id="startMsg"></p>
-      <button class="btn go" id="go">${GO_ICO}Nhổ neo</button>
+      ${cfg.mode==="solo"?`<div class="btn2"><button class="btn" id="mk">${GO_ICO}Tạo phòng</button><button class="btn line" id="join">Vào phòng</button></div>`:`<button class="btn go" id="go">${GO_ICO}Nhổ neo</button>`}
     </section>
   </div></div>`;
   bindSound();
@@ -685,9 +968,16 @@ function renderStart(){
   const keep=()=>{cfg.n1=$("#n1").value;const n2=$("#n2");if(n2)cfg.n2=n2.value};
   document.querySelectorAll("#modes .opt").forEach(b=>b.onclick=()=>{keep();cfg.mode=b.dataset.v;renderStart()});
   document.querySelectorAll("#levels .opt").forEach(b=>b.onclick=()=>{if(b.getAttribute("aria-disabled")==="true"){$("#startMsg").textContent=`Cấp ${LEVELS[b.dataset.v].name} chưa có câu hỏi. Tạm chơi cấp Dễ.`;return}keep();cfg.level=b.dataset.v;renderStart()});
+  const bao=(t,loi)=>{const m=$("#startMsg");if(!m)return;m.textContent=t;m.className="msg"+(loi?" bad":"");document.querySelectorAll("#mk,#join").forEach(b=>b.disabled=!loi)};
+  if(cfg.mode==="solo"){
+    const ten=()=>{keep();cfg.n1=cfg.n1.trim();if(!cfg.n1){bao("Nhập tên của bạn để cả phòng biết tàu nào của ai.",1);$("#n1").focus();return ""}store.set("ht.cfg",cfg);return cfg.n1};
+    $("#mk").onclick=()=>{const t=ten();if(t)taoPhong(t,bao)};
+    $("#join").onclick=()=>{const ma=$("#room").value.trim();if(!/^\d{4}$/.test(ma)){bao("Nhập mã phòng gồm 4 chữ số.",1);$("#room").focus();return}const t=ten();if(t)vaoPhong(t,ma,bao)};
+    $("#room").addEventListener("keydown",e=>{if(e.key==="Enter")$("#join").click()});
+    return;
+  }
   $("#go").onclick=()=>{
     keep();cfg.n1=cfg.n1.trim();cfg.n2=(cfg.n2||"").trim();
-    if(cfg.mode==="solo"&&!cfg.n1){$("#startMsg").textContent="Nhập tên đội để Sổ kết quả ghi đúng đội.";$("#n1").focus();return}
     if(cfg.mode==="duel"&&!cfg.n1){$("#startMsg").textContent="Nhập tên để Sổ kết quả ghi đúng người.";$("#n1").focus();return}
     if(cfg.mode==="duel"&&!cfg.n2){$("#startMsg").textContent="Nhập tên người chơi 2.";$("#n2").focus();return}
     if(cfg.mode==="duel"&&cfg.n1.toLowerCase()===cfg.n2.toLowerCase()){$("#startMsg").textContent="Hai người chơi cần tên khác nhau.";return}

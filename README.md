@@ -49,12 +49,15 @@ Dữ liệu trận đi qua máy chủ MQTT công cộng, gồm số nhóm, họ 
 ## Hải Trình Ba Mươi Năm
 
 Tìm đường trên hải đồ hành trình 1911–1941, từ bến Nhà Rồng về Pác Bó: mỗi ngã rẽ một câu hỏi, bốn lối đi,
-lối sai dẫn vào ngõ cụt — nơi Người từng ghé qua rồi đi tiếp. Ba chế độ: **Đội 2 người** (một máy, chia trái – phải),
-**Đội tự do** (một tàu, bao người cũng được), **Ôn tập** (không tính giờ). Chạy trên một máy, không cần mạng sau khi mở trang.
+lối sai dẫn vào ngõ cụt — nơi Người từng ghé qua rồi đi tiếp. Ba cấp Dễ (15 ngã rẽ), Khó (30), Siêu khó (66, ba hải trình).
+Ba chế độ: **Đội 2 người** (một máy, chia trái – phải), **Đội tự do** (mỗi người một máy, cùng vào một phòng bằng mã
+4 chữ số, đua song song), **Ôn tập** (không tính giờ).
 
 - **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/hai-trinh-30-nam/
 
 ![Mã QR vào Hải Trình Ba Mươi Năm](hai-trinh-30-nam/qr-vao-game.png)
+
+Chế độ Đội tự do gửi dữ liệu trận qua máy chủ MQTT công cộng, gồm tên người chơi nhập, vị trí tàu và điểm; hai chế độ còn lại không dùng mạng.
 
 ## 1911 — Anh Ba xin làm phụ bếp
 
