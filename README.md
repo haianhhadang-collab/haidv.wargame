@@ -88,8 +88,10 @@ Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm số nhóm 
 ## Non sông một dải
 
 Tư tưởng Hồ Chí Minh về độc lập dân tộc, mỗi người một thiết bị. Ba vòng nối lại ba miền trên bản đồ:
-bốn luận điểm (Bắc Bộ), hai tập hợp ý của luận điểm thứ nhất (Trung Bộ), câu nói – văn bản – thời điểm (Nam Bộ).
+bốn luận điểm (Bắc Bộ), hai tổ hợp ý của luận điểm thứ nhất (Trung Bộ), câu nói – văn bản – thời điểm (Nam Bộ).
 Điểm nhóm là trung bình điểm các thành viên. Máy giảng viên tạo phòng và chiếu; có chế độ ôn tập một mình.
+
+Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame/non-song/poster-doc.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/non-song/poster-doc.png) — A4 ngang [PDF in](https://haianhhadang-collab.github.io/haidv.wargame/non-song/poster-ngang.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/non-song/poster-ngang.png).
 
 - **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/non-song/
 
