@@ -627,17 +627,17 @@ body.dang-sua .sua-tro{ outline:2px dashed var(--vang); outline-offset:2px; curs
   <div class="dau-luoi">
     <div class="dau-trai">
       <div class="dau-bien"><h1>Thước Kẻ<br>Thời Gian</h1></div>
-      <div class="dau-phu">Hội Văn Phòng Phẩm · Tư tưởng Hồ Chí Minh</div>
-      <div class="cua-giay"><p>Cả nhóm cùng xếp các sự kiện lên <b>cây thước</b>. Mỗi người giữ các thẻ khác nhau – ghép lại theo thứ tự thời gian để có đáp án đúng.</p>
+      <div class="dau-phu">Hội Văn Phòng Phẩm</div>
+      <div class="cua-giay"><p>Cả nhóm cùng sắp xếp các sự kiện trên <b>cây thước</b>. Mỗi người giữ các thẻ khác nhau – ghép lại theo thứ tự thời gian để có đáp án đúng.</p>
         <p class="nho mo" id="d-nguon"></p></div>
       <div id="d-khoi"></div>
     </div>
     <nav class="cua" aria-label="Lối vào">
-      <button data-di="vao"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-butchi"/></svg></span><span><b>Vào chơi</b><span class="nho">Sinh viên — mã phòng, nhóm, số thứ tự</span></span></button>
+      <button data-di="vao"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-butchi"/></svg></span><span><b>Vào chơi</b><span class="nho">Sinh viên bấm vào đây</span></span></button>
       <button data-di="tao"><span class="huy"><svg viewBox="0 0 96 96"><use href="#w-bangden"/></svg></span><span><b>Tạo phòng</b><span class="nho">(dành cho giảng viên)</span></span></button>
       <button data-di="on"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-giaynho"/></svg></span><span><b>Ôn tập một mình</b><span class="nho">Không tính giờ, có hiển thị kết quả.</span></span></button>
       <button data-di="luat"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-capsach"/></svg></span><span><b>Luật chơi</b><span class="nho">Vai trò, cách tính điểm.</span></span></button>
-      <button data-di="thu"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-kepgiay"/></svg></span><span><b>Kết quả cả nhóm</b><span class="nho">Máy chiếu + điện thoại cả nhóm trên một máy</span></span></button>
+      <button data-di="thu"><span class="huy"><svg viewBox="0 0 96 96"><use href="#c-kepgiay"/></svg></span><span><b>Kết quả cả nhóm</b><span class="nho">Hiển thị kết quả</span></span></button>
     </nav>
   </div>
 </section>
@@ -658,8 +658,8 @@ body.dang-sua .sua-tro{ outline:2px dashed var(--vang); outline-offset:2px; curs
   <h3>Một ván</h3>
   <ol class="luat">
     <li><b>Chuẩn bị</b>: 30 s đọc thẻ.</li>
-    <li><b>Thảo luận và cắm thẻ</b>: trao đổi, xác định thông tin, gửi thẻ cho Thước Kẻ. Trên thước chung, mỗi thẻ hiện tên, hình nhân vật và màu của người gửi.</li>
-    <li><b>Sự cố</b> (cấp Khó trở lên, giảng viên bật/tắt): <i>Quạt Trần</i> tráo một thẻ manh mối giữa hai nhóm; <i>Bút Xoá</i> (Siêu khó) trộn một thẻ manh mối sai vào bộ của mỗi nhóm.</li>
+    <li><b>Thảo luận và sắp xếp</b>: trao đổi, xác định thông tin, gửi thẻ cho Thước Kẻ. Trên thước chung, mỗi thẻ hiện tên, hình nhân vật và màu của người gửi.</li>
+    <li><b>Sự cố</b> (cấp Khó trở lên): <i>Quạt Trần</i> gây rối; <i>Bút Xoá</i> (Siêu khó) lung lạc.</li>
     <li><b>Kẹp Giấy chốt</b> hoặc hết giờ.</li>
     <li><b>Bảng Đen</b>: thống kê kết quả của các nhóm.</li>
   </ol>
@@ -669,7 +669,7 @@ body.dang-sua .sua-tro{ outline:2px dashed var(--vang); outline-offset:2px; curs
     <tr><th>Lệch 1–2 năm</th><td id="l-d2"></td></tr>
     <tr><th>Sai năm nhưng đúng thứ tự so với hai sự kiện liền trước, liền sau</th><td id="l-d3"></td></tr>
     <tr><th>Sai cả thứ tự · chưa cắm</th><td>0</td></tr>
-    <tr><th>Rút một thẻ đã cắm (dời chỗ, trả về khay)</th><td id="l-rut"></td></tr>
+    <tr><th>Sắp xếp lại (dời chỗ, trả về khay)</th><td id="l-rut"></td></tr>
     <tr><th>Đánh dấu đúng thẻ manh mối giả của Bút Xoá</th><td id="l-gia"></td></tr>
   </table>
   <p class="nho mo">Dễ – thước chia theo thập niên: cắm đúng thập niên được 3 điểm, không có mức lệch 1–2 năm.</p>
@@ -736,12 +736,12 @@ const NHOM = [["Vở Đỏ","#C43D2E","#D94D3C"],["Vở Cam","#DE6B1F","#E87B2E"
   ["Vở Ngọc","#0E9488","#14A89A"],["Vở Biển","#2C6FBB","#3D82D0"],["Vở Tím","#7B3FA0","#9159B8"],["Vở Sen","#C4407E","#D9548F"],
   ["Vở Nâu","#9A5518","#B06A24"],["Vở Than","#333F4A","#8494A3"]];
 const VAI = {
-  TK: {ten: "Thước Kẻ", sym: "c-thuoc", mau: "#2F6B52", mo: "Đội trưởng, giữ cây thước chung — người duy nhất cắm và rút thẻ"},
-  KG: {ten: "Kẹp Giấy", sym: "c-kepgiay", mau: "#6F89A3", mo: "Người duy nhất bấm Chốt nộp bài"},
-  CT: {ten: "Cục Tẩy", sym: "c-cuctay", mau: "#D9677E", mo: "Một lần mỗi ván: cho Thước Kẻ rút một thẻ đã cắm mà không bị trừ điểm"},
+  TK: {ten: "Thước Kẻ", sym: "c-thuoc", mau: "#2F6B52", mo: "Đội trưởng, giữ cây thước chung - người duy nhất được sắp xếp thẻ"},
+  KG: {ten: "Kẹp Giấy", sym: "c-kepgiay", mau: "#6F89A3", mo: "Người duy nhất bấm Nộp bài"},
+  CT: {ten: "Cục Tẩy", sym: "c-cuctay", mau: "#D9677E", mo: "Một lần/ván: giúp Thước Kẻ sắp xếp lại 01 thẻ, không bị trừ điểm"},
   MT: {ten: "Máy Tính Bỏ Túi", sym: "c-maytinh", mau: "#5A6B7D", mo: "Một lần mỗi ván: hỏi máy hai sự kiện cách nhau bao nhiêu năm"},
-  GN: {ten: "Giấy Nhớ", sym: "c-giaynho", symM: "c-giaynho-m", ban: [["Vàng", "#D9B83A"], ["Xanh", "#5DB89A"], ["Hồng", "#E08AAB"]], mo: "Giữ thẻ manh mối — đọc to cho cả nhóm"},
-  BC: {ten: "Bút Chì", sym: "c-butchi", symM: "c-butchi-m", ban: [["Vàng", "#E8B71E"], ["Xanh", "#2E7FBF"], ["Hồng", "#E0699A"]], mo: "Giữ thẻ sự kiện — kể cho cả nhóm, gửi cho Thước Kẻ"},
+  GN: {ten: "Giấy Nhớ", sym: "c-giaynho", symM: "c-giaynho-m", ban: [["Vàng", "#D9B83A"], ["Xanh", "#5DB89A"], ["Hồng", "#E08AAB"]], mo: "Giữ thẻ manh mối"},
+  BC: {ten: "Bút Chì", sym: "c-butchi", symM: "c-butchi-m", ban: [["Vàng", "#E8B71E"], ["Xanh", "#2E7FBF"], ["Hồng", "#E0699A"]], mo: "Giữ thẻ sự kiện"},
   XEM: {ten: "Người xem", sym: "c-capsach", mau: "#8496A6", mo: "Nhóm đã đủ 10 vai — ngồi cùng nhóm, nghe và góp ý"}
 };
 /* thứ tự bật ghế theo số người (thiết kế: lấp vai cần nhất trước; quá 6 người mới nhân bản, tối đa 3 bản) */
@@ -1127,7 +1127,7 @@ function bangLech(ch, don, hang){
 function dsKetQua(ch, don, ct, cuaToi){
   const so = soThuTu(ch), xep = ch.ids.slice().sort((a, b) => soSanh(E(a), E(b)));
   return `<ul class="ds-kq">${xep.map(id => { const neo = ch.neo.includes(id), c = ct[id];
-    const nhan = neo ? `<span class="nhan-d chua">mốc neo</span>` : `<span class="nhan-d ${c.loai}">${c.loai === "chua" ? "chưa cắm" : (c.lech === 0 ? "✓" : "cắm " + (don === 10 ? c.p + "s" : c.p)) + " · " + c.d}</span>`;
+    const nhan = neo ? `<span class="nhan-d chua">mốc neo</span>` : `<span class="nhan-d ${c.loai}">${c.loai === "chua" ? "chưa đặt" : (c.lech === 0 ? "✓" : "cắm " + (don === 10 ? c.p + "s" : c.p)) + " · " + c.d}</span>`;
     return `<li class="${cuaToi && cuaToi.includes(id) ? "cua-toi" : ""}"><span class="nam">${don === 10 ? oCua(E(id).nam, 10) + "s" : E(id).nam}</span><span><b class="mono">${so[id]}</b> ${esc(E(id).ten)}</span>${nhan}</li>`; }).join("")}</ul>`;
 }
 
@@ -1155,7 +1155,7 @@ function veLuat(){
     `<tr><td><b>${c.ten}</b></td><td>${c.soSK}</td><td>${moTaCap(c)}</td></tr>`).join("");
 }
 const moTaCap = c => [c.chang > 1 ? `chia ${c.chang} chặng liên tiếp, điểm chặng trước giữ lại` : "", c.don === 10 ? "thước chia theo thập niên" : "thước chia theo năm",
-  `${c.neo} mốc neo${c.chang > 1 ? " mỗi chặng" : ""}`, `${c.soMM} thẻ manh mối${c.chang > 1 ? " mỗi chặng" : ""}`,
+  `${c.neo} mốc cố định${c.chang > 1 ? " mỗi chặng" : ""}`, `${c.soMM} thẻ manh mối${c.chang > 1 ? " mỗi chặng" : ""}`,
   c.quat || c.gia ? "sự cố: " + [c.quat ? "Quạt Trần" : "", c.gia ? "Bút Xoá" : ""].filter(Boolean).join(" + ") : "không có sự cố",
   `${c.phut} phút thảo luận${c.chang > 1 ? " mỗi chặng" : ""}`].filter(Boolean).join(" · ");
 $$("[data-di]").forEach(b => b.addEventListener("click", () => {
@@ -1662,7 +1662,7 @@ function vaoChangOn(){
   O.mm = taoManhMoi(ch, CH.cap[O.cap].soMM, false, rng((O.seed ^ ((O.k + 1) * 104729)) >>> 0), "o");
   O.thu = xao(ch.ids.filter(id => !ch.neo.includes(id)), rng(O.seed + O.k));
   const don = O.van.don, soCh = O.van.chang.length;
-  $("#s-on").innerHTML = `<button class="nut phu nho" id="o-thoat">← Thôi</button>
+  $("#s-on").innerHTML = `<button class="nut phu nho" id="o-thoat">← Quay lại</button>
     <h2>Ôn tập · ${CH.cap[O.cap].ten}${soCh > 1 ? ` · chặng ${O.k + 1}/${soCh}` : ""}</h2>
     <div class="neo-ds">Mốc neo: ${neoDs(ch)}</div>
     <details open><summary class="muc-t" style="cursor:pointer">Thẻ manh mối (${O.mm.length})</summary>${O.mm.map(m => `<div class="manh"><p>${esc(m.text)}</p></div>`).join("")}</details>
@@ -1681,7 +1681,7 @@ function veOn(){
     .concat(Object.entries(O.cam).map(([id, y]) => ({id, y, ten: E(id).ten, mau: khoa ? `var(--c-${O.nop.ct[id].loai === "thuTu" ? "thutu" : O.nop.ct[id].loai})` : "var(--muc2)", cls: O.sel && O.sel.id === id ? "chon" : ""})));
   const dich = !khoa && !!O.sel;
   O.ui.ve(chips, dich);
-  $("#o-goi-y").innerHTML = khoa ? "" : dich ? `<div class="goi-y">Chạm vào vạch ${don === 10 ? "thập niên" : "năm"} để cắm «${esc(E(O.sel.id).ten)}»</div>` : `<p class="nho mo">Chạm một thẻ, rồi chạm vào vạch ${don === 10 ? "thập niên" : "năm"}. Chạm thẻ đã cắm để dời.</p>`;
+  $("#o-goi-y").innerHTML = khoa ? "" : dich ? `<div class="goi-y">Chạm vào vạch ${don === 10 ? "thập niên" : "năm"} để cắm «${esc(E(O.sel.id).ten)}»</div>` : `<p class="nho mo">Chọn thẻ sau đó chọn thời gian. Chọn lại để di dời.</p>`;
   const khay = O.thu.filter(id => O.cam[id] == null);
   $("#o-dem").textContent = `còn ${khay.length} / ${O.thu.length}`;
   $("#o-khay").innerHTML = khay.map(id => `<button class="the-sk ${O.sel && O.sel.id === id ? "chon" : ""}" data-k="${id}"${khoa ? " disabled" : ""}><b>${esc(E(id).ten)}</b><p>${esc(E(id).moTa)}</p></button>`).join("") || `<p class="nho mo">Đã cắm hết.</p>`;
