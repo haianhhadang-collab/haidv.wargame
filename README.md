@@ -85,6 +85,16 @@ Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame
 
 Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm số nhóm và tiến độ (chặng, hoa sen, số bước); không có họ tên.
 
+## Non sông một dải
+
+Tư tưởng Hồ Chí Minh về độc lập dân tộc, mỗi người một thiết bị. Ba vòng nối lại ba miền trên bản đồ:
+bốn luận điểm (Bắc Bộ), hai tập hợp ý của luận điểm thứ nhất (Trung Bộ), câu nói – văn bản – thời điểm (Nam Bộ).
+Điểm nhóm là trung bình điểm các thành viên. Máy giảng viên tạo phòng và chiếu; có chế độ ôn tập một mình.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/non-song/
+
+![Mã QR vào Non sông một dải](non-song/qr-vao-game.png)
+
 ## 1911 — Anh Ba xin làm phụ bếp
 
 Game nhập vai cá nhân trên điện thoại, khoảng 15 phút: vào vai anh Ba xin làm phụ bếp trên con tàu
