@@ -205,6 +205,69 @@ h1,h2,p{margin:0}
 .dong .ten-d span{font-size:.9em;font-weight:700}
 .dong .tk{display:flex;gap:1em;font-size:.95em;font-weight:800}
 
+/* phòng chơi */
+.vao-phong{background:var(--tam);border:.1em solid var(--vien);border-radius:.55em;padding:.6em .8em}
+.vao-phong label{display:block;margin-bottom:.35em;font-weight:800}
+.vao-phong .hang{display:flex;gap:.5em}
+.vao-phong input{flex:1;min-width:0;min-height:44px;padding:0 .6em;border:0;border-radius:.45em;background:var(--kem);color:var(--muc);font-family:var(--chu-to);font-size:1.2em;letter-spacing:.12em}
+.loi{margin-top:.4em;font-weight:800;color:#FF9C84}
+.hang-2nut{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,13em),1fr));gap:.6em}
+.hang-2nut .nut{font-size:1.4em}
+.net{display:inline-flex;align-items:center;gap:.4em;font-size:.82em;font-weight:800;color:var(--mo)}
+.net i{width:.6em;height:.6em;border-radius:50%;background:#FF7A5C}
+.net i.on{background:#5FD0A0}
+.cham{display:inline-flex;gap:.22em;vertical-align:middle}
+.cham i{width:.62em;height:.62em;border-radius:50%;background:transparent;box-shadow:inset 0 0 0 .09em currentColor;opacity:.45}
+.cham i.on{background:#2FA57F;box-shadow:none;opacity:1}
+.cham i.mat{background:#C8321F;box-shadow:none;opacity:1}
+.sanh{display:flex;flex-wrap:wrap;gap:1.2em;align-items:stretch;max-width:78em;margin:0 auto;min-height:calc(100vh - 2.6em)}
+.sanh-trai{flex:1 1 20em;min-width:0;display:flex;flex-direction:column;gap:.8em;justify-content:center}
+.sanh-trai .bien h1{font-size:2.4em}
+.ma-phong{padding:.9em 1em;text-align:center}
+.ma-phong .nhan{font-weight:800;color:var(--mo)}
+.so-ma{font-size:4.4em;line-height:1.05;letter-spacing:.08em;color:var(--vang)}
+.qr-phong svg{display:block;width:13em;height:13em;margin:.45em auto;background:#fff;border-radius:.4em}
+.sanh-phai{flex:999 1 560px;min-width:0;padding:1em;border-radius:.6em;display:flex;flex-direction:column;gap:.5em}
+.sanh-phai h2{margin-bottom:.15em;font-size:1.7em}
+.dong .may{font-weight:800;white-space:nowrap}
+.choi.phong .ray{flex-basis:13.5em}
+.choi.phong .r-so{grid-template-columns:repeat(3,minmax(0,1fr))}
+.choi.phong .r-so .gt{font-size:1.2em}
+.choi.phong .r-tinh .so{font-size:1.8em}
+.choi.phong .ban{padding-top:0}
+.choi.phong .bai{flex-basis:7em;min-height:11em}
+.choi.phong .khoi{margin-top:0}
+.tk-phong{flex:1 1 21em;min-width:0;padding:.7em;display:flex;flex-direction:column;gap:.4em}
+.tk-phong h2{font-size:1.25em}
+.tk-dong{flex:0 1 auto;display:flex;align-items:center;gap:.5em;padding:.2em .55em;border-radius:.45em;background:var(--kem);color:var(--muc);box-shadow:0 .14em 0 var(--kem-bong)}
+.tk-dong.tc{box-shadow:0 0 0 .16em var(--vang)}
+.tk-dong.mt{box-shadow:0 0 0 .16em #FF7A5C}
+.tk-dong.ra{background:#3A2A20;color:var(--kem);box-shadow:none}
+.tk-dong .hang{flex:none;width:1.1em;font-family:var(--chu-to);font-size:1.25em;text-align:center}
+.tk-dong .dau{width:1.7em;height:1.7em;font-size:.9em}
+.tk-dong .giua{flex:1;min-width:0}
+.tk-dong b{display:block;font-size:.95em;font-weight:800;line-height:1.2;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.tk-dong .mau{margin-top:.18em}
+.tk-dong .so-tk{display:block;margin-top:.12em;font-size:.78em;font-weight:800;white-space:nowrap}
+.tk-dong .phai{flex:none;text-align:right}
+.tk-dong .pt{display:block;font-family:var(--chu-to);font-size:1.25em;line-height:1.1}
+.binh{display:flex;flex-direction:column;gap:.2em}
+.binh p{font-size:.86em;font-weight:700;line-height:1.28;color:var(--mo)}
+.binh p.moi{padding:.3em .55em;border-radius:.4em;background:var(--vang);color:var(--muc);font-size:1em;font-weight:800}
+.binh p.vao{animation:chia .32s ease}
+.cho-doi{font-size:1.15em;font-weight:800;color:var(--vang);text-align:center}
+.ghi-nhan{margin-top:.3em;font-size:.9em;font-weight:800}
+.dt{display:flex;flex-direction:column;gap:.75em;max-width:44em;margin:0 auto}
+.dt .bien h1{font-size:2.1em}
+.dt h2.tieu{font-size:1.25em;font-weight:800}
+.dt-dau{display:flex;align-items:center;gap:.6em;padding:.5em .7em}
+.dt-dau .giua{flex:1;min-width:0}
+.dt-dau b{display:block;font-weight:800;line-height:1.2}
+.dt-dau .pt{font-family:var(--chu-to);font-size:1.5em;color:var(--vang)}
+.dt-chon{flex:none;width:100%;min-height:3.4em;border:0;text-align:left;font:inherit}
+.dt-chon .ten-d{flex:1;min-width:0;font-weight:800}
+.dt-chon:disabled{opacity:.5}
+
 /* điện thoại */
 @container (max-width: 760px){
   .r-ten,.r-tinh,.r-ket{display:none}
@@ -270,17 +333,18 @@ const SAO = sao();
 document.getElementById('sao-nen').setAttribute('points', SAO);
 const anhSao = `<svg viewBox="0 0 1000 1000" aria-hidden="true"><circle cx="500" cy="500" r="470" fill="none" stroke="#E3B23C" stroke-width="26"/><polygon points="${SAO}" fill="#E3B23C" transform="translate(500 500) scale(2) translate(-500 -500)"/></svg>`;
 
-let S = { man:'mo', cd:0, denBuoi:12, soCau:60, soDoi:4, ten:TEN_MAC_DINH.slice(), doi:[], atk:null, tgt:null, luot:1, kho:[], chon:[], gio:GIAY, kq:null, goiY:true, moi:true, trung:null };
+let S = { man:'mo', cd:0, denBuoi:12, soCau:60, soDoi:4, ten:TEN_MAC_DINH.slice(), doi:[], atk:null, tgt:null, luot:1, kho:[], chon:[], gio:GIAY, kq:null, goiY:true, moi:true, trung:null, van:0, ai:0, aiCid:'', c:null, daGui:null, loiGui:false, binh:[], binhCu:[], dauBang:null };
 
-const cauHienTai = () => S.kho[(S.luot - 1) % S.kho.length];
+const cauHienTai = () => PH.vai === 'dt' ? S.c : S.kho[(S.luot - 1) % S.kho.length];
 const tim = id => S.doi.find(t => t.id === id);
 const tenCD = () => S.cd === TONG ? `Tổng hợp từ buổi 1 đến buổi ${S.denBuoi}, ${S.soCau} câu` : CHU_DE[S.cd].ten;
 function tron(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
 const taoDoi = (i, ten) => ({ id:i + 1, ten, mau:100, song:true, loaiLuot:null, tk:{dung:0, sai:0, het:0} });
 
+const dsTenDoi = () => TEN_MAC_DINH.slice(0, S.soDoi).map((d, i) => (S.ten[i] || '').trim() || d);
+const rutKho = () => S.cd === TONG ? tron(cauDenBuoi(S.denBuoi)).slice(0, S.soCau) : tron(CHU_DE[S.cd].cau);
 function batDau() {
-  const ten = TEN_MAC_DINH.slice(0, S.soDoi).map((d, i) => (S.ten[i] || '').trim() || d);
-  Object.assign(S, { man:'muc', doi:ten.map((t, i) => taoDoi(i, t)), atk:1, tgt:null, luot:1, kho:S.cd === TONG ? tron(cauDenBuoi(S.denBuoi)).slice(0, S.soCau) : tron(CHU_DE[S.cd].cau), chon:[], gio:GIAY, kq:null, moi:true, trung:null });
+  Object.assign(S, { man:'muc', doi:dsTenDoi().map((t, i) => taoDoi(i, t)), atk:1, tgt:null, luot:1, kho:rutKho(), chon:[], gio:GIAY, kq:null, moi:true, trung:null });
   ve();
 }
 function matMau(t, so) { t.mau = Math.max(0, t.mau - so); if (t.mau <= 0 && t.song) { t.song = false; t.loaiLuot = S.luot; } }
@@ -292,9 +356,10 @@ function chot() {
     : S.chon.length === c.dung.length && S.chon.every(k => c.dung.includes(k));
   const a = tim(S.atk), m = tim(S.tgt);
   if (dung) { matMau(m, TRU_DUNG); a.tk.dung++; S.trung = m.id; } else { matMau(a, TRU_SAI); a.tk.sai++; S.trung = a.id; }
+  binhSauLuot(dung ? 'dung' : 'sai', a, m);
   S.man = 'kq'; S.kq = dung ? 'dung' : 'sai'; S.moi = true; ve();
 }
-function hetGio() { const a = tim(S.atk); matMau(a, TRU_SAI); a.tk.het++; S.trung = a.id; S.man = 'kq'; S.kq = 'het'; S.gio = 0; S.moi = true; ve(); }
+function hetGio() { const a = tim(S.atk); matMau(a, TRU_SAI); a.tk.het++; S.trung = a.id; binhSauLuot('het', a, tim(S.tgt)); S.man = 'kq'; S.kq = 'het'; S.gio = 0; S.moi = true; ve(); }
 function luotSau() {
   if (S.doi.filter(t => t.song).length <= 1) { S.man = 'xh'; S.moi = true; ve(); return; }
   let n = S.doi.findIndex(t => t.id === S.atk);
@@ -311,14 +376,305 @@ const duDe = c => c.loai === 'dien' ? c.dung.every((_, i) => S.chon[i]) : S.chon
 
 setInterval(() => {
   if (S.man !== 'hoi') return;
-  if (S.gio <= 1) { hetGio(); return; }
+  if (PH.vai === 'dt') { if (S.gio > 0) { S.gio--; capNhatGio(); } return; }
+  /* trong phòng: chờ thêm một giây sau khi đồng hồ về 0 cho câu trả lời đang trên đường truyền */
+  if (S.gio <= (PH.vai === 'chu' ? 0 : 1)) { hetGio(); return; }
   S.gio--; capNhatGio();
+  if (PH.vai === 'chu' && S.gio % 3 === 0) phat();
 }, 1000);
 function capNhatGio() {
   const so = document.getElementById('so-gio'), vach = document.getElementById('vach-gio'), o = document.getElementById('o-gio');
   if (!so) return;
   so.textContent = S.gio; vach.style.width = (S.gio / GIAY * 100) + '%';
   o.classList.toggle('gap', S.man === 'hoi' && S.gio <= 4);
+}
+
+/* ---------- đường nối giữa các máy (chép từ game Nhanh: MQTT công cộng, mỗi đường dẫn là một tài liệu giữ lại trên máy chủ;
+   ?noi=bc để các tab của một trình duyệt nói chuyện trực tiếp, không cần mạng) ---------- */
+const THAM_SO = new URLSearchParams(location.search), CHI_BC = THAM_SO.get('noi') === 'bc';
+const boNho = () => CHI_BC ? sessionStorage : localStorage;
+const docNho = k => { try { return JSON.parse(boNho().getItem(k)); } catch (x) { return null; } };
+const ghiNho = (k, v) => { try { boNho().setItem(k, JSON.stringify(v)); } catch (x) {} };
+const xoaNho = k => { try { boNho().removeItem(k); } catch (x) {} };
+const MAY_CHU = [{url:'wss://broker.emqx.io:8084/mqtt'}, {url:'wss://broker.hivemq.com:8884/mqtt'}, {url:'wss://public.cloud.shiftr.io/mqtt', user:'public', pass:'public'}];
+const KHONG_GIAN = 'hanu-pol1001/dau-truong-hieu-bai/v1/';
+function taoMQTT(cfg, onMsg, onState) {
+  let ws = null, ok = false, buf = new Uint8Array(0), pid = 0, ping = null, lui = 1000;
+  const subs = new Set(), cho = new Map(), te = new TextEncoder(), td = new TextDecoder();
+  const vlen = n => { const o = []; do { let b = n % 128; n = Math.floor(n / 128); if (n > 0) b |= 128; o.push(b); } while (n > 0); return o; };
+  const chu = x => { const b = te.encode(x); return [b.length >> 8, b.length & 255].concat(Array.from(b)); };
+  const goi = (h, body) => { if (!ws || ws.readyState !== 1) return false; ws.send(new Uint8Array([h].concat(vlen(body.length), body))); return true; };
+  const moiId = () => { pid = pid % 65535 + 1; return pid; };
+  function dangKy(f) { const id = moiId(); goi(0x82, [id >> 8, id & 255].concat(chu(f), [1])); return id; }
+  function ketNoi() {
+    try { ws = new WebSocket(cfg.url, ['mqtt']); } catch (x) { henLai(); return; }
+    ws.binaryType = 'arraybuffer';
+    ws.onopen = () => { let co = 0x02, pl = chu('dthb' + Math.random().toString(36).slice(2, 12));
+      if (cfg.user) { co |= 0x80; pl = pl.concat(chu(cfg.user)); } if (cfg.pass) { co |= 0x40; pl = pl.concat(chu(cfg.pass)); }
+      goi(0x10, chu('MQTT').concat([4, co, 0, 30], pl)); };
+    ws.onmessage = x => { const d = new Uint8Array(x.data), n = new Uint8Array(buf.length + d.length); n.set(buf); n.set(d, buf.length); buf = n; tach(); };
+    ws.onclose = () => { const truoc = ok; ok = false; ws = null; buf = new Uint8Array(0); clearInterval(ping); cho.forEach(f => f(false)); cho.clear(); if (truoc) onState(); henLai(); };
+    ws.onerror = () => { try { ws && ws.close(); } catch (x) {} };
+  }
+  function henLai() { setTimeout(ketNoi, lui); lui = Math.min(lui * 2, 15000); }
+  function tach() { for (;;) { if (buf.length < 2) return; let m = 1, len = 0, i = 1, b;
+    do { if (i >= buf.length) return; b = buf[i++]; len += (b & 127) * m; m *= 128; } while (b & 128);
+    if (buf.length < i + len) return; const h = buf[0], p = buf.slice(i, i + len); buf = buf.slice(i + len); try { xuLy(h, p); } catch (x) {} } }
+  function xuLy(h, p) { const t = h >> 4;
+    if (t === 2) { if (p[1] === 0) { ok = true; lui = 1000; subs.forEach(dangKy); clearInterval(ping); ping = setInterval(() => goi(0xC0, []), 25000); onState(); } else { try { ws.close(); } catch (x) {} } }
+    else if (t === 3) { const qos = (h >> 1) & 3, tl = (p[0] << 8) | p[1], topic = td.decode(p.subarray(2, 2 + tl)); let o = 2 + tl;
+      if (qos > 0) { const id = (p[o] << 8) | p[o + 1]; o += 2; goi(0x40, [id >> 8, id & 255]); } onMsg(topic, td.decode(p.subarray(o))); }
+    else if (t === 4 || t === 9) { const id = (p[0] << 8) | p[1], f = cho.get(id); if (f) { cho.delete(id); f(true); } } }
+  const doi = (id, r, ms) => { cho.set(id, r); setTimeout(() => { if (cho.delete(id)) r(false); }, ms); };
+  return { get ok() { return ok; }, batDau: ketNoi,
+    sub(f) { if (subs.has(f)) return Promise.resolve(true); subs.add(f); if (!ok) return Promise.resolve(false); return new Promise(r => doi(dangKy(f), r, 4000)); },
+    pub(topic, text) { return new Promise(r => { if (!ok) return r(false); const id = moiId();
+      const pl = chu(topic).concat([id >> 8, id & 255], Array.from(te.encode(text))); if (!goi(0x33, pl)) return r(false); doi(id, r, 6000); }); } };
+}
+const SYNC = (() => {
+  const kho = new Map(), nghe = new Set(), may = []; let bc = null, tCuoi = 0;
+  const dc = p => KHONG_GIAN + p;
+  const khop = (f, t) => { if (f.endsWith('/+')) { const g = f.slice(0, -1); return t.startsWith(g) && t.length > g.length && !t.slice(g.length).includes('/'); } return f === t; };
+  function nhan(t, text) { if (!t.startsWith(KHONG_GIAN) || !text) return; let r; try { r = JSON.parse(text); } catch (x) { return; }
+    if (!r || typeof r.t !== 'number' || typeof r.v !== 'object') return; const cu = kho.get(t); if (cu && cu.t >= r.t) return;
+    kho.set(t, r); nghe.forEach(l => { if (khop(l.f, t)) try { l.cb(t.slice(t.lastIndexOf('/') + 1), r.v); } catch (x) { console.error(x); } }); }
+  const coMay = () => CHI_BC || may.some(m => m.ok);
+  const cho = (dk, ms) => new Promise(r => { if (dk()) return r(true); const t0 = Date.now(), iv = setInterval(() => { if (dk()) { clearInterval(iv); r(true); } else if (Date.now() - t0 > ms) { clearInterval(iv); r(false); } }, 100); });
+  const sub = f => { if (bc) bc.postMessage({k:'hoi', f}); may.forEach(m => m.sub(f)); };
+  /* nhãn thời gian luôn lớn hơn bản đang giữ, để máy có đồng hồ chậm vẫn ghi đè được */
+  async function ghi(p, v) { const t = dc(p), cu = kho.get(t); tCuoi = Math.max(Date.now(), tCuoi + 1, cu ? cu.t + 1 : 0); const tx = JSON.stringify({t:tCuoi, v});
+    if (!coMay()) await cho(coMay, 6000); nhan(t, tx); if (bc) bc.postMessage({k:'pub', t, tx}); if (CHI_BC) return;
+    const kq = await Promise.all(may.map(m => m.pub(t, tx))); if (!kq.some(Boolean)) throw new Error('không gửi được'); }
+  /* cb(tên cuối của đường dẫn, dữ liệu): gọi theo đúng thứ tự tin đến máy này */
+  function ngheTin(p, boDuoi, cb) { const f = dc(p) + (boDuoi ? '/+' : ''), l = {f, cb}; nghe.add(l); sub(f);
+    setTimeout(() => { kho.forEach((r, t) => { if (nghe.has(l) && khop(f, t)) cb(t.slice(t.lastIndexOf('/') + 1), r.v); }); }, 0);
+    return () => nghe.delete(l); }
+  let daNoi = false;
+  return { coMay, cho, ghi, ngheTin,
+    batDau() { if (daNoi) return; daNoi = true;
+      if (THAM_SO.get('noi') !== 'mqtt' && 'BroadcastChannel' in window) { bc = new BroadcastChannel('dau-truong-hieu-bai');
+        bc.onmessage = x => { const d = x.data || {}; if (d.k === 'pub') nhan(d.t, d.tx); else if (d.k === 'hoi') kho.forEach((r, t) => { if (khop(d.f, t)) bc.postMessage({k:'pub', t, tx:JSON.stringify(r)}); }); }; }
+      if (!CHI_BC) MAY_CHU.forEach(c => { const m = taoMQTT(c, nhan, () => capNhatMang()); may.push(m); m.batDau(); }); } };
+})();
+function docMot(p, ms) { return new Promise(r => { let xong = false; const huy = SYNC.ngheTin(p, false, (_, v) => { if (xong) return; xong = true; setTimeout(() => huy(), 0); r(v); }); setTimeout(() => { if (!xong) { xong = true; huy(); r(null); } }, ms); }); }
+
+/* địa chỉ cho điện thoại: đang chạy bản trên mạng thì dùng chính nó; chạy từ tệp, localhost thì dùng bản trên GitHub Pages */
+const DIA_CHI_WEB = 'https://haianhhadang-collab.github.io/haidv.wargame/dau-truong-hieu-bai/';
+const laBanWeb = () => /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[::1\])/.test(location.hostname);
+const diaChiGame = () => laBanWeb() ? location.origin + location.pathname.replace(/index\.html$/, '') : DIA_CHI_WEB;
+let hueQR = null;
+function napQR() {
+  if (!hueQR) hueQR = new Promise(r => { if (window.qrcode) return r(true);
+    const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    sc.onload = () => r(!!window.qrcode); sc.onerror = () => { hueQR = null; r(false); }; document.head.appendChild(sc); });
+  return hueQR;
+}
+function veQRPhong() {
+  const el = document.getElementById('qr-phong');
+  if (!el) return;
+  if (PH.qr) { el.innerHTML = PH.qr; return; }
+  napQR().then(ok => { if (!ok || PH.vai !== 'chu') return;
+    const q = qrcode(0, 'M'); q.addData(diaChiGame() + '?ma=' + PH.ma + '&v=' + PH.r); q.make();
+    PH.qr = q.createSvgTag({cellSize:4, margin:2}); const moi = document.getElementById('qr-phong'); if (moi) moi.innerHTML = PH.qr; });
+}
+
+/* ---------- phòng chơi: máy chiếu giữ luật và đồng hồ, điện thoại chỉ gửi thao tác; tin đến máy chiếu trước được ghi nhận ---------- */
+const MAY_MOI_DOI = 4, MAT_NOI_MS = 25000, NHIP_MS = 8000, HAN_PHONG_MS = 6 * 3600 * 1000;
+const PH = { vai:null, ma:'', r:'', may:{}, tc:{}, cid:'', doi:0, tuLuc:0, nhapMa:'', loi:'', dang:false, jsonCu:'', khoa:'', qr:'', kyNoi:'', huy:[], nhip:null };
+const dg = t => 'p/' + PH.ma + '/' + t;
+const thanhVien = id => Object.keys(PH.may).filter(c => PH.may[c].doi === id).sort((a, b) => PH.may[a].vao - PH.may[b].vao);
+const dangNoi = c => Date.now() - PH.may[c].lan < MAT_NOI_MS;
+const soNoi = id => thanhVien(id).filter(dangNoi).length;
+const khoaGui = () => S.van + '.' + S.luot + '.' + (S.man === 'muc' ? 'm' : 'h');
+const daGuiXong = () => PH.vai === 'dt' && S.daGui === khoaGui();
+const chiXem = () => (PH.vai === 'chu' && S.man === 'hoi') || daGuiXong();
+const cham = (so, on) => `<span class="cham" role="img" aria-label="${so} máy, ${on} máy đang nối">${[0,1,2,3].map(i => `<i class="${i < on ? 'on' : i < so ? 'mat' : ''}"></i>`).join('')}</span>`;
+const oNet = () => '<span class="net" data-net></span>';
+function capNhatMang() {
+  const co = SYNC.coMay(), choChu = PH.vai === 'dt' && PH.tuLuc && Date.now() - PH.tuLuc > 20000;
+  const h = `<i class="${co && !choChu ? 'on' : ''}"></i>${!co ? 'Mất mạng, đang nối lại' : choChu ? 'Đang chờ máy chiếu' : 'Đã nối mạng'}`;
+  document.querySelectorAll('[data-net]').forEach(x => { x.innerHTML = h; });
+}
+setInterval(capNhatMang, 1500);
+
+function banTin() {
+  const c = S.man === 'hoi' || S.man === 'kq' ? cauHienTai() : null;
+  return { r:PH.r, man:S.man, van:S.van, atk:S.atk, tgt:S.tgt, luot:S.luot, con:S.kho.length, gio:S.gio, kq:S.kq, ai:S.ai, aiCid:S.aiCid, trung:S.trung, tc:PH.tc,
+    chon:S.man === 'kq' ? S.chon : [],
+    /* lúc đang hỏi không gửi đáp án và giải thích */
+    c:c && (S.man === 'kq' ? c : {...c, dung:c.loai === 'dien' ? c.dung.map(() => '') : [], gt:''}),
+    doi:S.doi.map(t => ({...t, ds:thanhVien(t.id), on:soNoi(t.id)})) };
+}
+function phat(buoc) {
+  if (PH.vai !== 'chu') return;
+  const tt = banTin(), s = JSON.stringify(tt);
+  if (!buoc && s === PH.jsonCu) return;
+  PH.jsonCu = s;
+  SYNC.ghi(dg('ttr'), {...tt, luc:Date.now()}).catch(() => {});
+  ghiNho('dthb-chu', { luc:Date.now(), ma:PH.ma, r:PH.r, may:PH.may, tc:PH.tc, S:{...S, moi:true} });
+}
+function ngheCacMay() {
+  PH.huy.push(SYNC.ngheTin(dg('may'), true, nhanMay), SYNC.ngheTin(dg('tl'), true, nhanTL));
+  clearInterval(PH.nhip);
+  PH.nhip = setInterval(() => {
+    const ky = S.doi.map(t => soNoi(t.id)).join();
+    if (ky !== PH.kyNoi) { PH.kyNoi = ky; ve(); }
+    phat(true);
+  }, 5000);
+}
+function nhanMay(cid, v) {
+  if (PH.vai !== 'chu' || !v || v.r !== PH.r) return;
+  const cu = PH.may[cid], now = Date.now();
+  if (cu && cu.n >= v.n) return;
+  /* máy rời đội vẫn giữ lại với doi = 0 để tin cũ gửi lại khi nối lại không kéo nó vào đội */
+  if (!v.doi) { PH.may[cid] = { ...(cu || {}), doi:0, n:v.n, lan:now, vao:now }; delete PH.tc[cid]; ve(); return; }
+  if (cu && cu.doi === v.doi) { const van = dangNoi(cid); cu.n = v.n; cu.lan = now; if (!van) ve(); return; }
+  const t = tim(v.doi);
+  if (!t || !t.song) return;
+  const ds = thanhVien(v.doi);
+  if (ds.length >= MAY_MOI_DOI) {
+    /* đội đủ máy: chỉ nhường chỗ của máy đã mất nối */
+    const mat = ds.find(c => !dangNoi(c));
+    if (!mat) { PH.tc[cid] = v.doi; phat(); return; }
+    PH.may[mat].doi = 0;
+  }
+  delete PH.tc[cid];
+  PH.may[cid] = { doi:v.doi, n:v.n, lan:now, vao:now };
+  ve();
+}
+function nhanTL(cid, v) {
+  if (PH.vai !== 'chu' || !v || v.r !== PH.r || (S.man !== 'muc' && S.man !== 'hoi') || v.k !== khoaGui()) return;
+  const m = PH.may[cid];
+  if (!m || m.doi !== S.atk) return;
+  if (S.man === 'muc') {
+    const t = tim(v.muc);
+    if (t && t.song && t.id !== S.atk) { S.tgt = t.id; moCau(); }
+    return;
+  }
+  if (!Array.isArray(v.chon)) return;
+  S.chon = v.chon; S.ai = thanhVien(S.atk).indexOf(cid) + 1; S.aiCid = cid;
+  chot();
+}
+/* lời bình trên bảng thống kê: {a}, {b}, {m}, {x} là tên đội, {n}, {p} là số */
+const LOI_BINH = {
+  mo: ['Trận đấu bắt đầu, các đội nhớ giữ bình tĩnh và giữ điện thoại.', 'Mở màn rồi, ai chưa ôn bài thì cứ tự tin trước đã.', 'Đấu trường mở cửa, giáo trình xin phép đứng xem.'],
+  dung: ['{a} ra đòn trúng phóc, {m} xin phép xoa chỗ đau.', '{m} vừa nhận một cú 15%, nhẹ nhàng mà thấm.', '{a} hôm nay học bài kỹ thật, đáng ngờ đấy.', 'Một câu đúng, {m} bắt đầu nhìn {a} bằng ánh mắt khác.', '{m}: "Chúng tôi chỉ đang nhường thôi."', '{a} ghi điểm gọn gàng, {m} cười mà không vui lắm.'],
+  sai: ['{a} tấn công, ai ngờ trúng chân mình.', '{a} có cố được không đấy...', '{a} vừa đóng 5% học phí cho câu này.', '{m} chưa làm gì mà vẫn thoát nạn, số đỏ thật.', 'Giáo trình vừa khẽ thở dài nhìn {a}.', '{a} tự tin lắm, chỉ tiếc là đáp án không đồng ý.'],
+  het: ['13 giây trôi qua, {a} vẫn đang suy tư.', '{a} nghĩ sâu quá, đồng hồ không đợi được.', 'Mạng chậm hay bàn nhau chưa xong đấy, {a}?', '{a} chọn im lặng, mà im lặng lần này mất 5%.', '{m} thở phào, {a} vẫn đang chọn đáp án trong tâm tưởng.'],
+  chuoi: ['{a} đúng {n} câu liền, đề dễ hay {a} khó đỡ?', '{n} câu đúng liên tiếp, {a} đang vào phom.', '{a} đúng {n} câu liền, các đội khác bắt đầu hỏi xin tài liệu.'],
+  thap: ['{x} còn {p}%, thở bằng niềm tin.', '{x} chỉ còn {p}%, các đội khác bắt đầu liếc sang.', '{x} ơi cố lên, vẫn còn {p}% hy vọng.'],
+  loai: ['{x} rời đấu trường, nhớ ôn bài để còn tái đấu nhé.', 'Tạm biệt {x}, giáo trình vẫn rộng cửa đón chào.', '{x} dừng bước tại đây, nhưng tinh thần thì chưa chịu về.'],
+  dauBang: ['{a} vươn lên, {b} hình như đang rủ.', 'Ngôi đầu đổi chủ: {a} lên, {b} nhìn theo tiếc nuối.', '{a} chiếm ngôi đầu, {b} bảo là mình cố tình nhường.'],
+  haiDoi: ['Chỉ còn {a} và {b}, cả lớp nín thở.', 'Chung kết gọi tên {a} và {b}, các đội khác chuyển sang cổ vũ.']
+};
+const tenGon = t => t.ten.includes(' - ') ? t.ten.split(' - ').pop() : t.ten;
+function binh(loai, o) {
+  const kho = LOI_BINH[loai], moi = kho.filter(m => !S.binhCu.includes(m)), ds = moi.length ? moi : kho, mau = ds[Math.floor(Math.random() * ds.length)];
+  S.binhCu = [mau, ...S.binhCu].slice(0, 12);
+  const dong = mau.replace(/\{(\w)\}/g, (_, k) => o[k] && o[k].ten ? tenGon(o[k]) : o[k]);
+  S.binh = [dong, ...S.binh].slice(0, 3);
+}
+function binhSauLuot(kq, a, m) {
+  if (PH.vai !== 'chu') return;
+  a.chuoi = kq === 'dung' ? (a.chuoi || 0) + 1 : 0;
+  const mat = kq === 'dung' ? m : a;
+  if (kq === 'dung' && a.chuoi >= 3) binh('chuoi', {a, n:a.chuoi}); else binh(kq, {a, m});
+  if (!mat.song) binh('loai', {x:mat}); else if (mat.mau <= 25) binh('thap', {x:mat, p:mat.mau});
+  const [d1, d2] = xepHang();
+  if (d1 && d2 && d1.song && d1.mau > d2.mau && S.dauBang !== d1.id) {
+    const cu = tim(S.dauBang);
+    if (cu) binh('dauBang', {a:d1, b:cu});
+    S.dauBang = d1.id;
+  }
+  const song = S.doi.filter(t => t.song);
+  if (song.length === 2 && !mat.song) binh('haiDoi', {a:song[0], b:song[1]});
+}
+function moCau() { Object.assign(S, {man:'hoi', chon:[], gio:GIAY, goiY:true, moi:true, ai:0, aiCid:''}); ve(); }
+function datSanh() {
+  Object.assign(S, { man:'sanh', doi:dsTenDoi().map((t, i) => taoDoi(i, t)), atk:null, tgt:null, luot:1, kho:[], chon:[], gio:GIAY, kq:null, moi:true, trung:null, ai:0, aiCid:'' });
+  ve();
+}
+async function taoPhong() {
+  PH.loi = ''; PH.dang = true; ve();
+  SYNC.batDau();
+  let ma = null;
+  if (await SYNC.cho(SYNC.coMay, 9000)) {
+    for (let i = 0; i < 8 && !ma; i++) {
+      const thu = String(1000 + Math.floor(Math.random() * 9000)), cu = await docMot('p/' + thu + '/ttr', 900);
+      if (!cu || cu.man === 'dong' || Date.now() - (cu.luc || 0) > HAN_PHONG_MS) ma = thu;
+    }
+  }
+  PH.dang = false;
+  if (!ma) { PH.loi = 'Chưa nối được mạng, chưa tạo được phòng. Kiểm tra Wi-Fi rồi thử lại.'; ve(); return; }
+  Object.assign(PH, { vai:'chu', ma, r:Math.random().toString(36).slice(2, 8), may:{}, tc:{}, qr:'', jsonCu:'', kyNoi:'' });
+  S.van = 0;
+  ngheCacMay();
+  datSanh();
+}
+function moLaiPhong() {
+  const l = docNho('dthb-chu');
+  if (!l) return;
+  SYNC.batDau();
+  const now = Date.now();
+  Object.keys(l.may).forEach(c => { l.may[c].lan = now; });
+  Object.assign(PH, { vai:'chu', ma:l.ma, r:l.r, may:l.may, tc:l.tc, qr:'', jsonCu:'', kyNoi:'' });
+  Object.assign(S, l.S);
+  ngheCacMay();
+  ve();
+}
+function batDauPhong() {
+  const doi = S.doi.filter(t => thanhVien(t.id).length);
+  if (doi.length < 2) return;
+  Object.assign(S, { man:'muc', doi, atk:doi[0].id, tgt:null, luot:1, van:S.van + 1, kho:rutKho(), chon:[], gio:GIAY, kq:null, moi:true, trung:null, ai:0, aiCid:'', binh:[], dauBang:null });
+  binh('mo', {});
+  ve();
+}
+function dongPhong() {
+  SYNC.ghi(dg('ttr'), {r:PH.r, man:'dong', luc:Date.now()}).catch(() => {});
+  xoaNho('dthb-chu');
+  PH.huy.forEach(h => h()); PH.huy = [];
+  clearInterval(PH.nhip);
+  PH.vai = null;
+  Object.assign(S, { man:'mo', doi:[], kho:[], moi:true });
+  ve();
+}
+
+/* điện thoại */
+function layCid() { let c = docNho('dthb-cid'); if (!c) { c = Math.random().toString(36).slice(2, 8); ghiNho('dthb-cid', c); } return c; }
+function guiMay() { SYNC.ghi(dg('may/' + PH.cid), {r:PH.r, doi:PH.doi, n:Date.now()}).catch(() => {}); ghiNho('dthb-dt', {ma:PH.ma, r:PH.r, doi:PH.doi, luc:Date.now()}); }
+async function vaoPhong(ma, cu) {
+  /* tự vào lại sau khi tải trang thì không khóa các nút trên màn mở ván */
+  PH.loi = ''; PH.loiVao = ''; PH.dang = !cu; ve();
+  SYNC.batDau();
+  const st = await docMot('p/' + ma + '/ttr', 8000);
+  PH.dang = false;
+  if (PH.vai) return;
+  if (!st || st.man === 'dong' || Date.now() - (st.luc || 0) > HAN_PHONG_MS) { xoaNho('dthb-dt'); PH.loiVao = cu ? '' : 'Không tìm thấy phòng ' + ma + '. Kiểm tra lại mã và mạng.'; ve(); return; }
+  Object.assign(PH, { vai:'dt', ma, r:st.r, cid:layCid(), doi:cu && cu.r === st.r ? cu.doi : 0, khoa:'', jsonCu:'' });
+  PH.huy.push(SYNC.ngheTin(dg('ttr'), false, (_, v) => nhanTT(v)));
+  nhanTT(st);
+  if (PH.doi) guiMay();
+  setInterval(() => { if (PH.doi) guiMay(); }, NHIP_MS);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && PH.doi) guiMay(); });
+}
+function nhanTT(st) {
+  if (!st) return;
+  PH.tuLuc = Date.now();
+  if (st.r !== PH.r || st.man === 'dong') { S.man = 'dong'; PH.doi = 0; xoaNho('dthb-dt'); ve(); return; }
+  if (PH.doi && st.tc && st.tc[PH.cid] === PH.doi) { PH.loi = 'Đội này đã đủ ' + MAY_MOI_DOI + ' máy. Hãy chọn đội khác.'; PH.doi = 0; guiMay(); }
+  const khoa = st.van + '.' + st.luot + '.' + st.man, moi = khoa !== PH.khoa, ban = JSON.stringify({...st, gio:0, luc:0});
+  if (!moi && ban === PH.jsonCu) { S.gio = st.gio; capNhatGio(); return; }
+  PH.jsonCu = ban;
+  Object.assign(S, { man:st.man, doi:st.doi, atk:st.atk, luot:st.luot, kho:{length:st.con}, gio:st.gio, c:st.c, kq:st.kq, ai:st.ai, aiCid:st.aiCid, trung:st.trung, van:st.van });
+  if (st.man !== 'muc' || moi) S.tgt = st.tgt;
+  if (st.man === 'kq') S.chon = st.chon; else if (moi) S.chon = [];
+  if (moi) { PH.khoa = khoa; S.daGui = null; S.loiGui = false; S.moi = true; S.goiY = true; }
+  ve();
+}
+function guiTL(x) {
+  const k = khoaGui();
+  S.daGui = k; S.loiGui = false; ve();
+  SYNC.ghi(dg('tl/' + PH.cid), {r:PH.r, k, ...x}).catch(() => { if (S.daGui === k) { S.daGui = null; S.loiGui = true; ve(); } });
 }
 
 /* ---------- vẽ ---------- */
@@ -335,6 +691,8 @@ function veMo() {
   return `<div class="mo-van">
     <div class="mo-trai">
       <div class="bien"><p class="nho">Tư tưởng Hồ Chí Minh</p><h1 class="to">Đấu trường hiểu bài</h1><p class="chi" id="chi-cd">${e(tenCD())}</p></div>
+      <div class="vao-phong"><label for="ma-phong">Sinh viên: vào phòng của giảng viên</label>
+        <div class="hang"><input id="ma-phong" data-ma inputmode="numeric" maxlength="4" autocomplete="off" placeholder="Mã phòng" value="${e(PH.nhapMa)}"><button type="button" class="nut vang" data-lam="vaophong" ${PH.dang ? 'disabled' : ''}>${PH.dang ? 'Đang nối' : 'Vào phòng'}</button></div>${PH.loiVao ? `<p class="loi" role="alert">${e(PH.loiVao)}</p>` : ''}</div>
       <div class="luat">
         <div class="toi"><div class="so">100%</div><div class="chu">Sinh mệnh ban đầu</div></div>
         <div class="vang-o"><div class="so">−15%</div><div class="chu">Đội bị tấn công</div></div>
@@ -349,9 +707,56 @@ function veMo() {
       ${vePhamVi()}
       <div><h2>Số đội chơi</h2><div class="so-doi">${[2,3,4,5,6,7,8,9].map(n => `<button type="button" data-so="${n}" aria-label="${n} đội" class="${n === S.soDoi ? 'bat' : ''}">${n}</button>`).join('')}</div></div>
       <div><h2>Tên các đội</h2><div class="ten-doi">${TEN_MAC_DINH.slice(0, S.soDoi).map((d, i) => `<label>${dau({id:i + 1})}<input type="text" maxlength="35" data-ten="${i}" value="${e(S.ten[i])}" aria-label="Tên đội ${i + 1}"></label>`).join('')}</div></div>
-      <button type="button" class="nut son" data-lam="batdau" style="font-size:1.65em">Bắt đầu ván đấu</button>
+      <div class="hang-2nut"><button type="button" class="nut son" data-lam="batdau">Bắt đầu ván đấu</button><button type="button" class="nut vang" data-lam="taophong" ${PH.dang ? 'disabled' : ''}>Giảng viên: tạo phòng</button></div>
+      ${(() => { const l = docNho('dthb-chu'); return l && Date.now() - l.luc < HAN_PHONG_MS ? `<button type="button" class="nut kem" data-lam="molai">Mở lại phòng ${e(l.ma)}</button>` : ''; })()}
+      ${PH.loi ? `<p class="loi" role="alert">${e(PH.loi)}</p>` : ''}
     </div>
   </div>`;
+}
+function veSanh() {
+  const co = S.doi.filter(t => thanhVien(t.id).length).length;
+  return `<div class="sanh">
+    <div class="sanh-trai">
+      <div class="bien"><p class="nho">Tư tưởng Hồ Chí Minh</p><h1 class="to">Đấu trường hiểu bài</h1><p class="chi">${e(tenCD())}</p></div>
+      <div class="o ma-phong"><div class="nhan">Mã phòng</div><div class="so-ma to">${e(PH.ma)}</div><div class="qr-phong" id="qr-phong"></div>${oNet()}</div>
+    </div>
+    <div class="o sanh-phai"><h2 class="to">Các đội tham gia</h2>
+      ${S.doi.map(t => { const so = thanhVien(t.id).length; return `<div class="dong ${so ? '' : 'ra'}">${dau(t)}<div class="ten-d"><b>${e(t.ten)}</b></div><span class="may">${so}/${MAY_MOI_DOI} máy</span>${cham(so, soNoi(t.id))}</div>`; }).join('')}
+      <div class="hang-2nut"><button type="button" class="nut son" data-lam="batdauphong" ${co < 2 ? 'disabled' : ''}>Bắt đầu ván đấu</button><button type="button" class="nut kem" data-lam="dongphong">Đóng phòng</button></div>
+    </div>
+  </div>`;
+}
+function veTK() {
+  return `<aside class="o tk-phong"><h2 class="to">Thống kê các đội</h2>
+    <div class="binh" aria-live="polite">${S.binh.map((b, i) => `<p class="${i ? '' : 'moi'} ${!i && S.moi && S.man === 'kq' ? 'vao' : ''}">${e(b)}</p>`).join('')}</div>${xepHang().map((t, i) => {
+    const so = thanhVien(t.id).length, lop = [t.id === S.atk && t.song ? 'tc' : '', t.id === S.tgt && t.song ? 'mt' : '', t.song ? '' : 'ra'].join(' ');
+    const mau = t.mau > 50 ? '#1F7A70' : t.mau > 25 ? '#B07A12' : '#C8321F';
+    return `<div class="tk-dong ${lop}"><span class="hang">${i + 1}</span>${dau(t)}<div class="giua"><b>${e(t.ten)}</b><span class="mau"><i style="width:${t.mau}%;background:${mau}"></i></span><span class="so-tk">Đúng ${t.tk.dung} · Sai ${t.tk.sai} · Hết giờ ${t.tk.het}</span></div><div class="phai"><span class="pt">${t.song ? t.mau + '%' : 'Loại'}</span>${cham(so, soNoi(t.id))}</div></div>`;
+  }).join('')}</aside>`;
+}
+function veCho(tieu, phu) {
+  return `<div class="o up"><div class="lung" aria-hidden="true">${anhSao}</div><div class="chu"><h2 class="to">${e(tieu)}</h2>${phu ? `<p>${e(phu)}</p>` : ''}</div></div>`;
+}
+function veChonDoi() {
+  return `<div class="dt"><div class="bien"><p class="nho">Phòng ${e(PH.ma)}</p><h1 class="to">Đấu trường hiểu bài</h1></div>
+    <h2 class="tieu">Chọn đội của bạn</h2>
+    ${PH.loi ? `<p class="loi" role="alert">${e(PH.loi)}</p>` : ''}
+    ${S.doi.map(t => { const so = t.ds.length, day = so >= MAY_MOI_DOI && t.on >= MAY_MOI_DOI; return `<button type="button" class="dong dt-chon" data-doi="${t.id}" ${day || !t.song ? 'disabled' : ''}>${dau(t)}<span class="ten-d">${e(t.ten)}</span><span class="may">${so}/${MAY_MOI_DOI} máy</span></button>`; }).join('')}
+    ${oNet()}</div>`;
+}
+function veDT() {
+  if (S.man === 'dong') return `<div class="dt">${veCho('Phòng đã đóng', '')}<button type="button" class="nut kem" data-lam="vetrang">Về trang đầu</button></div>`;
+  if (S.man === 'xh') return veXh();
+  const t = PH.doi && tim(PH.doi);
+  if (!t) return veChonDoi();
+  const stt = t.ds.indexOf(PH.cid) + 1, a = tim(S.atk), ta = S.atk === t.id && t.song;
+  const dauTrang = `<div class="o dt-dau">${dau(t)}<div class="giua"><b>${e(ngan(t.ten))}</b>${stt ? `Máy ${stt}/${MAY_MOI_DOI}` : 'Đang vào đội'} · Phòng ${e(PH.ma)}<br>${oNet()}</div><div class="pt">${t.song ? t.mau + '%' : 'Loại'}</div></div>`;
+  let than;
+  if (S.man === 'sanh') than = veCho('Chờ giảng viên bắt đầu', '') + `<button type="button" class="nut kem" data-lam="doidoi">Đổi đội</button>`;
+  else if (S.man === 'muc') than = ta ? veMuc() : veCho(a.ten + ' đang chọn mục tiêu', t.song ? '' : 'Đội của bạn đã bị loại.');
+  else if (S.man === 'hoi') than = ta ? `<div class="o r-gio" id="o-gio"><div class="ngang"><span class="nhan">Giây còn lại</span><span id="so-gio">${S.gio}</span></div><div class="vach"><div id="vach-gio" style="width:${S.gio / GIAY * 100}%"></div></div></div>` + veHoi() : veCho(a.ten + ' đang trả lời', 'Mục tiêu: ' + tim(S.tgt).ten);
+  else than = veKq();
+  return `<div class="dt">${dauTrang}${than}</div>`;
 }
 function veRay() {
   const a = tim(S.atk), kq = S.man === 'kq', song = S.doi.filter(t => t.song).length;
@@ -365,7 +770,8 @@ function veRay() {
       <div class="son-o${kq && S.kq === 'dung' ? ' mo-di' : ''}"><div class="so">−5</div><div class="chu">Sai, hết giờ: tự mất</div></div>
     </div>
     <div class="o r-gio" id="o-gio"><div class="ngang"><span class="nhan">${nhan}</span><span id="so-gio">${S.gio}</span></div><div class="vach"><div id="vach-gio" style="width:${S.gio / GIAY * 100}%"></div></div></div>
-    <div class="r-so"><div class="o"><div class="nhan">Lượt</div><div class="gt">${S.luot}</div></div><div class="o"><div class="nhan">Còn sống</div><div class="gt">${song}/${S.doi.length}</div></div></div>
+    <div class="r-so"><div class="o"><div class="nhan">Lượt</div><div class="gt">${S.luot}</div></div><div class="o"><div class="nhan">Còn sống</div><div class="gt">${song}/${S.doi.length}</div></div>${PH.vai === 'chu' ? `<div class="o"><div class="nhan">Phòng</div><div class="gt">${e(PH.ma)}</div></div>` : ''}</div>
+    ${PH.vai === 'chu' ? oNet() : ''}
     <button type="button" class="nut kem r-ket" data-lam="ketthuc">Kết thúc ván đấu</button>
   </aside>`;
 }
@@ -392,11 +798,11 @@ function veMuc() {
       <p>Câu hỏi lượt ${S.luot} đang úp. Trả lời đúng: trừ 15% sinh mệnh đối thủ. Trả lời sai hoặc hết 13 giây: phản đòn, tự mất 5% sinh mệnh.</p></div></div>
     <div class="tay">${ds.map((t, i) => {
       const bat = t.id === S.tgt, sau = Math.max(0, t.mau - TRU_DUNG);
-      return `<button type="button" data-muc="${t.id}" aria-pressed="${bat}" class="bai-doi ${bat ? 'bat' : ''} ${S.moi ? 'chia' : ''}" style="${xoe(i, ds.length)}">
+      return `<button type="button" data-muc="${t.id}" ${daGuiXong() ? 'disabled' : ''} aria-pressed="${bat}" class="bai-doi ${bat ? 'bat' : ''} ${S.moi ? 'chia' : ''}" style="${xoe(i, ds.length)}">
         ${dau(t)}<span class="ten">${e(ngan(t.ten))}</span><span class="pt">${t.mau}%</span><span class="sau">${sau === 0 ? 'Đúng: bị loại' : 'Đúng: còn ' + sau + '%'}</span>
         ${bat ? '<span class="nhan-tren" style="background:#C8321F;color:#fff">Mục tiêu</span>' : ''}</button>`;
     }).join('')}</div>
-    <div class="hang-nut"><button type="button" class="nut son" data-lam="mocau" ${S.tgt ? '' : 'disabled'}>Xác nhận và mở câu hỏi</button></div>
+    <div class="hang-nut"><button type="button" class="nut son" data-lam="mocau" ${S.tgt && !daGuiXong() ? '' : 'disabled'}>${daGuiXong() ? 'Đã gửi, chờ ghi nhận' : 'Xác nhận và mở câu hỏi'}</button>${S.loiGui ? '<p class="loi" role="alert">Chưa gửi được, hãy bấm lại.</p>' : ''}</div>
   </div>`;
 }
 function theBai(c, o, i) {
@@ -408,7 +814,7 @@ function theBai(c, o, i) {
     else if (chon) { lop = 'sai'; ky = '#A52617'; the = 'Đội đã chọn'; nen = '#C8321F'; chu = '#fff'; }
     else { lop = 'xam'; ky = '#3A2D22'; }
   }
-  return `<button type="button" data-chon="${e(o.k)}" ${kq ? 'disabled' : ''} aria-pressed="${chon}" class="bai ${dien ? 'nho-bai' : ''} ${lop} ${S.moi ? 'chia' : ''}" style="${dien ? `--i:${i}` : xoe(i, c.pa.length)}">
+  return `<button type="button" data-chon="${e(o.k)}" ${kq || chiXem() ? 'disabled' : ''} aria-pressed="${chon}" class="bai ${dien ? 'nho-bai' : ''} ${lop} ${S.moi ? 'chia' : ''}" style="${dien ? `--i:${i}` : xoe(i, c.pa.length)}">
     <span class="ky" style="color:${ky}">${e(o.k)}</span><span class="nd">${e(o.t)}</span><span class="ky-duoi" aria-hidden="true" style="color:${ky}">${e(o.k)}</span>
     ${the ? `<span class="nhan-tren" style="background:${nen};color:${chu}">${e(the)}</span>` : ''}</button>`;
 }
@@ -435,7 +841,7 @@ function veHoi() {
       ${c.loai === 'dien' ? veChoTrong(c) : ''}
     </div>
     <div class="tay-bai">${c.pa.map((o, i) => theBai(c, o, i)).join('')}</div>
-    <div class="hang-nut"><button type="button" class="nut son" data-lam="chot" ${duDe(c) ? '' : 'disabled'}>Chốt đáp án</button>${veChong()}</div>
+    <div class="hang-nut">${PH.vai === 'chu' ? `<p class="cho-doi">Chờ ${e(ngan(tim(S.atk).ten))} trả lời trên điện thoại</p>` : `<button type="button" class="nut son" data-lam="chot" ${duDe(c) && !daGuiXong() ? '' : 'disabled'}>${daGuiXong() ? 'Đã gửi, chờ ghi nhận' : 'Chốt đáp án'}</button>`}${S.loiGui ? '<p class="loi" role="alert">Chưa gửi được, hãy bấm lại.</p>' : ''}${veChong()}</div>
   </div>`;
 }
 function veKq() {
@@ -445,28 +851,34 @@ function veKq() {
     het:['#E3B23C','#231812','#9A7420','Hết 13 giây!', a.ten + ' không kịp trả lời.', ngan(a.ten) + ' −5%'] }[S.kq];
   const het = S.doi.filter(x => x.song).length <= 1;
   return `<div class="khoi" style="gap:1em;margin-top:.4em">
-    <div class="kq"><div class="kq-bien" style="background:${t[0]};color:${t[1]};box-shadow:0 .26em 0 ${t[2]}"><div class="a">${t[3]}</div><div class="b">${e(t[4])}</div><div class="c">${e(t[5])}</div></div>
+    <div class="kq"><div class="kq-bien" style="background:${t[0]};color:${t[1]};box-shadow:0 .26em 0 ${t[2]}"><div class="a">${t[3]}</div><div class="b">${e(t[4])}</div><div class="c">${e(t[5])}</div>${PH.vai && S.ai ? `<div class="ghi-nhan">${PH.vai === 'dt' && S.aiCid === PH.cid ? 'Câu trả lời của máy bạn được ghi nhận' : 'Ghi nhận câu trả lời đến trước: máy ' + S.ai}</div>` : ''}</div>
       <div class="kq-gt"><div class="n">Giải thích</div><p>${e(c.gt)}</p></div></div>
     <div class="tay-bai">${c.pa.map((o, i) => theBai(c, o, i)).join('')}</div>
-    <div class="hang-nut"><button type="button" class="nut vang" data-lam="tiep">${het ? 'Xem bảng xếp hạng' : 'Lượt tiếp theo'}</button>${veChong()}</div>
+    <div class="hang-nut">${PH.vai === 'dt' ? '' : `<button type="button" class="nut vang" data-lam="tiep">${het ? 'Xem bảng xếp hạng' : 'Lượt tiếp theo'}</button>`}${veChong()}</div>
   </div>`;
 }
 function veXh() {
   const ds = xepHang(), v = ds[0];
   return `<div class="xh">
     <div class="xh-trai"><div class="vo-dich"><p>Nhà vô địch đấu trường</p>${dau(v)}<h1 class="to">${e(ngan(v.ten))}</h1><div class="pt">${v.mau}%</div><p>Sinh mệnh còn lại, sau ${S.luot} lượt đấu</p></div>
-      <button type="button" class="nut son" data-lam="lai">Chơi lại</button></div>
+      ${PH.vai === 'dt' ? '' : `<button type="button" class="nut son" data-lam="lai">${PH.vai === 'chu' ? 'Ván mới trong phòng này' : 'Chơi lại'}</button>`}${PH.vai === 'chu' ? '<button type="button" class="nut kem" data-lam="dongphong">Đóng phòng</button>' : ''}</div>
     <div class="o xh-phai"><h2 class="to">Bảng xếp hạng tổng kết</h2>
       ${ds.map((t, i) => `<div class="dong ${i === 0 ? 'nhat' : t.song ? '' : 'ra'}"><span class="hang">${i + 1}</span>${dau(t)}<div class="ten-d"><b>${e(t.ten)}</b><span>${t.song ? 'Còn ' + t.mau + '% sinh mệnh' : 'Bị loại ở lượt ' + t.loaiLuot}</span></div><div class="tk"><span>Đúng ${t.tk.dung}</span><span>Sai ${t.tk.sai}</span><span>Hết giờ ${t.tk.het}</span></div></div>`).join('')}
     </div></div>`;
 }
 function ve() {
-  if (S.man === 'mo') app.innerHTML = veMo();
+  const chu = PH.vai === 'chu';
+  if (PH.vai === 'dt') app.innerHTML = veDT();
+  else if (S.man === 'mo') app.innerHTML = veMo();
+  else if (S.man === 'sanh') app.innerHTML = veSanh();
   else if (S.man === 'xh') app.innerHTML = veXh();
-  else app.innerHTML = `<div class="choi">${veRay()}<div class="ban">${veHangDoi()}${S.man === 'muc' ? veMuc() : S.man === 'hoi' ? veHoi() : veKq()}</div></div>`;
+  else app.innerHTML = `<div class="choi ${chu ? 'phong' : ''}">${veRay()}<div class="ban">${chu ? '' : veHangDoi()}${S.man === 'muc' ? veMuc() : S.man === 'hoi' ? veHoi() : veKq()}</div>${chu ? veTK() : ''}</div>`;
   capNhatGio();
+  capNhatMang();
+  if (chu && S.man === 'sanh') veQRPhong();
   if (S.moi) window.scrollTo(0, 0);
   S.moi = false;
+  phat();
 }
 
 app.addEventListener('click', ev => {
@@ -475,6 +887,7 @@ app.addEventListener('click', ev => {
   const d = n.dataset;
   if (d.so) { S.soDoi = +d.so; ve(); return; }
   if (d.socau) { S.soCau = +d.socau; ve(); return; }
+  if (d.doi) { PH.loi = ''; PH.doi = +d.doi; guiMay(); ve(); return; }
   if (d.muc) { S.tgt = +d.muc; ve(); return; }
   if (d.xoa !== undefined) { S.chon.splice(+d.xoa, 1, undefined); ve(); return; }
   if (d.chon) {
@@ -484,11 +897,23 @@ app.addEventListener('click', ev => {
     else { let o = c.dung.findIndex((_, i) => !S.chon[i]); if (o < 0) o = c.dung.length - 1; S.chon[o] = d.chon; }
     ve(); return;
   }
-  ({ batdau:batDau, mocau(){ if (!S.tgt) return; Object.assign(S, {man:'hoi', chon:[], gio:GIAY, goiY:true, moi:true}); ve(); },
-     goiy(){ S.goiY = !S.goiY; ve(); }, chot, tiep:luotSau, ketthuc(){ S.man = 'xh'; S.moi = true; ve(); },
-     lai(){ Object.assign(S, {man:'mo', doi:[], moi:true}); ve(); } }[d.lam] || (() => {}))();
+  ({ batdau:batDau, mocau(){ if (!S.tgt) return; if (PH.vai === 'dt') guiTL({muc:S.tgt}); else moCau(); },
+     goiy(){ S.goiY = !S.goiY; ve(); }, chot(){ if (PH.vai === 'dt') { if (duDe(S.c)) guiTL({chon:S.chon}); } else chot(); },
+     tiep:luotSau, ketthuc(){ S.man = 'xh'; S.moi = true; ve(); },
+     lai(){ if (PH.vai === 'chu') { datSanh(); return; } Object.assign(S, {man:'mo', doi:[], moi:true}); ve(); },
+     taophong:taoPhong, batdauphong:batDauPhong, dongphong:dongPhong, molai:moLaiPhong, vaophong:thuVaoPhong,
+     doidoi(){ PH.doi = 0; guiMay(); ve(); }, vetrang(){ location.replace(location.pathname); } }[d.lam] || (() => {}))();
 });
-app.addEventListener('input', ev => { if (ev.target.dataset.ten !== undefined) S.ten[+ev.target.dataset.ten] = ev.target.value; });
+function thuVaoPhong() {
+  const ma = PH.nhapMa.trim();
+  if (!/^\d{4}$/.test(ma)) { PH.loiVao = 'Mã phòng gồm 4 chữ số.'; ve(); return; }
+  vaoPhong(ma, null);
+}
+app.addEventListener('keydown', ev => { if (ev.key === 'Enter' && ev.target.dataset.ma !== undefined) thuVaoPhong(); });
+app.addEventListener('input', ev => {
+  if (ev.target.dataset.ten !== undefined) S.ten[+ev.target.dataset.ten] = ev.target.value;
+  if (ev.target.dataset.ma !== undefined) PH.nhapMa = ev.target.value;
+});
 app.addEventListener('change', ev => {
   const id = ev.target.id, v = +ev.target.value;
   if (id === 'cd') S.cd = v;
@@ -497,7 +922,13 @@ app.addEventListener('change', ev => {
   ve();
   document.getElementById(id).focus();
 });
-ve();
+/* quét QR thì vào thẳng phòng; tải lại trang thì về đúng phòng, đúng đội */
+{
+  const cu = docNho('dthb-dt'), ma = THAM_SO.get('ma');
+  ve();
+  if (ma) { PH.nhapMa = ma; vaoPhong(ma, cu && cu.ma === ma ? cu : null); }
+  else if (cu && Date.now() - cu.luc < HAN_PHONG_MS) { PH.nhapMa = cu.ma; vaoPhong(cu.ma, cu); }
+}
 </script>
 </body>
 </html>
