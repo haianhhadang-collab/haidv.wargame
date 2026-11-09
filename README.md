@@ -85,6 +85,14 @@ Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame
 
 Dữ liệu trận đi qua máy chủ MQTT công cộng, chỉ gồm số nhóm và tiến độ (chặng, hoa sen, số bước); không có họ tên.
 
+## Đấu trường hiểu bài
+
+Trò chơi theo đội trên một máy chiếu: 13 chủ đề, 365 câu; đội chọn mục tiêu rồi trả lời trong 13 giây, đúng trừ đối thủ 15% sinh mệnh, sai hoặc hết giờ tự mất 5%.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/dau-truong-hieu-bai/
+
+![Mã QR vào Đấu trường hiểu bài](dau-truong-hieu-bai/qr-vao-game.png)
+
 ## Non sông một dải
 
 Tư tưởng Hồ Chí Minh về độc lập dân tộc, mỗi người một thiết bị. Ba vòng nối lại ba miền trên bản đồ:
