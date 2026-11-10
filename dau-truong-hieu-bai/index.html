@@ -362,11 +362,19 @@ function chot() {
   const a = tim(S.atk), m = tim(S.tgt);
   if (dung) { matMau(m, tru()[0]); a.tk.dung++; S.trung = m.id; } else { matMau(a, tru()[1]); a.tk.sai++; S.trung = a.id; }
   binhSauLuot(dung ? 'dung' : 'sai', a, m);
-  S.man = 'kq'; S.kq = dung ? 'dung' : 'sai'; S.moi = true; henLuotSau(); ve();
+  S.man = 'kq'; S.kq = dung ? 'dung' : 'sai'; S.moi = true; amSauLuot(S.kq, dung ? m : a); henLuotSau(); ve();
 }
-function hetGio() { const a = tim(S.atk); matMau(a, tru()[1]); a.tk.het++; S.trung = a.id; binhSauLuot('het', a, tim(S.tgt)); S.man = 'kq'; S.kq = 'het'; S.gio = 0; S.moi = true; henLuotSau(); ve(); }
+function hetGio() { const a = tim(S.atk); matMau(a, tru()[1]); a.tk.het++; S.trung = a.id; binhSauLuot('het', a, tim(S.tgt)); S.man = 'kq'; S.kq = 'het'; S.gio = 0; S.moi = true; amSauLuot('sai', a); henLuotSau(); ve(); }
+/* mat: đội vừa bị trừ sinh mệnh trong lượt này */
+function amSauLuot(kq, mat) {
+  NHAC.am(kq);
+  NHAC.am('tru', .4);
+  if (!mat.song) NHAC.am('loai', .8);
+  if (S.doi.filter(t => t.song).length <= 1) NHAC.am('thang', 1.9);
+}
+function tongKet() { S.man = 'xh'; S.moi = true; NHAC.am('mung'); ve(); }
 function luotSau() {
-  if (S.doi.filter(t => t.song).length <= 1) { S.man = 'xh'; S.moi = true; ve(); return; }
+  if (S.doi.filter(t => t.song).length <= 1) { tongKet(); return; }
   let n = S.doi.findIndex(t => t.id === S.atk);
   do { n = (n + 1) % S.doi.length; } while (!S.doi[n].song);
   Object.assign(S, { man:'muc', atk:S.doi[n].id, tgt:null, luot:S.luot + 1, chon:[], gio:GIAY, kq:null, moi:true, trung:null });
@@ -732,7 +740,8 @@ const NHAC = (() => {
   const taoBai = (bpm, nhip, tay, trai) => { const ds = [], tong = giai(tay, .3, ds); giai(trai, .15, ds); ds.sort((a, b) => a.t - b.t); return { n16:60 / bpm / 4, nhip, ds, tong }; };
   const VUI = taoBai(138, 16, 'C5:8 E5:4 G5|B4:6 C5:1 D5 C5:4 r|A5:8 G5:4 C6|G5:4 G5:.5 F5 G5 F5 E5:1 F5 E5:4 r|A4:2 B4:1 C5 D5 E5 F5 G5 A5 G5 F5 E5 D5 C5 B4 A4|G4:2 A4:1 B4 C5 D5 E5 F5 G5 F5 E5 D5 C5 B4 A4 G4|F4:2 G4:1 A4 B4 C5 D5 E5 F5 E5 D5 C5 B4 A4 G4 F4|E4:2 F4:1 G4 A4 B4 C5 D5 E5 D5 C5 B4 A4 G4 F4 E4|D4:2 E4:1 F4 G4 A4 B4 C#5 D5 A4 B4 C#5 D5 E5 F5 G5|A5:1 B5 C6 B5 A5 G5 F5 E5 F5 G5 A5 G5 F5 E5 D5 C5|B4:2 G5 E5 C5 D5 G5 E5 C5|D5:4 G4+B4+D5 G4 r', 'C4:2 G4 E4 G4 C4 G4 E4 G4|D4:2 G4 F4 G4 C4 G4 E4 G4|C4:2 A4 F4 A4 C4 G4 E4 G4|B3:2 G4 D4 G4 C4 G4 E4 G4|F3:4 r r F3+C4|E3+C4:4 r r E3+C4|D3+C4:4 r r D3+B3|C3+C4:4 r r C4+E4|F4+A4:16|F4:6 G4:2 A4:6 F#4:2|G3:1 B3 D4 G4 G3 C4 E4 G4 G3 B3 D4 G4 G3 C4 E4 G4|G3:4 G4 G3 r');
   const GAP = taoBai(152, 8, 'C5:2 r D5:1 C5 B4 C5|E5:2 r F5:1 E5 D#5 E5|B5:1 A5 G#5 A5 B5 A5 G#5 A5|C6:4 A5:2 C6|G5:.4 A5 B5:1.2 F#5+A5:2 E5+G5 F#5+A5|G5:.4 A5 B5:1.2 F#5+A5:2 E5+G5 F#5+A5|G5:.4 A5 B5:1.2 F#5+A5:2 E5+G5 D#5+F#5|E5:4 C5+E5:2 D5+F5|E5+G5:2 E5+G5 A5:1 G5 F5 E5|B4+D5:2 G4 C5+E5 D5+F5|E5+G5:2 E5+G5 A5:1 G5 F5 E5|B4+D5:4 A4+C5:2 B4+D5|C5+E5:2 C5+E5 F5:1 E5 D5 C5|G#4+B4:2 E4 A4+C5 B4+D5|C5+E5:2 C5+E5 F5:1 E5 D5 C5|G#4+B4:4 B4:1 A4 G#4 A4|C5:2 r D5:1 C5 B4 C5|E5:2 r F5:1 E5 D#5 E5|B5:1 A5 G#5 A5 B5 A5 G#5 A5|C6:2 r A5 B5|C6:2 B5 A5 G#5|A5:2 E5 F5 D5|C5:4 C5:.5 B4 C5 B4 C5 B4 A4 B4|A4:4 B4:1 A4 G#4 A4', 'A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 A3 C4+E4|A3:2 C4+E4 C4+E4 C4+E4|E3:2 B3+E4 B3+E4 B3+E4|E3:2 B3+E4 B3+E4 B3+E4|E3:2 B3+E4 B2 B3|E3:4 r|C3:2 C4 E3 E4|G3:4 r|C3:2 C4 E3 E4|G3:4 r|A2:2 A3 C3 C4|E3:4 r|A2:2 A3 C3 C4|E3:4 r|A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 A3 C4+E4|F3:2 A3+D#4 A3+D#4 A3+D#4|E3:2 A3+E4 D3 F3+B3|C3:2 E3+A3 D3 F3+B3|E3+A3:2 E3+A3 E3+G#3 E3+G#3|A2+A3:4 r');
-  let ac = null, ra = null, nen = null, song = null, on = null, vang = null, iv = null, bai = null, muon = null, i = 0, goc = 0;
+  let ac = null, ra = null, nen = null, song = null, on = null, vang = null, hieu = null, xaoDai = null, iv = null, bai = null, muon = null, i = 0, goc = 0;
+  const MUC_NHAC = .4;
   const hz = n => 440 * 2 ** ((n - 69) / 12);
   function phim(t, x, n16) {
     const f = hz(x.n), dai = Math.max(x.d * n16 * 1.05, .09), tau = 1.2 * 2 ** ((60 - x.n) / 30), loc = ac.createBiquadFilter(), g = ac.createGain();
@@ -776,7 +785,45 @@ const NHAC = (() => {
     on.getChannelData(0).forEach((_, k, d) => { d[k] = Math.random() * 2 - 1; });
     vang = ac.createBuffer(2, ac.sampleRate * 1.1, ac.sampleRate);
     [0, 1].forEach(k => { const d = vang.getChannelData(k); for (let j = 0; j < d.length; j++) d[j] = (Math.random() * 2 - 1) * (1 - j / d.length) ** 3; });
+    xaoDai = ac.createBuffer(1, ac.sampleRate, ac.sampleRate);
+    xaoDai.getChannelData(0).forEach((_, k, d) => { d[k] = Math.random() * 2 - 1; });
+    const ep = ac.createDynamicsCompressor();
+    hieu = ac.createGain(); hieu.gain.value = .8;
+    hieu.connect(ep); ep.connect(ac.destination);
   }
+  /* tiếng hiệu ứng: đi đường riêng để vẫn còn khi nhạc đã tắt */
+  function keu(t, n, dai, kieu, am, n2, locHz) {
+    const o = ac.createOscillator(), g = ac.createGain();
+    let cuoi = o;
+    o.type = kieu; o.frequency.setValueAtTime(hz(n), t);
+    if (n2) o.frequency.exponentialRampToValueAtTime(hz(n2), t + dai);
+    g.gain.setValueAtTime(.0001, t);
+    g.gain.exponentialRampToValueAtTime(am, t + .008);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dai);
+    if (locHz) { const l = ac.createBiquadFilter(); l.type = 'lowpass'; l.frequency.value = locHz; o.connect(l); cuoi = l; }
+    cuoi.connect(g); g.connect(hieu); o.start(t); o.stop(t + dai + .03);
+  }
+  function xao(t, dai, am, kieu, f) {
+    const s = ac.createBufferSource(), l = ac.createBiquadFilter(), g = ac.createGain();
+    s.buffer = xaoDai; l.type = kieu; l.frequency.value = f;
+    g.gain.setValueAtTime(am, t);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dai);
+    s.connect(l); l.connect(g); g.connect(hieu); s.start(t, Math.random() * .7, dai + .02);
+  }
+  const kenDong = (t, n, dai, am) => { keu(t, n, dai, 'sawtooth', am, 0, 2400); keu(t, n + 12, dai, 'triangle', am * .5); };
+  const BO = {
+    dung:{ dai:.5, ve(t) { [84, 88, 91].forEach((n, k) => keu(t + k * .085, n, .28, 'triangle', .3)); keu(t + .17, 96, .3, 'sine', .12); } },
+    sai:{ dai:.6, ve(t) { keu(t, 52, .2, 'sawtooth', .26, 0, 900); keu(t + .2, 50, .38, 'sawtooth', .26, 46, 900); } },
+    tru:{ dai:.3, ve(t) { keu(t, 57, .24, 'sine', .5, 33); xao(t, .1, .3, 'lowpass', 1400); } },
+    loai:{ dai:1.1, ve(t) { keu(t, 69, .95, 'triangle', .3, 33); keu(t, 62, .95, 'sawtooth', .1, 26, 700); keu(t + .9, 33, .3, 'sine', .45, 24); } },
+    thang:{ dai:1.2, ve(t) { [[67, 0, .12], [72, .13, .12], [76, .26, .12], [79, .39, .75]].forEach(([n, l, d]) => kenDong(t + l, n, d, .16)); kenDong(t + .39, 72, .75, .1); kenDong(t + .39, 76, .75, .1); } },
+    mung:{ dai:3, ve(t) {
+      [[72, 0, .14], [72, .15, .14], [72, .3, .14], [76, .45, .28], [72, .75, .14], [76, .9, .14], [79, 1.05, .9]].forEach(([n, l, d]) => kenDong(t + l, n, d, .15));
+      kenDong(t + 1.05, 72, .9, .1); kenDong(t + 1.05, 76, .9, .1);
+      [84, 88, 91, 96, 100, 103].forEach((n, k) => keu(t + 1.2 + k * .07, n, .4, 'sine', .14));
+      for (let k = 0; k < 130; k++) { const lech = Math.random() * 3; xao(t + lech, .03 + Math.random() * .04, .08 * (1 - lech / 3.4), 'bandpass', 1200 + Math.random() * 2800); }
+    } }
+  };
   return {
     bat(gap) {
       muon = gap ? GAP : VUI;
@@ -786,17 +833,28 @@ const NHAC = (() => {
         if (ac.state === 'suspended') ac.resume();
         const tre = ac.createConvolver(), uot = ac.createGain();
         nen = ac.createDynamicsCompressor();
-        ra = ac.createGain(); ra.gain.value = .4;
+        ra = ac.createGain(); ra.gain.value = MUC_NHAC;
         tre.buffer = vang; uot.gain.value = .22;
         ra.connect(nen); ra.connect(tre); tre.connect(uot); uot.connect(nen); nen.connect(ac.destination);
         bai = muon; i = 0; goc = ac.currentTime + .08;
         iv = setInterval(lich, 90);
       } catch (x) { iv = null; }
     },
+    am(ten, tre = 0) {
+      try {
+        if (!ac) chuanBi();
+        if (ac.state === 'suspended') ac.resume();
+        const t = ac.currentTime + .02 + tre;
+        BO[ten].ve(t);
+        /* nhạc nhỏ lại trong lúc có hiệu ứng */
+        if (iv) { ra.gain.setTargetAtTime(MUC_NHAC * .45, t, .02); ra.gain.setTargetAtTime(MUC_NHAC, t + BO[ten].dai, .15); }
+      } catch (x) {}
+    },
     tat() {
       if (!iv) return;
       clearInterval(iv); iv = null;
       const cu = ra, n = nen;
+      cu.gain.cancelScheduledValues(ac.currentTime);
       cu.gain.setTargetAtTime(0, ac.currentTime, .06);
       setTimeout(() => { try { cu.disconnect(); n.disconnect(); } catch (x) {} }, 3200);
     },
@@ -1028,7 +1086,7 @@ app.addEventListener('click', ev => {
   }
   ({ batdau:batDau, mocau(){ if (!S.tgt) return; if (PH.vai === 'dt') guiTL({muc:S.tgt}); else moCau(); },
      goiy(){ S.goiY = !S.goiY; ve(); }, chot(){ if (PH.vai === 'dt') { if (duDe(S.c)) guiTL({chon:S.chon}); } else chot(); },
-     tiep:luotSau, ketthuc(){ S.man = 'xh'; S.moi = true; ve(); },
+     tiep:luotSau, ketthuc:tongKet,
      lai(){ if (PH.vai === 'chu') { datSanh(); return; } Object.assign(S, {man:'mo', doi:[], moi:true}); ve(); },
      taophong:taoPhong, batdauphong:batDauPhong, dongphong:dongPhong, molai:moLaiPhong, vaophong:thuVaoPhong,
      luisanh(){ const so = Object.keys(PH.may).length; if (!so || confirm('Quay lại sẽ đóng phòng ' + PH.ma + '. ' + so + ' máy đang trong phòng sẽ phải vào lại bằng mã mới.')) dongPhong(); },
