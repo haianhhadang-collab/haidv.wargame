@@ -36,6 +36,7 @@ h1,h2,p{margin:0}
 .nut.vang{background:var(--vang);color:var(--muc);box-shadow:0 .2em 0 var(--vang-dam)}
 .nut.kem{background:var(--kem);color:var(--muc);box-shadow:0 .2em 0 var(--kem-bong);font-family:inherit;font-weight:800}
 .nut:disabled{background:var(--vien);color:var(--mo);box-shadow:0 .2em 0 var(--tam)}
+.nut.lui{align-self:flex-start}
 
 /* màn mở ván */
 .mo-van{display:flex;flex-wrap:wrap;gap:1.2em;align-items:stretch;max-width:78em;margin:0 auto;min-height:calc(100vh - 2.6em)}
@@ -654,8 +655,23 @@ async function vaoPhong(ma, cu) {
   PH.huy.push(SYNC.ngheTin(dg('ttr'), false, (_, v) => nhanTT(v)));
   nhanTT(st);
   if (PH.doi) guiMay();
-  setInterval(() => { if (PH.doi) guiMay(); }, NHIP_MS);
-  document.addEventListener('visibilitychange', () => { if (!document.hidden && PH.doi) guiMay(); });
+  clearInterval(PH.nhip);
+  PH.nhip = setInterval(() => { if (PH.doi) guiMay(); }, NHIP_MS);
+  document.addEventListener('visibilitychange', baoKhiMoLai);
+}
+function baoKhiMoLai() { if (!document.hidden && PH.doi) guiMay(); }
+/* điện thoại rời phòng khi chưa chọn đội, trở về màn nhập mã */
+function roiPhong() {
+  if (PH.doi) { PH.doi = 0; guiMay(); }
+  xoaNho('dthb-dt');
+  PH.huy.forEach(h => h()); PH.huy = [];
+  clearInterval(PH.nhip);
+  Object.assign(PH, { vai:null, ma:'', r:'', loi:'', jsonCu:'', khoa:'' });
+  Object.assign(S, { man:'mo', doi:[], moi:true });
+  const u = new URL(location.href);
+  u.searchParams.delete('ma');
+  history.replaceState(null, '', u);
+  ve();
 }
 function nhanTT(st) {
   if (!st) return;
@@ -717,6 +733,7 @@ function veSanh() {
   const co = S.doi.filter(t => thanhVien(t.id).length).length;
   return `<div class="sanh">
     <div class="sanh-trai">
+      <button type="button" class="nut kem lui" data-lam="luisanh">← Quay lại</button>
       <div class="bien"><p class="nho">Tư tưởng Hồ Chí Minh</p><h1 class="to">Đấu trường hiểu bài</h1><p class="chi">${e(tenCD())}</p></div>
       <div class="o ma-phong"><div class="nhan">Mã phòng</div><div class="so-ma to">${e(PH.ma)}</div><div class="qr-phong" id="qr-phong"></div>${oNet()}</div>
     </div>
@@ -738,7 +755,7 @@ function veCho(tieu, phu) {
   return `<div class="o up"><div class="lung" aria-hidden="true">${anhSao}</div><div class="chu"><h2 class="to">${e(tieu)}</h2>${phu ? `<p>${e(phu)}</p>` : ''}</div></div>`;
 }
 function veChonDoi() {
-  return `<div class="dt"><div class="bien"><p class="nho">Phòng ${e(PH.ma)}</p><h1 class="to">Đấu trường hiểu bài</h1></div>
+  return `<div class="dt"><button type="button" class="nut kem lui" data-lam="roiphong">← Quay lại</button><div class="bien"><p class="nho">Phòng ${e(PH.ma)}</p><h1 class="to">Đấu trường hiểu bài</h1></div>
     <h2 class="tieu">Chọn đội của bạn</h2>
     ${PH.loi ? `<p class="loi" role="alert">${e(PH.loi)}</p>` : ''}
     ${S.doi.map(t => { const so = t.ds.length, day = so >= MAY_MOI_DOI && t.on >= MAY_MOI_DOI; return `<button type="button" class="dong dt-chon" data-doi="${t.id}" ${day || !t.song ? 'disabled' : ''}>${dau(t)}<span class="ten-d">${e(t.ten)}</span><span class="may">${so}/${MAY_MOI_DOI} máy</span></button>`; }).join('')}
@@ -752,7 +769,7 @@ function veDT() {
   const stt = t.ds.indexOf(PH.cid) + 1, a = tim(S.atk), ta = S.atk === t.id && t.song;
   const dauTrang = `<div class="o dt-dau">${dau(t)}<div class="giua"><b>${e(ngan(t.ten))}</b>${stt ? `Máy ${stt}/${MAY_MOI_DOI}` : 'Đang vào đội'} · Phòng ${e(PH.ma)}<br>${oNet()}</div><div class="pt">${t.song ? t.mau + '%' : 'Loại'}</div></div>`;
   let than;
-  if (S.man === 'sanh') than = veCho('Chờ giảng viên bắt đầu', '') + `<button type="button" class="nut kem" data-lam="doidoi">Đổi đội</button>`;
+  if (S.man === 'sanh') than = veCho('Chờ giảng viên bắt đầu', '') + `<button type="button" class="nut kem" data-lam="doidoi">← Quay lại chọn đội</button>`;
   else if (S.man === 'muc') than = ta ? veMuc() : veCho(a.ten + ' đang chọn mục tiêu', t.song ? '' : 'Đội của bạn đã bị loại.');
   else if (S.man === 'hoi') than = ta ? `<div class="o r-gio" id="o-gio"><div class="ngang"><span class="nhan">Giây còn lại</span><span id="so-gio">${S.gio}</span></div><div class="vach"><div id="vach-gio" style="width:${S.gio / GIAY * 100}%"></div></div></div>` + veHoi() : veCho(a.ten + ' đang trả lời', 'Mục tiêu: ' + tim(S.tgt).ten);
   else than = veKq();
@@ -802,7 +819,7 @@ function veMuc() {
         ${dau(t)}<span class="ten">${e(ngan(t.ten))}</span><span class="pt">${t.mau}%</span><span class="sau">${sau === 0 ? 'Đúng: bị loại' : 'Đúng: còn ' + sau + '%'}</span>
         ${bat ? '<span class="nhan-tren" style="background:#C8321F;color:#fff">Mục tiêu</span>' : ''}</button>`;
     }).join('')}</div>
-    <div class="hang-nut"><button type="button" class="nut son" data-lam="mocau" ${S.tgt && !daGuiXong() ? '' : 'disabled'}>${daGuiXong() ? 'Đã gửi, chờ ghi nhận' : 'Xác nhận và mở câu hỏi'}</button>${S.loiGui ? '<p class="loi" role="alert">Chưa gửi được, hãy bấm lại.</p>' : ''}</div>
+    <div class="hang-nut">${S.luot === 1 && PH.vai !== 'dt' ? '<button type="button" class="nut kem" data-lam="lai">← Quay lại</button>' : ''}<button type="button" class="nut son" data-lam="mocau" ${S.tgt && !daGuiXong() ? '' : 'disabled'}>${daGuiXong() ? 'Đã gửi, chờ ghi nhận' : 'Xác nhận và mở câu hỏi'}</button>${S.loiGui ? '<p class="loi" role="alert">Chưa gửi được, hãy bấm lại.</p>' : ''}</div>
   </div>`;
 }
 function theBai(c, o, i) {
@@ -902,7 +919,8 @@ app.addEventListener('click', ev => {
      tiep:luotSau, ketthuc(){ S.man = 'xh'; S.moi = true; ve(); },
      lai(){ if (PH.vai === 'chu') { datSanh(); return; } Object.assign(S, {man:'mo', doi:[], moi:true}); ve(); },
      taophong:taoPhong, batdauphong:batDauPhong, dongphong:dongPhong, molai:moLaiPhong, vaophong:thuVaoPhong,
-     doidoi(){ PH.doi = 0; guiMay(); ve(); }, vetrang(){ location.replace(location.pathname); } }[d.lam] || (() => {}))();
+     luisanh(){ const so = Object.keys(PH.may).length; if (!so || confirm('Quay lại sẽ đóng phòng ' + PH.ma + '. ' + so + ' máy đang trong phòng sẽ phải vào lại bằng mã mới.')) dongPhong(); },
+     roiphong:roiPhong, doidoi(){ PH.doi = 0; guiMay(); ve(); }, vetrang(){ location.replace(location.pathname); } }[d.lam] || (() => {}))();
 });
 function thuVaoPhong() {
   const ma = PH.nhapMa.trim();
