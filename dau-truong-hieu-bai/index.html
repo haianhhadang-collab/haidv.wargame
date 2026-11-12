@@ -742,7 +742,10 @@ const NHAC = (() => {
   const GAP = taoBai(152, 8, 'C5:2 r D5:1 C5 B4 C5|E5:2 r F5:1 E5 D#5 E5|B5:1 A5 G#5 A5 B5 A5 G#5 A5|C6:4 A5:2 C6|G5:.4 A5 B5:1.2 F#5+A5:2 E5+G5 F#5+A5|G5:.4 A5 B5:1.2 F#5+A5:2 E5+G5 F#5+A5|G5:.4 A5 B5:1.2 F#5+A5:2 E5+G5 D#5+F#5|E5:4 C5+E5:2 D5+F5|E5+G5:2 E5+G5 A5:1 G5 F5 E5|B4+D5:2 G4 C5+E5 D5+F5|E5+G5:2 E5+G5 A5:1 G5 F5 E5|B4+D5:4 A4+C5:2 B4+D5|C5+E5:2 C5+E5 F5:1 E5 D5 C5|G#4+B4:2 E4 A4+C5 B4+D5|C5+E5:2 C5+E5 F5:1 E5 D5 C5|G#4+B4:4 B4:1 A4 G#4 A4|C5:2 r D5:1 C5 B4 C5|E5:2 r F5:1 E5 D#5 E5|B5:1 A5 G#5 A5 B5 A5 G#5 A5|C6:2 r A5 B5|C6:2 B5 A5 G#5|A5:2 E5 F5 D5|C5:4 C5:.5 B4 C5 B4 C5 B4 A4 B4|A4:4 B4:1 A4 G#4 A4', 'A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 A3 C4+E4|A3:2 C4+E4 C4+E4 C4+E4|E3:2 B3+E4 B3+E4 B3+E4|E3:2 B3+E4 B3+E4 B3+E4|E3:2 B3+E4 B2 B3|E3:4 r|C3:2 C4 E3 E4|G3:4 r|C3:2 C4 E3 E4|G3:4 r|A2:2 A3 C3 C4|E3:4 r|A2:2 A3 C3 C4|E3:4 r|A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 C4+E4 C4+E4|A3:2 C4+E4 A3 C4+E4|F3:2 A3+D#4 A3+D#4 A3+D#4|E3:2 A3+E4 D3 F3+B3|C3:2 E3+A3 D3 F3+B3|E3+A3:2 E3+A3 E3+G#3 E3+G#3|A2+A3:4 r');
   /* nhạc trao giải: Beethoven, Ode to Joy (Giao hưởng số 9) */
   const MUNG = taoBai(116, 16, 'F#5:4 F#5 G5 A5|A5 G5 F#5 E5|D5 D5 E5 F#5|F#5:6 E5:2 E5:8|F#5:4 F#5 G5 A5|A5 G5 F#5 E5|D5 D5 E5 F#5|E5:6 D5:2 D5:8|E5:4 E5 F#5 D5|E5:4 F#5:2 G5 F#5:4 D5|E5:4 F#5:2 G5 F#5:4 E5|D5:4 E5 A4:8|F#5:4 F#5 G5 A5|A5 G5 F#5 E5|D5 D5 E5 F#5|E5:6 D5:2 D5:8', 'D3:4 F#3+A3+D4 A2 F#3+A3+D4|D3:4 F#3+A3+D4 A2 E3+G3+C#4|D3:4 F#3+A3+D4 A2 F#3+A3+D4|D3:4 F#3+A3+D4 A2+E3+A3+C#4:8|D3:4 F#3+A3+D4 A2 F#3+A3+D4|D3:4 F#3+A3+D4 A2 E3+G3+C#4|D3:4 F#3+A3+D4 A2 F#3+A3+D4|A2:4 E3+G3+C#4 D3+A3+D4+F#4:8|A2:4 E3+A3+C#4 D3 F#3+A3+D4|A2:4 E3+A3+C#4 D3 F#3+A3+D4|A2:4 E3+A3+C#4 A2 E3+A3+C#4|D3:4 F#3+A3+D4 A2+E3+G3+C#4:8|D3:4 F#3+A3+D4 A2 F#3+A3+D4|D3:4 F#3+A3+D4 A2 E3+G3+C#4|D3:4 F#3+A3+D4 A2 F#3+A3+D4|A2:4 E3+G3+C#4 D3+A3+D4+F#4:8');
-  const BAI = { vui:VUI, gap:GAP, mung:MUNG };
+  /* câu 61–80 và 81–100: hai bản tự soạn cho game này, pop La trưởng và rock Mi thứ */
+  const POP = taoBai(124, 16, 'E5:2 C#5 E5 F#5 E5:4 C#5:2 B4|B4:2 B4 C#5 E5:4 B4:2 G#4:4|A4:2 C#5 F#5:4 E5:2 C#5 A4:4|B4:2 C#5 D5 F#5:4 E5:2 D5 C#5|E5:2 C#5 E5 A5 G#5 F#5 E5:4|G#5:2 F#5 E5 B4 E5:4 r|C#5:2 F#5 A5 G#5 F#5 E5 C#5:4|D5:2 F#5 A5:4 G#5 E5', 'A2+A3:3 A2+A3 A2+A3:2 E3+A3+C#4 r E3+A3+C#4 r|E2+E3:3 E2+E3 E2+E3:2 E3+G#3+B3 r E3+G#3+B3 r|F#2+F#3:3 F#2+F#3 F#2+F#3:2 F#3+A3+C#4 r F#3+A3+C#4 r|D2+D3:3 D2+D3 D2+D3:2 D3+F#3+A3 r D3+F#3+A3 r|A2+A3:3 A2+A3 A2+A3:2 E3+A3+C#4 r E3+A3+C#4 r|E2+E3:3 E2+E3 E2+E3:2 E3+G#3+B3 r E3+G#3+B3 r|F#2+F#3:3 F#2+F#3 F#2+F#3:2 F#3+A3+C#4 r F#3+A3+C#4 r|D2+D3:3 D2+D3 D2+D3:2 E2+E3:3 E2+E3 E2+E3:2');
+  const ROCK = taoBai(144, 16, 'B4:2 B4 B4 G4 B4 D5:4 B4:2|C5:2 C5 C5 E5:4 D5:2 C5:4|D5:2 D5 D5 B4 D5 G5:4 F#5:2|F#5:4 E5:2 D5 A4:8|E5+G5:2 r E5+G5 r E5+G5 F#5 G5:4|E5+G5:2 r E5+G5 r G5 A5 G5:4|D5+G5:2 r D5+G5 r B5:4 A5:2 G5|F#5+A5:4 F#5+A5:2 D5+F#5 A5:8', 'E2+B2+E3:2 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3|C2+G2+C3:2 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3|G2+D3+G3:2 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3|D2+A2+D3:2 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3|E2+B2+E3:2 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3 E2+B2+E3|C2+G2+C3:2 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3 C2+G2+C3|G2+D3+G3:2 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3 G2+D3+G3|D2+A2+D3:2 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3 D2+A2+D3');
+  const BAI = { vui:VUI, gap:GAP, pop:POP, rock:ROCK, mung:MUNG };
   let ac = null, ra = null, nen = null, song = null, on = null, vang = null, hieu = null, xaoDai = null, iv = null, bai = null, muon = null, i = 0, goc = 0;
   const MUC_NHAC = .4;
   const hz = n => 440 * 2 ** ((n - 69) / 12);
@@ -828,7 +831,7 @@ const NHAC = (() => {
     } }
   };
   return {
-    /* ten: vui | gap | mung; đổi giữa nhạc ván đấu và nhạc trao giải thì bắt đầu lại ngay, sau cho giây */
+    /* ten: vui | gap | pop | rock | mung; đổi giữa nhạc ván đấu và nhạc trao giải thì bắt đầu lại ngay, sau cho giây */
     bat(ten, cho = 0) {
       const moi = BAI[ten];
       if (iv && (moi === MUNG) !== (muon === MUNG)) NHAC.tat();
@@ -1066,7 +1069,7 @@ function ve() {
   else if (S.man === 'xh') app.innerHTML = veXh();
   else app.innerHTML = `<div class="choi ${chu ? 'phong' : ''}">${veRay()}<div class="ban">${chu ? '' : veHangDoi()}${S.man === 'muc' ? veMuc() : S.man === 'hoi' ? veHoi() : veKq()}</div>${chu ? veTK() : ''}</div>`;
   /* nhạc trao giải đợi tiếng chúc mừng phát xong */
-  const nhac = PH.vai === 'dt' ? '' : S.man === 'xh' ? 'mung' : ['muc', 'hoi', 'kq'].includes(S.man) ? (S.luot > 30 ? 'gap' : 'vui') : '';
+  const nhac = PH.vai === 'dt' ? '' : S.man === 'xh' ? 'mung' : ['muc', 'hoi', 'kq'].includes(S.man) ? (S.luot > 80 ? 'rock' : S.luot > 60 ? 'pop' : S.luot > 30 ? 'gap' : 'vui') : '';
   if (nhac) NHAC.bat(nhac, nhac === 'mung' ? 2.8 : 0); else NHAC.tat();
   capNhatGio();
   capNhatMang();
