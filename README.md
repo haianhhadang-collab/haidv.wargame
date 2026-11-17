@@ -105,6 +105,18 @@ Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame
 
 ![Mã QR vào Non sông một dải](non-song/qr-vao-game.png)
 
+## Quy tụ — bốn vòng đoàn kết
+
+Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế (Bài 7), mỗi người một điện thoại, không tính giờ.
+30 câu chia bốn vòng: vai trò, lực lượng và điều kiện, Mặt trận dân tộc thống nhất, đoàn kết quốc tế. Trả lời đúng thắp sáng một ô
+trong bốn vòng tròn; câu sai để lại chỗ trống, cuối trận được ôn lại. Mỗi vòng một cảnh nền.
+
+Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame/quy-tu/poster-doc.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/quy-tu/poster-doc.png) — ngang 4:3 [PDF](https://haianhhadang-collab.github.io/haidv.wargame/quy-tu/poster-ngang-4-3.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/quy-tu/poster-ngang-4-3.png).
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/quy-tu/
+
+![Mã QR vào Quy tụ — bốn vòng đoàn kết](quy-tu/qr-vao-game.png)
+
 ## 1911 — Anh Ba xin làm phụ bếp
 
 Game nhập vai cá nhân trên điện thoại, khoảng 15 phút: vào vai anh Ba xin làm phụ bếp trên con tàu

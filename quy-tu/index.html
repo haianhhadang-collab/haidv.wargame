@@ -1,0 +1,891 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quy tụ – bốn vòng đoàn kết</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Cormorant+Garamond:wght@600;700&family=Lora:wght@500;600;700&display=swap">
+<style>
+:root{
+  --kem:#FFF4DC; --kem2:#E9E1F5; --mo:#C9C0E0;
+  --vang:#F3D27A; --xanh:#6FE6FF; --cam:#FFA45C; --dokinh:.74; --he:1;
+  --vangvien:color-mix(in srgb, var(--vang) 55%, transparent);
+  --xanhnen:color-mix(in srgb, var(--xanh) 22%, rgba(10,30,50,.8));
+  --camnen:color-mix(in srgb, var(--cam) 25%, rgba(50,16,6,.8));
+  --kinh:rgba(13,12,36,var(--dokinh)); --kinh2:rgba(22,20,56,calc(var(--dokinh) + .04)); --vienmo:rgba(255,240,200,.22);
+  --fs-q:clamp(calc(21px * var(--he)), calc((1.1rem + 1.3vw) * var(--he)), calc(30px * var(--he)));
+  --fs-o:clamp(calc(17px * var(--he)), calc((0.85rem + 0.8vw) * var(--he)), calc(23px * var(--he)));
+  --fs-b:clamp(calc(15px * var(--he)), calc((0.8rem + 0.6vw) * var(--he)), calc(20px * var(--he)));
+  --fs-s:clamp(calc(13px * var(--he)), calc((0.7rem + 0.4vw) * var(--he)), calc(17px * var(--he)));
+  --tieude:'Cormorant Garamond', 'Palatino Linotype', Cambria, serif;
+  --serif:'Lora', Cambria, 'Palatino Linotype', serif;
+  --sans:'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif;
+  --hat:#FFE7A0;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#0b0920;color:var(--kem);font-family:var(--sans);font-variant-numeric:lining-nums}
+body{min-height:100vh;overflow-x:hidden}
+button{font:inherit;color:inherit;cursor:pointer}
+button:disabled{cursor:default}
+:focus-visible{outline:3px solid var(--vang);outline-offset:2px}
+
+/* ---------- cảnh nền ---------- */
+.san{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.canh{position:absolute;inset:-3%;opacity:0;transition:opacity 1.1s ease}
+.canh svg{width:100%;height:100%;display:block}
+.canh.hien{opacity:1;animation:vao 1.6s ease-out both, troi 38s ease-in-out 1.6s infinite alternate}
+@keyframes vao{from{transform:scale(1.1)}to{transform:scale(1)}}
+@keyframes troi{from{transform:scale(1) translate(0,0)}to{transform:scale(1.06) translate(-1.2%,-.8%)}}
+.mangan{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%, transparent 35%, rgba(5,4,18,.55) 100%)}
+.hat{position:absolute;inset:0}
+.hat i{position:absolute;bottom:-10px;width:6px;height:6px;border-radius:50%;background:var(--hat);box-shadow:0 0 10px 3px var(--hat);opacity:0;animation:bay linear infinite}
+@keyframes bay{0%{transform:translate(0,0);opacity:0}12%{opacity:.9}80%{opacity:.7}100%{transform:translate(var(--dx),-105vh);opacity:0}}
+@media (prefers-reduced-motion: reduce){.canh.hien{animation:none}.hat{display:none}.canh{transition:none}.bang-vong{animation:none!important}}
+
+/* ---------- khung ---------- */
+.khung{position:relative;z-index:1;max-width:780px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+.kinh{background:var(--kinh);border:1px solid var(--vangvien);border-radius:18px;box-shadow:0 0 0 4px color-mix(in srgb, var(--vang) 8%, transparent), 0 18px 50px rgba(0,0,0,.45), inset 0 0 30px color-mix(in srgb, var(--vang) 6%, transparent);-webkit-backdrop-filter:blur(7px);backdrop-filter:blur(7px)}
+.dau{margin:12px 12px 0;padding:14px 18px 12px;display:flex;flex-direction:column;gap:9px;position:sticky;top:10px;z-index:3}
+.dau .hang{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.dau .ten{margin:0;font-family:var(--tieude);font-size:clamp(calc(20px * var(--he)), calc((1rem + 1vw) * var(--he)), calc(28px * var(--he)));font-weight:700;color:var(--vang);letter-spacing:.01em;line-height:1.15}
+.dau .so{margin:0;font-size:var(--fs-s);color:var(--mo);white-space:nowrap}
+.thanh{display:flex;gap:6px}
+.thanh .v{display:flex;gap:2px}
+.thanh .oc{flex:1;height:8px;border-radius:4px}
+.thanh .oc.b{background:var(--xanh);box-shadow:0 0 8px var(--xanh)}
+.thanh .oc.o{background:var(--cam);box-shadow:0 0 8px var(--cam)}
+.thanh .oc.p{background:rgba(255,240,200,.18)}
+.thanh .oc.n{background:var(--vang);box-shadow:0 0 10px var(--vang)}
+.tom{margin:0;font-size:var(--fs-s);color:var(--mo)}
+main{flex:1;padding:14px 12px 10px;display:flex;flex-direction:column;gap:14px}
+.the{padding:20px 18px;display:flex;flex-direction:column;gap:16px}
+.nhan{margin:0;font-size:var(--fs-s);font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--vang)}
+.hoi{margin:0;font-family:var(--serif);font-size:var(--fs-q);line-height:1.5;font-weight:600;color:var(--kem)}
+.hoi:focus{outline:none}
+.pa{display:flex;flex-direction:column;gap:10px}
+.pa button,.pa label{display:flex;gap:12px;align-items:center;text-align:left;min-height:56px;padding:10px 14px;border:1px solid var(--vienmo);border-radius:14px;background:var(--kinh2);font-size:var(--fs-o);line-height:1.4;color:var(--kem);transition:border-color .2s, box-shadow .2s, background .2s;cursor:pointer}
+.pa button:not(:disabled):hover,.pa label:hover{border-color:var(--vangvien);box-shadow:0 0 14px color-mix(in srgb, var(--vang) 25%, transparent)}
+.pa .chu{font-family:var(--tieude);font-weight:700;font-size:1.2em;color:var(--vang);width:1.1em;flex:none;text-align:center}
+.pa .chon{border:2px solid var(--vang);background:rgba(90,66,20,.55);box-shadow:0 0 18px color-mix(in srgb, var(--vang) 40%, transparent);font-weight:600}
+.pa .dung{border:2px solid var(--xanh);background:var(--xanhnen);box-shadow:0 0 18px color-mix(in srgb, var(--xanh) 45%, transparent);font-weight:600}
+.pa .dung .chu{color:var(--xanh)}
+.pa .sai{border:2px solid var(--cam);background:var(--camnen);box-shadow:0 0 18px color-mix(in srgb, var(--cam) 40%, transparent);font-weight:600}
+.pa .sai .chu{color:var(--cam)}
+.pa .bosot{border:2px dashed var(--xanh)}
+.pa .bosot .chu{color:var(--xanh)}
+.pa .ghi{margin-left:auto;font-size:var(--fs-s);font-weight:700;white-space:nowrap;padding-left:8px}
+.pa .dung .ghi,.pa .bosot .ghi{color:var(--xanh)} .pa .sai .ghi{color:var(--cam)}
+.pa input{width:22px;height:22px;accent-color:var(--vang);flex:none;margin:0}
+.hai{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.hai button{height:66px;border:2px solid var(--vangvien);border-radius:14px;background:var(--kinh2);font-family:var(--tieude);font-size:clamp(calc(22px * var(--he)), calc((1rem + 1vw) * var(--he)), calc(30px * var(--he)));font-weight:700;color:var(--kem);display:flex;align-items:center;justify-content:center;gap:8px;transition:box-shadow .2s}
+.hai button:not(:disabled):hover{box-shadow:0 0 20px color-mix(in srgb, var(--vang) 45%, transparent)}
+.hai .dung{border-color:var(--xanh);background:var(--xanhnen);color:var(--xanh);box-shadow:0 0 20px color-mix(in srgb, var(--xanh) 50%, transparent)}
+.hai .sai{border-color:var(--cam);background:var(--camnen);color:var(--cam);box-shadow:0 0 20px color-mix(in srgb, var(--cam) 45%, transparent)}
+.trongo{display:inline-block;min-width:4.5em;padding:0 8px;border-bottom:3px solid var(--vang);text-align:center;color:var(--mo)}
+.trongo.dung{background:var(--xanhnen);color:var(--xanh);border-color:var(--xanh);border-radius:8px 8px 0 0;text-shadow:0 0 10px color-mix(in srgb, var(--xanh) 60%, transparent)}
+.trongo.sai{background:var(--camnen);color:var(--cam);border-color:var(--cam);border-radius:8px 8px 0 0;text-decoration:line-through}
+.tu{display:flex;flex-wrap:wrap;gap:9px}
+.tu button{min-height:48px;padding:0 18px;border:1px solid var(--vangvien);border-radius:24px;background:var(--kinh2);font-size:var(--fs-o);color:var(--kem);transition:box-shadow .2s}
+.tu button:not(:disabled):hover{box-shadow:0 0 16px color-mix(in srgb, var(--vang) 45%, transparent)}
+.tu button:disabled{background:transparent;border-style:dashed;color:rgba(233,225,245,.55)}
+.tu button.dung{border:2px solid var(--xanh);background:var(--xanhnen);color:var(--xanh);font-weight:600;box-shadow:0 0 16px color-mix(in srgb, var(--xanh) 50%, transparent)}
+.phan{padding:16px 18px;display:flex;flex-direction:column;gap:10px;animation:mo .45s ease-out both}
+@keyframes mo{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.phan .kq{margin:0;font-size:var(--fs-b);font-weight:700;display:flex;align-items:center;gap:8px}
+.phan .kq.dung{color:var(--xanh);text-shadow:0 0 12px color-mix(in srgb, var(--xanh) 50%, transparent)} .phan .kq.sai{color:var(--cam)}
+.phan p{margin:0;font-size:var(--fs-b);line-height:1.65;color:var(--kem2)}
+.phan .phu{font-size:var(--fs-s);color:var(--mo)}
+.ghichu{margin:0;font-size:var(--fs-s);color:var(--mo)}
+.chan{padding:14px 12px 20px;position:sticky;bottom:0;background:linear-gradient(transparent, rgba(8,7,24,.85) 45%)}
+.nut{width:100%;height:58px;border:1px solid color-mix(in srgb, var(--vang) 60%, white);border-radius:16px;background:linear-gradient(180deg,color-mix(in srgb, var(--vang) 75%, white) 0%,var(--vang) 50%,color-mix(in srgb, var(--vang) 65%, black) 100%);color:#2B1700;font-family:var(--tieude);font-size:clamp(calc(22px * var(--he)), calc((1rem + .9vw) * var(--he)), calc(28px * var(--he)));font-weight:700;letter-spacing:.02em;box-shadow:0 0 22px color-mix(in srgb, var(--vang) 55%, transparent), inset 0 1px 0 rgba(255,255,255,.6);transition:box-shadow .2s, transform .1s}
+.nut:hover{box-shadow:0 0 34px color-mix(in srgb, var(--vang) 80%, transparent), inset 0 1px 0 rgba(255,255,255,.6)}
+.nut:active{transform:translateY(1px)}
+.nut:disabled{background:rgba(80,74,100,.75);border-color:rgba(255,255,255,.2);color:rgba(233,225,245,.7);box-shadow:none}
+.nut.vien{background:rgba(13,12,36,.6);border:1px solid var(--vangvien);color:var(--vang);height:54px;box-shadow:none}
+.nut.vien:hover{box-shadow:0 0 18px color-mix(in srgb, var(--vang) 35%, transparent)}
+
+/* ---------- màn mở đầu, kết quả ---------- */
+.mo{padding:22px 14px 24px;display:flex;flex-direction:column;gap:16px;flex:1}
+.dautieu{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding-top:6px}
+.dautieu .tren{margin:0;font-size:var(--fs-s);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--kem2);text-shadow:0 1px 6px rgba(0,0,0,.8)}
+.dautieu h1{margin:0;font-family:var(--tieude);font-size:clamp(calc(64px * var(--he)), calc((2.4rem + 5vw) * var(--he)), calc(108px * var(--he)));line-height:1;font-weight:700;background:linear-gradient(180deg,color-mix(in srgb, var(--vang) 30%, white) 10%,var(--vang) 50%,color-mix(in srgb, var(--vang) 70%, black) 95%);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px color-mix(in srgb, var(--vang) 55%, transparent)) drop-shadow(0 3px 2px rgba(0,0,0,.6))}
+.dautieu .phude{margin:0;font-family:var(--tieude);font-size:clamp(calc(22px * var(--he)), calc((1rem + 1.2vw) * var(--he)), calc(32px * var(--he)));font-weight:600;color:var(--kem);text-shadow:0 2px 8px rgba(0,0,0,.8)}
+.hoa{display:flex;align-items:center;gap:10px;color:var(--vang);width:min(320px,80%);margin-top:4px}
+.hoa::before,.hoa::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--vang),transparent)}
+.vt{display:flex;align-items:center;gap:18px;padding:16px 18px}
+.vt svg{flex:none;width:clamp(140px, 28vw, 210px);height:auto;overflow:visible}
+.vt p{margin:0;font-size:var(--fs-b);line-height:1.6;color:var(--kem2)}
+.dsv{margin:0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.dsv li{display:flex;flex-direction:column;justify-content:flex-end;gap:2px;min-height:96px;border:1px solid var(--vangvien);border-radius:14px;padding:10px 12px;position:relative;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+.dsv li::before{content:"";position:absolute;inset:0;background:var(--anh);z-index:0}
+.dsv li::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 15%,rgba(6,5,20,.85) 100%);z-index:0}
+.dsv li > *{position:relative;z-index:1}
+.dsv .so{font-family:var(--tieude);font-weight:700;font-size:var(--fs-s);color:var(--vang);letter-spacing:.08em;text-transform:uppercase}
+.dsv .tv{font-weight:600;font-size:var(--fs-b);line-height:1.3;color:var(--kem)}
+.dsv .sc{color:var(--kem2);font-size:var(--fs-s)}
+.form{display:flex;flex-direction:column;gap:12px;padding:16px 18px;margin-top:auto}
+.form .hang{display:flex;gap:10px}
+.form .o{display:flex;flex-direction:column;gap:4px}
+.form label{font-size:var(--fs-s);font-weight:600;color:var(--vang)}
+.form input,.form select{height:52px;border:1px solid var(--vangvien);border-radius:12px;padding:0 12px;font:inherit;font-size:var(--fs-o);background:rgba(8,7,26,.75);color:var(--kem);width:100%}
+.form input::placeholder{color:rgba(233,225,245,.6)}
+.form select option{background:#15122e;color:var(--kem)}
+.loi{margin:0;font-size:var(--fs-s);color:var(--cam);font-weight:600}
+.ket .dautieu h1{font-size:clamp(calc(34px * var(--he)), calc((1.4rem + 2.6vw) * var(--he)), calc(54px * var(--he)));line-height:1.15}
+.bang{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:var(--fs-b);min-width:9em}
+.bang li{display:flex;justify-content:space-between;gap:12px;color:var(--kem)}
+.bang strong{color:var(--vang);font-family:var(--tieude);font-size:1.25em}
+.bang .cg{display:flex;gap:8px;align-items:center;color:var(--mo);font-size:var(--fs-s);justify-content:flex-start}
+.bang .cg span:not([data-k]){width:12px;height:12px;border-radius:3px;flex:none}
+.on{padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.on h2{margin:0;font-family:var(--tieude);font-size:clamp(calc(22px * var(--he)), calc((1rem + 1vw) * var(--he)), calc(30px * var(--he)));font-weight:700;color:var(--vang)}
+.on ul{margin:0;padding:0 0 0 20px;display:flex;flex-direction:column;gap:6px;font-size:var(--fs-b);line-height:1.45;color:var(--kem2)}
+.loiBac{margin:6px 0 0;font-family:var(--tieude);font-size:clamp(calc(22px * var(--he)), calc((1rem + 1.2vw) * var(--he)), calc(32px * var(--he)));font-weight:600;line-height:1.35;color:var(--kem);text-align:center;text-shadow:0 0 14px color-mix(in srgb, var(--vang) 55%, transparent), 0 2px 8px rgba(0,0,0,.8)}
+.nguon{margin:0;font-size:12px;color:var(--kem2);text-align:center;text-shadow:0 1px 4px rgba(0,0,0,.9)}
+.cot{display:flex;flex-direction:column;gap:10px}
+
+/* ---------- bảng tên vòng khi đổi cảnh ---------- */
+.khung{transition:opacity .5s ease}
+.khung.an{opacity:0;pointer-events:none}
+.bang-vong{position:fixed;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;border:none;background:transparent;width:100%;padding:16px;cursor:pointer;animation:bangvong 2.6s ease both}
+.bang-vong .bo{position:absolute;bottom:28px;left:0;right:0;margin:0;font-size:var(--fs-s);color:var(--kem2);text-shadow:0 1px 4px rgba(0,0,0,.9)}
+.bang-vong .s,.bang-vong .t,.bang-vong .c{display:block}
+.bang-vong .nd{display:flex;flex-direction:column;align-items:center;gap:6px;padding:26px 34px;text-align:center;background:radial-gradient(ellipse at center, rgba(8,7,24,.82) 0%, rgba(8,7,24,.55) 60%, transparent 75%)}
+.bang-vong .s{margin:0;font-family:var(--tieude);font-weight:700;font-size:clamp(calc(22px * var(--he)), calc((1rem + 1.4vw) * var(--he)), calc(34px * var(--he)));letter-spacing:.3em;text-transform:uppercase;color:var(--vang)}
+.bang-vong .t{margin:0;font-family:var(--tieude);font-weight:700;font-size:clamp(calc(40px * var(--he)), calc((1.6rem + 4vw) * var(--he)), calc(76px * var(--he)));line-height:1.05;color:var(--kem);text-shadow:0 0 24px color-mix(in srgb, var(--vang) 70%, transparent), 0 3px 10px rgba(0,0,0,.8)}
+.bang-vong .c{margin:0;font-family:var(--tieude);font-style:italic;font-weight:600;font-size:clamp(calc(18px * var(--he)), calc((.9rem + .8vw) * var(--he)), calc(26px * var(--he)));color:var(--kem2)}
+@keyframes bangvong{0%{opacity:0;transform:scale(.94)}15%{opacity:1;transform:scale(1)}75%{opacity:1}100%{opacity:0;transform:scale(1.03)}}
+
+/* ---------- chế độ sửa (?sua=1) — chỉ giảng viên mở ---------- */
+#sua-khung{position:fixed;left:.6rem;bottom:.6rem;z-index:80;max-width:min(44rem,calc(100vw - 1.2rem));font:500 15px/1.4 'Segoe UI',system-ui,sans-serif;color:#1E2A3A}
+#sua-khung .sua-thanh,#sua-khung .sua-hop{background:rgba(255,253,248,.98);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.45);padding:.5rem .65rem;margin-top:.4rem}
+#sua-khung .sua-thanh{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;border:2px solid #B98A1E}
+#sua-khung button,#sua-khung select{font:600 14px 'Segoe UI',system-ui,sans-serif;border:1px solid #CFC6B4;background:#fff;color:#1E2A3A;border-radius:8px;padding:.3rem .55rem;cursor:pointer;min-height:34px}
+#sua-khung button.bat,#sua-khung button.chinh{background:#2E6B4A;color:#fff;border-color:#2E6B4A}
+#sua-khung.gon .sua-thanh > :not(#sua-gon),#sua-khung.gon .sua-hop{display:none!important}
+#sua-dem{font-weight:700;color:#9E2A22}
+#sua-ds{max-height:45vh;overflow:auto}
+#sua-ds ol{margin:0 0 .5rem;padding-left:1.3rem} #sua-ds li{margin:.4rem 0} #sua-ds s{color:#6B7380}
+#sua-gd{max-height:60vh;overflow:auto}
+#sua-gd .sua-cot{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:.2rem 1.2rem}
+#sua-gd label{display:flex;align-items:center;justify-content:space-between;gap:.6rem;margin:.3rem 0}
+#sua-gd input[type=color]{width:3rem;height:2rem;border:1px solid #CFC6B4;border-radius:6px;padding:0;background:none}
+#sua-gd input[type=range]{flex:1;min-width:6rem}
+#sua-gd select{max-width:12rem}
+#sua-o textarea{width:100%;font:600 16px 'Segoe UI',system-ui,sans-serif;border:2px solid #B98A1E;border-radius:10px;padding:.5rem;margin:.35rem 0;resize:vertical;color:#1E2A3A}
+#sua-o .sua-nut{display:flex;gap:.4rem;flex-wrap:wrap}
+.sua-nho{color:#5B6370;font-size:13px}
+body.co-sua .chan{padding-bottom:76px}
+#sua-ch{max-height:60vh;overflow:auto;min-width:min(40rem,calc(100vw - 1.2rem))}
+#sua-ch .sua-ch-dong{display:grid;grid-template-columns:minmax(10rem,1fr) minmax(12rem,1.6fr);gap:.6rem;align-items:center;margin:.25rem 0;font-size:13px}
+#sua-ch input{font:500 14px 'Segoe UI',system-ui,sans-serif;border:1px solid #CFC6B4;border-radius:8px;padding:.35rem .5rem;width:100%;color:#1E2A3A;background:#fff}
+#sua-ch input.da-sua{border:2px solid #B98A1E;background:#FFF8E6}
+@media (max-width:560px){#sua-ch .sua-ch-dong{grid-template-columns:1fr}}
+body.dang-sua .sua-tro{outline:2px dashed #F3D27A;outline-offset:2px;cursor:text}
+</style>
+</head>
+<body>
+<div class="san" aria-hidden="true"><div class="canh" id="canhA"></div><div class="canh" id="canhB"></div><div class="mangan"></div><div class="hat" id="hat"></div></div>
+<div class="khung" id="app" aria-live="off"></div>
+<div id="bangVong"></div>
+<script>
+const DB = {"ten":"Quy tụ","phuDe":"Bốn vòng đoàn kết","bai":"Tư tưởng Hồ Chí Minh · Bài 7","nguon":"Câu hỏi: tệp “2.Bài 7. Câu hỏi trắc nghiệm.docx” (30 câu), đã sửa theo Giáo trình Tư tưởng Hồ Chí Minh 2026, Chương 5. Lời giải thích lấy chữ giáo trình.","ket":"Đoàn kết là sức mạnh, là then chốt của thành công","tuDien":["thành công","phụng sự","công nhân","hiệp thương","Đảng","độc lập","chiến lược","Tổ quốc"],"vong":[{"id":"v1","ten":"Vai trò của đại đoàn kết","cau":[{"id":"I.1","loai":"ds","nhan":"Đại đoàn kết là chiến lược lâu dài, nhất quán","hoi":"Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc là một vấn đề mang tính sách lược, có tính chất tạm thời và đối phó tình huống.","dung":false,"giai":"Trong tư tưởng Hồ Chí Minh, đại đoàn kết toàn dân tộc là chiến lược lâu dài, nhất quán của cách mạng Việt Nam. Chính sách và phương pháp tập hợp có thể điều chỉnh cho phù hợp với từng đối tượng, song không bao giờ được thay đổi chủ trương đại đoàn kết toàn dân tộc."},{"id":"II.1","loai":"mot","nhan":"Nhân tố quyết định sự thành bại của cách mạng","hoi":"Theo tư tưởng Hồ Chí Minh, nhân tố nào quyết định sự thành bại của cách mạng Việt Nam?","pa":["Sức mạnh kinh tế","Sự ủng hộ của quốc tế","Đại đoàn kết toàn dân tộc","Trình độ khoa học công nghệ","Vai trò của giới trí thức"],"dung":2,"giai":"Đại đoàn kết toàn dân tộc là vấn đề mang tính sống còn của dân tộc Việt Nam. Không bao giờ được thay đổi chủ trương đại đoàn kết toàn dân tộc, vì đó là nhân tố quyết định sự thành bại của cách mạng."},{"id":"V.2","loai":"dien","nhan":"Tám chữ nêu mục đích của Đảng Lao động Việt Nam","hoi":"Ngày 3/3/1951, Hồ Chí Minh tuyên bố: “Mục đích của Đảng Lao động Việt Nam có thể gồm trong 8 chữ là: Đoàn kết toàn dân, {_} Tổ quốc”.","dung":"phụng sự","giai":"Đại đoàn kết toàn dân tộc là nhiệm vụ hàng đầu của Đảng. Lời tuyên bố được nêu trong lời kết thúc buổi ra mắt Đảng Lao động Việt Nam ngày 3/3/1951."},{"id":"I.2","loai":"ds","nhan":"Đại đoàn kết là mục tiêu, nhiệm vụ hàng đầu","hoi":"Đối với Hồ Chí Minh, đại đoàn kết toàn dân tộc không chỉ là khẩu hiệu chiến lược mà còn là mục tiêu lâu dài của cách mạng, là nhiệm vụ hàng đầu của Đảng.","dung":true,"giai":"Đối với Hồ Chí Minh, đại đoàn kết không chỉ là khẩu hiệu chiến lược mà còn là mục tiêu lâu dài của cách mạng. Đảng là lực lượng lãnh đạo cách mạng Việt Nam nên tất yếu đại đoàn kết toàn dân tộc phải được xác định là nhiệm vụ hàng đầu của Đảng."},{"id":"V.1","loai":"dien","nhan":"Luận điểm về sức mạnh của đoàn kết","hoi":"Hồ Chí Minh đã khái quát thành nhiều luận điểm mang tính chân lý về vai trò và sức mạnh của khối đại đoàn kết toàn dân tộc: “Đoàn kết là sức mạnh, là then chốt của {_}”.","dung":"thành công","giai":"Người đã đi đến kết luận: “Đoàn kết, đoàn kết, đại đoàn kết / Thành công, thành công, đại thành công”."},{"id":"III.1","loai":"sai","nhan":"Hai vai trò của đại đoàn kết toàn dân tộc","hoi":"Phát biểu nào sau đây không đúng về vai trò của đại đoàn kết toàn dân tộc theo tư tưởng Hồ Chí Minh?","pa":["Là vấn đề có ý nghĩa chiến lược","Là nhân tố quyết định thành công của cách mạng","Là một mục tiêu, nhiệm vụ hàng đầu của cách mạng Việt Nam","Chỉ mang tính sách lược tạm thời để đối phó tình huống","Là vấn đề mang tính sống còn của dân tộc"],"dung":3,"giai":"Giáo trình nêu hai vai trò: đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng; đại đoàn kết toàn dân tộc là một mục tiêu, nhiệm vụ hàng đầu của cách mạng Việt Nam. Đó là chiến lược lâu dài, nhất quán, không phải sách lược tạm thời."},{"id":"IV.1","loai":"nhieu","nhan":"Vai trò của đại đoàn kết đối với cách mạng","hoi":"Theo Hồ Chí Minh, đại đoàn kết toàn dân tộc có vai trò như thế nào đối với cách mạng Việt Nam?","pa":["Là vấn đề có ý nghĩa chiến lược","Quyết định thành công của cách mạng","Là mục tiêu lâu dài của cách mạng","Là nhiệm vụ hàng đầu của Đảng","Chỉ là biện pháp tạm thời trong lúc cách mạng gặp khó khăn"],"dung":[0,1,2,3],"giai":"Đại đoàn kết toàn dân tộc là vấn đề có ý nghĩa chiến lược, quyết định thành công của cách mạng; là mục tiêu lâu dài của cách mạng và nhiệm vụ hàng đầu của Đảng. Đó là chiến lược lâu dài, nhất quán, không phải biện pháp tạm thời."},{"id":"II.3","loai":"mot","nhan":"Mục đích của Đảng Lao động Việt Nam (3/3/1951)","hoi":"Trong lời kết thúc buổi ra mắt Đảng Lao động Việt Nam ngày 3/3/1951, Hồ Chí Minh tuyên bố mục đích của Đảng có thể gồm trong 8 chữ. Đó là 8 chữ nào?","pa":["Dân chủ, công bằng, văn minh, hiện đại","Độc lập, tự do, hạnh phúc cho nhân dân","Đoàn kết toàn dân, phụng sự Tổ quốc","Xây dựng chủ nghĩa xã hội thành công","Phát triển kinh tế, nâng cao đời sống"],"dung":2,"giai":"Hồ Chí Minh tuyên bố: “Mục đích của Đảng Lao động Việt Nam có thể gồm trong 8 chữ là: ĐOÀN KẾT TOÀN DÂN, PHỤNG SỰ TỔ QUỐC”."}]},{"id":"v2","ten":"Lực lượng và điều kiện","cau":[{"id":"V.3","loai":"dien","nhan":"Nền tảng của khối đại đoàn kết toàn dân tộc","hoi":"Lực lượng làm nền tảng cho khối đại đoàn kết toàn dân tộc theo quan điểm của Hồ Chí Minh là {_}, nông dân và trí thức.","dung":"công nhân","giai":"Nền tảng này càng được mở rộng và củng cố thì khối đại đoàn kết toàn dân tộc càng vững chắc."},{"id":"II.4","loai":"mot","nhan":"Ba điều kiện xây dựng khối đại đoàn kết","hoi":"Theo Hồ Chí Minh, nội dung nào sau đây là một trong những điều kiện để xây dựng khối đại đoàn kết toàn dân tộc?","pa":["Chỉ tập trung vào lợi ích riêng của từng giai cấp","Phải loại bỏ mọi khác biệt trong xã hội","Phải có lòng khoan dung, độ lượng với con người","Phải có sự áp đặt từ trên xuống","Đặt lợi ích của một bộ phận lên trên lợi ích của dân tộc"],"dung":2,"giai":"Giáo trình nêu ba điều kiện: một là, phải kế thừa truyền thống yêu nước, nhân nghĩa, đoàn kết của dân tộc; hai là, phải có lòng khoan dung, độ lượng với con người; ba là, phải có niềm tin vào nhân dân."},{"id":"I.3","loai":"ds","nhan":"Chủ thể của khối đại đoàn kết toàn dân tộc","hoi":"Chủ thể của khối đại đoàn kết toàn dân tộc theo Hồ Chí Minh chỉ có giai cấp công nhân.","dung":false,"giai":"Chủ thể của khối đại đoàn kết toàn dân tộc bao gồm toàn thể nhân dân, tất cả những người Việt Nam yêu nước ở các giai cấp, các tầng lớp trong xã hội, các ngành, các giới, các lứa tuổi, các dân tộc, đồng bào các tôn giáo, các đảng phái. Công nhân, nông dân và trí thức là nền tảng, không phải toàn bộ chủ thể."},{"id":"III.2","loai":"sai","nhan":"Lòng khoan dung, độ lượng với con người","hoi":"Nội dung nào sau đây không phải là điều kiện để xây dựng khối đại đoàn kết toàn dân tộc theo Hồ Chí Minh?","pa":["Phải kế thừa truyền thống yêu nước, nhân nghĩa, đoàn kết của dân tộc","Phải có lòng khoan dung, độ lượng với con người","Phải có niềm tin vào nhân dân","Phải tuyệt đối hóa sự đồng nhất, không chấp nhận bất kỳ sự khác biệt nào"],"dung":3,"giai":"Ba điều kiện là kế thừa truyền thống yêu nước, nhân nghĩa, đoàn kết; khoan dung, độ lượng; niềm tin vào nhân dân. Theo Hồ Chí Minh, cần trân trọng phần thiện dù nhỏ nhất ở mỗi người, có vậy mới tập hợp, quy tụ rộng rãi mọi lực lượng: “Năm ngón tay cũng có ngón vắn ngón dài. Nhưng vắn dài đều họp nhau lại nơi bàn tay”."},{"id":"II.2","loai":"mot","nhan":"Liên minh làm nền tảng của khối đại đoàn kết","hoi":"Nền tảng của khối đại đoàn kết toàn dân tộc theo Hồ Chí Minh là sự liên minh giữa các lực lượng nào?","pa":["Học sinh, sinh viên và thanh niên","Công nhân, nông dân và trí thức","Quân đội, công an và dân quân tự vệ","Các dân tộc thiểu số và tôn giáo","Các đảng phái chính trị khác nhau"],"dung":1,"giai":"Hồ Chí Minh chỉ rõ: “Đại đoàn kết tức là trước hết phải đoàn kết đại đa số nhân dân, mà đại đa số nhân dân là công nhân, nông dân và các tầng lớp nhân dân lao động khác. Đó là nền gốc của đại đoàn kết”. Lực lượng làm nền tảng là công nhân, nông dân và trí thức."},{"id":"IV.2","loai":"nhieu","nhan":"Điều kiện xây dựng khối đại đoàn kết","hoi":"Theo Hồ Chí Minh, để xây dựng khối đại đoàn kết toàn dân tộc cần bảo đảm những điều kiện nào?","pa":["Phải kế thừa truyền thống yêu nước, nhân nghĩa, đoàn kết của dân tộc","Phải có lòng khoan dung, độ lượng với con người","Phải có niềm tin vào nhân dân","Phải loại bỏ mọi khác biệt trong xã hội","Phải có sự áp đặt từ trên xuống"],"dung":[0,1,2],"giai":"Giáo trình nêu ba điều kiện: kế thừa truyền thống yêu nước, nhân nghĩa, đoàn kết của dân tộc; có lòng khoan dung, độ lượng với con người; có niềm tin vào nhân dân. Dân là chỗ dựa vững chắc, đồng thời là nguồn sức mạnh vô địch của khối đại đoàn kết toàn dân tộc."}]},{"id":"v3","ten":"Mặt trận dân tộc thống nhất","cau":[{"id":"II.5","loai":"mot","nhan":"Hình thức tổ chức: Mặt trận dân tộc thống nhất","hoi":"Hình thức tổ chức của khối đại đoàn kết toàn dân tộc theo Hồ Chí Minh là gì?","pa":["Các đoàn thể thanh niên","Các hội phụ nữ","Các công đoàn","Mặt trận dân tộc thống nhất","Các tổ chức tôn giáo"],"dung":3,"giai":"Khối đại đoàn kết toàn dân tộc chỉ trở thành lực lượng to lớn, có sức mạnh khi được tập hợp, tổ chức lại thành một khối vững chắc, đó là Mặt trận dân tộc thống nhất. Các hội, đoàn thể đều có vai trò, trong đó bao trùm là Mặt trận dân tộc thống nhất."},{"id":"V.4","loai":"dien","nhan":"Mặt trận đặt dưới sự lãnh đạo của Đảng","hoi":"Mặt trận dân tộc thống nhất phải được xây dựng trên nền tảng liên minh công nhân - nông dân - trí thức và đặt dưới sự lãnh đạo của {_}.","dung":"Đảng","giai":"Đảng Cộng sản Việt Nam vừa là thành viên, vừa là lực lượng lãnh đạo Mặt trận. Đảng không có lợi ích riêng, mà gắn liền với lợi ích toàn xã hội, toàn dân tộc."},{"id":"V.5","loai":"dien","nhan":"Nguyên tắc hiệp thương dân chủ","hoi":"Mặt trận dân tộc thống nhất phải hoạt động theo nguyên tắc {_} dân chủ.","dung":"hiệp thương","giai":"Mặt trận bao gồm nhiều giai cấp, tầng lớp, đảng phái, dân tộc, tôn giáo khác nhau, với nhiều lợi ích khác nhau. Mọi vấn đề của Mặt trận đều phải được đem ra để tất cả các thành viên cùng nhau bàn bạc công khai, để đi đến nhất trí."},{"id":"I.4","loai":"ds","nhan":"Tôn trọng những điểm khác biệt (Đại hội XII)","hoi":"“Tôn trọng những điểm khác biệt không trái với lợi ích chung của quốc gia - dân tộc” là một nội dung trong phương hướng tăng cường khối đại đoàn kết toàn dân tộc mà Đảng đề ra trong giai đoạn hiện nay.","dung":true,"giai":"Đại hội XII của Đảng đề ra phương hướng, nhiệm vụ tăng cường khối đại đoàn kết toàn dân tộc: lấy mục tiêu xây dựng một nước Việt Nam hòa bình, độc lập, thống nhất, toàn vẹn lãnh thổ, “dân giàu, nước mạnh, dân chủ, công bằng, văn minh” làm điểm tương đồng; tôn trọng những điểm khác biệt không trái với lợi ích chung của quốc gia - dân tộc."},{"id":"III.3","loai":"sai","nhan":"Bàn bạc công khai để đi đến nhất trí","hoi":"Nội dung nào sau đây không thuộc nguyên tắc xây dựng và hoạt động của Mặt trận dân tộc thống nhất theo tư tưởng Hồ Chí Minh?","pa":["Hoạt động theo nguyên tắc hiệp thương dân chủ","Xây dựng trên nền tảng liên minh công nhân - nông dân - trí thức","Đặt dưới sự lãnh đạo của Đảng","Đoàn kết thật sự, chân thành, thân ái giúp đỡ nhau cùng tiến bộ","Quyết định theo đa số, không cần bàn bạc để đi đến nhất trí"],"dung":4,"giai":"Hoạt động của Mặt trận phải dựa trên nguyên tắc hiệp thương dân chủ: mọi vấn đề đều phải được tất cả các thành viên cùng nhau bàn bạc công khai, để đi đến nhất trí, loại trừ mọi sự áp đặt hoặc dân chủ hình thức."},{"id":"IV.3","loai":"nhieu","nhan":"Ba nguyên tắc của Mặt trận dân tộc thống nhất","hoi":"Nguyên tắc xây dựng và hoạt động của Mặt trận dân tộc thống nhất theo Hồ Chí Minh gồm những nguyên tắc nào?","pa":["Xây dựng trên nền tảng liên minh công nhân - nông dân - trí thức và đặt dưới sự lãnh đạo của Đảng","Hoạt động theo nguyên tắc hiệp thương dân chủ","Đoàn kết lâu dài, chặt chẽ, đoàn kết thật sự, chân thành, thân ái giúp đỡ nhau cùng tiến bộ","Mọi thành viên phải từ bỏ lợi ích riêng, kể cả lợi ích riêng chính đáng"],"dung":[0,1,2],"giai":"Giáo trình nêu ba nguyên tắc như ba phương án đúng. Trong nguyên tắc thứ ba, Hồ Chí Minh nhấn mạnh phương châm “cầu đồng tồn dị”, lấy cái chung để hạn chế cái riêng, cái khác biệt. Những lợi ích riêng chính đáng, phù hợp với lợi ích chung của đất nước, của dân tộc cần được tôn trọng."},{"id":"III.6","loai":"sai","nhan":"Ba phương thức xây dựng khối đại đoàn kết","hoi":"Nội dung nào sau đây không phải là phương thức xây dựng khối đại đoàn kết toàn dân tộc theo Hồ Chí Minh?","pa":["Làm tốt công tác vận động quần chúng (dân vận)","Thành lập đoàn thể, tổ chức quần chúng phù hợp với từng đối tượng","Tập hợp các đoàn thể, tổ chức quần chúng trong Mặt trận dân tộc thống nhất","Đòi hỏi sự hy sinh toàn bộ lợi ích cá nhân vì lợi ích chung","Giáo dục, tuyên truyền, hướng dẫn, giúp đỡ nhân dân"],"dung":3,"giai":"Giáo trình nêu ba phương thức: làm tốt công tác vận động quần chúng (dân vận); thành lập đoàn thể, tổ chức quần chúng phù hợp với từng đối tượng; tập hợp các đoàn thể, tổ chức quần chúng trong Mặt trận dân tộc thống nhất. Giáo dục, tuyên truyền, hướng dẫn, giúp đỡ nhân dân là nội dung của công tác dân vận."}]},{"id":"v4","ten":"Đoàn kết quốc tế","cau":[{"id":"I.5","loai":"ds","nhan":"Hai lý do phải đoàn kết quốc tế","hoi":"Theo Hồ Chí Minh, đoàn kết quốc tế chỉ nhằm kết hợp sức mạnh dân tộc với sức mạnh thời đại, không liên quan đến việc góp phần thực hiện các mục tiêu cách mạng của thời đại.","dung":false,"giai":"Giáo trình nêu hai lý do: thực hiện đoàn kết quốc tế nhằm kết hợp sức mạnh dân tộc với sức mạnh thời đại, tạo sức mạnh tổng hợp cho cách mạng; thực hiện đoàn kết quốc tế nhằm góp phần cùng nhân dân thế giới thực hiện thắng lợi các mục tiêu cách mạng của thời đại."},{"id":"III.4","loai":"sai","nhan":"Sức mạnh thời đại","hoi":"Nội dung nào sau đây không đúng khi nói về “sức mạnh thời đại” trong tư tưởng Hồ Chí Minh về đoàn kết quốc tế?","pa":["Là sức mạnh của phong trào cách mạng thế giới","Là sức mạnh của chủ nghĩa Mác - Lênin","Gắn với chủ nghĩa Mác - Lênin được xác lập bởi thắng lợi của Cách mạng Tháng Mười Nga năm 1917","Chỉ bao gồm sức mạnh quân sự của các nước lớn","Là sức mạnh tiềm ẩn trong các phong trào cách mạng thế giới mà Việt Nam cần tranh thủ"],"dung":3,"giai":"Sức mạnh thời đại là sức mạnh của phong trào cách mạng thế giới, đó còn là sức mạnh của chủ nghĩa Mác - Lênin được xác lập bởi thắng lợi của Cách mạng Tháng Mười Nga năm 1917. Hồ Chí Minh đã từng bước phát hiện ra sức mạnh vĩ đại tiềm ẩn trong các phong trào cách mạng thế giới mà Việt Nam cần tranh thủ."},{"id":"IV.4","loai":"nhieu","nhan":"Sự cần thiết phải đoàn kết quốc tế","hoi":"Hồ Chí Minh chỉ ra những lý do nào cần thiết phải thực hiện đoàn kết quốc tế?","pa":["Nhằm kết hợp sức mạnh dân tộc với sức mạnh thời đại, tạo sức mạnh tổng hợp cho cách mạng","Nhằm góp phần cùng nhân dân thế giới thực hiện thắng lợi các mục tiêu cách mạng của thời đại","Để sự giúp đỡ của bên ngoài thay thế cho nội lực của dân tộc","Để các nước lớn quyết định thay đường lối cách mạng Việt Nam"],"dung":[0,1],"giai":"Giáo trình nêu hai lý do như hai phương án đúng. Đoàn kết quốc tế là để tăng thêm nội lực: nội lực là nhân tố quyết định, còn nguồn ngoại lực chỉ có thể phát huy tác dụng thông qua nguồn lực nội sinh. “Độc lập nghĩa là chúng tôi điều khiển lấy mọi công việc của chúng tôi, không có sự can thiệp ở ngoài vào”."},{"id":"II.6","loai":"mot","nhan":"Thực lực là cái chiêng, ngoại giao là cái tiếng","hoi":"Trong quan hệ quốc tế, Hồ Chí Minh nhấn mạnh: “Thực lực mạnh, ngoại giao sẽ thắng lợi. Thực lực là cái chiêng mà ngoại giao là cái tiếng, Chiêng có tiếng mới lớn”. Câu nói này nhấn mạnh điều gì?","pa":["Tầm quan trọng của sức mạnh quân sự","Vai trò của ngoại giao trong việc tạo dựng hình ảnh","Sự cần thiết của nội lực mạnh để tăng cường vị thế đối ngoại","Mối quan hệ giữa văn hóa và đối ngoại","Tầm quan trọng của việc học tiếng nước ngoài"],"dung":2,"giai":"Đoàn kết trên cơ sở độc lập, tự chủ: để đoàn kết tốt phải có nội lực tốt. Nội lực là nhân tố quyết định, còn nguồn ngoại lực chỉ có thể phát huy tác dụng thông qua nguồn lực nội sinh."},{"id":"III.5","loai":"sai","nhan":"Các lực lượng cần đoàn kết quốc tế","hoi":"Lực lượng nào sau đây không thuộc các lực lượng cần đoàn kết quốc tế trong tư tưởng Hồ Chí Minh?","pa":["Phong trào cộng sản và công nhân quốc tế","Phong trào đấu tranh giải phóng dân tộc","Phong trào hòa bình, dân chủ thế giới","Các tổ chức kinh tế tư bản quốc tế","Phong trào chống chiến tranh của nhân dân các nước đang xâm lược Việt Nam"],"dung":3,"giai":"Lực lượng đoàn kết quốc tế trong tư tưởng Hồ Chí Minh bao gồm: phong trào cộng sản và công nhân quốc tế; phong trào đấu tranh giải phóng dân tộc và phong trào hòa bình, dân chủ thế giới, trước hết là phong trào chống chiến tranh của nhân dân các nước đang xâm lược Việt Nam."},{"id":"I.6","loai":"ds","nhan":"Đoàn kết trên cơ sở độc lập, tự chủ","hoi":"Gắn với nguyên tắc đoàn kết quốc tế trên cơ sở độc lập, tự chủ, Hồ Chí Minh luôn nêu cao khẩu hiệu: “Tự lực cánh sinh, dựa vào sức mình là chính”.","dung":true,"giai":"Để đoàn kết tốt phải có nội lực tốt. Chính vì vậy, trong đấu tranh cách mạng, Hồ Chí Minh luôn nêu cao khẩu hiệu: “Tự lực cánh sinh, dựa vào sức mình là chính”."},{"id":"V.6","loai":"dien","nhan":"Tự lực cánh sinh trong kháng chiến chống Pháp","hoi":"Trong kháng chiến chống thực dân Pháp, Người chỉ rõ: “Một dân tộc không tự lực cánh sinh mà cứ ngồi chờ dân tộc khác giúp đỡ thì không xứng đáng được {_}”.","dung":"độc lập","giai":"Muốn tranh thủ được sự ủng hộ quốc tế, Đảng phải có đường lối độc lập, tự chủ và đúng đắn."},{"id":"IV.6","loai":"nhieu","nhan":"Bốn tầng mặt trận","hoi":"Tư tưởng đoàn kết vì thắng lợi của cách mạng Việt Nam đã định hướng cho việc hình thành “bốn tầng mặt trận”. Đó là những mặt trận nào?","pa":["Mặt trận đại đoàn kết dân tộc","Mặt trận đoàn kết Việt Nam - Lào - Campuchia","Mặt trận nhân dân Á - Phi đoàn kết với Việt Nam","Mặt trận nhân dân thế giới đoàn kết với Việt Nam chống đế quốc xâm lược","Mặt trận thống nhất của nhân dân chính quốc và thuộc địa"],"dung":[0,1,2,3],"giai":"Bốn tầng mặt trận: Mặt trận đại đoàn kết dân tộc, Mặt trận đoàn kết Việt Nam - Lào - Campuchia, Mặt trận nhân dân Á - Phi đoàn kết với Việt Nam, Mặt trận nhân dân thế giới đoàn kết với Việt Nam chống đế quốc xâm lược. “Mặt trận thống nhất của nhân dân chính quốc và thuộc địa” là quan điểm Hồ Chí Minh đưa ra từ năm 1924, không nằm trong bốn tầng này."},{"id":"IV.5","loai":"nhieu","nhan":"Lực lượng đoàn kết quốc tế","hoi":"Những lực lượng nào được Hồ Chí Minh xác định cần đoàn kết quốc tế?","pa":["Phong trào cộng sản và công nhân quốc tế","Phong trào đấu tranh giải phóng dân tộc","Các tổ chức kinh tế tư bản quốc tế","Phong trào hòa bình, dân chủ thế giới","Phong trào chống chiến tranh của nhân dân các nước đang xâm lược Việt Nam"],"dung":[0,1,3,4],"giai":"Lực lượng đoàn kết quốc tế bao gồm: phong trào cộng sản và công nhân quốc tế; phong trào đấu tranh giải phóng dân tộc và phong trào hòa bình, dân chủ thế giới, trước hết là phong trào chống chiến tranh của nhân dân các nước đang xâm lược Việt Nam. Giáo trình không xếp các tổ chức kinh tế tư bản quốc tế vào lực lượng cần đoàn kết."}]}]};
+const app = document.getElementById('app');
+const KHOA = 'quy-tu-bai7-v1';
+const KHOA_SUA = 'quy-tu-sua';
+const QS = new URLSearchParams(location.search);
+function layLS(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+/* chế độ sửa (?sua=1) — chỉ giảng viên mở; xem cuối tệp */
+const SUA = QS.get('sua') === '1' ? Object.assign({bat: true, chu: [], giaoDien: null, chuGD: {}}, layLS(KHOA_SUA) || {}) : null;
+/* giao diện: giá trị gốc lấy từ noi-dung.json (khóa giaoDien), chế độ sửa ghi đè trên máy */
+const GD_GOC = Object.assign({mauChinh: '#F3D27A', mauDung: '#6FE6FF', mauSai: '#FFA45C', doKinh: 0.74, phongTieuDe: 'cormorant', phongCau: 'lora', coChu: 1, domDom: true, canh: {}}, DB.giaoDien || {});
+const PHONG = {
+  cormorant: "'Cormorant Garamond', 'Palatino Linotype', Cambria, serif",
+  lora: "'Lora', Cambria, 'Palatino Linotype', serif",
+  vietnam: "'Be Vietnam Pro', 'Segoe UI', Arial, sans-serif",
+  palatino: "'Palatino Linotype', Palatino, serif",
+  constantia: "Constantia, Cambria, serif",
+  cambria: "Cambria, 'Palatino Linotype', serif"
+};
+let GD = Object.assign({}, GD_GOC, SUA && SUA.giaoDien || {});
+const MAU = {b: GD.mauDung, o: GD.mauSai, p: 'rgba(255,240,200,.18)', n: GD.mauChinh};
+let manHienTai = 'Màn mở đầu';
+/* ---------- CHỮ HIỂN THỊ ----------
+   Mọi chữ giao diện (không thuộc nội dung câu hỏi) nằm ở bảng này. {n}, {tong}, {d}, {t}, {da} là chỗ máy điền số.
+   Giá trị đã sửa lấy từ noi-dung.json (khóa chuGiaoDien), chế độ sửa ghi đè trên máy. */
+const CHU_GOC = {
+  vong: 'Vòng {n}',
+  mo_gioiThieu: 'Mỗi câu trả lời đúng thắp sáng một ô trong vòng, quy tụ thêm một lực lượng. Đủ {tong} lực lượng là khép kín bốn vòng.',
+  mo_soCau: '{n} câu',
+  mo_hoTen: 'Họ và tên', mo_nhapTen: 'Nhập họ tên', mo_nhom: 'Nhóm',
+  mo_batDau: 'Bắt đầu quy tụ',
+  mo_choiTiep: 'Chơi tiếp (đã trả lời {n}/{tong})',
+  mo_onTiep: 'Ôn tiếp chỗ trống ({n}/{tong})',
+  mo_ghiChu: 'Không tính giờ. Câu trả lời chưa đúng để lại chỗ trống trong vòng và được ôn lại khi kết thúc.',
+  mo_thieuTen: 'Hãy nhập họ và tên trước khi bắt đầu.',
+  choiLai: 'Chơi lại từ đầu',
+  hoi_choiLai: 'Xóa kết quả lượt này và chơi lại từ đầu?',
+  chao_cham: 'Chạm để vào câu hỏi',
+  dau_on: 'Ôn chỗ trống',
+  dau_tom: 'Đã quy tụ {d} lực lượng · {t} chỗ trống',
+  nhan_ds: 'Nhận định đúng hay sai?',
+  nhan_mot: 'Chọn một phương án đúng',
+  nhan_sai: 'Chọn phương án không đúng',
+  nhan_nhieu: 'Chọn tất cả ý đúng',
+  nhan_dien: 'Chạm vào từ để điền chỗ trống',
+  nut_dung: 'Đúng', nut_sai: 'Sai',
+  ghi_dapAn: 'Đáp án', ghi_daChon: 'Đã chọn', ghi_dung: 'Đúng', ghi_boSot: 'Bỏ sót', ghi_thua: 'Chọn thừa',
+  nhieu_dem: 'Đã chọn {n} ý. Chỉ được quy tụ khi chọn đủ và đúng mọi ý.',
+  xacNhan: 'Xác nhận', tiepTuc: 'Tiếp tục',
+  kq_dung: 'Chính xác · quy tụ thêm một lực lượng',
+  kq_sai: 'Chưa chính xác · đáp án: {da}',
+  phu_trong: 'Chỗ trống này được ghi lại để ôn khi kết thúc.',
+  phu_on: 'Chỗ trống này vẫn còn; có thể ôn lại lần nữa khi kết thúc.',
+  ket_sinhVien: 'Sinh viên', ket_nhom: 'Nhóm {n}',
+  ket_tieuDe: 'Đã quy tụ {d} lực lượng',
+  ket_khepKin: 'Khép kín bốn vòng: {tong}/{tong} lực lượng',
+  ket_daQuyTu: 'đã quy tụ', ket_choTrong: 'chỗ trống',
+  ket_canOn: '{n} chỗ trống cần ôn',
+  ket_khongCon: 'Không còn chỗ trống nào',
+  ket_khongCon2: 'Mọi lực lượng đã được quy tụ vào bốn vòng.',
+  ket_onLai: 'Ôn lại {n} chỗ trống'
+};
+function t(k, v) {
+  const m = (SUA && SUA.chuGD && SUA.chuGD[k] != null) ? SUA.chuGD[k] : (DB.chuGiaoDien && DB.chuGiaoDien[k] != null) ? DB.chuGiaoDien[k] : CHU_GOC[k];
+  return String(m == null ? k : m).replace(/\{(\w+)\}/g, (x, a) => (v && v[a] != null) ? v[a] : x);
+}
+/* chữ hiển thị có gắn mã: trong chế độ sửa, bấm vào là sửa mẫu chữ của mã đó */
+function tk(k, v) { return '<span data-k="' + k + '">' + h(t(k, v)) + '</span>'; }
+function apGiaoDien(g) {
+  GD = g;
+  const r = document.documentElement.style;
+  r.setProperty('--vang', g.mauChinh); r.setProperty('--xanh', g.mauDung); r.setProperty('--cam', g.mauSai);
+  r.setProperty('--dokinh', g.doKinh); r.setProperty('--he', g.coChu);
+  r.setProperty('--tieude', PHONG[g.phongTieuDe] || PHONG.cormorant); r.setProperty('--serif', PHONG[g.phongCau] || PHONG.lora);
+  MAU.b = g.mauDung; MAU.o = g.mauSai; MAU.n = g.mauChinh;
+  document.getElementById('hat').style.display = g.domDom ? '' : 'none';
+  if (canhLogic) datCanh(canhLogic);
+}
+const CHU = 'ABCDE';
+const BAN_KINH = [34, 56, 78, 100];
+const ICON_DUNG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const ICON_SAI = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+/* =====================================================================
+   CẢNH NỀN — vẽ bằng SVG, mỗi vòng một cảnh (vẽ mới, không dùng ảnh ngoài)
+   ===================================================================== */
+const CANH = {
+  mo:   {ten: 'Rừng đêm đom đóm',        hat: '#FFE7A0', mau: 'linear-gradient(160deg,#2a1563,#8a3f8f 60%,#f0a060)'},
+  v1:   {ten: 'Bình minh trên đồng lúa', hat: '#FFF0B0', mau: 'linear-gradient(170deg,#4a78d8,#f4a6b6 55%,#ffd98a)', cau: 'Đoàn kết là sức mạnh của chúng ta'},
+  v2:   {ten: 'Rừng tre ngọc bích',      hat: '#9FFFE0', mau: 'linear-gradient(170deg,#04262a,#0f6b5f 55%,#a8f5cf)', cau: 'Năm ngón tay họp nhau lại nơi bàn tay'},
+  v3:   {ten: 'Non nước hoàng hôn',      hat: '#FFB36B', mau: 'linear-gradient(170deg,#2b1055,#d5408a 50%,#ffb347)', cau: 'Bàn bạc công khai, để đi đến nhất trí'},
+  v4:   {ten: 'Biển sao, cực quang',     hat: '#BDEBFF', mau: 'linear-gradient(170deg,#020617,#123a7a 55%,#39d6b0)', cau: 'Kết hợp sức mạnh dân tộc với sức mạnh thời đại'},
+  ket:  {ten: 'Hội đèn trời',            hat: '#FFC37A', mau: 'linear-gradient(170deg,#1d0b3a,#8a2160 55%,#ff8a3d)'}
+};
+function ngauNhien(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+function doi(r, a, b) { return a + (b - a) * r(); }
+function dayNui(r, y, bienDo, buoc, mau, op) {
+  let d = 'M-20,1020 L-20,' + y.toFixed(0);
+  let x = -20, yt = y;
+  while (x < 1640) { const nx = x + buoc * doi(r, .6, 1.4), ny = y - bienDo * r(); d += ' Q' + ((x + nx) / 2).toFixed(0) + ',' + (Math.min(yt, ny) - bienDo * .35 * r()).toFixed(0) + ' ' + nx.toFixed(0) + ',' + ny.toFixed(0); x = nx; yt = ny; }
+  return '<path d="' + d + ' L1640,1020 Z" fill="' + mau + '"' + (op ? ' opacity="' + op + '"' : '') + '/>';
+}
+function quangSang(cx, cy, r, mau, id, op) {
+  return '<radialGradient id="' + id + '"><stop offset="0" stop-color="' + mau + '" stop-opacity="' + (op || 1) + '"/><stop offset=".35" stop-color="' + mau + '" stop-opacity="' + ((op || 1) * .45) + '"/><stop offset="1" stop-color="' + mau + '" stop-opacity="0"/></radialGradient><circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="url(#' + id + ')"/>';
+}
+function tiaSang(cx, cy, so, dai, mau, op, r, goc0, goc1) {
+  let s = '';
+  for (let i = 0; i < so; i++) {
+    const g = doi(r, goc0, goc1) * Math.PI / 180, w = doi(r, .015, .05);
+    const x1 = cx + Math.cos(g - w) * dai, y1 = cy + Math.sin(g - w) * dai, x2 = cx + Math.cos(g + w) * dai, y2 = cy + Math.sin(g + w) * dai;
+    s += '<polygon points="' + cx + ',' + cy + ' ' + x1.toFixed(0) + ',' + y1.toFixed(0) + ' ' + x2.toFixed(0) + ',' + y2.toFixed(0) + '" fill="' + mau + '" opacity="' + (op * doi(r, .4, 1)).toFixed(2) + '"/>';
+  }
+  return s;
+}
+function sao(r, so, yMax, mau) {
+  let s = '';
+  for (let i = 0; i < so; i++) s += '<circle cx="' + doi(r, 0, 1600).toFixed(0) + '" cy="' + doi(r, 0, yMax).toFixed(0) + '" r="' + doi(r, .6, 2.4).toFixed(1) + '" fill="' + mau + '" opacity="' + doi(r, .3, 1).toFixed(2) + '"/>';
+  return s;
+}
+function co(r, yDay, so, mau, cao) {
+  let d = '';
+  for (let i = 0; i < so; i++) {
+    const x = doi(r, -20, 1620), h = doi(r, cao * .4, cao), cong = doi(r, -60, 60), w = doi(r, 4, 10);
+    d += 'M' + (x - w).toFixed(0) + ',' + yDay + ' Q' + (x + cong * .4).toFixed(0) + ',' + (yDay - h * .6).toFixed(0) + ' ' + (x + cong).toFixed(0) + ',' + (yDay - h).toFixed(0) + ' Q' + (x + cong * .3 + w).toFixed(0) + ',' + (yDay - h * .5).toFixed(0) + ' ' + (x + w).toFixed(0) + ',' + yDay + ' Z ';
+  }
+  return '<path d="' + d + '" fill="' + mau + '"/><rect x="-20" y="' + yDay + '" width="1640" height="' + (1020 - yDay) + '" fill="' + mau + '"/>';
+}
+function cay(r, x, yDay, cao, mau) {
+  let s = '<path d="M' + (x - 26) + ',' + yDay + ' C' + (x - 14) + ',' + (yDay - cao * .5) + ' ' + (x - 30) + ',' + (yDay - cao * .8) + ' ' + x + ',' + (yDay - cao) + ' C' + (x + 26) + ',' + (yDay - cao * .8) + ' ' + (x + 12) + ',' + (yDay - cao * .5) + ' ' + (x + 30) + ',' + yDay + ' Z" fill="' + mau + '"/>';
+  for (let i = 0; i < 14; i++) s += '<circle cx="' + (x + doi(r, -170, 170)).toFixed(0) + '" cy="' + (yDay - cao + doi(r, -90, 120)).toFixed(0) + '" r="' + doi(r, 50, 110).toFixed(0) + '" fill="' + mau + '"/>';
+  return s;
+}
+function veCanh(ten) {
+  const r = ngauNhien({mo: 11, v1: 23, v2: 37, v3: 41, v4: 53, ket: 67}[ten]);
+  let s = '<svg viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><defs><filter id="mo-' + ten + '" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur stdDeviation="22"/></filter></defs>';
+  const troi = (id, stops) => '<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1">' + stops.map(([o, c]) => '<stop offset="' + o + '" stop-color="' + c + '"/>').join('') + '</linearGradient><rect width="1600" height="1000" fill="url(#' + id + ')"/>';
+  if (ten === 'mo') {
+    s += troi('t-mo', [[0, '#120a3a'], [.45, '#4a2384'], [.75, '#b0508a'], [1, '#f2a466']]);
+    s += sao(r, 120, 420, '#fff6dc');
+    s += quangSang(800, 470, 420, '#ffd9a0', 'g-mo1', .9) + '<circle cx="800" cy="470" r="70" fill="#fff3d6"/>';
+    s += tiaSang(800, 470, 16, 1300, '#ffe9c0', .09, r, 200, 340);
+    s += dayNui(r, 600, 120, 160, '#5a2f7e', .9) + dayNui(r, 680, 110, 130, '#3a1d62') + dayNui(r, 760, 90, 110, '#22113f');
+    s += cay(r, 140, 1000, 640, '#0d0722') + cay(r, 1480, 1000, 700, '#0d0722') + co(r, 940, 220, '#0a0619', 120);
+  } else if (ten === 'v1') {
+    s += troi('t-v1', [[0, '#3f6fd8'], [.35, '#8fa3e8'], [.6, '#f6a8b8'], [.82, '#ffd88a'], [1, '#fff2c6']]);
+    s += quangSang(800, 600, 560, '#fff2c0', 'g-v1', 1) + '<circle cx="800" cy="600" r="80" fill="#fffbe8"/>';
+    s += tiaSang(800, 600, 22, 1400, '#fff6d8', .14, r, 190, 350);
+    s += '<g filter="url(#mo-v1)" opacity=".75"><ellipse cx="380" cy="300" rx="260" ry="50" fill="#ffe1ec"/><ellipse cx="1220" cy="240" rx="300" ry="60" fill="#ffe9d0"/></g>';
+    s += dayNui(r, 640, 110, 200, '#9b7ec0', .85) + dayNui(r, 700, 90, 170, '#6f9f6a');
+    const ruong = ['#8fd45a', '#6fbf4a', '#56a83c', '#3f8e30', '#2e7426'];
+    ruong.forEach((m, i) => {
+      const y = 730 + i * 58, b = 22 + i * 6;
+      let d = 'M-20,' + y; for (let x = -20; x <= 1640; x += 160) d += ' Q' + (x + 80) + ',' + (y - b * doi(r, .4, 1.4)).toFixed(0) + ' ' + (x + 160) + ',' + y;
+      s += '<path d="' + d + ' L1640,1020 L-20,1020 Z" fill="' + m + '"/><path d="' + d + '" fill="none" stroke="#e9ff9a" stroke-width="3" opacity=".55"/>';
+    });
+    s += co(r, 985, 260, '#1f4a1c', 140);
+  } else if (ten === 'v2') {
+    s += troi('t-v2', [[0, '#03191c'], [.5, '#0b4a46'], [1, '#0e5e52']]);
+    s += quangSang(820, 420, 620, '#b8ffe0', 'g-v2', .95);
+    s += tiaSang(300, -100, 12, 1500, '#d8fff0', .12, r, 35, 75);
+    const tre = (so, x0, x1, w0, w1, mau, op) => {
+      let t = '';
+      for (let i = 0; i < so; i++) {
+        const x = doi(r, x0, x1), w = doi(r, w0, w1), nghieng = doi(r, -40, 40);
+        t += '<path d="M' + x.toFixed(0) + ',1020 L' + (x + nghieng).toFixed(0) + ',-20 L' + (x + nghieng + w).toFixed(0) + ',-20 L' + (x + w).toFixed(0) + ',1020 Z" fill="' + mau + '" opacity="' + op + '"/>';
+        for (let y = doi(r, 40, 140); y < 1000; y += doi(r, 110, 170)) { const xx = x + nghieng * (1 - y / 1000); t += '<rect x="' + (xx - 2).toFixed(0) + '" y="' + y.toFixed(0) + '" width="' + (w + 4).toFixed(0) + '" height="4" fill="' + mau + '" opacity="' + op + '"/>'; }
+        for (let k = 0; k < 4; k++) { const ly = doi(r, 60, 700), lx = x + nghieng * (1 - ly / 1000) + w / 2, g = doi(r, -60, 60); t += '<ellipse cx="' + (lx + 40).toFixed(0) + '" cy="' + ly.toFixed(0) + '" rx="48" ry="9" fill="' + mau + '" opacity="' + op + '" transform="rotate(' + g.toFixed(0) + ' ' + lx.toFixed(0) + ' ' + ly.toFixed(0) + ')"/>'; }
+      }
+      return t;
+    };
+    s += tre(16, -40, 1640, 10, 18, '#2a8f7a', .45) + tre(11, -40, 1640, 18, 30, '#13594c', .85) + tre(7, -60, 1660, 34, 56, '#04211c', 1);
+    for (let i = 0; i < 26; i++) { const x = doi(r, 40, 1560), y = doi(r, 880, 980), k = doi(r, 8, 20); s += quangSang(x.toFixed(0), y.toFixed(0), k * 3, '#7fe8ff', 'g-n' + i, .9) + '<ellipse cx="' + x.toFixed(0) + '" cy="' + y.toFixed(0) + '" rx="' + k.toFixed(0) + '" ry="' + (k * .55).toFixed(0) + '" fill="#c8fbff"/>'; }
+    s += co(r, 990, 200, '#021411', 110);
+  } else if (ten === 'v3') {
+    s += troi('t-v3', [[0, '#26104f'], [.35, '#7a2a8a'], [.58, '#e0488a'], [.76, '#ff9a3c'], [.8, '#ffd36b'], [1, '#3a1240']]);
+    s += quangSang(800, 640, 520, '#ffdd8a', 'g-v3', 1) + '<circle cx="800" cy="640" r="95" fill="#fff0c4"/>';
+    s += tiaSang(800, 640, 18, 1300, '#ffe0b0', .1, r, 195, 345);
+    const nui = (so, base, hMin, hMax, wMin, wMax, mau, op, chua) => {
+      let t = '';
+      for (let i = 0; i < so; i++) { let x = doi(r, -100, 1600); if (chua && x > 520 && x < 1000) x = x < 760 ? x - 420 : x + 260; const w = doi(r, wMin, wMax), h = doi(r, hMin, hMax); t += '<path d="M' + x.toFixed(0) + ',' + base + ' C' + (x + w * .02).toFixed(0) + ',' + (base - h * .7).toFixed(0) + ' ' + (x + w * .15).toFixed(0) + ',' + (base - h).toFixed(0) + ' ' + (x + w * .5).toFixed(0) + ',' + (base - h).toFixed(0) + ' C' + (x + w * .85).toFixed(0) + ',' + (base - h).toFixed(0) + ' ' + (x + w * .98).toFixed(0) + ',' + (base - h * .7).toFixed(0) + ' ' + (x + w).toFixed(0) + ',' + base + ' Z" fill="' + mau + '" opacity="' + op + '"/>'; }
+      return t;
+    };
+    s += nui(9, 760, 160, 300, 140, 260, '#b05a9a', .7) + nui(7, 770, 240, 420, 160, 280, '#6a2470', .9, true) + nui(6, 775, 300, 520, 160, 260, '#2c0c3a', 1, true);
+    s += '<linearGradient id="nuoc3" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff9a5c"/><stop offset=".4" stop-color="#a03a7a"/><stop offset="1" stop-color="#1c0830"/></linearGradient><rect x="0" y="770" width="1600" height="240" fill="url(#nuoc3)"/>';
+    for (let i = 0; i < 40; i++) { const y = doi(r, 785, 990), w = doi(r, 30, 160) * (1 - (y - 780) / 400); s += '<rect x="' + (800 - w / 2 + doi(r, -260, 260)).toFixed(0) + '" y="' + y.toFixed(0) + '" width="' + w.toFixed(0) + '" height="3" rx="1.5" fill="#fff0c4" opacity="' + doi(r, .35, .9).toFixed(2) + '"/>'; }
+    s += '<path d="M690,862 q60,-14 120,0 q-60,22 -120,0 Z" fill="#1a0526"/><path d="M745,860 l0,-70 l38,58 Z" fill="#1a0526"/>';
+  } else if (ten === 'v4') {
+    s += troi('t-v4', [[0, '#01030f'], [.45, '#081b47'], [.72, '#13407e'], [1, '#041230']]);
+    s += sao(r, 260, 700, '#e6f4ff');
+    s += '<linearGradient id="cq1" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3cffb5" stop-opacity="0"/><stop offset=".3" stop-color="#3cffb5"/><stop offset=".7" stop-color="#8a6bff"/><stop offset="1" stop-color="#ff5fd2" stop-opacity="0"/></linearGradient>';
+    s += '<linearGradient id="cq2" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#ff5fd2" stop-opacity="0"/><stop offset=".4" stop-color="#ff7ad9"/><stop offset=".8" stop-color="#5fd0ff"/><stop offset="1" stop-color="#5fd0ff" stop-opacity="0"/></linearGradient>';
+    s += quangSang(800, 760, 700, '#2fd3b0', 'g-v4c', .35);
+    s += '<g filter="url(#mo-v4)" opacity=".95"><path d="M-100,320 C250,160 520,420 820,250 S1350,120 1700,300" fill="none" stroke="url(#cq1)" stroke-width="130"/><path d="M-100,470 C300,330 600,540 900,390 S1400,300 1700,430" fill="none" stroke="url(#cq1)" stroke-width="80" opacity=".8"/><path d="M-100,180 C300,80 700,260 1000,140 S1450,60 1700,160" fill="none" stroke="url(#cq2)" stroke-width="70" opacity=".7"/></g>';
+    s += '<g opacity=".5"><path d="M-100,470 C300,330 600,540 900,390 S1400,300 1700,430" fill="none" stroke="#c8ffef" stroke-width="2"/></g>';
+    s += '<g opacity=".55"><path d="M-100,320 C250,160 520,420 820,250 S1350,120 1700,300" fill="none" stroke="#b9ffe6" stroke-width="3"/></g>';
+    s += quangSang(1240, 200, 220, '#d8ecff', 'g-v4', .85) + '<circle cx="1240" cy="200" r="46" fill="#f4faff"/>';
+    s += dayNui(r, 720, 70, 180, '#0b1f45') + dayNui(r, 745, 50, 140, '#071433');
+    s += '<linearGradient id="nuoc4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1b4f8f"/><stop offset="1" stop-color="#020a1e"/></linearGradient><rect x="0" y="760" width="1600" height="250" fill="url(#nuoc4)"/>';
+    for (let i = 0; i < 46; i++) { const y = doi(r, 772, 990), w = doi(r, 20, 140); s += '<rect x="' + (1240 - w / 2 + doi(r, -200, 200)).toFixed(0) + '" y="' + y.toFixed(0) + '" width="' + w.toFixed(0) + '" height="2.5" fill="#cfe8ff" opacity="' + doi(r, .2, .75).toFixed(2) + '"/>'; s += '<rect x="' + doi(r, 0, 1500).toFixed(0) + '" y="' + y.toFixed(0) + '" width="' + (w * .6).toFixed(0) + '" height="2" fill="#5fffc8" opacity="' + doi(r, .1, .35).toFixed(2) + '"/>'; }
+  } else {
+    s += troi('t-ket', [[0, '#170834'], [.4, '#5a1a6a'], [.7, '#c23f5c'], [1, '#ff9a3d']]);
+    s += sao(r, 90, 400, '#fff2d6');
+    s += quangSang(800, 900, 700, '#ffb35c', 'g-k', .9);
+    s += dayNui(r, 760, 90, 180, '#4a1440', .9) + dayNui(r, 820, 70, 150, '#2a0a2e');
+    for (let i = 0; i < 46; i++) {
+      const x = doi(r, 20, 1580), y = doi(r, 60, 860), k = doi(r, 7, 22) * (y / 860 + .3);
+      s += quangSang(x.toFixed(0), y.toFixed(0), (k * 4).toFixed(0), '#ffb04a', 'g-d' + i, .8);
+      s += '<path d="M' + (x - k * .7).toFixed(1) + ',' + (y - k).toFixed(1) + ' L' + (x + k * .7).toFixed(1) + ',' + (y - k).toFixed(1) + ' L' + (x + k * .55).toFixed(1) + ',' + (y + k).toFixed(1) + ' L' + (x - k * .55).toFixed(1) + ',' + (y + k).toFixed(1) + ' Z" fill="#ffd27a"/>';
+    }
+    s += co(r, 990, 160, '#170614', 90);
+  }
+  return s + '</svg>';
+}
+Object.keys(CANH).forEach(k => { CHU_GOC['canh_' + k] = CANH[k].ten; });
+function canhCua(logic) { return (GD.canh && CANH[GD.canh[logic]]) ? GD.canh[logic] : logic; }
+const DA_VE = {};
+let canhHienTai = null, canhLogic = null, lopCanh = 0;
+/* logic: cảnh của màn (mo, v1…v4, ket); cảnh thật vẽ ra có thể đổi trong chế độ sửa (giaoDien.canh) */
+function datCanh(logic) {
+  canhLogic = logic;
+  const ten = canhCua(logic);
+  if (ten === canhHienTai) return;
+  canhHienTai = ten;
+  if (!DA_VE[ten]) DA_VE[ten] = veCanh(ten);
+  const moi = document.getElementById(lopCanh ? 'canhA' : 'canhB'), cu = document.getElementById(lopCanh ? 'canhB' : 'canhA');
+  lopCanh = 1 - lopCanh;
+  moi.innerHTML = DA_VE[ten];
+  moi.classList.remove('hien'); void moi.offsetWidth; moi.classList.add('hien');
+  cu.classList.remove('hien');
+  document.documentElement.style.setProperty('--hat', CANH[ten].hat);
+}
+(function taoHat() {
+  const h = document.getElementById('hat'); let s = '';
+  for (let i = 0; i < 28; i++) {
+    const k = (2 + Math.random() * 5).toFixed(1);
+    s += '<i style="left:' + (Math.random() * 100).toFixed(1) + '%;width:' + k + 'px;height:' + k + 'px;--dx:' + (Math.random() * 120 - 60).toFixed(0) + 'px;animation-duration:' + (9 + Math.random() * 12).toFixed(1) + 's;animation-delay:-' + (Math.random() * 20).toFixed(1) + 's"></i>';
+  }
+  h.innerHTML = s;
+})();
+function hienBangVong(vi) {
+  const v = DB.vong[vi];
+  const el = document.getElementById('bangVong');
+  el.innerHTML = '<button type="button" class="bang-vong" id="nutBangVong" aria-label="' + h(t('vong', {n: vi + 1}) + ': ' + v.ten + '. ' + t('chao_cham')) + '"><span class="nd"><span class="s">' + tk('vong', {n: vi + 1}) + '</span><span class="t">' + h(v.ten) + '</span><span class="c">' + tk('canh_' + canhCua('v' + (vi + 1))) + '</span></span><span class="bo">' + tk('chao_cham') + '</span></button>';
+  app.classList.add('an');
+  const xong = () => { clearTimeout(hienBangVong.t); el.innerHTML = ''; app.classList.remove('an'); const q = document.getElementById('hoi'); if (q) q.focus({preventScroll: true}); };
+  document.getElementById('nutBangVong').addEventListener('click', xong);
+  document.getElementById('nutBangVong').focus();
+  clearTimeout(hienBangVong.t); hienBangVong.t = setTimeout(xong, 2600);
+}
+
+/* =====================================================================
+   LUẬT CHƠI
+   ===================================================================== */
+const DS = [];
+DB.vong.forEach((v, vi) => v.cau.forEach((c, ci) => DS.push(Object.assign({}, c, {vi, ci}))));
+const TONG = DS.length;
+const THEO_ID = {};
+DS.forEach(c => { THEO_ID[c.id] = c; });
+
+function moi() { return {ten: '', nhom: '', vi: 0, kq: {}, thuTu: {}, on: null, batDau: false}; }
+function docLai() {
+  try { const s = JSON.parse(localStorage.getItem(KHOA)); if (s && typeof s.vi === 'number' && s.kq) return s; } catch (e) {}
+  return null;
+}
+function luu() { try { localStorage.setItem(KHOA, JSON.stringify(st)); } catch (e) {} }
+let st = docLai() || moi();
+let tam = null; // câu đang làm: {c, chon, daTra, dung}
+let vongDaChao = -1;
+
+function h(s) { return String(s).replace(/[&<>"']/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[ch])); }
+function xao(n) { const a = [...Array(n).keys()]; for (let i = n - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function thuTu(c) {
+  if (!st.thuTu[c.id]) { st.thuTu[c.id] = xao(c.loai === 'dien' ? DB.tuDien.length : (c.pa ? c.pa.length : 0)); luu(); }
+  return st.thuTu[c.id];
+}
+function soDung() { return DS.filter(c => st.kq[c.id] === 'b').length; }
+function soTrong() { return DS.filter(c => st.kq[c.id] === 'o').length; }
+function cauHienTai() {
+  if (st.on) return st.on.k < st.on.ds.length ? THEO_ID[st.on.ds[st.on.k]] : null;
+  return st.vi < TONG ? DS[st.vi] : null;
+}
+
+/* ---------- vòng tròn phát sáng ---------- */
+function vanhDash(r, trangThai, s) {
+  const C = 2 * Math.PI * r, n = trangThai.length, seg = C / n, gap = 5, dash = seg - gap;
+  return trangThai.map(t => t === s ? dash.toFixed(2) + ' ' + gap : '0 ' + seg.toFixed(2)).join(' ');
+}
+function vongTron(nhan) {
+  let svg = '<svg viewBox="0 0 220 220" role="img" aria-label="' + h(nhan) + '"><defs><filter id="sang" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
+    '<radialGradient id="tam"><stop offset="0" stop-color="#FFF6D2"/><stop offset=".5" stop-color="#F3D27A"/><stop offset="1" stop-color="#C9902F" stop-opacity="0"/></radialGradient></defs>' +
+    '<circle cx="110" cy="110" r="108" fill="rgba(8,7,24,.55)" stroke="rgba(243,210,122,.5)" stroke-width="1"/>';
+  for (let vi = DB.vong.length - 1; vi >= 0; vi--) {
+    const r = BAN_KINH[vi];
+    const tt = DB.vong[vi].cau.map(c => st.kq[c.id] || 'p');
+    ['p', 'b', 'o'].forEach(s => {
+      if (!tt.includes(s)) return;
+      svg += '<circle cx="110" cy="110" r="' + r + '" fill="none" stroke="' + MAU[s] + '" stroke-width="12" stroke-dasharray="' + vanhDash(r, tt, s) + '" transform="rotate(-90 110 110)"' + (s === 'p' ? '' : ' filter="url(#sang)"') + '/>';
+    });
+  }
+  return svg + '<circle cx="110" cy="110" r="26" fill="url(#tam)"/><circle cx="110" cy="110" r="11" fill="#FFF6D2"/></svg>';
+}
+
+/* ---------- đầu trang câu hỏi ---------- */
+function dauTrang(c) {
+  let ten, so;
+  if (st.on) { ten = tk('dau_on') + ' · '; so = (st.on.ds.indexOf(c.id) + 1) + '/' + st.on.ds.length; manHienTai = 'Ôn chỗ trống · câu ' + c.id; }
+  else { ten = tk('vong', {n: c.vi + 1}) + ' · '; so = (c.ci + 1) + '/' + DB.vong[c.vi].cau.length; manHienTai = 'Vòng ' + (c.vi + 1) + ' · câu ' + c.id; }
+  let thanh = '';
+  DB.vong.forEach(v => {
+    thanh += '<div class="v" style="flex:' + v.cau.length + '">';
+    v.cau.forEach(x => { thanh += '<span class="oc ' + (st.kq[x.id] || (x.id === c.id ? 'n' : 'p')) + '"></span>'; });
+    thanh += '</div>';
+  });
+  const d = soDung(), tr = soTrong();
+  return '<header class="dau kinh"><div class="hang"><p class="ten">' + ten + '<span>' + h(DB.vong[c.vi].ten) + '</span></p><p class="so">' + so + '</p></div>' +
+    '<div class="thanh" role="img" aria-label="Tiến độ bốn vòng: đã quy tụ ' + d + ' trên ' + TONG + ' lực lượng">' + thanh + '</div>' +
+    '<p class="tom">' + tk('dau_tom', {d: d, t: tr}) + '</p></header>';
+}
+
+/* ---------- màn mở đầu ---------- */
+function manMo(loi) {
+  tam = null;
+  manHienTai = 'Màn mở đầu';
+  datCanh('mo');
+  const daTra = Object.keys(st.kq).length;
+  const dangDo = st.batDau && (st.vi < TONG || st.on);
+  let ds = '';
+  DB.vong.forEach((v, i) => { const k = canhCua('v' + (i + 1)); ds += '<li style="--anh:' + CANH[k].mau + '"><span class="so">' + tk('vong', {n: i + 1}) + '</span><span class="tv">' + h(v.ten) + '</span><span class="sc">' + tk('mo_soCau', {n: v.cau.length}) + ' · ' + tk('canh_' + k) + '</span></li>'; });
+  let nhom = '';
+  for (let i = 1; i <= 12; i++) nhom += '<option value="' + i + '"' + (String(st.nhom) === String(i) ? ' selected' : '') + '>' + i + '</option>';
+  const nutChinh = dangDo
+    ? '<button type="button" class="nut" data-act="tiep">' + (st.on ? tk('mo_onTiep', {n: st.on.k, tong: st.on.ds.length}) : tk('mo_choiTiep', {n: daTra, tong: TONG})) + '</button><button type="button" class="nut vien" data-act="lai">' + tk('choiLai') + '</button>'
+    : '<button type="submit" class="nut">' + tk('mo_batDau') + '</button>';
+  app.innerHTML = '<div class="mo">' +
+    '<div class="dautieu"><p class="tren">' + h(DB.bai) + '</p><h1>' + h(DB.ten) + '</h1><p class="phude">' + h(DB.phuDe) + '</p><div class="hoa" aria-hidden="true">✦</div></div>' +
+    '<div class="vt kinh">' + vongTron('Bốn vòng tròn đồng tâm, đã quy tụ ' + soDung() + ' trên ' + TONG + ' lực lượng') +
+    '<p>' + tk('mo_gioiThieu', {tong: TONG}) + '</p></div>' +
+    '<ol class="dsv">' + ds + '</ol>' +
+    '<form class="form kinh" id="fMo" novalidate>' +
+    (dangDo ? '' : '<div class="hang"><div class="o" style="flex:1"><label for="ten">' + tk('mo_hoTen') + '</label><input id="ten" type="text" autocomplete="name" placeholder="' + h(t('mo_nhapTen')) + '" value="' + h(st.ten) + '"></div>' +
+      '<div class="o" style="width:110px"><label for="nhom">' + tk('mo_nhom') + '</label><select id="nhom">' + nhom + '</select></div></div>') +
+    (loi ? '<p class="loi" role="alert">' + h(loi) + '</p>' : '') + nutChinh +
+    '<p class="ghichu" style="text-align:center">' + tk('mo_ghiChu') + '</p>' +
+    '</form><p class="nguon">' + h(DB.nguon) + '</p></div>';
+  window.scrollTo(0, 0);
+}
+
+/* ---------- màn câu hỏi ---------- */
+function manCau() {
+  const c = (tam && tam.daTra) ? tam.c : cauHienTai();
+  if (!c) { if (st.on) { st.on = null; luu(); } manKet(); return; }
+  datCanh('v' + (c.vi + 1));
+  if (!tam || tam.c.id !== c.id) tam = {c, chon: c.loai === 'nhieu' ? [] : null, daTra: false, dung: false};
+  let nhan, than = '', nut = '';
+  const tt = thuTu(c);
+  if (c.loai === 'ds') {
+    nhan = tk('nhan_ds');
+    const nutDS = (gt, chu) => {
+      let lop = '';
+      if (tam.daTra) { if (gt === c.dung) lop = 'dung'; else if (tam.chon === gt) lop = 'sai'; }
+      const ic = tam.daTra && lop ? (lop === 'dung' ? ICON_DUNG : ICON_SAI) : '';
+      return '<button type="button" class="' + lop + '" data-act="ds" data-v="' + gt + '"' + (tam.daTra ? ' disabled' : '') + ' aria-pressed="' + (tam.chon === gt) + '">' + ic + chu + '</button>';
+    };
+    than = '<div class="hai">' + nutDS(true, tk('nut_dung')) + nutDS(false, tk('nut_sai')) + '</div>';
+  } else if (c.loai === 'mot' || c.loai === 'sai') {
+    nhan = c.loai === 'mot' ? tk('nhan_mot') : tk('nhan_sai');
+    than = '<div class="pa" role="radiogroup" aria-label="Các phương án">';
+    tt.forEach((goc, i) => {
+      let lop = '', ghi = '';
+      if (tam.daTra) { if (goc === c.dung) { lop = 'dung'; ghi = tk('ghi_dapAn'); } else if (tam.chon === goc) { lop = 'sai'; ghi = tk('ghi_daChon'); } }
+      else if (tam.chon === goc) lop = 'chon';
+      than += '<button type="button" role="radio" aria-checked="' + (tam.chon === goc) + '" class="' + lop + '" data-act="mot" data-v="' + goc + '"' + (tam.daTra ? ' disabled' : '') + '><span class="chu">' + CHU[i] + '</span><span>' + h(c.pa[goc]) + '</span>' + (ghi ? '<span class="ghi">' + ghi + '</span>' : '') + '</button>';
+    });
+    than += '</div>';
+    if (!tam.daTra) nut = '<button type="button" class="nut" data-act="xn"' + (tam.chon === null ? ' disabled' : '') + '>' + tk('xacNhan') + '</button>';
+  } else if (c.loai === 'nhieu') {
+    nhan = tk('nhan_nhieu');
+    than = '<fieldset class="pa" style="margin:0;padding:0;border:none"><legend style="position:absolute;width:1px;height:1px;overflow:hidden">Các ý</legend>';
+    tt.forEach((goc, i) => {
+      const daChon = tam.chon.includes(goc), laDung = c.dung.includes(goc);
+      let lop = '', ghi = '';
+      if (tam.daTra) {
+        if (laDung && daChon) { lop = 'dung'; ghi = tk('ghi_dung'); }
+        else if (laDung) { lop = 'bosot'; ghi = tk('ghi_boSot'); }
+        else if (daChon) { lop = 'sai'; ghi = tk('ghi_thua'); }
+      } else if (daChon) lop = 'chon';
+      than += '<label class="' + lop + '"><input type="checkbox" data-act="nhieu" data-v="' + goc + '"' + (daChon ? ' checked' : '') + (tam.daTra ? ' disabled' : '') + '><span class="chu">' + CHU[i] + '</span><span>' + h(c.pa[goc]) + '</span>' + (ghi ? '<span class="ghi">' + ghi + '</span>' : '') + '</label>';
+    });
+    than += '</fieldset>';
+    if (!tam.daTra) {
+      than += '<p class="ghichu">' + tk('nhieu_dem', {n: tam.chon.length}) + '</p>';
+      nut = '<button type="button" class="nut" data-act="xn"' + (tam.chon.length ? '' : ' disabled') + '>' + tk('xacNhan') + '</button>';
+    }
+  } else if (c.loai === 'dien') {
+    nhan = tk('nhan_dien');
+    than = '<div class="tu" aria-label="Danh sách từ">';
+    tt.forEach(goc => {
+      const tu = DB.tuDien[goc];
+      const lop = tam.daTra && tu === c.dung ? 'dung' : '';
+      than += '<button type="button" class="' + lop + '" data-act="dien" data-v="' + h(tu) + '"' + (tam.daTra ? ' disabled' : '') + '>' + h(tu) + '</button>';
+    });
+    than += '</div>';
+  }
+  let hoi = h(c.hoi);
+  if (c.loai === 'dien') {
+    let o = '<span class="trongo">……</span>';
+    if (tam.daTra) o = '<span class="trongo ' + (tam.dung ? 'dung' : 'sai') + '">' + h(tam.chon) + '</span>';
+    hoi = hoi.replace('{_}', o);
+  }
+  let phan = '';
+  if (tam.daTra) {
+    let dapAn = '';
+    if (c.loai === 'ds') dapAn = c.dung ? t('nut_dung') : t('nut_sai');
+    else if (c.loai === 'mot' || c.loai === 'sai') dapAn = CHU[tt.indexOf(c.dung)];
+    else if (c.loai === 'nhieu') dapAn = c.dung.map(g => CHU[tt.indexOf(g)]).sort().join(', ');
+    else dapAn = c.dung;
+    phan = '<section class="phan kinh" id="phan" aria-live="polite">' +
+      (tam.dung ? '<p class="kq dung">' + ICON_DUNG + tk('kq_dung') + '</p>'
+                : '<p class="kq sai">' + tk('kq_sai', {da: dapAn}) + '</p>') +
+      '<p>' + h(c.giai) + '</p>' +
+      (!tam.dung ? '<p class="phu">' + (st.on ? tk('phu_on') : tk('phu_trong')) + '</p>' : '') +
+      '</section>';
+    nut = '<button type="button" class="nut" data-act="tiepCau">' + tk('tiepTuc') + '</button>';
+  }
+  app.innerHTML = dauTrang(c) + '<main><section class="the kinh"><p class="nhan">' + nhan + '</p><h2 class="hoi" id="hoi" tabindex="-1">' + hoi + '</h2>' + than + '</section>' + phan + '</main>' +
+    (nut ? '<footer class="chan">' + nut + '</footer>' : '');
+  if (!st.on && c.ci === 0 && !tam.daTra && vongDaChao !== c.vi) { vongDaChao = c.vi; hienBangVong(c.vi); }
+}
+
+function traLoi(dung) {
+  const c = tam.c;
+  tam.daTra = true; tam.dung = dung;
+  if (st.on) { if (dung) st.kq[c.id] = 'b'; st.on.k++; }
+  else { st.kq[c.id] = dung ? 'b' : 'o'; st.vi++; }
+  luu();
+  manCau();
+  const p = document.getElementById('phan');
+  if (p) p.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+}
+
+/* ---------- màn kết quả ---------- */
+function manKet() {
+  tam = null;
+  manHienTai = 'Kết quả';
+  datCanh('ket');
+  const d = soDung(), trong = DS.filter(c => st.kq[c.id] === 'o');
+  let bang = '';
+  DB.vong.forEach((v, i) => { bang += '<li><span>' + tk('vong', {n: i + 1}) + '</span><strong>' + v.cau.filter(c => st.kq[c.id] === 'b').length + '/' + v.cau.length + '</strong></li>'; });
+  bang += '<li class="cg" style="margin-top:4px"><span style="background:' + MAU.b + ';box-shadow:0 0 8px ' + MAU.b + '"></span>' + tk('ket_daQuyTu') + '</li>';
+  if (trong.length) bang += '<li class="cg"><span style="background:' + MAU.o + ';box-shadow:0 0 8px ' + MAU.o + '"></span>' + tk('ket_choTrong') + '</li>';
+  const tieuDe = d === TONG ? tk('ket_khepKin', {tong: TONG}) : tk('ket_tieuDe', {d: d});
+  const on = trong.length
+    ? '<section class="on kinh"><h2>' + tk('ket_canOn', {n: trong.length}) + '</h2><ul>' + trong.map(c => '<li>' + h(c.nhan) + '</li>').join('') + '</ul></section>'
+    : '<section class="on kinh"><h2>' + tk('ket_khongCon') + '</h2><ul style="list-style:none;padding:0"><li>' + tk('ket_khongCon2') + '</li></ul></section>';
+  app.innerHTML = '<div class="mo ket">' +
+    '<div class="dautieu"><p class="tren">' + (st.ten ? h(st.ten) : tk('ket_sinhVien')) + (st.nhom ? ' · ' + tk('ket_nhom', {n: st.nhom}) : '') + '</p><h1>' + tieuDe + '</h1><div class="hoa" aria-hidden="true">✦</div></div>' +
+    '<div class="vt kinh">' + vongTron('Bốn vòng đoàn kết: ' + d + ' lực lượng đã quy tụ, ' + trong.length + ' chỗ trống') + '<ul class="bang">' + bang + '</ul></div>' +
+    on +
+    '<div class="cot">' + (trong.length ? '<button type="button" class="nut" data-act="on">' + tk('ket_onLai', {n: trong.length}) + '</button>' : '') +
+    '<button type="button" class="nut vien" data-act="lai">' + tk('choiLai') + '</button></div>' +
+    '<p class="loiBac">“<span>' + h(DB.ket) + '</span>”</p></div>';
+  window.scrollTo(0, 0);
+}
+
+function vao() {
+  if (st.batDau && st.vi >= TONG && !st.on) { manKet(); return; }
+  manMo();
+}
+function batDauCau() { manCau(); window.scrollTo(0, 0); const q = document.getElementById('hoi'); if (q) q.focus({preventScroll: true}); }
+
+/* ---------- sự kiện ---------- */
+app.addEventListener('submit', e => {
+  e.preventDefault();
+  const ten = (document.getElementById('ten') || {}).value || '';
+  if (!ten.trim()) { manMo(t('mo_thieuTen')); const o = document.getElementById('ten'); if (o) o.focus(); return; }
+  st = moi(); st.ten = ten.trim(); st.nhom = document.getElementById('nhom').value; st.batDau = true; luu();
+  batDauCau();
+});
+app.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b || b.disabled) return;
+  const act = b.dataset.act;
+  if (act === 'tiep') { batDauCau(); }
+  else if (act === 'lai') { if (confirm(t('hoi_choiLai'))) { const ten = st.ten, nhom = st.nhom; st = moi(); st.ten = ten; st.nhom = nhom; vongDaChao = -1; luu(); manMo(); } }
+  else if (act === 'ds') { tam.chon = b.dataset.v === 'true'; traLoi(tam.chon === tam.c.dung); }
+  else if (act === 'mot') { tam.chon = +b.dataset.v; manCau(); const x = app.querySelector('[data-act="mot"][data-v="' + tam.chon + '"]'); if (x) x.focus(); }
+  else if (act === 'dien') { tam.chon = b.dataset.v; traLoi(tam.chon === tam.c.dung); }
+  else if (act === 'xn') {
+    const c = tam.c;
+    if (c.loai === 'nhieu') { const a = tam.chon.slice().sort(), d = c.dung.slice().sort(); traLoi(a.length === d.length && a.every((x, i) => x === d[i])); }
+    else traLoi(tam.chon === c.dung);
+  }
+  else if (act === 'tiepCau') { tam = null; batDauCau(); }
+  else if (act === 'on') { st.on = {ds: DS.filter(c => st.kq[c.id] === 'o').map(c => c.id), k: 0}; luu(); batDauCau(); }
+});
+app.addEventListener('change', e => {
+  const b = e.target;
+  if (b.dataset.act !== 'nhieu' || !tam || tam.daTra) return;
+  const g = +b.dataset.v;
+  tam.chon = b.checked ? tam.chon.concat(g) : tam.chon.filter(x => x !== g);
+  manCau();
+  const x = app.querySelector('[data-act="nhieu"][data-v="' + g + '"]'); if (x) x.focus();
+});
+
+/* =====================================================================
+   CHẾ ĐỘ SỬA (?sua=1) — theo khuôn game Non sông một dải, Phòng chống tin giả.
+   Sửa chữ: bấm vào chữ để sửa tại chỗ; chuyển sang "chơi thử" để đi tới màn khác.
+   Sửa giao diện: màu chủ đạo, màu đúng, màu sai, độ đậm khung, phông, cỡ chữ,
+   đom đóm, cảnh nền từng màn.
+   Lưu trên máy (localStorage "quy-tu-sua"); "Tải tệp sửa" xuất sua-chu-quy-tu.json,
+   cong-cu/ap-sua-chu.py đưa vào noi-dung.json / _khuon.html rồi dựng lại game.
+   Trang không có ?sua=1 (trang sinh viên) không có chế độ này.
+   ===================================================================== */
+if (SUA) {
+  const $ = s => document.querySelector(s);
+  const luuSua = () => { try { localStorage.setItem(KHOA_SUA, JSON.stringify({bat: SUA.bat, chu: SUA.chu, giaoDien: SUA.giaoDien, chuGD: SUA.chuGD})); } catch (e) {} };
+  const bao = (t, ms) => { const e = $('#sua-bao'); e.textContent = t; e.hidden = false; clearTimeout(bao.t); bao.t = setTimeout(() => { e.hidden = true; }, ms || 3000); };
+  /* chữ đã sửa hiện ngay cả khi game vẽ lại màn */
+  const apSua = goc => {
+    if (!SUA.chu.length) return;
+    const doi = new Map(SUA.chu.map(x => [x.cu, x.moi]));
+    const thay = n => { const t = n.data.trim(); if (t && doi.has(t)) n.data = n.data.replace(t, doi.get(t)); };
+    if (goc.nodeType === 3) { thay(goc); return; }
+    if (goc.nodeType !== 1 || goc.closest('#sua-khung')) return;
+    const w = document.createTreeWalker(goc, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) thay(n);
+  };
+  const theoDoi = new MutationObserver(ds => ds.forEach(m => m.addedNodes.forEach(apSua)));
+  theoDoi.observe(app, {childList: true, subtree: true});
+  theoDoi.observe(document.getElementById('bangVong'), {childList: true, subtree: true});
+
+  const TEN_CANH = Object.keys(CANH).map(k => '<option value="' + k + '">' + h(CANH[k].ten) + '</option>').join('');
+  const MAN_CANH = [['mo', 'Màn mở đầu'], ['v1', 'Vòng 1'], ['v2', 'Vòng 2'], ['v3', 'Vòng 3'], ['v4', 'Vòng 4'], ['ket', 'Kết quả']];
+  const khung = document.createElement('div'); khung.id = 'sua-khung';
+  khung.innerHTML = '<div class="sua-thanh"><b>✎ Chế độ sửa</b><button type="button" id="sua-bat"></button><span id="sua-dem"></span>' +
+    '<button type="button" id="sua-xem">Danh sách</button><button type="button" id="sua-gd-nut">Giao diện</button><button type="button" id="sua-ch-nut">Chữ hiển thị</button><button type="button" id="sua-tai" class="chinh">Tải tệp sửa</button><button type="button" id="sua-gon" title="Thu gọn thanh sửa">–</button></div>' +
+    '<div id="sua-bao" class="sua-hop" hidden></div>' +
+    '<div id="sua-ds" class="sua-hop" hidden></div>' +
+    '<div id="sua-gd" class="sua-hop" hidden>' +
+      '<div class="sua-cot"><div>' +
+        '<label>Màu chủ đạo (chữ vàng, nút, viền) <input type="color" data-gd="mauChinh"></label>' +
+        '<label>Màu trả lời đúng <input type="color" data-gd="mauDung"></label>' +
+        '<label>Màu chỗ trống (trả lời sai) <input type="color" data-gd="mauSai"></label>' +
+        '<label>Độ đậm khung kính <input type="range" min="0.4" max="0.95" step="0.01" data-gd="doKinh"> <span id="sua-kinh"></span></label>' +
+        '<label>Cỡ chữ <input type="range" min="0.8" max="1.5" step="0.05" data-gd="coChu"> <span id="sua-co"></span></label>' +
+        '<label>Phông tiêu đề, nút <select data-gd="phongTieuDe"><option value="cormorant">Cormorant Garamond</option><option value="lora">Lora</option><option value="vietnam">Be Vietnam Pro</option><option value="palatino">Palatino Linotype</option><option value="constantia">Constantia</option><option value="cambria">Cambria</option></select></label>' +
+        '<label>Phông câu hỏi <select data-gd="phongCau"><option value="lora">Lora</option><option value="cormorant">Cormorant Garamond</option><option value="vietnam">Be Vietnam Pro</option><option value="palatino">Palatino Linotype</option><option value="constantia">Constantia</option><option value="cambria">Cambria</option></select></label>' +
+        '<label>Đom đóm bay <input type="checkbox" data-gd="domDom"></label>' +
+      '</div><div><p class="sua-nho" style="margin:.2rem 0">Cảnh nền từng màn</p>' +
+        MAN_CANH.map(([k, t]) => '<label>' + t + ' <select data-canh="' + k + '">' + TEN_CANH + '</select></label>').join('') +
+      '</div></div>' +
+      '<button type="button" id="sua-gd-goc">Trả giao diện gốc</button>' +
+      '<p class="sua-nho">Cỡ chữ 100% = chữ câu hỏi 21–30px, co giãn theo bề rộng màn hình.</p>' +
+    '</div>' +
+    '<div id="sua-ch" class="sua-hop" hidden><p class="sua-nho" style="margin:0 0 .4rem">Mọi chữ giao diện của game. Gõ là đổi ngay trên trang. Giữ nguyên các chỗ trong ngoặc nhọn như {n}, {tong}, {d}, {t}, {da}: máy điền số vào đó. Ô có viền vàng là chữ đã sửa.</p><div id="sua-ch-ds"></div><button type="button" id="sua-ch-goc">Trả mọi chữ hiển thị về gốc</button></div>' +
+    '<div id="sua-o" class="sua-hop" hidden><div class="sua-nho" id="sua-goc"></div><textarea id="sua-chu" rows="3"></textarea>' +
+      '<div class="sua-nut"><button type="button" id="sua-xong" class="chinh">Xong (Enter)</button><button type="button" id="sua-tra">Trả chữ gốc</button><button type="button" id="sua-huy">Hủy (Esc)</button></div></div>';
+  document.body.appendChild(khung);
+  document.body.classList.add('co-sua');
+  let dang = null, xoaLan = 0;   /* dang: {n: nút chữ đang sửa, cu: chữ gốc}; xoaLan: bấm "Xóa hết" hai lần mới xóa */
+  const gd = () => Object.assign({}, GD_GOC, SUA.giaoDien || {});
+
+  /* ---------- chữ hiển thị (bảng CHU_GOC) ---------- */
+  const NHAN_CHU = {
+    vong: 'Chữ “Vòng N” (mọi nơi)', mo_gioiThieu: 'Mở đầu · lời giới thiệu cạnh vòng tròn', mo_soCau: 'Mở đầu · số câu mỗi vòng',
+    mo_hoTen: 'Mở đầu · nhãn ô họ tên', mo_nhapTen: 'Mở đầu · chữ mờ trong ô họ tên', mo_nhom: 'Mở đầu · nhãn ô nhóm',
+    mo_batDau: 'Mở đầu · nút bắt đầu', mo_choiTiep: 'Mở đầu · nút chơi tiếp', mo_onTiep: 'Mở đầu · nút ôn tiếp', mo_ghiChu: 'Mở đầu · ghi chú dưới nút',
+    mo_thieuTen: 'Mở đầu · báo khi chưa nhập tên', choiLai: 'Nút chơi lại từ đầu', hoi_choiLai: 'Hộp hỏi khi bấm chơi lại',
+    chao_cham: 'Màn chào vòng · dòng dưới cùng', dau_on: 'Đầu trang khi ôn chỗ trống', dau_tom: 'Đầu trang · dòng đếm lực lượng',
+    nhan_ds: 'Nhãn câu Đúng/Sai', nhan_mot: 'Nhãn câu chọn một đúng', nhan_sai: 'Nhãn câu chọn phương án sai', nhan_nhieu: 'Nhãn câu chọn nhiều', nhan_dien: 'Nhãn câu điền khuyết',
+    nut_dung: 'Nút Đúng', nut_sai: 'Nút Sai', ghi_dapAn: 'Ghi bên phương án đúng', ghi_daChon: 'Ghi bên phương án đã chọn sai',
+    ghi_dung: 'Chọn nhiều · ý chọn đúng', ghi_boSot: 'Chọn nhiều · ý bỏ sót', ghi_thua: 'Chọn nhiều · ý chọn thừa', nhieu_dem: 'Chọn nhiều · dòng đếm ý đã chọn',
+    xacNhan: 'Nút xác nhận', tiepTuc: 'Nút tiếp tục', kq_dung: 'Phản hồi khi đúng', kq_sai: 'Phản hồi khi sai',
+    phu_trong: 'Dòng nhắc chỗ trống', phu_on: 'Dòng nhắc khi ôn vẫn sai',
+    ket_sinhVien: 'Kết quả · khi không có tên', ket_nhom: 'Kết quả · chữ nhóm', ket_tieuDe: 'Kết quả · tiêu đề', ket_khepKin: 'Kết quả · tiêu đề khi đủ 30',
+    ket_daQuyTu: 'Kết quả · chú thích ô xanh', ket_choTrong: 'Kết quả · chú thích ô cam', ket_canOn: 'Kết quả · tiêu đề danh sách ôn',
+    ket_khongCon: 'Kết quả · khi không còn chỗ trống', ket_khongCon2: 'Kết quả · dòng dưới khi không còn chỗ trống', ket_onLai: 'Kết quả · nút ôn lại'
+  };
+  Object.keys(CANH).forEach(k => { NHAN_CHU['canh_' + k] = 'Tên cảnh nền “' + CANH[k].ten + '”'; });
+  /* chữ gốc của một mã: bản trong noi-dung.json nếu đã đưa vào, không thì bảng trong khuôn */
+  const chuGocCua = k => (DB.chuGiaoDien && DB.chuGiaoDien[k] != null) ? DB.chuGiaoDien[k] : CHU_GOC[k];
+  const ghiMa = (k, moi, tuBang) => {
+    if (moi === chuGocCua(k)) delete SUA.chuGD[k]; else SUA.chuGD[k] = moi;
+    luuSua();
+    if (!tuBang) veThanh(); else { const so = Object.keys(SUA.chuGD).length; $('#sua-dem').textContent = (SUA.chu.length + so) + ' chỗ sửa chữ' + (SUA.giaoDien ? ' · đã đổi giao diện' : ''); }
+    veLai();
+    if (tuBang) { const o = khung.querySelector('[data-ck="' + k + '"]'); if (o) o.classList.toggle('da-sua', SUA.chuGD[k] != null); }
+  };
+  const veBangChu = () => {
+    $('#sua-ch-ds').innerHTML = Object.keys(CHU_GOC).map(k =>
+      '<label class="sua-ch-dong"><span>' + h(NHAN_CHU[k] || k) + '</span><input type="text" data-ck="' + k + '" value="' + h(t(k)) + '"' + (SUA.chuGD[k] != null ? ' class="da-sua"' : '') + '></label>').join('');
+  };
+  const veThanh = () => {
+    $('#sua-bat').textContent = SUA.bat ? 'Đang sửa chữ — bấm vào chữ' : 'Đang chơi thử — bấm để sửa tiếp';
+    $('#sua-bat').classList.toggle('bat', SUA.bat); document.body.classList.toggle('dang-sua', SUA.bat);
+    const soCh = Object.keys(SUA.chuGD).length;
+    $('#sua-dem').textContent = (SUA.chu.length + soCh) + ' chỗ sửa chữ' + (SUA.giaoDien ? ' · đã đổi giao diện' : '');
+    $('#sua-ds').innerHTML = (SUA.chu.length || soCh)
+      ? '<ol>' + SUA.chu.map((x, i) => '<li><span class="sua-nho">' + h(x.man) + '</span><br><s>' + h(x.cu) + '</s><br><b>' + h(x.moi) + '</b> <button type="button" data-bo="' + i + '" title="Bỏ chỗ sửa này">↩ bỏ</button></li>').join('') +
+        Object.keys(SUA.chuGD).map(k => '<li><span class="sua-nho">Chữ hiển thị · ' + h(NHAN_CHU[k] || k) + '</span><br><s>' + h(chuGocCua(k)) + '</s><br><b>' + h(SUA.chuGD[k]) + '</b> <button type="button" data-bok="' + k + '" title="Bỏ chỗ sửa này">↩ bỏ</button></li>').join('') +
+        '</ol><button type="button" id="sua-xoa">Xóa hết danh sách</button>'
+      : '<p>Chưa sửa chỗ nào.</p>';
+    veBangChu();
+    const g = gd();
+    khung.querySelectorAll('[data-gd]').forEach(o => { if (o.type === 'checkbox') o.checked = !!g[o.dataset.gd]; else o.value = g[o.dataset.gd]; });
+    khung.querySelectorAll('[data-canh]').forEach(o => { o.value = (g.canh && g.canh[o.dataset.canh]) || o.dataset.canh; });
+    $('#sua-co').textContent = Math.round(g.coChu * 100) + '%';
+    $('#sua-kinh').textContent = Math.round(g.doKinh * 100) + '%';
+  };
+  const ghiSua = (cu, moi) => {
+    const i = SUA.chu.findIndex(x => x.cu === cu);
+    if (moi === cu) { if (i >= 0) SUA.chu.splice(i, 1); }
+    else if (i >= 0) SUA.chu[i].moi = moi;
+    else SUA.chu.push({man: manHienTai, cu, moi});
+    luuSua(); veThanh();
+  };
+  const moSuaMa = k => {
+    dang = {k};
+    $('#sua-goc').textContent = 'Chữ hiển thị · ' + (NHAN_CHU[k] || k) + ' · chữ gốc: “' + chuGocCua(k) + '”' + (/\{\w+\}/.test(chuGocCua(k)) ? ' — giữ nguyên chỗ {…}' : '');
+    $('#sua-chu').value = t(k); $('#sua-o').hidden = false; $('#sua-chu').focus(); $('#sua-chu').select();
+  };
+  const moSua = n => {
+    const t = n.data.trim(), r = SUA.chu.find(x => x.moi === t), cu = r ? r.cu : t;
+    dang = {n, cu};
+    $('#sua-goc').textContent = manHienTai + ' · chữ gốc: “' + cu + '”';
+    $('#sua-chu').value = t; $('#sua-o').hidden = false; $('#sua-chu').focus(); $('#sua-chu').select();
+  };
+  const dong = () => { $('#sua-o').hidden = true; dang = null; };
+  const xong = moi => {
+    if (!dang) return; moi = moi.replace(/\s+/g, ' ').trim();
+    if (dang.k) { if (moi) ghiMa(dang.k, moi); dong(); return; }
+    if (moi) { const t = dang.n.data.trim(); dang.n.data = dang.n.data.replace(t, moi); ghiSua(dang.cu, moi); }
+    dong();
+  };
+  /* chữ nằm dưới con trỏ: nút chữ chứa điểm bấm; không lấy được thì lấy chữ duy nhất của phần tử bấm vào */
+  const chuTai = e => {
+    let n = null;
+    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(e.clientX, e.clientY); n = p && p.offsetNode; }
+    else if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(e.clientX, e.clientY); n = r && r.startContainer; }
+    if (n && n.nodeType === 3) { const r = document.createRange(); r.selectNodeContents(n);
+      if (![...r.getClientRects()].some(b => e.clientX >= b.left - 2 && e.clientX <= b.right + 2 && e.clientY >= b.top - 2 && e.clientY <= b.bottom + 2)) n = null; }
+    if (!n || n.nodeType !== 3 || !n.data.trim()) { const ts = [...e.target.childNodes].filter(x => x.nodeType === 3 && x.data.trim()); n = ts.length === 1 ? ts[0] : null; }
+    return n;
+  };
+  document.addEventListener('click', e => {
+    if (!SUA.bat || e.target.closest('#sua-khung') || !e.target.closest('#app')) return;
+    e.preventDefault(); e.stopPropagation();
+    const ma = e.target.closest('[data-k]');
+    if (ma) { moSuaMa(ma.dataset.k); return; }
+    const n = chuTai(e);
+    if (n) moSua(n);
+  }, true);
+  let tro = null;
+  document.addEventListener('mouseover', e => { if (tro) tro.classList.remove('sua-tro'); tro = null;
+    if (SUA.bat && !e.target.closest('#sua-khung') && e.target.closest('#app') && e.target !== app) { tro = e.target; tro.classList.add('sua-tro'); } });
+  $('#sua-bat').onclick = () => { SUA.bat = !SUA.bat; dong(); luuSua(); veThanh(); };
+  $('#sua-xem').onclick = () => { $('#sua-ds').hidden = !$('#sua-ds').hidden; };
+  $('#sua-gd-nut').onclick = () => { $('#sua-gd').hidden = !$('#sua-gd').hidden; };
+  $('#sua-ch-nut').onclick = () => { $('#sua-ch').hidden = !$('#sua-ch').hidden; };
+  $('#sua-ch-ds').addEventListener('input', e => { const o = e.target.closest('[data-ck]'); if (!o) return; ghiMa(o.dataset.ck, o.value, true); });
+  $('#sua-ch-goc').onclick = () => { SUA.chuGD = {}; luuSua(); veThanh(); veLai(); };
+  $('#sua-gon').onclick = () => { const gon = khung.classList.toggle('gon'); $('#sua-gon').textContent = gon ? '✎' : '–'; $('#sua-gon').title = gon ? 'Mở thanh sửa' : 'Thu gọn thanh sửa'; };
+  const doiGD = g => { SUA.giaoDien = g; apGiaoDien(Object.assign({}, GD_GOC, g || {})); luuSua(); veThanh(); veLai(); };
+  /* vẽ lại màn đang mở để màu vòng tròn, tên cảnh theo giao diện mới */
+  const veLai = () => { if (manHienTai === 'Màn mở đầu') manMo(); else if (manHienTai === 'Kết quả') manKet(); else if (tam) manCau(); };
+  $('#sua-gd').addEventListener('input', e => {
+    const o = e.target.closest('[data-gd],[data-canh]'); if (!o) return;
+    const g = gd();
+    if (o.dataset.canh) g.canh = Object.assign({}, g.canh, {[o.dataset.canh]: o.value});
+    else g[o.dataset.gd] = o.type === 'checkbox' ? o.checked : (o.type === 'range' ? +o.value : o.value);
+    doiGD(g);
+  });
+  $('#sua-gd-goc').onclick = () => doiGD(null);
+  $('#sua-ds').onclick = e => { const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'sua-xoa') {
+      if (Date.now() - xoaLan > 4000) { xoaLan = Date.now(); bao('Bấm “Xóa hết danh sách” lần nữa để xóa mọi chỗ sửa chữ trên máy này.', 4000); return; }
+      SUA.chu = []; SUA.chuGD = {}; luuSua(); location.reload(); return; }
+    if (b.dataset.bok) { ghiMa(b.dataset.bok, chuGocCua(b.dataset.bok)); return; }
+    if (b.dataset.bo) { SUA.chu.splice(+b.dataset.bo, 1); luuSua(); location.reload(); } };
+  $('#sua-tai').onclick = () => {
+    const coCh = Object.keys(SUA.chuGD).length > 0;
+    if (!SUA.chu.length && !SUA.giaoDien && !coCh) { bao('Chưa sửa chỗ nào.'); return; }
+    const a = document.createElement('a');
+    /* chữ hiển thị xuất trọn bộ đang dùng (bản trong noi-dung.json + chỗ mới sửa), để đưa vào không mất chỗ sửa lần trước */
+    const chuGiaoDien = coCh ? Object.assign({}, DB.chuGiaoDien || {}, SUA.chuGD) : null;
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({game: 'quy-tu', luc: new Date().toISOString(), sua: SUA.chu, giaoDien: SUA.giaoDien, chuGiaoDien}, null, 2)], {type: 'application/json'}));
+    a.download = 'sua-chu-quy-tu.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    bao('Đã tải sua-chu-quy-tu.json — gửi tệp này để đưa chữ và giao diện vào game.', 5000);
+  };
+  $('#sua-xong').onclick = () => xong($('#sua-chu').value);
+  $('#sua-tra').onclick = () => { if (dang && dang.k) { ghiMa(dang.k, chuGocCua(dang.k)); dong(); } else if (dang) xong(dang.cu); };
+  $('#sua-huy').onclick = dong;
+  $('#sua-chu').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); xong(e.target.value); } else if (e.key === 'Escape') dong(); });
+  veThanh();
+}
+apGiaoDien(GD);
+vao();
+</script>
+</body>
+</html>
