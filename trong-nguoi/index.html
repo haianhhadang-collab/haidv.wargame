@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trăm năm trồng người – Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
+<style>
+/* Trăm năm trồng người — game Bài 8 (Chương 6). Khuôn giao diện; nội dung ở noi-dung.json.
+   Dựng index.html: python _KHO-DU-LIEU/cong-cu/tao-game-trong-nguoi.py */
+:root{--nau:#3b2414;--nau2:#5a3418;--nau3:#7a4a24;--nau4:#8e5426;--giay:#fbe9c3;--giay2:#f6e2b6;--giay3:#e6c98f;--vang:#f0b545;--vang2:#ffd77e;--vang3:#c07d1c;--kem:#fff3d6;--xanh:#dff3c8;--xanh2:#bfe8a0;--do:#e9a48f;--do2:#f6d2c4;--chu2:#6b3d18}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#6fb24a}
+body{font-family:'Literata',Georgia,'Palatino Linotype',serif;color:var(--nau)}
+#nen{position:fixed;inset:0;z-index:0;pointer-events:none}
+#nen svg{width:100%;height:100%;display:block}
+#app{position:relative;z-index:1;container-type:inline-size;min-height:100vh}
+/* chữ co giãn theo bề rộng khung: gốc 16–30px; câu hỏi 1.4em (sàn 22px), phương án 1.2em (sàn 19px) */
+.man{font-size:clamp(16px,1.25cqi,30px);min-height:100vh;display:flex;flex-direction:column}
+.px{font-family:'VT323',monospace;font-weight:400;line-height:1}
+button{font:inherit;color:inherit}
+.an{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:4px solid var(--vang);outline-offset:2px}
+
+/* nút gỗ */
+.pbtn{font-family:'VT323',monospace;font-size:1.75em;line-height:1;color:var(--nau);background:var(--vang);border:4px solid var(--nau);box-shadow:inset -4px -4px 0 var(--vang3),inset 4px 4px 0 var(--vang2),4px 4px 0 rgba(40,20,8,.45);padding:.28em .75em;display:inline-flex;align-items:center;gap:.35em;cursor:pointer;min-height:44px;text-decoration:none}
+.pbtn:hover{background:#ffc75a}
+.pbtn:active{transform:translate(2px,2px);box-shadow:inset -4px -4px 0 var(--vang3),inset 4px 4px 0 var(--vang2),2px 2px 0 rgba(40,20,8,.45)}
+.pbtn.nhat{background:var(--giay2);box-shadow:inset -4px -4px 0 #d8b57a,inset 4px 4px 0 #fff4d8,4px 4px 0 rgba(40,20,8,.45)}
+.pbtn.nhat:hover{background:#fff0cc}
+.pbtn svg{width:.8em;height:.8em;flex:none}
+.giay{background:var(--giay);border:4px solid var(--nau);box-shadow:inset 0 -5px 0 var(--giay3),6px 6px 0 rgba(40,20,8,.35)}
+
+/* thanh đầu */
+.dau{position:sticky;top:0;z-index:5;background:var(--nau2);border-bottom:6px solid var(--nau);box-shadow:inset 0 -4px 0 var(--nau3);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5em 1em;padding:.5em 1.2em;color:var(--kem)}
+.dau-trai,.dau-phai{display:flex;flex-wrap:wrap;align-items:center;gap:.5em .9em}
+.ve{width:2.7em;height:2.7em;min-width:44px;min-height:44px;display:grid;place-items:center;background:var(--nau3);border:3px solid var(--nau);color:var(--vang2);cursor:pointer;padding:0}
+.ve svg{width:1.3em;height:1.3em}
+.dau-ten{font-size:2.3em;color:var(--vang2);text-shadow:3px 3px 0 var(--nau)}
+.dau-phu{font-size:1.65em}
+.chip{font-family:'VT323',monospace;font-size:1.45em;line-height:1.1;background:var(--nau);border:3px solid var(--nau4);padding:.1em .55em;color:var(--kem)}
+.chip b{font-weight:400;color:var(--vang2)}
+.chip.cay b{color:#9be07a}
+button.chip{cursor:pointer;min-height:40px}
+button.chip:hover{border-color:var(--vang)}
+.than{flex:1;width:100%;max-width:84em;margin:0 auto;padding:1.3em 1.2em 1.6em}
+
+/* ---------- màn chào ---------- */
+.chao{flex:1;display:flex;flex-direction:column;align-items:center;gap:1.4em;padding:2.4em 1em 1.4em}
+.bien{background:#b9773f;border:6px solid var(--nau);box-shadow:inset 0 0 0 6px #d9995a,inset 0 0 0 10px var(--nau4),6px 6px 0 rgba(40,20,8,.35);padding:1.6em 2.2em 1.5em;display:flex;flex-direction:column;align-items:center;gap:.35em;text-align:center;max-width:100%}
+.bien-tren{font-size:1.75em;letter-spacing:.12em;color:var(--kem);text-shadow:3px 3px 0 var(--nau)}
+.bien-ten{margin:0;font-size:min(7.2em,15cqi);line-height:.9;color:var(--kem);text-shadow:6px 6px 0 var(--nau),-2px -2px 0 #7a3a12}
+.bien-duoi{margin-top:.3em;font-size:2.1em;background:var(--giay2);border:4px solid var(--nau);padding:.05em .6em}
+.cot{display:flex;justify-content:space-between;width:min(37em,80%);margin-top:-1.4em}
+.cot i{display:block;width:12px;height:3.6em;background:var(--nau3);border:4px solid var(--nau);border-top:none}
+.trich{max-width:40em;padding:1em 1.6em;text-align:center}
+.trich p{margin:0;font-size:1.3em;line-height:1.45;font-style:italic}
+.trich .px{margin-top:.3em;font-size:1.55em;color:var(--chu2);font-style:normal}
+.chao-nut{display:flex;flex-wrap:wrap;justify-content:center;gap:1.1em}
+.chao-nut .pbtn{font-size:2.05em}
+.chao-duoi{width:100%;max-width:84em;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:1.2em;margin-top:auto}
+.cach-choi{max-width:33em;background:rgba(59,36,20,.9);border:4px solid var(--nau);box-shadow:inset 0 0 0 3px var(--nau4);color:var(--kem);padding:.9em 1.15em;line-height:1.5}
+.cach-choi p{margin:.25em 0 0}
+.cach-choi .px{margin:0 0 .2em;font-size:1.6em;color:var(--vang2)}
+.cach-choi.nhay{animation:nhay 1s 2}
+@keyframes nhay{50%{box-shadow:inset 0 0 0 3px var(--vang),0 0 0 6px var(--vang)}}
+.may-nhac{display:flex;align-items:center;gap:.75em;background:var(--giay2);border:4px solid var(--nau);box-shadow:4px 4px 0 rgba(40,20,8,.35);padding:.5em .8em .5em .5em}
+.may-nhac button{width:3em;height:3em;min-width:44px;min-height:44px;background:var(--nau2);border:3px solid var(--nau);color:var(--vang2);display:grid;place-items:center;cursor:pointer;padding:0}
+.may-nhac button svg{width:1.6em;height:1.6em}
+.may-nhac div{text-align:center}
+.may-nhac .px{display:block;font-size:1.4em;color:var(--chu2)}
+.may-nhac b{font-size:.95em}
+
+/* ---------- bản đồ ---------- */
+.bando{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.8em}
+.mua{border:6px solid var(--nau);box-shadow:inset 0 0 0 4px var(--vien),6px 6px 0 rgba(40,20,8,.35);background:var(--nen);padding:.9em 1em 1em;display:flex;flex-direction:column;gap:.8em}
+.mua-dau{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5em}
+.mua-ten{margin:0;font-size:2.1em;background:var(--vien);border:3px solid var(--nau);padding:0 .35em;line-height:1.1}
+.mua-phan{font-size:1.5em;background:var(--giay);border:3px solid var(--nau);padding:0 .4em}
+.thua-ds{display:flex;flex-wrap:wrap;gap:.9em;flex:1}
+.thua{flex:1 1 8.4em;max-width:13em;display:flex;flex-direction:column;align-items:center;gap:.35em;background:var(--giay);border:4px solid var(--nau);box-shadow:inset 0 -4px 0 var(--giay3),4px 4px 0 rgba(40,20,8,.35);padding:.6em .6em .7em;cursor:pointer;text-align:center;min-height:44px}
+.thua:hover{background:#fff4d8;transform:translate(-2px,-2px);box-shadow:inset 0 -4px 0 var(--giay3),6px 6px 0 rgba(40,20,8,.35)}
+.thua svg{width:6em;height:4.5em}
+.thua .px.ma{font-size:1.4em;color:var(--chu2)}
+.thua .ten{font-size:1.02em;font-weight:600;line-height:1.25}
+.thua .the{margin-top:auto;font-size:1.35em;padding:.05em .45em;border:2px solid var(--nau)}
+.mua-thu{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;gap:.6em}
+.mua-thu .px.ghi{font-size:1.5em;background:var(--giay);border:3px solid var(--nau);padding:.05em .45em}
+.mua-thu .pbtn{font-size:1.5em}
+
+/* ---------- gieo hạt ---------- */
+.gieo{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:1.5em;align-items:start}
+.the-ds{display:flex;gap:6px;padding-left:8px}
+.tab{font-family:'VT323',monospace;font-size:1.6em;line-height:1;padding:.3em .7em;border:4px solid var(--nau);border-bottom:none;cursor:pointer;min-height:44px;background:#c99a62}
+.tab[aria-selected="true"]{background:var(--giay)}
+.sach{max-height:calc(100vh - 11em);overflow-y:auto;padding:1.1em 1.4em;font-size:1.08em;line-height:1.62}
+.sach p{margin:0 0 .65em}
+.sach h3{margin:.9em 0 .35em;font-size:1.1em;line-height:1.35}
+.sach .nhan{font-size:1.35em;color:var(--chu2);margin-bottom:.2em}
+.sach h2{margin:0 0 .5em;font-size:1.35em;line-height:1.3}
+.sach::-webkit-scrollbar{width:12px}.sach::-webkit-scrollbar-thumb{background:#b9773f;border:3px solid var(--giay)}
+.so{background:var(--giay2);border:4px solid var(--nau);box-shadow:inset 0 0 0 4px var(--giay3),6px 6px 0 rgba(40,20,8,.35);padding:1em 1.2em;display:flex;flex-direction:column;gap:.65em}
+.so-dau{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.4em}
+.so-dau h2{margin:0;font-size:2.1em}
+.so-dau .px{font-size:1.5em;color:var(--chu2)}
+.so label{line-height:1.45}
+.so textarea{width:100%;min-height:9.5em;resize:vertical;font-family:'Literata',Georgia,serif;font-size:1.02em;line-height:1.55;color:var(--nau);background:#fffaf0;border:4px solid var(--nau);padding:.6em .75em}
+.so textarea:focus{outline:4px solid var(--vang);outline-offset:0}
+.so-hang{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.6em}
+.so-hang .px{font-size:1.5em;color:var(--chu2)}
+.so-hang .px.qua{color:#a8321f}
+.y-ds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.6em}
+.y{border:3px solid var(--nau);padding:.4em .5em .5em;display:flex;flex-direction:column;gap:.3em;min-height:7.2em;background:var(--giay)}
+.y.co{background:var(--xanh)}
+.y.thieu{background:#efd9ae}
+.y svg{width:100%;height:2.5em}
+.y span{font-size:.88em;line-height:1.35}
+.y.co span{font-weight:600}
+.bao{background:var(--nau);color:var(--kem);padding:.5em .75em;font-size:.95em;line-height:1.45;border:3px solid var(--nau4)}
+.so-cuoi{display:flex;justify-content:flex-end}
+
+/* ---------- thu hoạch ---------- */
+.thu{display:grid;grid-template-columns:11em minmax(0,1fr);gap:1.4em;align-items:start}
+.cu-ds{display:flex;flex-direction:column;gap:.6em}
+.cu{background:var(--giay2);border:4px solid var(--nau);box-shadow:4px 4px 0 rgba(40,20,8,.35);padding:.5em .6em;display:flex;flex-direction:column;gap:.1em;opacity:.8}
+.cu.dang{background:var(--vang);opacity:1}
+.cu div{display:flex;align-items:center;gap:.45em}
+.cu svg{width:1.75em;height:1.75em;flex:none}
+.cu .px{font-size:1.6em}
+.cu small{font-size:.8em;line-height:1.3}
+.cau{padding:1.1em 1.5em;display:flex;flex-direction:column;gap:.75em;min-height:31em}
+.gio{display:flex;align-items:center;gap:.75em}
+.gio svg{width:1.9em;height:1.9em;flex:none}
+.gio .thanh{flex:1;height:1.15em;background:var(--giay3);border:3px solid var(--nau);position:relative}
+.gio .thanh i{position:absolute;left:0;top:0;bottom:0;background:var(--vang);transition:width .9s linear}
+.gio .thanh i.chieu{background:#d9622b}
+.gio .px{font-size:1.6em;min-width:8.5em;text-align:right}
+.dong-cu{font-size:1.5em;color:var(--chu2)}
+.cau h2{margin:0;font-size:1.4em;line-height:1.42;font-weight:600}
+.pa-ds{display:flex;flex-direction:column;gap:.5em}
+.pa{display:flex;align-items:center;gap:.7em;width:100%;text-align:left;font-size:1.2em;line-height:1.35;border:4px solid var(--nau);padding:.45em .7em;cursor:pointer;min-height:48px;background:#fffaf0}
+.pa:hover:not([disabled]){filter:brightness(1.05)}
+.pa[disabled]{cursor:default}
+.pa .px.chu{font-size:1.4em;width:1.3em;height:1.3em;display:grid;place-items:center;background:var(--nau);color:var(--kem);flex:none}
+.pa .noi{flex:1}
+.pa .px.ghi{font-size:1.15em;flex:none}
+.pa.chon{background:var(--vang2)}
+.pa.dung{background:var(--xanh2)}
+.pa.sai{background:var(--do)}
+.pa.mo{background:#f3e6c8}
+.tu-ds{display:flex;flex-wrap:wrap;gap:.75em;margin-top:.3em}
+.tu{font-size:1.2em;border:4px solid var(--nau);padding:.35em 1em;cursor:pointer;min-height:48px;box-shadow:3px 3px 0 rgba(40,20,8,.35);background:#fffaf0}
+.tu.dung{background:var(--xanh2)}.tu.sai{background:var(--do)}.tu.mo{background:#f3e6c8}
+.cau-cuoi{display:flex;flex-wrap:wrap;align-items:flex-end;gap:1em;margin-top:auto}
+.phan-hoi{flex:1 1 20em;border:3px solid var(--nau);padding:.5em .75em;font-size:.98em;line-height:1.5}
+.phan-hoi .px{font-size:1.6em;margin-right:.3em}
+.phan-hoi.dung{background:var(--xanh)}.phan-hoi.sai{background:var(--do2)}.phan-hoi.lan{background:#efd9ae}
+.nhieu-ghi{flex:1;font-size:.95em}
+.o-ds{display:grid;grid-template-columns:repeat(auto-fit,minmax(5.2em,1fr));gap:.6em;margin-top:1.2em}
+.o{border:4px solid var(--nau);background:#8a5a33;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15em;padding:.3em .2em;box-shadow:4px 4px 0 rgba(40,20,8,.35)}
+.o svg{width:3.2em;height:2.8em}
+.o .px{font-size:1.2em;color:var(--kem)}
+.o.dang{outline:4px solid var(--vang);outline-offset:-4px}
+
+/* ---------- kết mùa ---------- */
+.ket-ten{align-self:center;background:#b9773f;border:6px solid var(--nau);box-shadow:inset 0 0 0 6px #d9995a,inset 0 0 0 10px var(--nau4),6px 6px 0 rgba(40,20,8,.35);padding:.5em 1.6em;margin:0 auto 1.4em;text-align:center}
+.ket-ten h1{margin:0;font-size:min(4.3em,10cqi);color:var(--kem);text-shadow:5px 5px 0 var(--nau)}
+.ket{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.6em;align-items:start}
+.ket section{padding:1em 1.3em;display:flex;flex-direction:column;gap:.6em}
+.ket-dau{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:.4em}
+.ket-dau h2{margin:0;font-size:2em}
+.ket-dau .px{font-size:1.85em}
+.ket .dong{display:flex;justify-content:space-between;gap:.8em;border-bottom:2px dashed #d8b57a;padding-bottom:.25em}
+.ket .px.nho{margin:.3em 0 0;font-size:1.5em;color:var(--chu2)}
+.ket ul{margin:0;padding-left:1.2em;line-height:1.5}
+.ket li{margin:.2em 0}
+.cu-diem{display:grid;grid-template-columns:repeat(auto-fit,minmax(6em,1fr));gap:.5em}
+.cu-diem div{background:var(--giay2);border:3px solid var(--nau);padding:.35em;text-align:center}
+.cu-diem .px{display:block;font-size:1.35em}
+.cu-diem .px.diem{font-size:1.85em}
+.ket-cuoi{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:1em;margin-top:1.4em}
+.hoan-thanh{grid-column:1/-1;background:var(--vang2);border:4px solid var(--nau);padding:.6em 1em;text-align:center;font-size:1.7em}
+
+/* ---------- âm nhạc ---------- */
+.bang-nhac{padding:1.1em 1.4em;display:flex;flex-direction:column;gap:.9em}
+.bang-nhac h1{margin:0;font-size:3.3em}
+.bang-nhac .loai{display:flex;gap:.6em;font-size:1.45em}
+.bang-nhac .loai span{border:3px solid var(--nau);padding:.05em .6em}
+.cuon{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.98em;line-height:1.38;min-width:44em}
+th{font-family:'VT323',monospace;font-weight:400;font-size:1.45em;text-align:left;background:var(--nau2);color:var(--kem);padding:.3em .6em}
+td{padding:.45em .6em;border-bottom:2px dashed #d8b57a;vertical-align:top}
+td .px{font-size:1.3em;border:2px solid var(--nau);padding:0 .4em;white-space:nowrap}
+td small{display:block;color:var(--chu2);font-size:.85em;margin-top:.2em}
+td small a{color:var(--chu2)}
+.hai-hop{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.1em}
+.hai-hop div{background:var(--giay2);border:3px solid var(--nau);padding:.6em .9em;font-size:.95em;line-height:1.5}
+.hai-hop .px{margin:0 0 .2em;font-size:1.5em}
+.hai-hop p{margin:0}
+
+@container (max-width:900px){
+  .bando,.gieo,.ket,.hai-hop{grid-template-columns:minmax(0,1fr)}
+  .thu{grid-template-columns:minmax(0,1fr)}
+  .cu-ds{flex-direction:row;flex-wrap:wrap}
+  .cu{flex:1 1 7em}
+  .cu small{display:none}
+  .sach{max-height:62vh}
+  .y-ds{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .cau{min-height:0;padding:1em}
+}
+@container (max-width:520px){
+  .dau{padding:.45em .7em}
+  .than{padding:1em .7em 1.4em}
+  .chao-duoi{flex-direction:column;align-items:stretch}
+  .gio .px{min-width:0}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- chế độ sửa (?sua=1) — chỉ giảng viên mở ---------- */
+#sua-khung{position:fixed;left:.6rem;bottom:.6rem;z-index:80;max-width:min(46rem,calc(100vw - 1.2rem));font:500 15px/1.4 'Segoe UI',system-ui,sans-serif;color:#3b2414}
+#sua-khung .sua-thanh,#sua-khung .sua-hop{background:#fbe9c3;border:4px solid #3b2414;box-shadow:4px 4px 0 rgba(40,20,8,.45);padding:.5rem .65rem;margin-top:.4rem}
+#sua-khung .sua-thanh{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;background:#3b2414;color:#fff3d6;border-color:#8e5426}
+#sua-khung .sua-thanh b{font:400 26px/1 'VT323',monospace;color:#ffd77e}
+#sua-khung button{font:600 14px 'Segoe UI',system-ui,sans-serif;border:3px solid #3b2414;background:#f6e2b6;color:#3b2414;padding:.3rem .6rem;cursor:pointer;min-height:36px}
+#sua-khung button.bat,#sua-khung button.chinh{background:#f0b545}
+#sua-khung.gon .sua-thanh > :not(#sua-gon),#sua-khung.gon .sua-hop{display:none!important}
+#sua-dem{font-weight:700;color:#ffd77e}
+#sua-ds{max-height:45vh;overflow:auto}
+#sua-ds ol{margin:0 0 .5rem;padding-left:1.3rem} #sua-ds li{margin:.4rem 0} #sua-ds s{color:#7a5a3a}
+#sua-o textarea{width:100%;font:600 16px 'Segoe UI',system-ui,sans-serif;border:3px solid #3b2414;padding:.5rem;margin:.35rem 0;resize:vertical;color:#3b2414;background:#fffaf0}
+#sua-o .sua-nut{display:flex;gap:.4rem;flex-wrap:wrap}
+.sua-nho{color:#6b3d18;font-size:13px}
+body.co-sua .man{padding-bottom:76px}
+#sua-ch{max-height:60vh;overflow:auto;min-width:min(42rem,calc(100vw - 1.2rem))}
+#sua-ch .sua-ch-dong{display:grid;grid-template-columns:minmax(10rem,1fr) minmax(12rem,1.6fr);gap:.6rem;align-items:center;margin:.25rem 0;font-size:13px}
+#sua-ch input{font:500 14px 'Segoe UI',system-ui,sans-serif;border:2px solid #3b2414;padding:.35rem .5rem;width:100%;color:#3b2414;background:#fffaf0}
+#sua-ch input.da-sua{border:3px solid #c07d1c;background:#fff1c9}
+@media (max-width:560px){#sua-ch .sua-ch-dong{grid-template-columns:1fr}}
+body.dang-sua .sua-tro{outline:3px dashed #c07d1c;outline-offset:2px;cursor:text}
+</style>
+</head>
+<body>
+<div id="nen" aria-hidden="true"></div>
+<div id="app"></div>
+<script>
+const DB = {"mua":[{"ma":"xuan","ten":"MÙA XUÂN","phan":"I. Văn hóa","thua":[{"ma":"I.1","ten":"Quan niệm về văn hóa","baiGiang":["- Năm 1943, trong Mục đọc sách ở phần cuối của tập Nhật ký trong tù, lần đầu tiên Hồ Chí Minh đưa ra quan niệm về văn hóa: “Vì lẽ sinh tồn cũng như mục đích của cuộc sống, loài người mới sáng tạo và phát minh ra ngôn ngữ, chữ viết, đạo đức, pháp luật, khoa học, tôn giáo, văn học, nghệ thuật, những công cụ cho sinh hoạt hàng ngày về mặc, ăn, ở và các phương thức sử dụng. Toàn bộ những sáng tạo và phát minh đó tức là văn hóa. Văn hóa là sự tổng hợp của mọi phương thức sinh hoạt cùng với biểu hiện của nó mà loài người đã sản sinh ra nhằm thích ứng những nhu cầu đời sống và đòi hỏi của sự sinh tồn”.","Đây là lần đầu tiên, cũng là lần duy nhất Hồ Chí Minh đưa ra định nghĩa về văn hóa theo nghĩa rộng; sau cách mạng tháng Tám, văn hóa được Người xác định là đời sống tinh thần của xã hội.","Hồ Chí Minh đặt văn hóa ngang hàng với chính trị, kinh tế, xã hội.","- Quan hệ giữa văn hóa với chính trị: Hồ Chí Minh cho rằng chính trị, xã hội có được giải phóng thì văn hóa mới được giải phóng: “Xã hội thế nào, văn nghệ thế ấy. Văn nghệ của dân tộc ta vốn rất phong phú, nhưng dưới chế độ thực dân và phong kiến, nhân dân ta bị nô lệ, thì văn nghệ cũng bị nô lệ, bị tồi tàn, không thể phát triển được. Trong kháng chiến, nhân dân ta vùng dậy phá ách nô lệ, giành lại tự do, nhờ vậy văn nghệ ta cũng được vươn mình giải phóng”. Theo quan điểm của Người, giải phóng chính trị là để mở đường cho văn hóa phát triển. Tuy nhiên, văn hóa không thể đứng ngoài mà phải ở trong chính trị, văn hóa phải phục vụ nhiệm vụ chính trị; đồng thời mọi hoạt động của tổ chức và nhà chính trị phải có hàm lượng văn hóa.","- Quan hệ giữa văn hóa với kinh tế. Trong mối quan hệ này, Hồ Chí Minh cho rằng, xây dựng kinh tế để tạo điều kiện cho việc xây dựng và phát triển văn hóa. Tuy nhiên, văn hóa cũng không thể đứng ngoài mà phải đứng trong kinh tế, nghĩa là văn hóa không hoàn toàn phụ thuộc vào kinh tế, mà có vai trò tác động tích cực trở lại kinh tế.","- Quan hệ giữa văn hóa với xã hội. Hồ Chí Minh cho rằng giải phóng chính trị đồng nghĩa với giải phóng xã hội, từ đó văn hóa mới có điều kiện phát triển; xã hội thế nào, văn hóa thế ấy.","+ Bản sắc văn hóa dân tộc là những giá trị văn hóa bền vững của cộng đồng dân tộc Việt Nam; là thành quả của quá trình lao động, sản xuất, chiến đấu và giao lưu của con người Việt Nam. Hồ Chí Minh cho rằng, bản sắc văn hóa dân tộc có ý nghĩa quan trọng đối với sự nghiệp xây dựng và bảo vệ Tổ quốc, do vậy trách nhiệm của các thế hệ người Việt là phải biết trân trọng, giữ gìn và phát huy, phát triển những giá trị của văn hóa dân tộc, đáp ứng yêu cầu, nhiệm vụ của cách mạng theo từng giai đoạn lịch sử. Theo Người: “Dân ta phải biết sử ta. Cho tường gốc tích nước nhà Việt Nam”.","+ Trong vấn đề giữ gìn bản sắc văn hóa dân tộc, Hồ Chí Minh nhấn mạnh yêu cầu lấy văn hóa dân tộc làm gốc, đó là điều kiện, cơ sở để tiếp thu văn hóa nhân loại. Tiếp thu văn hóa nhân loại là để làm giàu cho văn hóa Việt Nam, xây dựng văn hóa Việt Nam hợp với tinh thần dân chủ."],"giaoTrinh":["Hồ Chí Minh có bốn cách tiếp cận chủ yếu về văn hóa: (1) Tiếp cận theo nghĩa rộng, tổng hợp mọi phương thức sinh hoạt của con người; (2) Tiếp cận theo nghĩa hẹp là đời sống tinh thần của xã hội, thuộc kiến trúc thượng tầng; (3) Tiếp cận theo nghĩa hẹp hơn là bàn đến các trường học, số người đi học, xóa nạn mù chữ, biết đọc, biết viết (thường xuất hiện trong các bài nói với đồng bào miền núi); (4) Tiếp cận theo “phương thức sử dụng công cụ sinh hoạt”.","Tháng 8/1943, khi còn ở trong nhà tù của Tưởng Giới Thạch, Hồ Chí Minh đã đưa ra quan niệm nhấn mạnh ý nghĩa của văn hóa. Người viết: “Vì lẽ sinh tồn cũng như mục đích của cuộc sống, loài người mới sáng tạo và phát minh ra ngôn ngữ, chữ viết, đạo đức, pháp luật, khoa học, tôn giáo, văn học, nghệ thuật, những công cụ cho sinh hoạt hằng ngày về mặc, ăn, ở và các phương thức sử dụng. Toàn bộ những sáng tạo và phát minh đó tức là văn hóa. Văn hóa là sự tổng hợp của mọi phương thức sinh hoạt cùng với biểu hiện của nó mà loài người đã sản sinh ra nhằm thích ứng những nhu cầu đời sống và đòi hỏi của sự sinh tồn”.","Từ sau Cách mạng Tháng Tám, Hồ Chí Minh có bàn đến văn hóa nhưng theo nghĩa hẹp, với ý nghĩa là kiến trúc thượng tầng, là toàn bộ đời sống tinh thần của xã hội.","- Quan hệ giữa văn hóa với chính trị. Hồ Chí Minh cho rằng, trong đời sống có bốn vấn đề phải được coi là quan trọng ngang nhau và có sự tác động qua lại lẫn nhau, đó là chính trị, kinh tế, văn hóa, xã hội. Tuy nhiên, văn hóa không thể đứng ngoài mà phải ở trong chính trị, tức là văn hóa phải phục vụ nhiệm vụ chính trị; đồng thời mọi hoạt động của tổ chức và nhà chính trị phải có hàm lượng văn hóa.","- Quan hệ giữa văn hóa với kinh tế. Trong mối quan hệ với kinh tế, Hồ Chí Minh giải thích rằng, văn hóa thuộc kiến trúc thượng tầng. Tuy nhiên, văn hóa cũng không thể đứng ngoài mà phải đứng trong kinh tế, nghĩa là văn hóa không hoàn toàn phụ thuộc vào kinh tế, mà có vai trò tác động tích cực trở lại kinh tế.","- Quan hệ giữa văn hóa với xã hội. Giải phóng chính trị đồng nghĩa với giải phóng xã hội, từ đó văn hóa mới có điều kiện phát triển. Xã hội thế nào văn hóa thế ấy.","- Về giữ gìn bản sắc văn hóa dân tộc, tiếp thu văn hóa nhân loại. Bản sắc văn hóa dân tộc là những giá trị văn hóa bền vững của cộng đồng các dân tộc Việt Nam; là thành quả của quá trình lao động, sản xuất, chiến đấu và giao lưu của con người Việt Nam. Về hình thức, cốt cách văn hóa dân tộc biểu hiện ở ngôn ngữ, phong tục, tập quán, lễ hội, truyền thống, cách cảm và nghĩ... Bản sắc văn hóa dân tộc chứa đựng giá trị lớn và có một ý nghĩa quan trọng đối với sự nghiệp xây dựng và bảo vệ Tổ quốc. Nó phản ánh những nét độc đáo, đặc tính dân tộc. Nó là ngọn nguồn đi tới chủ nghĩa Mác - Lênin. Theo Người: “Dân ta phải biết sử ta. Cho tường gốc tích nước nhà Việt Nam”.","Hồ Chí Minh chỉ rõ mục đích của việc tiếp thu văn hóa nhân loại là để làm giàu cho văn hóa Việt Nam, xây dựng văn hóa Việt Nam hợp với tinh thần dân chủ. Nội dung tiếp thu là toàn diện bao gồm Đông, Tây, kim, cổ, tất cả các mặt, các khía cạnh. Tiêu chí tiếp thu là có cái gì hay, cái gì tốt là ta học lấy. Mối quan hệ giữa giữ gìn cốt cách văn hóa dân tộc và tiếp thu văn hóa nhân loại là phải lấy văn hóa dân tộc làm gốc, đó là điều kiện, cơ sở để tiếp thu văn hóa nhân loại."],"y":[{"ten":"Hồ Chí Minh có bốn cách tiếp cận chủ yếu về văn hóa: theo nghĩa rộng, nghĩa hẹp, nghĩa hẹp hơn và theo phương thức sử dụng công cụ sinh hoạt","goiY":"Đọc lại đoạn mở đầu mục: Người tiếp cận văn hóa theo mấy cách?","khoa":[["bon cach tiep can"],["nghia rong","nghia hep"]]},{"ten":"Tháng 8/1943, Người đưa ra quan niệm văn hóa duy nhất theo nghĩa rộng: văn hóa là sự tổng hợp của mọi phương thức sinh hoạt cùng với biểu hiện của nó","goiY":"Đọc lại định nghĩa Người viết khi còn ở trong nhà tù năm 1943: văn hóa là sự tổng hợp của cái gì?","khoa":[["phuong thuc sinh hoat"],["sang tao","phat minh"]]},{"ten":"Chính trị, kinh tế, văn hóa, xã hội quan trọng ngang nhau và có sự tác động qua lại lẫn nhau","goiY":"Đọc lại câu mở đầu phần quan hệ giữa văn hóa với chính trị: bốn vấn đề của đời sống đứng ở vị trí thế nào?","khoa":[["ngang nhau"],["ngang hang"],["quan trong ngang"],["tac dong qua lai"]]},{"ten":"Giải phóng chính trị, giải phóng xã hội để mở đường cho văn hóa phát triển; văn hóa phải ở trong chính trị, phục vụ nhiệm vụ chính trị","goiY":"Đọc lại phần quan hệ giữa văn hóa với chính trị và với xã hội: điều gì phải đi trước để văn hóa phát triển?","khoa":[["mo duong"],["o trong chinh tri"],["phuc vu nhiem vu chinh tri"],["phuc vu chinh tri"],["xa hoi the nao"]]},{"ten":"Văn hóa không hoàn toàn phụ thuộc vào kinh tế mà có vai trò tác động tích cực trở lại kinh tế","goiY":"Đọc lại phần quan hệ giữa văn hóa với kinh tế, chú ý chữ \"Tuy nhiên\".","khoa":[["tro lai kinh te"],["tac dong tich cuc"],["khong hoan toan phu thuoc"],["dung trong kinh te"]]},{"ten":"Giữ gìn bản sắc văn hóa dân tộc, lấy văn hóa dân tộc làm gốc để tiếp thu tinh hoa văn hóa nhân loại","goiY":"Đọc lại phần cuối về bản sắc văn hóa dân tộc và tiếp thu văn hóa nhân loại: cái gì là gốc?","khoa":[["ban sac"],["lam goc"]]}]},{"ma":"I.2","ten":"Vai trò của văn hóa","baiGiang":["- Văn hóa là mục tiêu:","+ Mục tiêu của cách mạng Việt Nam là độc lập dân tộc và chủ nghĩa xã hội. Do vậy, cùng với chính trị, kinh tế, xã hội, văn hóa nằm trong mục tiêu chung của toàn bộ tiến trình cách mạng của đất nước.","+ Theo Hồ Chí Minh, văn hóa là mục tiêu được hiểu là quyền sống, quyền tự do, quyền mưu cầu hạnh phúc; là khát vọng của nhân dân về các giá trị chân, thiện, mỹ. Đó là một xã hội dân chủ (dân là chủ, dân làm chủ), công bằng, văn minh, ai cũng có cơm ăn áo mặc, ai cũng được học hành; một xã hội mà đời sống vật chất và tinh thần của nhân dân luôn được quan tâm và không ngừng nâng cao; con người có điều kiện phát triển toàn diện.","- Văn hóa là động lực:","Động lực là yếu tố thúc đẩy sự phát triển xã hội. Trong quan điểm của Hồ Chí Minh, động lực phát triển đất nước được phân chia bao gồm động lực vật chất và động lực tinh thần; động lực cộng đồng và cá nhân; nội lực và ngoại lực… Tất cả những động lực này chỉ có thể được phát huy thông qua nhân tố con người với tư cách là sản phẩm văn hóa. Người nhấn mạnh: “Trình độ văn hóa của nhân dân nâng cao sẽ giúp chúng ta đẩy mạnh công cuộc khôi phục kinh tế, phát triển dân chủ… cũng là một việc cần thiết để xây dựng nước ta thành một nước hòa bình, thống nhất, độc lập, dân chủ và giàu mạnh”.","Tiếp cận vai trò động lực của văn hóa đối với các lĩnh vực cụ thể, Hồ Chí Minh cho rằng:","+ Văn hóa chính trị là động lực lớn, có ý nghĩa “soi đường cho quốc dân đi”. Văn hóa chính trị mang lại sự đúng đắn, sáng suốt trong việc lựa chọn đường lối và các biện pháp thực hiện, giữ vững độc lập, tự chủ.","+ Văn hóa văn nghệ góp phần nâng cao lòng yêu nước, tinh thần tự cường, tự tôn dân tộc; lý tưởng, tình cảm cách mạng, sự lạc quan, ý chí, quyết tâm và niềm tin vào thắng lợi cuối cùng của cách mạng.","+ Văn hóa giáo dục giúp diệt giặc dốt, nâng cao dân trí, đào tạo nhân lực chất lượng cao, thúc đẩy sự tăng trưởng kinh tế.","+ Văn hóa đạo đức, lối sống nâng cao sức mạnh cho con người cách mạng, hướng con người tới chân, thiện, mỹ.","+ Văn hóa pháp luật giúp đảm bảo dân chủ, trật tự, kỷ cương, phép nước.","- Hồ Chí Minh khẳng định: Văn hóa cũng là mặt trận, người làm văn hóa là chiến sĩ trên mặt trận tiên phong ấy.","- Khẳng định “văn hóa cũng là mặt trận” mang các hàm ý sau:","+ Văn hóa như là một lĩnh vực hoạt động có tính độc lập và có tầm quan trọng như các mặt trận khác như quân sự, chính trị, kinh tế.","- Khẳng định “văn nghệ sỹ là chiến sĩ” mang hàm ý:","+ Các văn - nghệ sĩ có nhiệm vụ phụng sự Tổ quốc, phục vụ nhân dân; ngòi bút của họ là công cụ trong sự nghiệp “phò chính, trừ tà”","- Hồ Chí Minh cho rằng mọi hoạt động văn hóa phải trở về với thực tại của quần chúng, phản ánh được tư tưởng và khát vọng của quần chúng, định hướng giá trị cho quần chúng.","- Người khẳng định nhân dân phải là những người được hưởng thụ các giá trị văn hóa.","- Viết cho nhân dân nên nội dung phải thiết thực, cách diễn đạt phải ngắn gọn, dễ hiểu, chân phương.","- Văn nghệ sỹ phải đi sâu vào quần chúng để có tư liệu sinh động về cuộc sống và quần chúng chính là người thẩm định các giá trị văn hóa."],"giaoTrinh":["- Văn hóa là mục tiêu. Mục tiêu của cách mạng Việt Nam là độc lập dân tộc và chủ nghĩa xã hội, độc lập dân tộc gắn liền với chủ nghĩa xã hội. Như vậy, cùng với chính trị, kinh tế, xã hội, văn hóa nằm trong mục tiêu chung của toàn bộ tiến trình cách mạng.","Theo quan điểm Hồ Chí Minh, văn hóa là mục tiêu - nhìn một cách tổng quát - là quyền sống, quyền sung sướng, quyền tự do, quyền mưu cầu hạnh phúc; là khát vọng của nhân dân về các giá trị chân, thiện, mỹ. Đó là một xã hội dân chủ - dân là chủ và dân làm chủ - công bằng, văn minh, ai cũng có cơm ăn áo mặc, ai cũng được học hành; một xã hội mà đời sống vật chất và tinh thần của nhân dân luôn luôn được quan tâm và không ngừng nâng cao, con người có điều kiện phát triển toàn diện.","Hồ Chí Minh đã đặt cơ sở cho một xã hội phát triển bền vững với ba trụ cột là bền vững về kinh tế, xã hội và môi trường.","- Văn hóa là động lực. Động lực là cái thúc đẩy cho sự phát triển. Di sản Hồ Chí Minh cho thấy, động lực phát triển đất nước bao gồm động lực vật chất và tinh thần; động lực cộng đồng và cá nhân; nội lực và ngoại lực. Tất cả quy tụ ở con người và đều có thể được xem xét dưới góc độ văn hóa. Tuy nhiên, nếu tiếp cận các lĩnh vực văn hóa cụ thể trong tư tưởng Hồ Chí Minh, động lực có thể nhận thức ở các phương diện chủ yếu sau:","Văn hóa chính trị là một trong những động lực có ý nghĩa soi đường cho quốc dân đi, lãnh đạo quốc dân để thực hiện độc lập, tự cường, tự chủ.","Văn hóa văn nghệ góp phần nâng cao lòng yêu nước, lý tưởng, tình cảm cách mạng, sự lạc quan, ý chí, quyết tâm và niềm tin vào thắng lợi cuối cùng của cách mạng.","Văn hóa giáo dục diệt giặc dốt, xóa mù chữ, giúp con người hiểu biết quy luật phát triển của xã hội. Với sứ mệnh “trồng người”, văn hóa giáo dục đào tạo con người mới, cán bộ mới, nguồn nhân lực chất lượng cao cho sự nghiệp cách mạng.","Văn hóa đạo đức, lối sống nâng cao phẩm giá, phong cách lành mạnh cho con người, hướng con người tới các giá trị chân, thiện, mỹ.","Văn hóa pháp luật bảo đảm dân chủ, trật tự, kỷ cương, phép nước.","Văn hóa là một trong bốn nội dung chính của đời sống kinh tế - xã hội, quan trọng ngang các vấn đề kinh tế, chính trị và xã hội. Mặt trận văn hóa là cuộc đấu tranh cách mạng trên lĩnh vực văn hóa - tư tưởng. Mặt trận văn hóa là cuộc chiến đấu trên lĩnh vực văn hóa; vì vậy anh chị em văn nghệ sĩ là chiến sĩ trên mặt trận ấy; cũng như các chiến sĩ khác, chiến sĩ nghệ thuật có nhiệm vụ phụng sự Tổ quốc, phục vụ nhân dân.","Để làm tròn nhiệm vụ, chiến sĩ nghệ thuật phải có lập trường tư tưởng vững vàng; ngòi bút là vũ khí sắc bén trong sự nghiệp “phò chính trừ tà”. Phải bám sát cuộc sống thực tiễn, đi sâu vào quần chúng, để phê bình nghiêm khắc những thói xấu như tham ô, lười biếng, lãng phí, quan liêu, và ca tụng chân thật những người tốt việc tốt để làm gương mẫu cho chúng ta ngày nay và giáo dục con cháu đời sau.","Tư tưởng Hồ Chí Minh phản ánh khát vọng hạnh phúc của nhân dân. Tư tưởng văn hóa của Người cũng vì nhân dân, phục vụ nhân dân. Theo Người, mọi hoạt động văn hóa phải trở về với cuộc sống thực tại của quần chúng, phản ánh được tư tưởng và khát vọng của quần chúng.","Nhân dân phải là những người được hưởng thụ các giá trị văn hóa."],"y":[{"ten":"Văn hóa là mục tiêu của cách mạng","goiY":"Đọc lại đoạn \"Văn hóa là mục tiêu\": văn hóa nằm ở đâu trong mục tiêu chung của cách mạng?","khoa":[["muc tieu"]]},{"ten":"Văn hóa là mục tiêu, nhìn tổng quát là quyền sống, quyền sung sướng, quyền tự do, quyền mưu cầu hạnh phúc; là khát vọng của nhân dân về các giá trị chân, thiện, mỹ","goiY":"Đọc tiếp đoạn ấy: nhìn một cách tổng quát, văn hóa là mục tiêu gồm những quyền và khát vọng nào?","khoa":[["hanh phuc"],["chan thien my"],["quyen song"],["tu do"]]},{"ten":"Văn hóa là động lực của sự nghiệp cách mạng","goiY":"Đọc lại đoạn \"Văn hóa là động lực\": động lực là gì, tất cả quy tụ ở đâu?","khoa":[["dong luc"]]},{"ten":"Động lực ấy thể hiện ở văn hóa chính trị, văn hóa văn nghệ, văn hóa giáo dục, văn hóa đạo đức, văn hóa pháp luật","goiY":"Đọc các dòng nói văn hóa là động lực trên từng lĩnh vực cụ thể; kể ít nhất ba lĩnh vực.","khoa":[],"nhom":{"tu":["chinh tri","van nghe","giao duc","dao duc","phap luat"],"toiThieu":3}},{"ten":"Văn hóa là một mặt trận; anh chị em văn nghệ sĩ là chiến sĩ trên mặt trận ấy","goiY":"Đọc lại mục \"Văn hóa là một mặt trận\": người làm văn nghệ được gọi là gì?","khoa":[["mat tran"]]},{"ten":"Văn hóa phục vụ quần chúng nhân dân","goiY":"Đọc lại mục cuối: mọi hoạt động văn hóa phải trở về với ai?","khoa":[["quan chung"],["phuc vu","nhan dan"]]}]},{"ma":"I.3","ten":"Xây dựng nền văn hóa mới","baiGiang":["Tại kỳ họp 24 của Đại Hội đồng Tổ chức Giáo dục, Khoa học và Văn hóa của Liên Hợp Quốc (UNESCO) từ ngày 20/10 đến ngày 20/11/1987 tại Paris đã thông qua Nghị quyết 24C/18.6.5 ghi nhận Hồ Chí Minh là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam.","Với tư cách là Nhà văn hóa kiệt xuất, Hồ Chí Minh đã xác lập hệ thống quan điểm về văn hóa và xây dựng nền văn hóa mới Việt Nam. Người cũng dành cả cuộc đời mình cho sự nghiệp chống giặc dốt, phát triển văn hóa, nâng cao dân trí.","Nền văn hóa mà Hồ Chí Minh xây dựng là sự kết hợp những giá trị văn hóa truyền thống tốt đẹp của dân tộc, kết hợp với tinh hoa văn hóa nhân loại; thấm nhuần chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính.","Ở mỗi chặng đường lịch sử, Hồ Chí Minh lại xác định nền văn hóa cần xây dựng với các đặc tính khác nhau.","Ở giai đoạn này, cùng với việc đưa ra quan niệm về ý nghĩa của văn hóa, Hồ Chí Minh đưa ra quan niệm về xây dựng nền văn hóa dân tộc với năm nội dung:","Một là, Xây dựng tâm lý: tinh thần độc lập tự cường.","Hai là, Xây dựng luân lý: biết hi sinh mình, làm lợi cho quần chúng","Ba là, Xây dựng xã hội: mọi sự nghiệp có liên quan đến phúc lợi của nhân dân trong xã hội.","Bốn là, Xây dựng chính trị: đảm bảo dân quyền","Năm là, Xây dựng kinh tế.","Với năm nội dung này, văn hóa đóng vai trò toàn diện trong đời sống xã hội","Hồ Chí Minh khẳng định lại quan điểm của Đảng ta trong Đề cương văn hóa Việt Nam về nền văn hóa mang tính dân tộc, khoa học, đại chúng","- Tính dân tộc: khẳng định và phát huy giá trị văn hóa dân tộc, “đặc tính dân tộc”, “cốt cách dân tộc”, đồng thời biết tiếp thu tinh hoa văn hóa nhân loại.","- Tính khoa học: tiến kịp xu thế phát triển của nhân loại.","- Tính đại chúng: “Văn hóa phải thiết thực phục vụ cho nhân dân”, do nhân dân xây dựng nên, và phải dễ hiểu, dễ nhớ, phù hợp với nhân dân lao động.","Trong thời kỳ cách mạng xã hội chủ nghĩa, Hồ Chí Minh xác định tính chất của nền văn hóa mới phải xã hội chủ nghĩa về nội dung và dân tộc về hình thức.","- Nội dung xã hội chủ nghĩa tức là: (1) Văn hóa phải phản ánh và phục vụ cho công cuộc xây dựng chủ nghĩa xã hội ở nước ta; (2) Đồng thời, văn hóa phải cổ vũ con người mới, đấu tranh chống lại các tư tưởng đi ngược lại xu thế phát triển của đất nước.","- Tính dân tộc về hình thức thể hiện ở việc giữ gìn, kế thừa, phát huy những giá trị truyền thống tốt đẹp của dân tộc, phát huy những truyền thống tốt đẹp ấy cho phù hợp với những điều kiện lịch sử mới của dân tộc."],"giaoTrinh":["Hồ Chí Minh được Tổ chức Giáo dục, Khoa học và Văn hóa Liên hợp quốc (UNESCO) ghi nhận là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam trong Nghị quyết 24C/18.6.5 của Khóa họp 24 Đại hội đồng UNESCO từ ngày 20/10 đến ngày 20/11/1987.","Cống hiến của Nhà văn hóa kiệt xuất Hồ Chí Minh còn thể hiện ở việc sáng tạo văn hóa, văn nghệ, xác lập hệ thống quan điểm về văn hóa và xây dựng nền văn hóa mới Việt Nam. Cả cuộc đời Người chú trọng chống giặc dốt, phát triển văn hóa, nâng cao dân trí.","Nền văn hóa mà Hồ Chí Minh chủ trương kết hợp những truyền thống tốt đẹp của văn hóa dân tộc được phát triển và nâng cao với tinh hoa văn hóa của nhân loại, thấm nhuần sâu sắc chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính. Người cho rằng, phải làm cho văn hóa đi sâu vào tâm lý quốc dân, đi vào cuộc sống mới; văn hóa phải sửa đổi tham nhũng, lười biếng, phù hoa, xa xỉ; văn hóa phải làm thế nào cho mọi người dân Việt Nam, từ già đến trẻ, cả đàn ông và đàn bà, ai cũng hiểu nhiệm vụ của mình và biết hưởng hạnh phúc mà mình nên được hưởng.","- Giai đoạn trước Cách mạng Tháng Tám năm 1945: Tháng 8/1943, cùng với việc đưa ra quan niệm về ý nghĩa của văn hóa, Hồ Chí Minh quan tâm đến việc xây dựng nền văn hóa dân tộc với năm nội dung: xây dựng tâm lý (Tinh thần độc lập tự cường); xây dựng luân lý (Biết hy sinh mình, làm lợi cho quần chúng); xây dựng xã hội (Mọi sự nghiệp liên quan đến phúc lợi của nhân dân); xây dựng chính trị (dân quyền); xây dựng kinh tế.","- Trong kháng chiến chống thực dân Pháp: Khi cả dân tộc bước vào cuộc kháng chiến trường kỳ, gian khổ, Hồ Chí Minh khẳng định lại quan điểm của Đảng từ năm 1943 trong Đề cương văn hóa Việt Nam về phương châm xây dựng nền văn hóa mới. Đó là một nền văn hóa có tính chất dân tộc, khoa học, đại chúng.","- Trong thời kỳ xây dựng chủ nghĩa xã hội: Trong thời kỳ nhân dân miền Bắc quá độ lên chủ nghĩa xã hội, Hồ Chí Minh chủ trương xây dựng nền văn hóa có nội dung xã hội chủ nghĩa và tính chất dân tộc.","Tóm lại, quan điểm của Hồ Chí Minh về xây dựng nền văn hóa mới Việt Nam, đó là một nền văn hóa toàn diện, giữ gìn được cốt cách văn hóa dân tộc, bảo đảm tính khoa học, tiến bộ và nhân văn."],"y":[{"ten":"UNESCO ghi nhận Hồ Chí Minh là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam","goiY":"Đọc lại đoạn mở đầu về Nghị quyết của UNESCO năm 1987.","khoa":[["unesco"],["kiet xuat"],["nha van hoa"]]},{"ten":"Nền văn hóa Hồ Chí Minh chủ trương kết hợp truyền thống tốt đẹp của văn hóa dân tộc với tinh hoa văn hóa nhân loại, thấm nhuần chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính","goiY":"Đọc lại đoạn nói nền văn hóa Người chủ trương kết hợp những yếu tố nào.","khoa":[["tinh hoa"],["quoc te chan chinh"],["yeu nuoc","quoc te"]]},{"ten":"Trước Cách mạng Tháng Tám, Người nêu năm nội dung xây dựng nền văn hóa dân tộc: tâm lý, luân lý, xã hội, chính trị, kinh tế","goiY":"Đọc lại giai đoạn trước Cách mạng Tháng Tám năm 1945: nền văn hóa dân tộc gồm mấy nội dung xây dựng?","khoa":[["nam noi dung"],["tam ly","luan ly"]]},{"ten":"Trong kháng chiến chống thực dân Pháp, nền văn hóa mới có tính chất dân tộc, khoa học, đại chúng","goiY":"Đọc lại giai đoạn kháng chiến chống thực dân Pháp và Đề cương văn hóa Việt Nam.","khoa":[["khoa hoc","dai chung"]]},{"ten":"Trong thời kỳ xây dựng chủ nghĩa xã hội, nền văn hóa có nội dung xã hội chủ nghĩa và tính chất dân tộc","goiY":"Đọc lại giai đoạn xây dựng chủ nghĩa xã hội: nội dung và tính chất của nền văn hóa là gì?","khoa":[["noi dung xa hoi chu nghia"],["xa hoi chu nghia","dan toc"]]},{"ten":"Nền văn hóa mới là nền văn hóa toàn diện, giữ gìn cốt cách văn hóa dân tộc, bảo đảm tính khoa học, tiến bộ và nhân văn","goiY":"Đọc lại câu \"Tóm lại\" ở cuối mục.","khoa":[["toan dien"],["cot cach"],["nhan van"]]}]}]},{"ma":"ha","ten":"MÙA HẠ","phan":"II. Đạo đức","thua":[{"ma":"II.1","ten":"Đạo đức là gốc, là nền tảng","baiGiang":["Đánh giá về vai trò của đạo đức cách mạng, Hồ Chí Minh coi đạo đức là gốc, là nền tảng của người cách mạng: “Cũng như sông thì có nguồn mới có nước, không có nguồn thì sông cạn. Cây phải có gốc, không có gốc thì cây héo. Người cách mạng phải có đạo đức, không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân. Vì muốn giải phóng cho dân tộc, giải phóng cho loài người là một công việc to tát, mà tự mình không có đạo đức, không có căn bản, tự mình đã hủ hóa, xấu xa thì còn làm nổi việc gì?”.","Hồ Chí Minh cho rằng: “Làm cách mạng để cải tạo xã hội cũ thành xã hội mới là một sự nghiệp rất vẻ vang, nhưng nó cũng là một nhiệm vụ rất nặng nề, một cuộc đấu tranh rất phức tạp, lâu dài, gian khổ. Sức có mạnh mới gánh được nặng và đi được xa. Người cách mạng phải có đạo đức cách mạng làm nền tảng, mới hoàn thành được nhiệm vụ cách mạng vẻ vang”.","Trong điều kiện cụ thể của nước ta, Đảng Cộng sản Việt Nam là một đảng cầm quyền, mặt trái của quyền lực có thể làm tha hóa con người, Hồ Chí Minh nhiều lần căn dặn: “Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân”.","Tư tưởng đạo đức Hồ Chí Minh là đạo đức trong hành động, lấy hiệu quả thực tế làm thước đo. Chính vì vậy Hồ Chí Minh luôn đặt đạo đức bên cạnh tài năng, gắn đức với tài, lời nói đi đôi với hành động và hiệu quả thực tế, Người khẳng định: “Có tài phải có đức. Có tài không có đức, tham ô hủ hoá có hại cho nước. Có đức không có tài như ông bụt ngồi trong chùa, không giúp ích gì được ai”.","Vai trò của Đạo đức còn là thước đo lòng cao thượng của con người. Trong tác phẩm Đạo đức cách mạng (1955), Hồ Chí Minh viết: “Tuy năng lực và công việc của mỗi người khác nhau, người làm việc to, người làm việc nhỏ; nhưng ai giữ được đạo đức đều là người cao thượng”. Giá trị đạo đức tinh thần một khi được con người tiếp nhận sẽ biến thành sức mạnh vật chất. Có đạo đức cách mạng thì khi gặp khó khăn, gian khổ, thất bại cũng không lùi bước, chán nản; khi gặp thuận lợi cũng không tự kiêu, tự đại. Rèn luyện đạo đức cách mạng, theo Hồ Chí Minh là để trở thành những con người “Giàu sang không thể quyến rũ; nghèo khó không thể chuyển lay; Uy lực không thể khuất phục”."],"giaoTrinh":["Khi đánh giá vai trò của đạo đức trong đời sống, từ rất sớm, Hồ Chí Minh đã nêu rõ: đạo đức là nguồn nuôi dưỡng và phát triển con người. Hồ Chí Minh nhiều lần khẳng định đạo đức là gốc, là nền tảng, là sức mạnh, là tiêu chuẩn hàng đầu của người cách mạng. Người coi đạo đức rất quan trọng như gốc của cây, như ngọn nguồn của sông, suối. Trong tác phẩm Sửa đổi lối làm việc (1947), Người viết: “Cũng như sông thì có nguồn mới có nước, không có nguồn thì sông cạn. Cây phải có gốc, không có gốc thì cây héo. Người cách mạng phải có đạo đức, không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân. Vì muốn giải phóng cho dân tộc, giải phóng cho loài người là một công việc to tát, mà tự mình không có đạo đức, không có căn bản, tự mình đã hủ hóa, xấu xa thì còn làm nổi việc gì?”.","Trong tác phẩm Đạo đức cách mạng (1958), Hồ Chí Minh viết: “Làm cách mạng để cải tạo xã hội cũ thành xã hội mới là một sự nghiệp rất vẻ vang, nhưng nó cũng là một nhiệm vụ rất nặng nề, một cuộc đấu tranh rất phức tạp, lâu dài, gian khổ. Sức có mạnh mới gánh được nặng và đi được xa. Người cách mạng phải có đạo đức cách mạng làm nền tảng, mới hoàn thành được nhiệm vụ cách mạng vẻ vang”.","Đạo đức trở thành nhân tố quyết định của sự thành bại của mọi công việc, phẩm chất mỗi con người. Trong bài Người cán bộ cách mạng (1955), Hồ Chí Minh yêu cầu: “Người cán bộ cách mạng phải có đạo đức cách mạng... Mọi việc thành hay là bại, chủ chốt là do cán bộ có thấm nhuần đạo đức cách mạng, hay là không”.","Theo Hồ Chí Minh, “Đại đa số chiến sĩ cách mạng là người có đạo đức: Cả đời hết lòng hết sức phục vụ nhân dân, sinh hoạt ngày thường thì làm gương mẫu; gian khổ, chất phác, kính trọng của công... Đạo đức ấy có ảnh hưởng lớn đến sự nghiệp đổi xã hội cũ thành xã hội mới và xây dựng mỹ tục thuần phong”. Theo Hồ Chí Minh, đạo đức cách mạng là chỗ dựa giúp cho con người vững vàng trong mọi thử thách. “Có đạo đức cách mạng thì khi gặp khó khăn, gian khổ, thất bại, cũng không sợ sệt, rụt rè, lùi bước... khi gặp thuận lợi và thành công vẫn giữ vững tinh thần gian khổ, chất phác, khiêm tốn”.","Trong Di chúc, Người viết: “Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân...”.","Đức và tài phải là những phẩm chất thống nhất của con người. Vì vậy, con người cần có cả đức và tài, nếu thiếu tài thì làm việc gì cũng khó, nhưng thiếu đạo đức thì vô dụng, thậm chí có hại. Trong đó, đạo đức là gốc, là nền tảng của người cách mạng. Hồ Chí Minh thường khuyên: “Dạy cũng như học phải biết chú trọng cả tài lẫn đức. Đức là đạo đức cách mạng. Đó là cái gốc, rất quan trọng. Nếu không có đạo đức cách mạng thì có tài cũng vô dụng”.","Vai trò của đạo đức còn thể hiện là thước đo lòng cao thượng của con người. Trong bài Đạo đức cách mạng (1955), Hồ Chí Minh viết: “Tuy năng lực và công việc của mỗi người khác nhau, người làm việc to, người làm việc nhỏ; nhưng ai giữ được đạo đức đều là người cao thượng”."],"y":[{"ten":"Đạo đức là gốc, là nền tảng, là sức mạnh, là tiêu chuẩn hàng đầu của người cách mạng","goiY":"Đọc lại đoạn đầu: Hồ Chí Minh nhiều lần khẳng định đạo đức là gì của người cách mạng?","khoa":[["la goc"],["nen tang"],["tieu chuan hang dau"]]},{"ten":"Như sông có nguồn, cây có gốc; người cách mạng không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân","goiY":"Đọc lại câu trích trong Sửa đổi lối làm việc có hình ảnh sông và cây.","khoa":[["co nguon"],["tai gioi"],["khong lanh dao"]]},{"ten":"Đạo đức là nhân tố quyết định sự thành bại của mọi công việc","goiY":"Đọc lại đoạn trích bài Người cán bộ cách mạng (1955): mọi việc thành hay bại là do đâu?","khoa":[["thanh bai"],["thanh hay la bai"],["thanh hay bai"]]},{"ten":"Đức và tài thống nhất, đức là gốc; nếu không có đạo đức cách mạng thì có tài cũng vô dụng","goiY":"Đọc lại đoạn bàn về quan hệ giữa đức và tài, hồng và chuyên.","khoa":[["duc va tai"],["duc voi tai"],["vo dung"],["hong","chuyen"]]},{"ten":"Đạo đức là thước đo lòng cao thượng của con người","goiY":"Đọc lại đoạn trích bài Đạo đức cách mạng: ai giữ được đạo đức thì là người thế nào?","khoa":[["cao thuong"],["thuoc do"]]},{"ten":"Đảng ta là một Đảng cầm quyền; mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân","goiY":"Đọc lại lời dặn trong Di chúc về Đảng cầm quyền.","khoa":[["cam quyen"],["day to"]]}]},{"ma":"II.2","ten":"Bốn chuẩn mực đạo đức cách mạng","baiGiang":["- Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm quan trọng nhất và chi phối các phẩm chất khác.","- Trung và Hiếu là những khái niệm đã có trong tư tưởng đạo đức truyền thống Việt Nam và phương Đông được Hồ Chí Minh sử dụng và đưa vào nội dung mới.","Hồ Chí Minh đưa vào trong khái niệm cũ một nội dung mới: Trung với nước, hiếu với dân. Đầu năm 1946, Người chỉ rõ: “Đạo đức, ngày trước thì chỉ trung với vua, hiếu với cha mẹ. Ngày nay, thời đại mới, đạo đức cũng phải mới. Phải trung với nước, phải hiếu với toàn dân, với đồng bào”.","- Nội dung chủ yếu của trung với nước là:","+ Trong quan hệ với cá nhân, cộng đồng và xã hội phải biết đặt lợi ích của Đảng, Tổ quốc, cách mạng lên trên hết, trước hết.","+ Quyết tâm phấn đấu thực hiện mục tiêu cách mạng.","+ Thực hiện tốt mọi chủ trương, chính sách của Đảng và Nhà nước.","- Nội dung chủ yếu của hiếu với dân là:","+ Khẳng định vai trò sức mạnh thật sự của nhân dân.","+ Tin dân, học dân, lắng nghe ý kiến của nhân dân, tôn trọng quyền làm chủ của nhân dân, gắn bó mật thiết với nhân dân.","+ Chăm lo đời sống vật chất và tinh thần của nhân dân.","Cần, kiệm, liêm, chính, chí công vô tư là nội dung cốt lõi của đạo đức cách mạng; đây là những phẩm chất gắn với sinh hoạt và hoạt động hàng ngày nên được Hồ Chí Minh đề cập tới nhiều nhất và thường xuyên nhất, từ những tác phẩm đầu tiên Đường cách mệnh cho đến bản Di chúc.","- Cần là siêng năng, chăm chỉ, cố gắng, dẻo dai.","- Kiệm là tiết kiệm vật tư, tiền bạc, của cải, thời gian, không xa xỉ, không hoang phí, không bừa bãi.","- Liêm là trong sạch, không tham lam.","- Chính là không tà, thẳng thắn, đứng đắn.","Cần, kiệm, liêm, chính trước hết có ý nghĩa quan trọng đối với mỗi cá nhân, là thước đo tính người:","“Trời có bốn mùa: Xuân, Hạ, Thu, Đông / Đất có bốn phương: Đông, Tây, Nam, Bắc / Người có bốn đức: Cần, Kiệm, Liêm, Chính / Thiếu một mùa thì không thành trời / Thiếu một phương thì không thành đất / Thiếu một đức thì không thành người”","Chí công vô tư, về thực chất, là sự tiếp nối của cần kiệm liêm chính. Chí công vô tư nghĩa là phải là đặt lợi ích chung lên trên hết, trước hết; kiên quyết chống chủ nghĩa cá nhân.","Tuy nhiên, Người cũng nhấn mạnh, đấu tranh chống chủ nghĩa cá nhân không có nghĩa là giày xéo lên lợi ích cá nhân, mà phải quan tâm, bảo vệ lợi ích cá nhân chính đáng của con người.","Theo Hồ Chí Minh, người cách mạng là người giàu tình cảm, có tình cảm mới đi làm cách mạng. Có lẽ, vì yêu thương đồng bào của mình mà Hồ Chí Minh sẵn sàng chấp nhận mọi gian khổ, hy sinh, để đem lại độc lập, tự do, hạnh phúc cho nhân dân.","+ Tình yêu thương con người là một tình cảm rộng lớn, trước hết dành cho những người cùng khổ, những người bị áp bức, bóc lột không phân biệt màu da, dân tộc.","Chủ nghĩa quốc tế là một trong những phẩm chất quan trọng nhất của đạo đức cộng sản chủ nghĩa. Điều này bắt nguồn từ bản chất giai cấp công nhân, nhằm vào mối quan hệ rộng lớn vượt ra khỏi giới hạn quốc gia - dân tộc.","Hồ Chí Minh nêu cao tinh thần độc lập, tự chủ, tự cường, nhưng luôn kêu gọi phải tăng cường đoàn kết, hợp tác quốc tế, đồng thời ủng hộ và giúp đỡ đối với các cuộc đấu tranh của nhân dân các nước vì hòa bình, độc lập dân tộc, dân chủ và tiến bộ xã hội."],"giaoTrinh":["Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm quan trọng nhất và chi phối các phẩm chất khác.","Trung và hiếu là những khái niệm đạo đức cũ đã có từ lâu trong tư tưởng đạo đức truyền thống Việt Nam và phương Đông, phản ánh mối quan hệ lớn nhất và cũng là phẩm chất bao trùm nhất: “Trung với vua, hiếu với cha mẹ”. Phẩm chất này được Hồ Chí Minh sử dụng với những nội dung mới, rộng lớn: “Trung với nước, hiếu với dân”, đã tạo nên một cuộc cách mạng sâu sắc trong lĩnh vực đạo đức. Đầu năm 1946, Người chỉ rõ: “Đạo đức, ngày trước thì chỉ trung với vua, hiếu với cha mẹ. Ngày nay, thời đại mới, đạo đức cũng phải mới. Phải trung với nước. Phải hiếu với toàn dân, với đồng bào”.","Hồ Chí Minh cho rằng, trung với nước phải gắn liền hiếu với dân. Trung với nước, là phải yêu nước, tuyệt đối trung thành với Tổ quốc, suốt đời phấn đấu cho Đảng, cho cách mạng, phải làm cho “dân giàu, nước mạnh”. Hiếu với dân là phải thương dân, tin dân, thân dân, học hỏi dân, lấy trí tuệ ở dân, kính trọng dân, lấy dân làm gốc, “hết lòng hết sức phục vụ nhân dân. Phải yêu kính nhân dân. Phải thật sự tôn trọng quyền làm chủ của nhân dân. Tuyệt đối không được lên mặt “quan cách mạng” ra lệnh ra oai”.","Cần, kiệm, liêm, chính, chí công vô tư là nội dung cốt lõi của đạo đức cách mạng, đó là phẩm chất đạo đức gắn liền với hoạt động hằng ngày của mỗi người. Vì vậy, Hồ Chí Minh đề cập về phẩm chất này nhiều nhất, thường xuyên nhất, phản ánh ngay từ cuốn sách Đường cách mệnh cho đến bản Di chúc.","“Cần tức là siêng năng, chăm chỉ, cố gắng dẻo dai... Muốn cho chữ Cần có nhiều kết quả hơn, thì phải có kế hoạch cho mọi công việc”. Cần tức là lao động cần cù, siêng năng; lao động có kế hoạch, sáng tạo, có năng suất cao; lao động với tinh thần tự lực cánh sinh, không lười biếng. Phải thấy rõ, “Lao động là nghĩa vụ thiêng liêng, là nguồn sống, nguồn hạnh phúc của chúng ta”.","“Kiệm là thế nào? Là tiết kiệm, không xa xỉ, không hoang phí, không bừa bãi. CẦN với KIỆM phải đi đôi với nhau, như hai chân của con người”.","Liêm “là trong sạch, không tham lam... Chữ LIÊM phải đi đôi với chữ KIỆM. Cũng như chữ KIỆM phải đi với chữ CẦN. Có KIỆM mới LIÊM được”; “Liêm là không tham địa vị. Không tham tiền tài. Không tham sung sướng. Không ham người tâng bốc mình. Vì vậy mà quang minh chính đại, không bao giờ hủ hóa. Chỉ có một thứ ham là ham học, ham làm, ham tiến bộ”.","“Chính nghĩa là không tà, nghĩa là thẳng thắn, đứng đắn. Điều gì không đứng đắn, thẳng thắn, tức là tà”.","Chí công vô tư là hoàn toàn vì lợi ích chung, không vì tư lợi; là hết sức công bằng, không chút thiên tư, thiên vị, công tâm, luôn đặt lợi ích của Đảng, của nhân dân, của dân tộc lên trên hết, trước hết; chỉ biết vì Đảng, vì dân tộc, “lo trước thiên hạ, vui sau thiên hạ”. Chí công vô tư là chống chủ nghĩa cá nhân.","Hồ Chí Minh coi cần, kiệm, liêm, chính là bốn đức tính cơ bản của con người, giống như bốn mùa của trời, bốn phương của đất; “Thiếu một đức, thì không thành người”.","Theo Hồ Chí Minh, người cách mạng là người giàu tình cảm, có tình cảm cách mạng mới đi làm cách mạng. Vì yêu thương nhân dân, yêu thương con người mà Hồ Chí Minh sẵn sàng chấp nhận mọi gian khổ, hy sinh để đem lại độc lập cho dân tộc, tự do, hạnh phúc cho con người.","Chủ nghĩa quốc tế là một trong những phẩm chất quan trọng nhất của đạo đức cộng sản chủ nghĩa. Điều này được bắt nguồn từ bản chất của giai cấp công nhân, nhằm vào mối quan hệ rộng lớn vượt ra khỏi giới hạn quốc gia - dân tộc."],"y":[{"ten":"Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm quan trọng nhất và chi phối các phẩm chất khác","goiY":"Đọc lại câu mở đầu mục: phẩm chất nào bao trùm, quan trọng nhất?","khoa":[["trung voi nuoc"],["hieu voi dan"],["bao trum"]]},{"ten":"Người đưa nội dung mới vào khái niệm cũ: ngày trước trung với vua, hiếu với cha mẹ; ngày nay phải trung với nước, hiếu với toàn dân","goiY":"Đọc lại lời Người nói đầu năm 1946 về đạo đức ngày trước và ngày nay.","khoa":[["noi dung moi"],["trung voi vua"],["cha me"]]},{"ten":"Cần, kiệm, liêm, chính, chí công vô tư là nội dung cốt lõi của đạo đức cách mạng","goiY":"Đọc lại câu mở đầu phần b: nội dung cốt lõi của đạo đức cách mạng là gì?","khoa":[["chi cong vo tu"],["can","kiem","liem","chinh"],["cot loi"]]},{"ten":"Cần, kiệm, liêm, chính là bốn đức tính cơ bản của con người; thiếu một đức thì không thành người","goiY":"Đọc lại câu so sánh với bốn mùa của trời, bốn phương của đất.","khoa":[["thieu mot duc"],["khong thanh nguoi"],["bon duc"]]},{"ten":"Thương yêu con người, sống có tình có nghĩa","goiY":"Đọc lại phần c: người cách mạng là người thế nào về tình cảm?","khoa":[["thuong yeu"],["yeu thuong"],["tinh co nghia"],["thuong nguoi"]]},{"ten":"Tinh thần quốc tế trong sáng","goiY":"Đọc lại phần d: chủ nghĩa yêu nước kết hợp với tinh thần gì?","khoa":[["quoc te"]]}]},{"ma":"II.3","ten":"Ba nguyên tắc xây dựng đạo đức","baiGiang":["- Nói đi đôi với làm là nét đẹp của truyền thống văn hóa phương Đông. Hồ Chí Minh khẳng định: “Nói chung thì các dân tộc phương Đông đều giàu tình cảm, và đối với họ một tấm gương sống còn có giá trị hơn một trăm bài diễn văn tuyên truyền”.","Nói đi đôi với làm là nguyên tắc quan trọng bậc nhất trong xây dựng nền đạo đức mới; là sự thống nhất giữa lý luận và thực tiễn, trở thành phương pháp luận trong cuộc sống và là nền tảng triết lý sống hết sức bình dị và sâu sắc của Hồ Chí Minh. Bản thân Hồ Chí Minh cũng là một tấm gương đạo đức mẫu mực.","Đạo đức mới, đạo đức cách mạng thì nói phải đi đôi với làm, chống lại tư tưởng và hành động: nói nhiều làm ít, nói mà không làm, thậm chí nói một đằng làm một nẻo. Nói đi đôi với làm còn nhằm chống thói đạo đức giả.","- Sự nêu gương về đạo đức giữ vai trò rất quan trọng trong hình thành đạo đức xã hội, đặc biệt với người phương Đông. Vì thế:","+ Phải thực hành nêu gương ở mọi cấp độ, mọi nơi, mọi lúc: (1) Cán bộ lãnh đạo phải nêu gương cho cán bộ thường. (2) Cán bộ phải nêu gương cho nhân dân, phải “làm mực thước cho nhân dân bắt chước”. (3) Người trên phải nêu gương cho người dưới.","+ Phải phát động phong trào người tốt việc tốt và nhân rộng các điển hình tiên tiến.","- Nêu gương về đạo đức: Là nét đẹp của truyền thống văn hóa phương Đông. Lời nói đi đôi với việc làm phải gắn liền với nêu gương về đạo đức.","Xây dựng đạo đức là quá trình kết hợp chặt chẽ giữa xây và chống. Xây tức là xây dựng các giá trị, các chuẩn mực đạo đức mới; chống là chống cái ác, các biểu hiện, các hành vi vô đạo đức, những biểu hiện suy thoái về đạo đức.","Theo Hồ Chí Minh: “Mỗi con người đều có thiện và ác ở trong lòng. Ta phải biết làm cho phần tốt ở trong mỗi con người nảy nở như hoa mùa Xuân và phần xấu bị mất dần đi, đó là thái độ của người cách mạng”.","Về mối quan hệ giữa “Xây” và “Chống”: (1) xây phải đi đôi với chống, chống nhằm mục đích xây, lấy xây làm chính; (2) phải phát hiện sớm những cái xấu, cái sai để có hướng ngăn chặn.","- Tu dưỡng đạo đức suốt đời là một truyền thống tốt đẹp của dân tộc Việt Nam và của văn hóa phương Đông.","Đạo đức cách mạng, đạo đức mới khác với đạo đức cũ ở chỗ nó gắn với thực tiễn cách mạng và phục vụ cách mạng, phục vụ nhân dân, vì vậy tu dưỡng đạo đức là một trong những yêu cầu có ý nghĩa quan trọng hàng đầu. Người cho rằng: “Đạo đức cách mạng không phải trên trời sa xuống. Nó do đấu tranh, rèn luyện bền bỉ hàng ngày mà phát triển và củng cố. Cũng như ngọc càng mài càng sáng, vàng càng luyện càng trong”.","- Vì sao phải tu dưỡng:","+ Bởi vì ai cũng có chỗ hay, chỗ dở, chỗ xấu, chỗ tốt. “Phải đánh thắng lòng tà là kẻ thù trong mình”.","+ Bởi cách mạng là không ngừng, người cán bộ giữ nhiều địa vị khác nhau, thực hiện các nhiệm vụ khác nhau nên phải không ngừng điều chỉnh hành vi để hoàn thành nhiệm vụ được giao.","⇒ Đây là cuộc cách mạng trường kỳ mà mỗi người phải tự giác tiến hành.","- Vậy tu dưỡng bằng cách nào?","+ Phải thường xuyên thực hiện công tác tự phê bình","+ Việc tu dưỡng phải được thực hiện trên tinh thần tự giác.","+ Các tổ chức, đoàn thể phải thường xuyên giúp đỡ, tạo điều kiện cho mỗi con người phấn đấu rèn luyện."],"giaoTrinh":["Nói đi đôi với làm là nét đẹp trong đạo đức truyền thống của dân tộc được Hồ Chí Minh nâng lên một tầm cao mới.","Người coi đây là nguyên tắc quan trọng bậc nhất trong xây dựng nền đạo đức mới. Trong tác phẩm Đường cách mệnh, khi đề cập tư cách một người cách mệnh, Hồ Chí Minh yêu cầu: “Nói thì phải làm”.","Nêu gương về đạo đức là một nét đẹp của truyền thống văn hóa phương Đông. Lời nói đi đôi với việc làm phải gắn liền với nêu gương về đạo đức. Hồ Chí Minh đã viết: “Nói chung thì các dân tộc phương Đông đều giàu tình cảm, và đối với họ một tấm gương sống còn có giá trị hơn một trăm bài diễn văn tuyên truyền”.","Hồ Chí Minh cho rằng, nguyên tắc xây đi đôi với chống là đòi hỏi của nền đạo đức mới, thể hiện tính nhân đạo chiến đấu vì mục tiêu của sự nghiệp cách mạng; xây tức là xây dựng các giá trị, các chuẩn mực đạo đức mới; chống là chống các biểu hiện, các hành vi vô đạo đức, suy thoái đạo đức.","Xây phải đi đôi với chống, muốn xây phải chống, chống nhằm mục đích xây, lấy xây làm chính.","Hồ Chí Minh cho rằng, trên con đường đi tới tiến bộ và cách mạng, đạo đức mới chỉ có thể được xây dựng thành công trên cơ sở kiên trì mục tiêu chống chủ nghĩa đế quốc, chống những thói quen và tập tục lạc hậu, phải loại trừ chủ nghĩa cá nhân.","Trong bài Chống quan liêu, tham ô, lãng phí (năm 1952), Hồ Chí Minh chỉ rõ: “Quan liêu, tham ô, lãng phí là tội ác. Phải tẩy sạch nó để thực hiện cần kiệm liêm chính”. Nguồn gốc của mọi thứ tệ nạn là chủ nghĩa cá nhân. Tuy nhiên, Người lưu ý: “Đấu tranh chống chủ nghĩa cá nhân không phải là “giày xéo lên lợi ích cá nhân””.","Theo Hồ Chí Minh, tu dưỡng đạo đức như một cuộc cách mạng trường kỳ, gian khổ. Một nền đạo đức mới chỉ có thể được xây dựng trên cơ sở tự giác tu dưỡng đạo đức của mỗi người. Hồ Chí Minh quan tâm phải làm thế nào để mỗi người tự nhận thấy sâu sắc việc trau dồi đạo đức cách mạng là một việc phải kiên trì, thường xuyên, liên tục. Người nhắc lại luận điểm của Khổng Tử “chính tâm, tu thân”; “tề gia, trị quốc, bình thiên hạ”, và nêu rõ: “Chính tâm tu thân tức là cải tạo. Cải tạo cũng phải trường kỳ gian khổ, vì đó là một cuộc cách mạng trong bản thân của mỗi người. Bồi dưỡng tư tưởng mới để đánh thắng tư tưởng cũ, đoạn tuyệt với con người cũ để trở thành con người mới không phải là một việc dễ dàng... Dù khó khăn gian khổ, nhưng muốn cải tạo thì nhất định thành công”.","Đạo đức cách mạng thể hiện trong hành động của người Việt Nam yêu nước vì độc lập, tự do của dân tộc, hạnh phúc của nhân dân. Chỉ có trong hành động, đạo đức cách mạng mới bộc lộ rõ những giá trị của nó. Do vậy, đạo đức cách mạng đòi hỏi mỗi người phải tự giác rèn luyện thông qua các hoạt động thực tiễn, trong công việc, trong các mối quan hệ của mình, phải nhìn thẳng vào mình, không tự lừa dối, huyễn hoặc; phải thấy rõ cái hay, cái tốt, cái thiện của mình để phát huy và thấy rõ cái dở, cái xấu, cái ác của mình để khắc phục; phải kiên trì rèn luyện liên tục, tu dưỡng suốt đời, trong đó, thời tuổi trẻ đặc biệt quan trọng. Đạo đức không phải là cái gì đó có tính “nhất thành bất biến”, mà nó được hình thành, phát triển do môi trường giáo dục, do sự rèn luyện, phấn đấu và tu dưỡng bản thân của mỗi người. Từ thực tiễn, Người tổng kết sâu sắc: “Đạo đức cách mạng không phải trên trời sa xuống. Nó do đấu tranh, rèn luyện bền bỉ hằng ngày mà phát triển và củng cố. Cũng như ngọc càng mài càng sáng, vàng càng luyện càng trong”."],"y":[{"ten":"Nói đi đôi với làm, nêu gương về đạo đức là nguyên tắc quan trọng bậc nhất trong xây dựng nền đạo đức mới","goiY":"Đọc lại phần a: nguyên tắc nào được coi là quan trọng bậc nhất, và vì sao một tấm gương sống có giá trị hơn một trăm bài diễn văn?","khoa":[["di doi voi lam"],["noi thi phai lam"],["neu guong"],["lam guong"]]},{"ten":"Xây đi đôi với chống, muốn xây phải chống, chống nhằm mục đích xây, lấy xây làm chính","goiY":"Đọc lại phần b: xây là gì, chống là gì, cái nào làm chính?","khoa":[["xay di doi voi chong"],["xay","chong"]]},{"ten":"Phải kiên quyết quét sạch chủ nghĩa cá nhân, nguồn gốc của mọi thứ tệ nạn","goiY":"Đọc lại đoạn về quan liêu, tham ô, lãng phí: nguồn gốc của mọi thứ tệ nạn là gì?","khoa":[["chu nghia ca nhan"],["ca nhan chu nghia"]]},{"ten":"Tu dưỡng đạo đức như một cuộc cách mạng trường kỳ, gian khổ; nền đạo đức mới chỉ có thể được xây dựng trên cơ sở tự giác tu dưỡng đạo đức của mỗi người","goiY":"Đọc lại câu mở đầu phần c và lời Người giải thích \"chính tâm tu thân tức là cải tạo\".","khoa":[["truong ky"],["tu giac tu duong"],["chinh tam tu than"],["cai tao"]]},{"ten":"Đạo đức cách mạng thể hiện trong hành động; mỗi người phải tự giác rèn luyện thông qua hoạt động thực tiễn, kiên trì tu dưỡng suốt đời, trong đó thời tuổi trẻ đặc biệt quan trọng","goiY":"Đọc lại đoạn nói đạo đức cách mạng chỉ bộc lộ giá trị ở đâu, và thời nào của đời người đặc biệt quan trọng.","khoa":[["suot doi"],["tuoi tre"],["hoat dong thuc tien"],["trong hanh dong"]]},{"ten":"Đạo đức cách mạng không phải trên trời sa xuống, mà do đấu tranh, rèn luyện bền bỉ hằng ngày mà phát triển và củng cố","goiY":"Đọc lại câu Người tổng kết có hình ảnh ngọc và vàng.","khoa":[["tren troi"],["ren luyen ben bi"],["ngoc cang mai"]]}]}]},{"ma":"thu","ten":"MÙA THU","phan":"III. Con người","thua":[{"ma":"III.1","ten":"Quan niệm về con người","baiGiang":["Tiếp thu quan niệm về con người của chủ nghĩa Mác - Lênin về bản chất xã hội của con người: “Trong tính hiện thực của nó, bản chất con người là tổng hòa của các mối quan hệ xã hội”, Hồ Chí Minh nhìn nhận con người như một chỉnh thể có sự thống nhất giữa yếu tố sinh học và yếu tố xã hội. Hồ Chí Minh cho rằng: “Chữ người, nghĩa hẹp là gia đình, anh em, họ hàng, bầu bạn. Nghĩa rộng là đồng bào cả nước. Rộng nữa là cả loài người”.","Hồ Chí Minh ít dùng khái niệm con người một cách chung chung, trừu tượng. Con người trong Tư tưởng Hồ Chí Minh thường mang tính lịch sử - cụ thể gắn liền với từng thời kỳ cách mạng. Người dùng khái niệm này hay khái niệm khác để chỉ “con người” và xem xét nó trong những bình diện, chiều cạnh khác nhau.","Thời kỳ trước cách mạng tháng Tám, Người thường nói đến các cụm từ “người nô lệ”, “người bóc lột”, “người cùng khổ”, “người mất nước”…","Từ sau cách mạng tháng Tám, Người thường dùng các khái niệm “đồng bào”, “quốc dân”, nhân dân lao động, “người lao động”, dân…","Thời kỳ từ sau năm 1954, khi miền Bắc hoàn thành công cuộc cải cách ruộng đất và cải tạo xã hội chủ nghĩa, Hồ Chí Minh thường dùng những khái niệm phù hợp với những quan hệ xã hội mới: “người chủ xã hội”, “lao động trí óc”, “lao động chân tay”, “người chủ tập thể”…","Người thường xem con người trong các mối quan hệ xã hội, trong các quan hệ giai cấp; theo giới tính, lứa tuổi, nghề nghiệp; trong khối thống nhất của cộng đồng dân tộc và quan hệ quốc tế.","Con người là cốt lõi của tư tưởng nhân văn Hồ Chí Minh được thể hiện ở ba phương diện:","+ Sự cảm nhận, cảm thông hết sức sâu sắc với mọi niềm đau nỗi khổ của con người nô lệ và con người cùng khổ.","+ Quyết tâm chiến đấu để giải phóng con người và đem lại cuộc sống tự do, hạnh phúc cho con người.","+ Tin tưởng tuyệt đối ở khả năng tự giải phóng của con người."],"giaoTrinh":["Theo Hồ Chí Minh, con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực, đa dạng bởi mối quan hệ giữa cá nhân và xã hội (quan hệ gia đình, dòng tộc, làng xã, quan hệ giai cấp, dân tộc...) và các mối quan hệ xã hội (quan hệ chính trị, văn hóa, đạo đức, tôn giáo...). Trong mỗi con người đều có tính tốt và tính xấu. Người giải thích, “chữ người, nghĩa hẹp là gia đình, anh em, họ hàng, bè bạn; nghĩa rộng là đồng bào cả nước; rộng hơn nữa là cả loài người”. Con người có tính xã hội, là con người xã hội, thành viên của một cộng đồng xã hội.","Hồ Chí Minh cũng chỉ ra yếu tố sinh vật của con người. Theo Người, “dân dĩ thực vi thiên”; “dân chỉ biết rõ giá trị của tự do, của độc lập khi mà dân được ăn no, mặc đủ”. Theo Người, trong mọi đường lối, chủ trương, chính sách, nhiệm vụ phải thực hiện ngay làm cho dân có ăn, có mặc, có chỗ ở, có học hành.","Trong thực tiễn, con người có nhiều chiều quan hệ: quan hệ với cộng đồng xã hội (là một thành viên); quan hệ với một chế độ xã hội (làm chủ hay bị áp bức); quan hệ với tự nhiên (một bộ phận không tách rời).","Xa lạ với con người trừu tượng, phi nguồn gốc lịch sử, Hồ Chí Minh nhìn nhận con người lịch sử - cụ thể về giới tính, lứa tuổi, nghề nghiệp, chức vụ, vị trí, đảng viên, công dân..., trong từng giai đoạn lịch sử cụ thể.","Nét đặc sắc trong quan niệm của Hồ Chí Minh về con người là nhìn nhận đặc điểm con người Việt Nam với những điều kiện lịch sử cụ thể, với những cấu trúc kinh tế, xã hội cụ thể. Cách tiếp cận này đi đến việc giải quyết mối quan hệ dân tộc và giai cấp rất sáng tạo, không chỉ về mặt đường lối cách mạng mà cả về mặt con người."],"y":[{"ten":"Con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực","goiY":"Đọc lại câu đầu của phần giáo trình: con người là một chỉnh thể thống nhất về những gì?","khoa":[["chinh the"],["tri luc"],["tam luc"],["the luc"]]},{"ten":"Con người đa dạng bởi mối quan hệ giữa cá nhân và xã hội và các mối quan hệ xã hội","goiY":"Đọc tiếp câu ấy: con người đa dạng bởi những mối quan hệ nào?","khoa":[["ca nhan va xa hoi"],["quan he xa hoi"]]},{"ten":"Trong mỗi con người đều có tính tốt và tính xấu","goiY":"Tìm câu nói trong mỗi con người đều có những tính gì.","khoa":[["tinh tot"],["tinh xau"],["thien va ac"]]},{"ten":"Chữ người, nghĩa hẹp là gia đình, anh em, họ hàng, bè bạn; nghĩa rộng là đồng bào cả nước; rộng hơn nữa là cả loài người","goiY":"Đọc lại lời Người giải thích chữ \"người\" theo nghĩa hẹp và nghĩa rộng.","khoa":[["nghia hep"],["nghia rong"],["dong bao ca nuoc"],["loai nguoi"]]},{"ten":"Con người có tính xã hội và có yếu tố sinh vật: dân dĩ thực vi thiên","goiY":"Đọc lại đoạn Hồ Chí Minh chỉ ra yếu tố sinh vật của con người.","khoa":[["sinh vat"],["sinh hoc"],["di thuc vi thien"],["an no"]]},{"ten":"Hồ Chí Minh nhìn nhận con người lịch sử - cụ thể, xa lạ với con người trừu tượng","goiY":"Đọc lại đoạn Người xem xét con người trong từng giai đoạn lịch sử.","khoa":[["lich su cu the"],["truu tuong"]]}]},{"ma":"III.2","ten":"Vai trò của con người","baiGiang":["- Chủ nghĩa Mác - Lênin khẳng định: “Quần chúng nhân dân là người sáng tạo ra lịch sử”.","- Hồ Chí Minh chỉ ra:","+ Vai trò của con người trong xã hội: “Vô luận việc gì, đều do người làm ra, và từ nhỏ đến to, từ gần đến xa, đều thế cả”.","+ Vai trò của nhân dân trong sự nghiệp cách mạng: “Gốc có vững, cây mới bền/ Xây lầu thắng lợi trên nền nhân dân”.","- Mục tiêu cách mạng của Hồ Chí Minh là giải phóng dân tộc, giải phóng xã hội, giải phóng con người. Giải phóng con người, đem lại tự do, hạnh phúc cho con người là mục tiêu triệt để nhất của mọi cuộc cách mạng: “Nếu nước độc lập mà dân không hưởng hạnh phúc, tự do, thì độc lập cũng chẳng có nghĩa lý gì”.","Khi xác định con người là mục tiêu thì mọi đường lối, chủ trương của Đảng và nhà nước đều phải xuất phát từ nhu cầu, lợi ích chính đáng của con người, nhằm phát huy mọi năng lực của con người.","- Con người là động lực của cách mạng: Theo Hồ Chí Minh, con người là vốn quý nhất, là động lực quyết định thành công của sự nghiệp cách mạng. Người nhấn mạnh: “mọi việc đều do người làm ra”; “Trong bầu trời không gì quý bằng nhân dân. Trong thế giới không gì mạnh bằng lực lượng đoàn kết của nhân dân”; “Ý dân là ý trời”, “Dễ trăm lần không dân cũng chịu, khó vạn lần dân liệu cũng xong”… Người nhiều lần khẳng định “cách mạng là sự nghiệp của quần chúng”. Nhân dân là những người sáng tạo chân chính ra lịch sử thông qua các hoạt động thực tiễn cơ bản như lao động sản xuất, đấu tranh chính trị - xã hội, sáng tạo ra các giá trị văn hóa.","Hồ Chí Minh cũng nhấn mạnh con người là động lực chỉ khi được giác ngộ, được giáo dục, được tổ chức."],"giaoTrinh":["- Con người là mục tiêu của cách mạng. Con người là chiến lược đầu tiên trong tư tưởng và hành động của Hồ Chí Minh. Mục tiêu này được cụ thể hóa trong ba giai đoạn cách mạng (giải phóng dân tộc - xây dựng chế độ dân chủ nhân dân - tiến dần lên xã hội chủ nghĩa) nhằm giải phóng dân tộc, giải phóng xã hội, giải phóng giai cấp, giải phóng con người.","Giải phóng dân tộc là xóa bỏ ách thống trị của chủ nghĩa đế quốc, giành lại độc lập cho dân tộc. Con người trong giải phóng dân tộc là cả cộng đồng dân tộc Việt Nam. Phạm vi thế giới là giải phóng các dân tộc thuộc địa.","Giải phóng xã hội là đưa xã hội phát triển thành một xã hội không có chế độ người bóc lột người, một xã hội có nền sản xuất phát triển cao và bền vững, văn hóa tiên tiến, mọi người là chủ và làm chủ xã hội, có cuộc sống ấm no, tự do, hạnh phúc, một xã hội văn minh, tiến bộ. Xã hội đó phát triển cao nhất là xã hội cộng sản, giai đoạn đầu là xã hội xã hội chủ nghĩa.","Giải phóng giai cấp là xóa bỏ sự áp bức, bóc lột của giai cấp này đối với giai cấp khác; xóa bỏ sự bất công, bất bình đẳng xã hội; xóa bỏ nền tảng kinh tế - xã hội đẻ ra sự bóc lột giai cấp; dần dần thủ tiêu sự khác biệt giai cấp, các điều kiện dẫn đến sự phân chia xã hội thành giai cấp và xác lập một xã hội không có giai cấp. Con người trong giải phóng xã hội là các giai cấp cần lao, trước hết là giai cấp công nhân và giai cấp nông dân. Phạm vi thế giới là giải phóng giai cấp vô sản và nhân dân lao động các nước.","Giải phóng con người là xóa bỏ tình trạng áp bức, bóc lột, nô dịch con người; xóa bỏ các điều kiện xã hội làm tha hóa con người, làm cho mọi người được hưởng tự do, hạnh phúc, có điều kiện phát huy khả năng sáng tạo, làm chủ xã hội, làm chủ tự nhiên và làm chủ bản thân, phát triển toàn diện theo đúng bản chất tốt đẹp của con người. Con người trong giải phóng con người là cá nhân mỗi con người. Phạm vi thế giới là giải phóng loài người.","Các “giải phóng” đó kết hợp chặt chẽ với nhau, giải phóng dân tộc đã có một phần giải phóng xã hội và giải phóng con người; đồng thời nối tiếp nhau, giải phóng dân tộc mở đường cho giải phóng xã hội, giải phóng giai cấp và giải phóng con người.","- Con người là động lực của cách mạng. Theo Hồ Chí Minh, con người là vốn quý nhất, động lực, nhân tố quyết định thành công của sự nghiệp cách mạng. Người nhấn mạnh: “mọi việc đều do người làm ra”; “trong bầu trời không gì quý bằng nhân dân. Trong thế giới không gì mạnh bằng sức mạnh đoàn kết của nhân dân”.","Cách mạng là sự nghiệp của quần chúng. Nhân dân là những người sáng tạo chân chính ra lịch sử thông qua các hoạt động thực tiễn cơ bản nhất như lao động sản xuất, đấu tranh chính trị - xã hội, sáng tạo ra các giá trị văn hóa. Nói đến nhân dân là nói đến lực lượng, trí tuệ, quyền hành, lòng tốt, niềm tin, đó chính là gốc, động lực cách mạng."],"y":[{"ten":"Con người là mục tiêu của cách mạng","goiY":"Đọc lại câu mở đầu: con người là gì của cách mạng?","khoa":[["muc tieu"]]},{"ten":"Mục tiêu ấy là giải phóng dân tộc, giải phóng xã hội, giải phóng giai cấp, giải phóng con người","goiY":"Đọc lại câu nói mục tiêu được cụ thể hóa trong ba giai đoạn cách mạng nhằm những sự giải phóng nào.","khoa":[["giai phong","giai cap"]],"nhom":{"tu":["giai phong dan toc","giai phong xa hoi","giai phong giai cap","giai phong con nguoi"],"toiThieu":3}},{"ten":"Giải phóng con người là xóa bỏ tình trạng áp bức, bóc lột, nô dịch con người, làm cho mọi người được hưởng tự do, hạnh phúc, phát triển toàn diện","goiY":"Đọc lại định nghĩa \"giải phóng con người\".","khoa":[["ap buc"],["boc lot"],["tu do","hanh phuc"],["toan dien"]]},{"ten":"Con người là động lực của cách mạng","goiY":"Đọc lại phần thứ hai: ngoài mục tiêu, con người còn là gì của cách mạng?","khoa":[["dong luc"]]},{"ten":"Con người là vốn quý nhất, nhân tố quyết định thành công của sự nghiệp cách mạng","goiY":"Đọc lại câu \"mọi việc đều do người làm ra\" và câu đứng trước nó.","khoa":[["von quy"],["nhan to quyet dinh"],["quyet dinh thanh cong"]]},{"ten":"Cách mạng là sự nghiệp của quần chúng; nhân dân là những người sáng tạo chân chính ra lịch sử","goiY":"Đọc lại đoạn cuối về vai trò của nhân dân đối với lịch sử.","khoa":[["su nghiep cua quan chung"],["sang tao","lich su"],["quan chung"]]}]},{"ma":"III.3","ten":"Xây dựng con người","baiGiang":["Xây dựng con người là yêu cầu khách quan của sự nghiệp cách mạng, vừa cấp bách, vừa lâu dài, có ý nghĩa chiến lược. Xây dựng con người là một trọng tâm, bộ phận hợp thành của chiến lược phát triển đất nước, có mối quan hệ chặt chẽ với nhiệm vụ xây dựng chính trị, kinh tế, văn hóa, xã hội.","Hồ Chí Minh quan niệm: “Vì lợi ích mười năm thì phải trồng cây, vì lợi ích trăm năm thì phải trồng người”. Theo Người, “trồng người” là một công việc lâu dài, gian khổ, vừa vì lợi ích trước mắt, vừa vì lợi ích lâu dài; công việc “trồng người” là trách nhiệm của Đảng, Nhà nước, các đoàn thể chính trị - xã hội, kết hợp với tính tích cực, chủ động của từng người.","Hồ Chí Minh quan tâm xây dựng con người toàn diện vừa “hồng” vừa “chuyên”. Đó là những con người có mục đích và lối sống cao đẹp, có bản lĩnh chính trị vững vàng, những con người của chủ nghĩa xã hội, có tư tưởng, tác phong và đạo đức xã hội chủ nghĩa và năng lực làm chủ.","Hồ Chí Minh nêu lên quan điểm về xây dựng con người một cách toàn diện với những khía cạnh chủ yếu sau:","+ Có ý thức làm chủ, tinh thần tập thể, có tư tưởng “mình vì mọi người, mọi người vì mình”.","+ Cần kiệm xây dựng đất nước, hăng hái bảo vệ Tổ quốc.","+ Có lòng yêu nước nồng nàn, tinh thần quốc tế trong sáng.","+ Có phương pháp làm việc khoa học, phong cách quần chúng, dân chủ, nêu gương…","Hồ Chí Minh đặc biệt quan tâm đến việc nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân; bồi dưỡng về năng lực trí tuệ, trình độ lý luận chính trị, văn hóa, khoa học - kỹ thuật, chuyên môn, nghiệp vụ, ngoại ngữ, nâng cao sức khỏe.","Mỗi người tự rèn luyện, tu dưỡng ý thức, kết hợp chặt chẽ với xây dựng cơ chế, tính khoa học của bộ máy và tạo dựng nền dân chủ. Việc nêu gương, nhất là người đứng đầu, có ý nghĩa rất quan trọng. Biện pháp giáo dục có một vị trí quan trọng. Chú trọng vai trò của tổ chức Đảng, chính quyền, đoàn thể quần chúng. Các phương pháp cụ thể: Học đi đôi với hành, Lý luận gắn với thực tiễn, nói đi đôi với làm, học và chơi, bồi dưỡng và thi đua; giáo dục thông qua tổ chức, đoàn thể, kết hợp giáo dục nhà trường- gia đình- xã hội, phát huy ý thức tự giáo dục, tự rèn luyện, nêu gương."],"giaoTrinh":["Xây dựng con người là yêu cầu khách quan của sự nghiệp cách mạng, vừa cấp bách vừa lâu dài, có ý nghĩa chiến lược. Xây dựng con người là một trọng tâm, bộ phận hợp thành của chiến lược phát triển đất nước, có mối quan hệ chặt chẽ với nhiệm vụ xây dựng chính trị, kinh tế, văn hóa, xã hội. Hồ Chí Minh nêu hai quan điểm nổi bật làm sáng tỏ sự cần thiết xây dựng con người.","“Vì lợi ích trăm năm thì phải “trồng người””. “Trồng người” là công việc lâu dài, gian khổ, vừa vì lợi ích trước mắt vừa vì lợi ích lâu dài, là công việc của văn hóa giáo dục. Công việc “trồng người” là trách nhiệm của Đảng, Nhà nước, các đoàn thể chính trị - xã hội kết hợp với tính tích cực, chủ động của từng người.","“Muốn xây dựng chủ nghĩa xã hội, trước hết cần phải có những con người xã hội chủ nghĩa”. Việc xây dựng con người xã hội chủ nghĩa được đặt ra ngay từ đầu và phải được quan tâm trong suốt tiến trình xây dựng chủ nghĩa xã hội.","Hồ Chí Minh quan tâm xây dựng con người toàn diện vừa “hồng” vừa “chuyên”. Đó là những con người có mục đích và lối sống cao đẹp, có bản lĩnh chính trị vững vàng, những con người của chủ nghĩa xã hội, có tư tưởng, tác phong và đạo đức xã hội chủ nghĩa và năng lực làm chủ. Xây dựng con người toàn diện với những khía cạnh chủ yếu sau:","- Có ý thức làm chủ, tinh thần tập thể xã hội chủ nghĩa và tư tưởng “mình vì mọi người, mọi người vì mình”.","- Cần kiệm xây dựng đất nước, hăng hái bảo vệ Tổ quốc.","- Có lòng yêu nước nồng nàn, tinh thần quốc tế trong sáng.","- Có phương pháp làm việc khoa học, phong cách quần chúng, dân chủ, nêu gương.","Hồ Chí Minh đặc biệt quan tâm đến việc nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân; bồi dưỡng về năng lực trí tuệ, trình độ lý luận chính trị, văn hóa, khoa học - kỹ thuật, chuyên môn, nghiệp vụ, ngoại ngữ, sức khỏe.","Mỗi người tự rèn luyện, tu dưỡng ý thức, kết hợp chặt chẽ với xây dựng cơ chế, tính khoa học và bộ máy và tạo dựng nền dân chủ. Việc nêu gương, nhất là người đứng đầu, có ý nghĩa rất quan trọng.","Biện pháp giáo dục có một vị trí quan trọng. Hồ Chí Minh nhắc nhở rằng: “Hiền, dữ phải đâu là tính sẵn. Phần nhiều do giáo dục mà nên”. Theo Người, các cháu mẫu giáo, tiểu học như tờ giấy trắng. Chúng ta vẽ xanh thì xanh, vẽ đỏ thì đỏ. Nói như vậy để thấy giáo dục rất quan trọng trong việc xây dựng con người.","Chú trọng vai trò của tổ chức Đảng, chính quyền, đoàn thể quần chúng. Thông qua các phong trào cách mạng như “Thi đua yêu nước”, “Người tốt việc tốt”. Đặc biệt phải dựa vào quần chúng theo quan điểm “dựa vào ý kiến của dân chúng mà sửa chữa cán bộ và tổ chức của ta”."],"y":[{"ten":"Xây dựng con người là yêu cầu khách quan của sự nghiệp cách mạng, vừa cấp bách vừa lâu dài, có ý nghĩa chiến lược","goiY":"Đọc lại câu đầu phần a: xây dựng con người là yêu cầu thế nào?","khoa":[["cap bach"],["chien luoc"],["khach quan"]]},{"ten":"Vì lợi ích trăm năm thì phải trồng người","goiY":"Đọc lại câu nói nổi tiếng so sánh trồng cây với một việc lâu dài hơn.","khoa":[["trong nguoi"],["tram nam"]]},{"ten":"Muốn xây dựng chủ nghĩa xã hội, trước hết cần phải có những con người xã hội chủ nghĩa","goiY":"Đọc lại quan điểm thứ hai: muốn xây dựng chủ nghĩa xã hội thì trước hết cần gì?","khoa":[["con nguoi xa hoi chu nghia"]]},{"ten":"Xây dựng con người toàn diện vừa hồng vừa chuyên","goiY":"Đọc lại phần b: Người quan tâm xây dựng con người như thế nào?","khoa":[["hong","chuyen"],["toan dien"]]},{"ten":"Mỗi người tự rèn luyện, tu dưỡng; việc nêu gương, nhất là người đứng đầu, có ý nghĩa rất quan trọng","goiY":"Đọc lại phần c: phương pháp xây dựng con người bắt đầu từ đâu, ai cần nêu gương?","khoa":[["neu guong"],["tu ren luyen"],["tu duong"],["nguoi dung dau"]]},{"ten":"Biện pháp giáo dục có một vị trí quan trọng","goiY":"Đọc lại câu \"Hiền, dữ phải đâu là tính sẵn\".","khoa":[["giao duc"]]}]}]},{"ma":"dong","ten":"MÙA ĐÔNG","phan":"IV. Vận dụng hiện nay","thua":[{"ma":"IV.1","ten":"Xây dựng và phát triển văn hóa, con người","baiGiang":["- Tình hình thế giới và đất nước đặt ra nhiều yêu cầu mới trong chiến lược xây dựng văn hóa và con người. Tiến trình xây dựng, phát triển văn hóa và con người ở nước ta hiện có nhiều khó khăn.","- Một số chủ trương, đường lối của Đảng về phát triển văn hóa, con người:","+ Nghị quyết Hội nghị lần thứ 5 Ban Chấp hành Trung ương khóa VIII về xây dựng và phát triển văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc ( Tháng 7-1998)","+ Cương lĩnh xây dựng đất nước trong thời kỳ quá độ lên chủ nghĩa xã hội (bổ sung, phát triển năm 2011)","+ Nghị quyết Hội nghị Trung ương 9 khóa XI về xây dựng và phát triển văn hóa, con người Việt Nam đáp ứng yêu cầu phát triển bền vững đất nước (Nghị quyết số 33- NQ/TW ngày 9-6-2014) và Nghị quyết Đại hội đại biểu toàn quốc lần thứ XII (1-2016)","- Nhiệm vụ hàng đầu trong quá trình “xây dựng và phát triển nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc” là xây dựng con người Việt Nam trong thời đại mới với những nội dung sau:","+ Có lòng yêu thương con người.","+ Có ý thức tập thể, đoàn kết, phấn đấu vì lợi ích chung.","+ Có lối sống lành mạnh, nếp sống văn minh, cần, kiệm, trung thực, nhân nghĩa, tôn trọng kỷ cương phép nước, quy ước của cộng đồng; có ý thức bảo vệ và cải thiện môi trường sinh thái.","+ Lao động chăm chỉ với lương tâm nghề nghiệp, có kỹ thuật, sáng tạo, năng suất cao vì lợi ích của bản thân, gia đình, tập thể và xã hội.","+ Thường xuyên học tập, nâng cao hiểu biết, trình độ chuyên môn, thẩm mỹ và thể lực.","Bên cạnh đó, giữ gìn và phát huy bản sắc văn hóa dân tộc, tiếp thu văn hóa nhân loại trong quá trình giao lưu, hội nhập quốc tế.","Thu hẹp dần khoảng cách đời sống văn hóa giữa các vùng miền, giữa trung tâm đô thị và nông thôn.","Đấu tranh chống sự xâm nhập của những yếu tố phản văn hóa."],"giaoTrinh":["Nghị quyết Hội nghị lần thứ năm Ban Chấp hành Trung ương khóa VIII về xây dựng và phát triển nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc (tháng 7/1998) nêu những quan điểm chỉ đạo cơ bản: Văn hóa là nền tảng tinh thần của xã hội, vừa là mục tiêu vừa là động lực thúc đẩy sự phát triển kinh tế - xã hội; nền văn hóa mà chúng ta xây dựng là nền văn hóa tiên tiến, đậm đà bản sắc dân tộc; thống nhất mà đa dạng trong cộng đồng các dân tộc Việt Nam; xây dựng và phát triển văn hóa là sự nghiệp của toàn dân do Đảng lãnh đạo, trong đó đội ngũ trí thức giữ vai trò quan trọng; văn hóa là một mặt trận; xây dựng và phát triển văn hóa là một sự nghiệp cách mạng lâu dài, đòi hỏi phải có ý chí cách mạng và sự kiên trì thận trọng.","Trong công cuộc đổi mới, nhận thức của Đảng về vai trò của văn hóa, mục tiêu xây dựng nền văn hóa không ngừng được bổ sung, hoàn thiện. Văn hóa “là nguồn lực nội sinh quan trọng hun đúc trí tuệ, tâm hồn, khí phách và bản lĩnh người Việt Nam”; là nền tảng tinh thần để duy trì và phát triển giá trị tinh thần tốt đẹp của dân tộc, vừa là mục tiêu, là động lực để phát triển kinh tế - xã hội. Yêu cầu đặt ra là “Văn hóa phải đi trước soi đường, thấm sâu vào từng quyết sách phát triển”.","Văn hóa là nền tảng tinh thần của xã hội.","Phát huy vai trò trung tâm của con người với tư cách là trung tâm của chiến lược phát triển, đồng thời là chủ thể phát triển. Đổi mới căn bản và toàn diện giáo dục và đào tạo. Trọng dụng trí thức, nhân tài. Thực hiện chính sách xã hội đúng đắn, công bằng vì con người, tạo động lực mạnh mẽ phát huy mọi năng lực sáng tạo của nhân dân trong sự nghiệp xây dựng và bảo vệ Tổ quốc.","Nghị quyết Hội nghị Trung ương 9 khóa XI về xây dựng và phát triển văn hóa, con người Việt Nam đáp ứng yêu cầu phát triển bền vững đất nước (Nghị quyết số 33-NQ/TW ngày 9/6/2014) nêu rõ: “Chăm lo xây dựng con người Việt Nam phát triển toàn diện, trọng tâm là bồi dưỡng tinh thần yêu nước, lòng tự hào dân tộc, đạo đức, lối sống và nhân cách. Tạo chuyển biến mạnh mẽ về nhận thức, ý thức tôn trọng pháp luật, mọi người Việt Nam đều hiểu biết sâu sắc, tự hào, tôn vinh lịch sử, văn hóa dân tộc”, cụ thể: 1) Xây dựng con người Việt Nam phát triển toàn diện là mục tiêu của chiến lược phát triển. 2) Xây dựng môi trường văn hóa lành mạnh, phù hợp với bối cảnh phát triển kinh tế thị trường định hướng xã hội chủ nghĩa và hội nhập quốc tế. 7) Chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại.","Nghị quyết Đại hội đại biểu toàn quốc lần thứ XIII của Đảng xác định: “Phát triển con người toàn diện và xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc để văn hóa, con người Việt Nam thực sự trở thành sức mạnh nội sinh, động lực phát triển đất nước và bảo vệ Tổ quốc.”","Đại hội đại biểu toàn quốc lần thứ XIV của Đảng xác định: “Phát triển toàn diện con người Việt Nam về đạo đức, trí tuệ, ý thức dân tộc, trách nhiệm công dân, thượng tôn pháp luật, năng lực sáng tạo, thẩm mỹ, thể lực, kỹ năng sống, kỹ năng nghề nghiệp, kỹ năng số. Xây dựng môi trường văn hóa lành mạnh, văn minh gắn với xây dựng, hoàn thiện con người mới Việt Nam xã hội chủ nghĩa”."],"y":[{"ten":"Văn hóa là nền tảng tinh thần của xã hội, vừa là mục tiêu vừa là động lực thúc đẩy sự phát triển kinh tế - xã hội","goiY":"Đọc lại các quan điểm chỉ đạo của Nghị quyết Trung ương 5 khóa VIII.","khoa":[["nen tang tinh than"],["muc tieu","dong luc"]]},{"ten":"Xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc","goiY":"Tìm tính chất của nền văn hóa mà các nghị quyết của Đảng xác định.","khoa":[["tien tien"],["dam da"]]},{"ten":"Văn hóa, con người Việt Nam trở thành sức mạnh nội sinh của sự phát triển","goiY":"Đọc lại định hướng của Đại hội XIII: văn hóa, con người trở thành sức mạnh gì?","khoa":[["noi sinh"]]},{"ten":"Con người là trung tâm của chiến lược phát triển, đồng thời là chủ thể phát triển","goiY":"Đọc lại đoạn nói vai trò trung tâm của con người.","khoa":[["trung tam"],["chu the"]]},{"ten":"Xây dựng con người Việt Nam phát triển toàn diện và môi trường văn hóa lành mạnh","goiY":"Đọc lại các nhiệm vụ cụ thể của Nghị quyết Trung ương 9 khóa XI.","khoa":[["toan dien"],["moi truong van hoa"]]},{"ten":"Chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại","goiY":"Tìm nhiệm vụ nói về quan hệ với văn hóa thế giới.","khoa":[["hoi nhap"],["tinh hoa"]]}]},{"ma":"IV.2","ten":"Xây dựng đạo đức cách mạng","baiGiang":["Hồ Chí Minh “là tấm gương sáng, là hiện thân của nền đạo đức cách mạng Việt Nam, mãi là ngọn đèn pha chiếu rọi con đường rèn luyện, phấn đấu để trở nên tốt hơn, đạt đến “chân thiện mỹ” của con người Việt Nam ngày nay và mai sau”.","Hồ Chí Minh luôn khẳng định tầm quan trọng của việc tu dưỡng, rèn luyện đạo đức, Đạo đức là yếu tố cơ bản tạo nên giá trị con người. Chính vì vậy, Người thường xuyên chú trọng quan tâm giáo dục đạo đức, chăm lo rèn luyện đạo đức cho các đối tượng.","Việc tu dưỡng đạo đức rất quan trọng đối với con người Việt Nam trong sự nghiệp cách mạng, nhất là đối với thế hệ trẻ. Thế hệ trẻ là “người chủ tương lai của nước nhà… nước nhà thịnh hay suy, yếu hay mạnh một phần lớn là do các thanh niên”. Do vậy, cần phải chú trọng chăm lo, giáo dục lý tưởng cách mạng, đạo đức, lối sống, văn hóa cho sinh viên, hình thành thế hệ thanh niên có những phẩm chất tốt đẹp, có khí phách và quyết tâm hành động, có trách nhiệm với Tổ quốc, với nhân dân."],"giaoTrinh":["Hồ Chí Minh “là tấm gương sáng, là hiện thân của nền đạo đức cách mạng Việt Nam, mãi mãi là ngọn đèn pha chiếu rọi con đường rèn luyện, phấn đấu để trở nên “tốt” hơn, đạt đến “chân thiện mỹ” của con người Việt Nam ngày nay và mai sau”.","Đạo đức là yếu tố cơ bản của nhân cách tạo nên giá trị con người, vì vậy ai cũng phải tu dưỡng hoàn thiện mình về đạo đức.","Thế hệ trẻ là “người chủ tương lai của nước nhà... nước nhà thịnh hay suy, yếu hay mạnh một phần lớn là do các thanh niên”. Vì vậy, cần phải chú trọng chăm lo giáo dục lý tưởng cách mạng, đạo đức, lối sống, văn hóa cho sinh viên, hình thành thế hệ thanh niên mới có những phẩm chất tốt đẹp, có khí phách và quyết tâm hành động, có trách nhiệm với Tổ quốc, với nhân dân, với chế độ xã hội chủ nghĩa.","Học tập đạo đức cách mạng Hồ Chí Minh là phải trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng. Học tập đạo đức cách mạng Hồ Chí Minh là học phẩm chất con người trọn đời vì nước, vì dân, là học tập khí phách anh hùng, ý chí độc lập tự cường, kiên trì mục tiêu lý tưởng, sáng tạo và quyết thắng, không chịu khuất phục trước mọi kẻ thù. Hồ Chí Minh đã cống hiến trọn đời mình cho sự nghiệp giải phóng dân tộc và thống nhất Tổ quốc, giải phóng giai cấp công nhân và dân tộc bị áp bức, cho sự thắng lợi của chủ nghĩa xã hội, cho sự hợp tác anh em và hòa bình giữa các dân tộc.","Học tập đạo đức cách mạng của Hồ Chí Minh là phải tu dưỡng, rèn luyện theo tấm gương cần, kiệm, liêm, chính, chí công vô tư; đức khiêm tốn, trung thực. Trung thực là phẩm chất hàng đầu của cán bộ, đảng viên và của mỗi người. Hồ Chí Minh coi trách nhiệm là việc phải làm, phải gánh vác, không thể thoái thác.","Học tập đạo đức Hồ Chí Minh là phải có đức tin tuyệt đối vào sức mạnh của nhân dân, kính trọng nhân dân và hết lòng, hết sức phục vụ nhân dân; luôn nhân ái, vị tha, khoan dung và nhân hậu với con người.","Học tập đạo đức cách mạng của Hồ Chí Minh còn là học tập và làm theo tấm gương về ý chí và nghị lực tinh thần to lớn, quyết tâm vượt qua mọi thử thách, gian nguy để đạt được mục đích cuộc sống. Học tập tư tưởng, đạo đức Hồ Chí Minh là học tấm gương về chủ nghĩa yêu nước kết hợp với chủ nghĩa quốc tế vô sản trong sáng."],"y":[{"ten":"Hồ Chí Minh là tấm gương sáng, là hiện thân của nền đạo đức cách mạng Việt Nam","goiY":"Đọc lại câu so sánh Người với ngọn đèn pha.","khoa":[["tam guong sang"],["hien than"],["ngon den pha"]]},{"ten":"Học tập đạo đức cách mạng Hồ Chí Minh là phải trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng","goiY":"Đọc lại câu đầu tiên nói học tập đạo đức Hồ Chí Minh là phải làm gì.","khoa":[["trung voi nuoc"],["hieu voi dan"]]},{"ten":"Tu dưỡng, rèn luyện theo tấm gương cần, kiệm, liêm, chính, chí công vô tư; đức khiêm tốn, trung thực","goiY":"Đọc lại câu về tu dưỡng theo tấm gương những đức tính hằng ngày của Người.","khoa":[["chi cong vo tu"],["khiem ton"],["trung thuc"],["can","kiem","liem","chinh"]]},{"ten":"Có đức tin tuyệt đối vào sức mạnh của nhân dân, hết lòng, hết sức phục vụ nhân dân; nhân ái, vị tha, khoan dung","goiY":"Đọc lại câu nói học tập đạo đức Hồ Chí Minh là phải có đức tin vào ai.","khoa":[["duc tin"],["phuc vu nhan dan"],["nhan ai"],["khoan dung"],["vi tha"]]},{"ten":"Học tập ý chí và nghị lực tinh thần to lớn, quyết tâm vượt qua mọi thử thách, gian nguy","goiY":"Đọc lại câu về tấm gương ý chí của Người.","khoa":[["nghi luc"],["y chi"],["thu thach"]]},{"ten":"Thế hệ trẻ là người chủ tương lai của nước nhà; cần chăm lo giáo dục lý tưởng cách mạng, đạo đức, lối sống, văn hóa cho sinh viên","goiY":"Đọc lại đoạn nói về thế hệ trẻ và sinh viên.","khoa":[["the he tre"],["thanh nien"],["sinh vien"],["chu tuong lai"]]}]}]}],"cau":[{"id":"c01","goc":1,"mua":"xuan","muc":"I.2","dang":"tf","hoi":"Theo Hồ Chí Minh, văn hóa là mục tiêu duy nhất của cách mạng Việt Nam.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. Mục tiêu của cách mạng Việt Nam là độc lập dân tộc và chủ nghĩa xã hội. Cùng với chính trị, kinh tế, xã hội, văn hóa nằm trong mục tiêu chung của toàn bộ tiến trình cách mạng; văn hóa không phải là mục tiêu duy nhất."},{"id":"c02","goc":2,"mua":"xuan","muc":"I.3","dang":"tf","hoi":"UNESCO đã ghi nhận Chủ tịch Hồ Chí Minh là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam vào năm 1987.","pa":["Đúng","Sai"],"dung":[0],"giaiThich":"Đúng. Hồ Chí Minh được UNESCO ghi nhận là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam trong Nghị quyết 24C/18.6.5 của Khóa họp 24 Đại hội đồng UNESCO từ ngày 20/10 đến ngày 20/11/1987."},{"id":"c03","goc":3,"mua":"ha","muc":"II.3","dang":"tf","hoi":"Câu nói của Hồ Chí Minh “Đạo đức cách mạng không phải trên trời sa xuống. Nó do đấu tranh, rèn luyện bền bỉ hằng ngày mà phát triển và củng cố. Cũng như ngọc càng mài càng sáng, vàng càng luyện càng trong” thể hiện nguyên tắc tu dưỡng đạo đức suốt đời.","pa":["Đúng","Sai"],"dung":[0],"giaiThich":"Đúng. Theo Hồ Chí Minh, tu dưỡng đạo đức như một cuộc cách mạng trường kỳ, gian khổ; mỗi người phải kiên trì rèn luyện liên tục, tu dưỡng suốt đời. Đạo đức không phải là cái gì đó có tính “nhất thành bất biến”, mà được hình thành, phát triển do môi trường giáo dục, do sự rèn luyện, phấn đấu và tu dưỡng bản thân của mỗi người."},{"id":"c04","goc":4,"mua":"xuan","muc":"I.1","dang":"tf","hoi":"Quan niệm văn hóa theo nghĩa rộng của Hồ Chí Minh xuất hiện sau Cách mạng Tháng Tám năm 1945, khi cả nước tập trung xây dựng đất nước.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. Quan niệm văn hóa theo nghĩa rộng được Hồ Chí Minh đưa ra vào tháng 8/1943, khi còn ở trong nhà tù của Tưởng Giới Thạch. Đây là quan niệm văn hóa duy nhất theo nghĩa rộng. Từ sau Cách mạng Tháng Tám, Hồ Chí Minh có bàn đến văn hóa nhưng theo nghĩa hẹp, với ý nghĩa là kiến trúc thượng tầng, là toàn bộ đời sống tinh thần của xã hội."},{"id":"c05","goc":5,"mua":"thu","muc":"III.3","dang":"tf","hoi":"Trong quan điểm của Hồ Chí Minh về xây dựng con người, “trồng người” chỉ là công việc trước mắt, không mang ý nghĩa lâu dài.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. “Vì lợi ích trăm năm thì phải “trồng người””. “Trồng người” là công việc lâu dài, gian khổ, vừa vì lợi ích trước mắt vừa vì lợi ích lâu dài, là công việc của văn hóa giáo dục."},{"id":"c06","goc":6,"mua":"ha","muc":"II.1","dang":"tf","hoi":"Theo tư tưởng Hồ Chí Minh, nếu cán bộ có tài nhưng thiếu đạo đức cách mạng thì vẫn có thể lãnh đạo nhân dân thành công.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. Hồ Chí Minh khẳng định: “Người cách mạng phải có đạo đức, không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân” và “Nếu không có đạo đức cách mạng thì có tài cũng vô dụng”."},{"id":"c07","goc":7,"mua":"xuan","muc":"I.1","dang":"one","hoi":"Theo Hồ Chí Minh, trong đời sống có bốn vấn đề phải được coi là quan trọng ngang nhau và có sự tác động qua lại lẫn nhau, đó là:","pa":["Chính trị, kinh tế, giáo dục, văn hóa.","Chính trị, kinh tế, xã hội, quốc phòng.","Chính trị, kinh tế, văn hóa, xã hội.","Kinh tế, văn hóa, giáo dục, y tế.","Chính trị, quân sự, văn hóa, xã hội."],"dung":[2],"giaiThich":"Hồ Chí Minh cho rằng, trong đời sống có bốn vấn đề phải được coi là quan trọng ngang nhau và có sự tác động qua lại lẫn nhau, đó là chính trị, kinh tế, văn hóa, xã hội."},{"id":"c08","goc":8,"mua":"ha","muc":"II.2","dang":"one","hoi":"Theo quan điểm của Hồ Chí Minh về đạo đức cách mạng, đâu là phẩm chất bao trùm và quan trọng nhất?","pa":["Cần, kiệm, liêm, chính.","Thương yêu con người, sống có tình có nghĩa.","Trung với nước, hiếu với dân.","Tinh thần quốc tế trong sáng.","Nói đi đôi với làm, nêu gương về đạo đức."],"dung":[2],"giaiThich":"Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm quan trọng nhất và chi phối các phẩm chất khác. Nói đi đôi với làm, nêu gương về đạo đức là một nguyên tắc xây dựng đạo đức, không phải một chuẩn mực."},{"id":"c09","goc":9,"mua":"xuan","muc":"I.1","dang":"one","hoi":"Trong các cách tiếp cận văn hóa của Hồ Chí Minh, cách tiếp cận nào thường xuất hiện trong các bài nói với đồng bào miền núi?","pa":["Tiếp cận theo nghĩa rộng, tổng hợp mọi phương thức sinh hoạt của con người.","Tiếp cận theo nghĩa hẹp là đời sống tinh thần của xã hội, thuộc kiến trúc thượng tầng.","Tiếp cận theo nghĩa hẹp hơn là bàn đến các trường học, số người đi học, xóa nạn mù chữ, biết đọc, biết viết.","Tiếp cận theo “phương thức sử dụng công cụ sinh hoạt”.","Tiếp cận văn hóa như một mặt trận."],"dung":[2],"giaiThich":"Hồ Chí Minh có bốn cách tiếp cận chủ yếu về văn hóa. Trong đó, cách tiếp cận theo nghĩa hẹp hơn là bàn đến các trường học, số người đi học, xóa nạn mù chữ, biết đọc, biết viết thường xuất hiện trong các bài nói với đồng bào miền núi."},{"id":"c10","goc":10,"mua":"xuan","muc":"I.1","dang":"one","hoi":"“Dân ta phải biết sử ta. Cho tường gốc tích nước nhà Việt Nam” là lời nhắc nhở của Hồ Chí Minh về việc:","pa":["Học tập văn hóa các nước phương Đông.","Giữ gìn bản sắc văn hóa dân tộc.","Tiếp thu tinh hoa văn hóa nhân loại.","Xây dựng nền văn hóa mới xã hội chủ nghĩa.","Chống giặc dốt và nâng cao dân trí."],"dung":[1],"giaiThich":"Câu này nằm trong phần giữ gìn bản sắc văn hóa dân tộc: trách nhiệm của con người Việt Nam là phải trân trọng, khai thác, giữ gìn, phát huy, phát triển những giá trị của văn hóa dân tộc, đáp ứng yêu cầu, nhiệm vụ cách mạng của từng giai đoạn lịch sử."},{"id":"c11","goc":11,"mua":"ha","muc":"II.3","dang":"one","hoi":"Theo Hồ Chí Minh, nguồn gốc của mọi thứ tệ nạn như quan liêu, tham ô, lãng phí là gì?","pa":["Sự thiếu hiểu biết về pháp luật.","Chủ nghĩa cá nhân.","Thiếu kinh nghiệm lãnh đạo.","Ảnh hưởng của văn hóa ngoại lai.","Sự kém phát triển về kinh tế."],"dung":[1],"giaiThich":"Hồ Chí Minh chỉ rõ: “Quan liêu, tham ô, lãng phí là tội ác. Phải tẩy sạch nó để thực hiện cần kiệm liêm chính”. Nguồn gốc của mọi thứ tệ nạn là chủ nghĩa cá nhân: “do cá nhân chủ nghĩa mà phạm nhiều sai lầm... Phải kiên quyết quét sạch chủ nghĩa cá nhân”."},{"id":"c12","goc":12,"mua":"xuan","muc":"I.3","dang":"one","hoi":"Trong thời kỳ kháng chiến chống thực dân Pháp, Hồ Chí Minh chủ trương xây dựng nền văn hóa mới với tính chất nào?","pa":["Tiên tiến, đậm đà bản sắc dân tộc.","Toàn diện, hiện đại, hội nhập.","Dân tộc, khoa học, đại chúng.","Xã hội chủ nghĩa và dân tộc.","Truyền thống và tiến bộ."],"dung":[2],"giaiThich":"Trong kháng chiến chống thực dân Pháp, Hồ Chí Minh khẳng định lại quan điểm của Đảng từ năm 1943 trong Đề cương văn hóa Việt Nam về phương châm xây dựng nền văn hóa mới: một nền văn hóa có tính chất dân tộc, khoa học, đại chúng."},{"id":"c13","goc":13,"mua":"xuan","muc":"I.2","dang":"wrong","hoi":"Theo Hồ Chí Minh, để làm tròn nhiệm vụ của một chiến sĩ nghệ thuật trên mặt trận văn hóa, điều nào sau đây không phải là yêu cầu?","pa":["Có lập trường tư tưởng vững vàng.","Coi ngòi bút là vũ khí sắc bén trong sự nghiệp “phò chính trừ tà”.","Chỉ ca ngợi cái tốt, tránh phê bình cái xấu.","Bám sát cuộc sống thực tiễn, đi sâu vào quần chúng.","Phụng sự Tổ quốc, phục vụ nhân dân."],"dung":[2],"giaiThich":"Để làm tròn nhiệm vụ, chiến sĩ nghệ thuật phải có lập trường tư tưởng vững vàng; ngòi bút là vũ khí sắc bén trong sự nghiệp “phò chính trừ tà”. Phải bám sát cuộc sống thực tiễn, đi sâu vào quần chúng, để phê bình nghiêm khắc những thói xấu như tham ô, lười biếng, lãng phí, quan liêu, và ca tụng chân thật những người tốt việc tốt. Vì vậy, “chỉ ca ngợi cái tốt, tránh phê bình cái xấu” là sai."},{"id":"c14","goc":14,"mua":"xuan","muc":"I.1","dang":"wrong","hoi":"Trong tư tưởng Hồ Chí Minh về quan hệ giữa văn hóa với các lĩnh vực khác, nhận định nào sau đây là không đúng?","pa":["Văn hóa phải phục vụ nhiệm vụ chính trị.","Văn hóa thuộc kiến trúc thượng tầng và hoàn toàn phụ thuộc vào kinh tế.","Giải phóng chính trị để mở đường cho văn hóa phát triển.","Văn hóa có vai trò tác động tích cực trở lại kinh tế.","Xã hội thế nào văn hóa thế ấy, nên phải giải phóng xã hội để văn hóa phát triển."],"dung":[1],"giaiThich":"Hồ Chí Minh giải thích rằng văn hóa thuộc kiến trúc thượng tầng. Tuy nhiên, văn hóa cũng không thể đứng ngoài mà phải đứng trong kinh tế, nghĩa là văn hóa không hoàn toàn phụ thuộc vào kinh tế, mà có vai trò tác động tích cực trở lại kinh tế. Vì vậy, nhận định “hoàn toàn phụ thuộc vào kinh tế” là sai."},{"id":"c15","goc":15,"mua":"ha","muc":"II.3","dang":"wrong","hoi":"Theo Hồ Chí Minh, để xây dựng nền đạo đức mới, đạo đức cách mạng, điều nào sau đây không phải là đối tượng cần chống?","pa":["Chủ nghĩa đế quốc.","Những thói quen và tập tục lạc hậu.","Chủ nghĩa cá nhân.","Lợi ích cá nhân chính đáng của con người.","Những biểu hiện, hành vi vô đạo đức, suy thoái đạo đức."],"dung":[3],"giaiThich":"Trên con đường đi tới tiến bộ và cách mạng, đạo đức mới chỉ có thể được xây dựng thành công trên cơ sở kiên trì mục tiêu chống chủ nghĩa đế quốc, chống những thói quen và tập tục lạc hậu, phải loại trừ chủ nghĩa cá nhân; chống là chống các biểu hiện, các hành vi vô đạo đức, suy thoái đạo đức. Tuy nhiên, Người lưu ý: “Đấu tranh chống chủ nghĩa cá nhân không phải là “giày xéo lên lợi ích cá nhân””."},{"id":"c16","goc":16,"mua":"thu","muc":"III.3","dang":"wrong","hoi":"Đâu không phải là nội dung xây dựng con người toàn diện “vừa hồng vừa chuyên” theo quan điểm của Hồ Chí Minh?","pa":["Có ý thức làm chủ, tinh thần tập thể xã hội chủ nghĩa.","Chỉ chú trọng phát triển trí tuệ, không cần đạo đức.","Cần kiệm xây dựng đất nước, hăng hái bảo vệ Tổ quốc.","Có lòng yêu nước nồng nàn, tinh thần quốc tế trong sáng.","Có phương pháp làm việc khoa học, phong cách quần chúng, dân chủ, nêu gương."],"dung":[1],"giaiThich":"Hồ Chí Minh quan tâm xây dựng con người toàn diện vừa “hồng” vừa “chuyên”, đặc biệt quan tâm đến việc nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân, đồng thời bồi dưỡng năng lực trí tuệ. Người khuyên: “Đức là đạo đức cách mạng. Đó là cái gốc, rất quan trọng. Nếu không có đạo đức cách mạng thì có tài cũng vô dụng”. Vì vậy, “chỉ chú trọng phát triển trí tuệ, không cần đạo đức” là sai."},{"id":"c17","goc":17,"mua":"ha","muc":"II.2","dang":"wrong","hoi":"Theo Hồ Chí Minh, phẩm chất “Liêm” trong “Cần, kiệm, liêm, chính” không bao gồm điều nào sau đây?","pa":["Trong sạch, không tham lam.","Không tham địa vị, tiền tài, sung sướng.","Ham người tâng bốc mình.","Chỉ ham học, ham làm, ham tiến bộ.","Đi đôi với chữ Kiệm."],"dung":[2],"giaiThich":"Liêm “là trong sạch, không tham lam... Chữ LIÊM phải đi đôi với chữ KIỆM”; “Liêm là không tham địa vị. Không tham tiền tài. Không tham sung sướng. Không ham người tâng bốc mình... Chỉ có một thứ ham là ham học, ham làm, ham tiến bộ”. Vì vậy, “ham người tâng bốc mình” là sai."},{"id":"c18","goc":18,"mua":"xuan","muc":"I.1","dang":"wrong","hoi":"Phát biểu nào sau đây không phản ánh quan điểm của Hồ Chí Minh về việc tiếp thu tinh hoa văn hóa nhân loại?","pa":["Tiếp thu cái gì tốt của văn hóa xưa và nay.","Tránh nguy cơ trở thành kẻ bắt chước.","Chỉ nên học hỏi văn hóa phương Đông.","Mục đích là làm giàu cho văn hóa Việt Nam.","Phải lấy văn hóa dân tộc làm gốc khi tiếp thu."],"dung":[2],"giaiThich":"Hồ Chí Minh chỉ rõ: “Tây phương hay Đông phương có cái gì tốt ta học lấy để tạo ra một nền văn hóa Việt Nam”. Nội dung tiếp thu là toàn diện, bao gồm Đông, Tây, kim, cổ; tiêu chí tiếp thu là có cái gì hay, cái gì tốt là ta học lấy; đồng thời tránh nguy cơ trở thành kẻ bắt chước. Vì vậy, “chỉ nên học hỏi văn hóa phương Đông” là sai."},{"id":"c19","goc":19,"mua":"xuan","muc":"I.3","dang":"multi","hoi":"Theo Hồ Chí Minh, nền văn hóa mới Việt Nam được xây dựng trên cơ sở kết hợp những yếu tố nào? (Chọn tất cả đáp án đúng)","pa":["Những truyền thống tốt đẹp của văn hóa dân tộc được phát triển và nâng cao.","Tinh hoa văn hóa của nhân loại.","Thấm nhuần sâu sắc chủ nghĩa yêu nước.","Thấm nhuần sâu sắc chủ nghĩa quốc tế chân chính.","Duy trì hoàn toàn các phong tục tập quán cũ."],"dung":[0,1,2,3],"giaiThich":"Nền văn hóa mà Hồ Chí Minh chủ trương kết hợp những truyền thống tốt đẹp của văn hóa dân tộc được phát triển và nâng cao với tinh hoa văn hóa của nhân loại, thấm nhuần sâu sắc chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính. Người không chủ trương duy trì hoàn toàn phong tục tập quán cũ."},{"id":"c20","goc":20,"mua":"xuan","muc":"I.1","dang":"multi","hoi":"Theo quan điểm Hồ Chí Minh, những nhận định nào sau đây đúng về bản sắc văn hóa dân tộc? (Chọn tất cả đáp án đúng)","pa":["Phản ánh những nét độc đáo, đặc tính dân tộc.","Là ngọn nguồn đi tới chủ nghĩa Mác - Lênin.","Có ý nghĩa quan trọng đối với sự nghiệp xây dựng và bảo vệ Tổ quốc.","Là những giá trị văn hóa nhất thời, dễ mất đi trong quá trình giao lưu với bên ngoài.","Về hình thức, biểu hiện ở ngôn ngữ, phong tục, tập quán, lễ hội, truyền thống, cách cảm và nghĩ."],"dung":[0,1,2,4],"giaiThich":"Bản sắc văn hóa dân tộc là những giá trị văn hóa bền vững của cộng đồng các dân tộc Việt Nam, chứa đựng giá trị lớn và có một ý nghĩa quan trọng đối với sự nghiệp xây dựng và bảo vệ Tổ quốc. Nó phản ánh những nét độc đáo, đặc tính dân tộc; nó là ngọn nguồn đi tới chủ nghĩa Mác - Lênin. Về hình thức, cốt cách văn hóa dân tộc biểu hiện ở ngôn ngữ, phong tục, tập quán, lễ hội, truyền thống, cách cảm và nghĩ. Vì vậy, coi bản sắc là “những giá trị nhất thời” là sai."},{"id":"c21","goc":21,"mua":"ha","muc":"II.1","dang":"multi","hoi":"Theo tư tưởng Hồ Chí Minh, những biểu hiện nào sau đây thuộc về đạo đức cách mạng của người chiến sĩ cách mạng? (Chọn tất cả đáp án đúng)","pa":["Cả đời hết lòng hết sức phục vụ nhân dân.","Sinh hoạt ngày thường thì làm gương mẫu: gian khổ, chất phác, kính trọng của công.","Gặp khó khăn, gian khổ, thất bại cũng không sợ sệt, rụt rè, lùi bước.","Khi gặp thuận lợi và thành công vẫn giữ vững tinh thần gian khổ, chất phác, khiêm tốn.","Ưu tiên lợi ích cá nhân trước lợi ích tập thể."],"dung":[0,1,2,3],"giaiThich":"Theo Hồ Chí Minh, “Đại đa số chiến sĩ cách mạng là người có đạo đức: Cả đời hết lòng hết sức phục vụ nhân dân, sinh hoạt ngày thường thì làm gương mẫu; gian khổ, chất phác, kính trọng của công...”. “Có đạo đức cách mạng thì khi gặp khó khăn, gian khổ, thất bại, cũng không sợ sệt, rụt rè, lùi bước... khi gặp thuận lợi và thành công vẫn giữ vững tinh thần gian khổ, chất phác, khiêm tốn”. Đặt lợi ích cá nhân lên trước là biểu hiện của chủ nghĩa cá nhân, trái với đạo đức cách mạng."},{"id":"c22","goc":22,"mua":"dong","muc":"IV.2","dang":"multi","hoi":"Học tập đạo đức cách mạng Hồ Chí Minh là học tập và làm theo những phẩm chất nào sau đây? (Chọn tất cả đáp án đúng)","pa":["Trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng.","Cần, kiệm, liêm, chính, chí công vô tư; đức khiêm tốn, trung thực.","Đức tin tuyệt đối vào sức mạnh của nhân dân; nhân ái, vị tha, khoan dung và nhân hậu với con người.","Ý chí và nghị lực tinh thần to lớn, quyết tâm vượt qua mọi thử thách, gian nguy.","Đề cao chủ nghĩa yêu nước, tách rời tinh thần quốc tế để giữ vững độc lập dân tộc."],"dung":[0,1,2,3],"giaiThich":"Học tập đạo đức cách mạng Hồ Chí Minh là phải trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng; tu dưỡng, rèn luyện theo tấm gương cần, kiệm, liêm, chính, chí công vô tư, đức khiêm tốn, trung thực; có đức tin tuyệt đối vào sức mạnh của nhân dân, luôn nhân ái, vị tha, khoan dung và nhân hậu với con người; học tấm gương về ý chí và nghị lực tinh thần to lớn. Đồng thời, đó là học tấm gương về chủ nghĩa yêu nước kết hợp với chủ nghĩa quốc tế vô sản trong sáng, không tách rời hai mặt ấy."},{"id":"c23","goc":23,"mua":"thu","muc":"III.2","dang":"multi","hoi":"Theo Hồ Chí Minh, những nội dung nào sau đây thuộc về “giải phóng con người”? (Chọn tất cả đáp án đúng)","pa":["Xóa bỏ tình trạng áp bức, bóc lột, nô dịch con người.","Xóa bỏ các điều kiện xã hội làm tha hóa con người.","Làm cho mọi người được hưởng tự do, hạnh phúc, có điều kiện phát huy khả năng sáng tạo, làm chủ xã hội, làm chủ tự nhiên và làm chủ bản thân.","Phát triển toàn diện theo đúng bản chất tốt đẹp của con người.","Xóa bỏ ách thống trị của chủ nghĩa đế quốc, giành lại độc lập cho dân tộc."],"dung":[0,1,2,3],"giaiThich":"Giải phóng con người là xóa bỏ tình trạng áp bức, bóc lột, nô dịch con người; xóa bỏ các điều kiện xã hội làm tha hóa con người, làm cho mọi người được hưởng tự do, hạnh phúc, có điều kiện phát huy khả năng sáng tạo, làm chủ xã hội, làm chủ tự nhiên và làm chủ bản thân, phát triển toàn diện theo đúng bản chất tốt đẹp của con người. “Xóa bỏ ách thống trị của chủ nghĩa đế quốc, giành lại độc lập cho dân tộc” là nội dung của giải phóng dân tộc."},{"id":"c24","goc":24,"mua":"dong","muc":"IV.1","dang":"multi","hoi":"Theo Nghị quyết Hội nghị Trung ương 9 khóa XI và Nghị quyết Đại hội XIII của Đảng, những định hướng nào sau đây về xây dựng văn hóa, con người Việt Nam là đúng? (Chọn tất cả đáp án đúng)","pa":["Phát triển con người toàn diện và xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc.","Văn hóa, con người Việt Nam thực sự trở thành sức mạnh nội sinh, động lực phát triển đất nước và bảo vệ Tổ quốc.","Chăm lo xây dựng con người Việt Nam phát triển toàn diện, trọng tâm là bồi dưỡng tinh thần yêu nước, lòng tự hào dân tộc, đạo đức, lối sống và nhân cách.","Xây dựng môi trường văn hóa lành mạnh, phù hợp với bối cảnh phát triển kinh tế thị trường định hướng xã hội chủ nghĩa và hội nhập quốc tế.","Hạn chế hội nhập quốc tế về văn hóa để giữ nguyên bản sắc dân tộc."],"dung":[0,1,2,3],"giaiThich":"Nghị quyết Đại hội XIII xác định: “Phát triển con người toàn diện và xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc để văn hóa, con người Việt Nam thực sự trở thành sức mạnh nội sinh, động lực phát triển đất nước và bảo vệ Tổ quốc”. Nghị quyết số 33-NQ/TW (Hội nghị Trung ương 9 khóa XI) nêu: “Chăm lo xây dựng con người Việt Nam phát triển toàn diện, trọng tâm là bồi dưỡng tinh thần yêu nước, lòng tự hào dân tộc, đạo đức, lối sống và nhân cách”, cùng các nhiệm vụ như xây dựng môi trường văn hóa lành mạnh và chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại. Vì vậy, “hạn chế hội nhập quốc tế về văn hóa” là sai."},{"id":"c25","goc":25,"mua":"ha","muc":"II.1","dang":"fill","hoi":"Trong Di chúc, Hồ Chí Minh viết: “Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo, là người ____ thật trung thành của nhân dân”.","pa":["đồng chí","đầy tớ","chiến sĩ","bạn bè","đại diện"],"dung":[1],"giaiThich":"Trong Di chúc, Hồ Chí Minh viết: “Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân”."},{"id":"c26","goc":26,"mua":"ha","muc":"II.2","dang":"fill","hoi":"Theo Hồ Chí Minh: “Cần tức là siêng năng, chăm chỉ, cố gắng dẻo dai... Muốn cho chữ Cần có nhiều kết quả hơn, thì phải có ____ cho mọi công việc”.","pa":["mục tiêu","kế hoạch","sáng kiến","kinh nghiệm","quy trình"],"dung":[1],"giaiThich":"“Cần tức là siêng năng, chăm chỉ, cố gắng dẻo dai... Muốn cho chữ Cần có nhiều kết quả hơn, thì phải có kế hoạch cho mọi công việc”. Cần tức là lao động cần cù, siêng năng; lao động có kế hoạch, sáng tạo, có năng suất cao."},{"id":"c27","goc":27,"mua":"xuan","muc":"I.2","dang":"fill","hoi":"Hồ Chí Minh đã đặt cơ sở cho một xã hội phát triển bền vững với ba trụ cột là bền vững về kinh tế, xã hội và ____.","pa":["chính trị","văn hóa","môi trường","quốc phòng","giáo dục"],"dung":[2],"giaiThich":"Hồ Chí Minh đã đặt cơ sở cho một xã hội phát triển bền vững với ba trụ cột là bền vững về kinh tế, xã hội và môi trường."},{"id":"c28","goc":28,"mua":"thu","muc":"III.3","dang":"fill","hoi":"Về phương pháp xây dựng con người, Hồ Chí Minh nhắc nhở rằng: “Hiền, dữ phải đâu là tính sẵn. Phần nhiều do ____ mà nên”.","pa":["di truyền","giáo dục","hoàn cảnh","tài năng","rèn luyện"],"dung":[1],"giaiThich":"Biện pháp giáo dục có một vị trí quan trọng. Hồ Chí Minh nhắc nhở rằng: “Hiền, dữ phải đâu là tính sẵn. Phần nhiều do giáo dục mà nên”."},{"id":"c29","goc":29,"mua":"dong","muc":"IV.2","dang":"fill","hoi":"Hồ Chí Minh đã cống hiến trọn đời mình cho sự nghiệp giải phóng dân tộc và thống nhất Tổ quốc, giải phóng giai cấp công nhân và dân tộc bị áp bức, cho sự thắng lợi của chủ nghĩa xã hội, cho sự hợp tác anh em và ____ giữa các dân tộc.","pa":["cạnh tranh","hòa bình","hội nhập","đối đầu","đấu tranh"],"dung":[1],"giaiThich":"Hồ Chí Minh đã cống hiến trọn đời mình cho sự nghiệp giải phóng dân tộc và thống nhất Tổ quốc, giải phóng giai cấp công nhân và dân tộc bị áp bức, cho sự thắng lợi của chủ nghĩa xã hội, cho sự hợp tác anh em và hòa bình giữa các dân tộc."},{"id":"c30","goc":30,"mua":"thu","muc":"III.1","dang":"fill","hoi":"Theo Hồ Chí Minh, con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực, đa dạng bởi mối quan hệ giữa cá nhân và xã hội (quan hệ gia đình, dòng tộc, làng xã, quan hệ giai cấp, dân tộc...) và các mối quan hệ xã hội (quan hệ chính trị, văn hóa, đạo đức, ____...).","pa":["khoa học","tôn giáo","quân sự","công nghệ","kinh tế"],"dung":[1],"giaiThich":"Theo Hồ Chí Minh, con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực, đa dạng bởi mối quan hệ giữa cá nhân và xã hội (quan hệ gia đình, dòng tộc, làng xã, quan hệ giai cấp, dân tộc...) và các mối quan hệ xã hội (quan hệ chính trị, văn hóa, đạo đức, tôn giáo...)."}]};
+const KHOA = 'trong-nguoi-bai8-v1';
+const KHOA_SUA = 'trong-nguoi-sua';
+const QS = new URLSearchParams(location.search);
+function layLS(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+/* chế độ sửa (?sua=1) — chỉ giảng viên mở; xem cuối tệp */
+const SUA = QS.get('sua') === '1' ? Object.assign({bat: true, chu: [], chuGD: {}}, layLS(KHOA_SUA) || {}) : null;
+const app = document.getElementById('app');
+const nen = document.getElementById('nen');
+let manHienTai = 'Màn chào';
+const GIAY = DB.giayMoiCau || 20;          /* thời gian mỗi câu (giây) */
+const TOI_THIEU = 40, TOI_DA = 150;        /* số chữ của bản tóm tắt */
+
+/* ---------- CHỮ HIỂN THỊ ----------
+   Mọi chữ giao diện (không thuộc nội dung bài đọc, câu hỏi) nằm ở bảng này. {n}, {tong}, {a}, {b}… là chỗ máy điền số, chữ.
+   Giá trị đã sửa lấy từ noi-dung.json (khóa chuGiaoDien), chế độ sửa ghi đè trên máy. */
+const CHU_GOC = {
+  ten_tren: 'TƯ TƯỞNG HỒ CHÍ MINH', ten_game1: 'TRĂM NĂM', ten_game2: 'TRỒNG NGƯỜI', ten_duoi: 'Văn hóa · Đạo đức · Con người',
+  trich: '“Vì lợi ích mười năm thì phải trồng cây, vì lợi ích trăm năm thì phải trồng người”', trich_tg: '— Hồ Chí Minh',
+  nut_vao: 'Vào vườn', nut_cachChoi: 'Cách chơi', nut_amNhac: 'Âm nhạc',
+  cc_tieuDe: 'Trên mỗi ruộng:',
+  cc_1a: 'Gieo hạt', cc_1b: ': bằng cách đọc một đoạn bài giảng và tóm tắt các ý chính (có thể tra cứu Giáo trình ở Thư viện làng). Mỗi ý nêu đúng nảy thành một cây.',
+  cc_2a: 'Thu hoạch', cc_2b: ': trả lời câu hỏi trước khi mặt trời lặn. Mỗi câu đúng tăng sản lượng thu hoạch.',
+  nhac_dang: 'Đang phát', nhac_tat: 'Đã tắt nhạc', nhac_cho: 'Bấm để nghe nhạc', nhac_bat: 'Bật nhạc nền', nhac_tatNut: 'Tắt nhạc nền',
+  ve_chao: 'Về màn chào', ve_banDo: 'Về bản đồ',
+  bd_tieuDe: 'BẢN ĐỒ BỐN MÙA', bd_cay: 'Cây đã trồng', bd_lua: 'Bó lúa', bd_soCau: '{n} câu hỏi',
+  thua_chua: 'Chưa gieo', thua_lon: 'Đang lớn {a}/{b}', thua_du: 'Đủ ý', thua_gat: 'Đã gặt',
+  bd_thu: 'Thu hoạch', bd_thuTiep: 'Gặt tiếp ({a}/{b})', bd_daGat: 'Đã gặt {a}/{b} bó', bd_gatLai: 'Gặt lại',
+  mua_xuan: 'Mùa Xuân', mua_ha: 'Mùa Hạ', mua_thu: 'Mùa Thu', mua_dong: 'Mùa Đông',
+  g_tieuDe: 'GIEO HẠT', g_dong: '{mua} · Thửa {ma} · {ten}',
+  g_tabBG: 'Bài giảng', g_tabGT: 'Thư viện làng',
+  g_nhanBG: 'MỤC {ma}', g_nhanGT: 'GIÁO TRÌNH TƯ TƯỞNG HỒ CHÍ MINH · CHƯƠNG 6 · MỤC {ma}',
+  g_nhatKy: 'NHẬT KÝ GIEO HẠT', g_soY: 'Có {n} điểm cần nêu',
+  g_huongDan: 'Tóm tắt các ý chính của đoạn bài giảng bằng lời văn của sinh viên, tối đa 150 chữ.',
+  g_dem: '{n}/150 chữ', g_nut: 'Gieo hạt',
+  g_dau: 'Viết bản tóm tắt rồi bấm Gieo hạt. Mỗi ý nêu đúng nảy thành một cây.',
+  g_ngan: 'Bản tóm tắt cần viết thành câu hoàn chỉnh, tối thiểu 40 chữ, rồi mới gieo hạt.',
+  g_dai: 'Bản tóm tắt dài hơn 150 chữ. Hãy rút gọn, giữ các ý chính, rồi gieo lại.',
+  g_du: 'Cả {n} ý đều đã nảy mầm. Thửa ruộng sẵn sàng cho mùa thu hoạch.',
+  g_thieu: 'Đã nảy mầm {a}/{b} ý. Đọc lại các đoạn được gợi ý trên ô đất trống, bổ sung bản tóm tắt rồi gieo lại.',
+  g_oTrong: 'Điểm thứ {n}', g_sangThu: 'Thu hoạch',
+  th_tieuDe: 'THU HOẠCH', th_dong: '{mua} · Câu hỏi {n}/{tong}',
+  cu_tf: 'Bình tưới', cu_one: 'Cuốc', cu_wrong: 'Liềm', cu_multi: 'Giỏ', cu_fill: 'Túi hạt',
+  kd_tf: 'Đúng hay sai', kd_one: 'Chọn một phương án đúng', kd_wrong: 'Chọn một phương án sai', kd_multi: 'Chọn tất cả phương án đúng', kd_fill: 'Điền vào chỗ trống',
+  ln_tf: 'BÌNH TƯỚI · Nhận định sau đúng hay sai?', ln_one: 'CUỐC · Chọn một phương án đúng', ln_wrong: 'LIỀM · Cắt bỏ một phương án sai',
+  ln_multi: 'GIỎ · Hái tất cả phương án đúng', ln_fill: 'TÚI HẠT · Chọn từ điền vào chỗ trống',
+  th_gio: 'Mặt trời lặn sau {s} giây', th_lan: 'Mặt trời đã lặn',
+  tf_d: 'Đ', tf_s: 'S', tag_dung: 'đúng', tag_paSai: 'phương án sai', tag_chuaDung: 'chưa đúng',
+  fb_dung: 'Gặt được một bó lúa.', fb_sai: 'Chưa đúng.', fb_lan: 'Mặt trời đã lặn.',
+  th_nhieu: 'Chọn tất cả phương án đúng, rồi bấm Gặt.', th_gat: 'Gặt', th_tiep: 'Câu tiếp', th_ket: 'Kết mùa',
+  o_gat: 'Đã gặt', o_heo: 'Héo', o_dang: 'Đang gặt', o_cho: 'Chờ',
+  k_tieuDe: 'THU HOẠCH {mua}',
+  k_gieo: 'GIEO HẠT · ĐỌC VÀ TÓM TẮT', k_y: '{a}/{b} ý', k_chuaGieo: 'chưa gieo', k_docLai: 'Ý cần đọc lại', k_docLaiKhong: 'Mọi ý của mùa đã nảy mầm.', k_gieoLai: 'Gieo lại thửa {ma}',
+  k_thu: 'THU HOẠCH · CÂU HỎI', k_lua: '{a}/{b} bó lúa', k_chuaDung: 'Nội dung trả lời chưa đúng', k_khongSai: 'Mọi câu hỏi của mùa đều trả lời đúng.',
+  k_sang: 'Sang {mua} · {phan}', k_veBanDo: 'Về bản đồ', k_hoanThanh: 'Đã gặt đủ bốn mùa: {a}/{b} bó lúa, {c}/{d} ý đã nảy mầm.',
+  an_tieuDe: 'ÂM NHẠC', an_guitar: 'Guitar', an_gh: 'Giao hưởng',
+  an_canh: 'Cảnh', an_tinhChat: 'Tính chất', an_ban: 'Bản nhạc', an_phat: 'Cách phát',
+  an_dk: 'Điều khiển', an_dk2: 'Nút bật, tắt nhạc ở góc mọi màn; máy nhớ lựa chọn. Nhạc chỉ bắt đầu sau lần bấm đầu tiên, vì trình duyệt chặn tự phát. Chuyển cảnh: bản cũ nhỏ dần, bản mới lên dần trong 1,5 giây.',
+  an_bq: 'Nguồn và bản quyền', an_bq2: 'Các tác phẩm đều đã thuộc phạm vi công cộng. Bản thu phát trực tiếp từ Wikimedia Commons; người biểu diễn và giấy phép của từng bản ghi ngay dưới tên bản nhạc.'
+};
+const NHAN_CHU = {
+  ten_tren: 'Màn chào · dòng trên tên game', ten_game1: 'Màn chào · tên game, dòng 1', ten_game2: 'Màn chào · tên game, dòng 2', ten_duoi: 'Màn chào · dòng dưới tên game',
+  trich: 'Màn chào · câu trích', trich_tg: 'Màn chào · tên tác giả câu trích', nut_vao: 'Màn chào · nút vào vườn', nut_cachChoi: 'Màn chào · nút cách chơi', nut_amNhac: 'Màn chào · nút âm nhạc',
+  cc_tieuDe: 'Cách chơi · tiêu đề', cc_1a: 'Cách chơi · chữ đậm ý 1', cc_1b: 'Cách chơi · ý 1', cc_2a: 'Cách chơi · chữ đậm ý 2', cc_2b: 'Cách chơi · ý 2',
+  nhac_dang: 'Máy nhạc · đang phát', nhac_tat: 'Máy nhạc · đã tắt', nhac_cho: 'Máy nhạc · trước lần bấm đầu', nhac_bat: 'Nút nhạc · nhãn bật', nhac_tatNut: 'Nút nhạc · nhãn tắt',
+  ve_chao: 'Nút về màn chào', ve_banDo: 'Nút về bản đồ',
+  bd_tieuDe: 'Bản đồ · tên màn', bd_cay: 'Bản đồ · ô cây đã trồng', bd_lua: 'Ô bó lúa', bd_soCau: 'Bản đồ · số câu hỏi của mùa',
+  thua_chua: 'Thửa · chưa gieo', thua_lon: 'Thửa · đang lớn', thua_du: 'Thửa · đủ ý', thua_gat: 'Thửa · đã gặt',
+  bd_thu: 'Bản đồ · nút thu hoạch', bd_thuTiep: 'Bản đồ · nút gặt tiếp', bd_daGat: 'Bản đồ · đã gặt', bd_gatLai: 'Bản đồ · nút gặt lại',
+  mua_xuan: 'Tên mùa Xuân', mua_ha: 'Tên mùa Hạ', mua_thu: 'Tên mùa Thu', mua_dong: 'Tên mùa Đông',
+  g_tieuDe: 'Gieo hạt · tên màn', g_dong: 'Gieo hạt · dòng mùa, thửa', g_tabBG: 'Gieo hạt · thẻ bài giảng', g_tabGT: 'Gieo hạt · thẻ giáo trình',
+  g_nhanBG: 'Gieo hạt · nhãn mục bài giảng', g_nhanGT: 'Gieo hạt · nhãn mục giáo trình', g_nhatKy: 'Gieo hạt · tên sổ', g_soY: 'Gieo hạt · số điểm cần nêu',
+  g_huongDan: 'Gieo hạt · hướng dẫn viết', g_dem: 'Gieo hạt · đếm chữ', g_nut: 'Gieo hạt · nút gieo',
+  g_dau: 'Gieo hạt · lời nhắc ban đầu', g_ngan: 'Gieo hạt · báo quá ngắn', g_dai: 'Gieo hạt · báo quá dài', g_du: 'Gieo hạt · báo đủ ý', g_thieu: 'Gieo hạt · báo còn thiếu ý',
+  g_oTrong: 'Gieo hạt · ô chưa gieo', g_sangThu: 'Gieo hạt · nút sang thu hoạch',
+  th_tieuDe: 'Thu hoạch · tên màn', th_dong: 'Thu hoạch · dòng mùa và thứ tự câu',
+  cu_tf: 'Nông cụ câu đúng/sai', cu_one: 'Nông cụ câu chọn một đúng', cu_wrong: 'Nông cụ câu chọn một sai', cu_multi: 'Nông cụ câu chọn nhiều', cu_fill: 'Nông cụ câu điền khuyết',
+  kd_tf: 'Mô tả dạng đúng/sai', kd_one: 'Mô tả dạng chọn một đúng', kd_wrong: 'Mô tả dạng chọn một sai', kd_multi: 'Mô tả dạng chọn nhiều', kd_fill: 'Mô tả dạng điền khuyết',
+  ln_tf: 'Nhãn câu đúng/sai', ln_one: 'Nhãn câu chọn một đúng', ln_wrong: 'Nhãn câu chọn một sai', ln_multi: 'Nhãn câu chọn nhiều', ln_fill: 'Nhãn câu điền khuyết',
+  th_gio: 'Đồng hồ mặt trời', th_lan: 'Đồng hồ · hết giờ', tf_d: 'Chữ cái phương án Đúng', tf_s: 'Chữ cái phương án Sai',
+  tag_dung: 'Ghi bên phương án đúng', tag_paSai: 'Ghi bên phương án sai cần chọn', tag_chuaDung: 'Ghi bên phương án chọn chưa đúng',
+  fb_dung: 'Phản hồi khi đúng', fb_sai: 'Phản hồi khi sai', fb_lan: 'Phản hồi khi hết giờ',
+  th_nhieu: 'Câu chọn nhiều · lời nhắc', th_gat: 'Câu chọn nhiều · nút gặt', th_tiep: 'Nút câu tiếp', th_ket: 'Nút kết mùa',
+  o_gat: 'Ô ruộng · đã gặt', o_heo: 'Ô ruộng · héo', o_dang: 'Ô ruộng · đang gặt', o_cho: 'Ô ruộng · chờ',
+  k_tieuDe: 'Kết mùa · tên màn', k_gieo: 'Kết mùa · tiêu đề phần gieo hạt', k_y: 'Kết mùa · số ý', k_chuaGieo: 'Kết mùa · thửa chưa gieo',
+  k_docLai: 'Kết mùa · tiêu đề ý cần đọc lại', k_docLaiKhong: 'Kết mùa · khi đủ ý', k_gieoLai: 'Kết mùa · nút gieo lại',
+  k_thu: 'Kết mùa · tiêu đề phần thu hoạch', k_lua: 'Kết mùa · số bó lúa', k_chuaDung: 'Kết mùa · tiêu đề nội dung chưa đúng', k_khongSai: 'Kết mùa · khi đúng hết',
+  k_sang: 'Kết mùa · nút sang mùa sau', k_veBanDo: 'Kết mùa · nút về bản đồ', k_hoanThanh: 'Kết mùa · khi gặt đủ bốn mùa',
+  an_tieuDe: 'Âm nhạc · tên màn', an_guitar: 'Âm nhạc · nhãn guitar', an_gh: 'Âm nhạc · nhãn giao hưởng',
+  an_canh: 'Âm nhạc · cột cảnh', an_tinhChat: 'Âm nhạc · cột tính chất', an_ban: 'Âm nhạc · cột bản nhạc', an_phat: 'Âm nhạc · cột cách phát',
+  an_dk: 'Âm nhạc · tiêu đề điều khiển', an_dk2: 'Âm nhạc · lời điều khiển', an_bq: 'Âm nhạc · tiêu đề bản quyền', an_bq2: 'Âm nhạc · lời bản quyền'
+};
+function t(k, v) {
+  const m = (SUA && SUA.chuGD && SUA.chuGD[k] != null) ? SUA.chuGD[k] : (DB.chuGiaoDien && DB.chuGiaoDien[k] != null) ? DB.chuGiaoDien[k] : CHU_GOC[k];
+  return String(m == null ? k : m).replace(/\{(\w+)\}/g, (x, a) => (v && v[a] != null) ? v[a] : x);
+}
+function h(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]); }
+/* chữ hiển thị có gắn mã: trong chế độ sửa, bấm vào là sửa mẫu chữ của mã đó */
+function tk(k, v) { return '<span data-k="' + k + '">' + h(t(k, v)) + '</span>'; }
+
+/* ---------- NHẠC ----------
+   Bản thu trên Wikimedia Commons, phát trực tiếp (bản MP3 do Commons chuyển mã). */
+const WM = 'https://upload.wikimedia.org/wikipedia/commons/transcoded/';
+const CM = 'https://commons.wikimedia.org/wiki/File:';
+const BAN = {
+  granVals: {tg: 'F. Tárrega', ten: 'Gran Vals', thu: 'Joni Ikäläinen (guitar)', gp: 'Phạm vi công cộng', tep: 'Francisco_T%C3%A1rrega_-_Gran_Vals.ogg', ma: '9/95'},
+  romance: {tg: 'Khuyết danh', ten: 'Romance (Romance Anónimo)', thu: 'Jim Greeninger (guitar)', gp: 'CC0', tep: 'Romance_An%C3%B3nimo_%28Jeux_interdits%29.ogg', ma: '3/33'},
+  bourree: {tg: 'J.S. Bach', ten: 'Bourrée giọng Mi thứ, BWV 996', thu: 'Guilherme Facchetti (guitar)', gp: 'CC BY 3.0', tep: 'J._S._Bach_-_Bourr%C3%A9e_BWV_996.ogg', ma: 'f/fc'},
+  sor: {tg: 'F. Sor', ten: 'Luyện khúc Op. 35 số 19', thu: 'Glen Larsen (guitar)', gp: 'CC BY-SA 4.0', tep: 'Fernando_Sor_op35_no19.ogg', ma: '0/02'},
+  mozart40: {tg: 'W.A. Mozart', ten: 'Giao hưởng số 40, chương I', thu: 'Musopen Symphony', gp: 'Phạm vi công cộng', tep: 'Mozart_-_Symphony_No._40_in_G_minor%2C_K550_-_I._Molto_allegro_%28Musopen_Symphony%29.flac', ma: 'a/a8'},
+  beet5: {tg: 'L. van Beethoven', ten: 'Giao hưởng số 5, chương I', thu: 'Bản thu trên Wikimedia Commons', gp: 'Phạm vi công cộng', tep: 'Ludwig_van_Beethoven_-_Symphonie_5_c-moll_-_1._Allegro_con_brio.ogg', ma: '5/5b'},
+  dvorak9: {tg: 'A. Dvořák', ten: 'Giao hưởng số 9 “Từ Thế giới mới”, chương IV', thu: 'Bản thu trên Wikimedia Commons', gp: 'Phạm vi công cộng', tep: 'Antonin_Dvorak_-_symphony_no._9_in_e_minor_%27from_the_new_world%27%2C_op._95_-_iv._allegro_con_fuoco.ogg', ma: '1/17'},
+  eroica: {tg: 'L. van Beethoven', ten: 'Giao hưởng số 3 “Anh hùng”, chương IV', thu: 'Musopen Symphony', gp: 'Phạm vi công cộng', tep: 'Beethoven_-_Symphony_No._3_in_E_flat_major%2C_Op._55_%27Eroica%27_-_IV._Finale._Allegro_molto_%28Musopen_Symphony%29.flac', ma: 'f/fc'},
+  recuerdos: {tg: 'F. Tárrega', ten: 'Recuerdos de la Alhambra', thu: 'Outonomia (guitar)', gp: 'CC BY-SA 3.0', tep: 'Recuerdos_de_la_Alhambra.ogg', ma: 'a/a3'},
+  hoanCa: {tg: 'L. van Beethoven', ten: 'Giao hưởng số 9, chương IV (giai điệu Hoan ca)', thu: 'Bản thu trên Wikimedia Commons', gp: 'Phạm vi công cộng', tep: 'Ode_to_Joy.ogg', ma: 'f/f7'}
+};
+Object.values(BAN).forEach(b => { b.src = WM + b.ma + '/' + b.tep + '/' + b.tep + '.mp3'; b.trang = CM + b.tep; });
+/* cảnh: danh sách bản (phát luân phiên), âm lượng, lặp */
+const CANH_NHAC = {
+  chao: {ten: 'Màn chào', loai: 'g', ds: ['granVals'], am: 0.55, cach: 'Lặp vòng'},
+  bando: {ten: 'Bản đồ bốn mùa', loai: 'g', ds: ['romance'], am: 0.55, cach: 'Lặp vòng'},
+  gieo: {ten: 'Gieo hạt: đọc và tóm tắt', loai: 'g', ds: ['bourree', 'sor'], am: 0.4, cach: 'Luân phiên; âm lượng 40% để không át việc đọc'},
+  thu_xuan: {ten: 'Thu hoạch · mùa Xuân', loai: 'h', ds: ['mozart40'], am: 0.7, cach: 'Phát khi đồng hồ chạy'},
+  thu_ha: {ten: 'Thu hoạch · mùa Hạ', loai: 'h', ds: ['beet5'], am: 0.7, cach: 'Phát khi đồng hồ chạy'},
+  thu_thu: {ten: 'Thu hoạch · mùa Thu', loai: 'h', ds: ['dvorak9'], am: 0.7, cach: 'Phát khi đồng hồ chạy'},
+  thu_dong: {ten: 'Thu hoạch · mùa Đông', loai: 'h', ds: ['eroica'], am: 0.7, cach: 'Phát khi đồng hồ chạy'},
+  ket: {ten: 'Kết mùa', loai: 'g', ds: ['recuerdos'], am: 0.55, cach: 'Lặp vòng'},
+  hoanThanh: {ten: 'Hoàn thành cả bốn mùa', loai: 'h', ds: ['hoanCa'], am: 0.7, cach: 'Phát một lần, rồi trở lại bản kết mùa', mot: true, sau: 'ket'}
+};
+
+/* ---------- TIẾN ĐỘ (lưu trên máy) ---------- */
+function moi() { return {thua: {}, kq: {}, nhap: {}}; }
+let st = Object.assign(moi(), layLS(KHOA) || {});
+function luu() { try { localStorage.setItem(KHOA, JSON.stringify(st)); } catch (e) {} }
+const MUA = DB.mua;
+const CAU = DB.cau;
+const tenMua = m => t('mua_' + m.ma);
+const cauMua = ma => CAU.filter(c => c.mua === ma);
+const thuaTheoMa = ma => { for (const m of MUA) for (const th of m.thua) if (th.ma === ma) return {m, th}; return null; };
+const yCo = ma => (st.thua[ma] && st.thua[ma].y) || [];
+const soYCo = ma => yCo(ma).filter(Boolean).length;
+const daGatMua = ma => cauMua(ma).filter(c => st.kq[c.id] != null).length;
+const dungMua = ma => cauMua(ma).filter(c => st.kq[c.id] === true).length;
+const tongCay = () => MUA.reduce((s, m) => s + m.thua.reduce((a, th) => a + soYCo(th.ma), 0), 0);
+const tongLua = () => CAU.filter(c => st.kq[c.id] === true).length;
+
+/* ---------- MÁY DÒ Ý ----------
+   Bỏ dấu, đ → d, viết thường. Ý có mặt khi đủ mọi cụm của một phương án trong "khoa",
+   hoặc có ít nhất "toiThieu" cụm của "nhom". */
+function chuan(s) { return ' ' + String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[đĐ]/g, 'd').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim() + ' '; }
+function coY(n, y) {
+  const co = k => n.indexOf(chuan(k)) !== -1;
+  if ((y.khoa || []).some(pa => pa.length && pa.every(co))) return true;
+  return !!(y.nhom && y.nhom.tu.filter(co).length >= y.nhom.toiThieu);
+}
+const demChu = s => { const x = String(s || '').trim(); return x ? x.split(/\s+/).length : 0; };
+
+/* ---------- HÌNH PIXEL ---------- */
+const SVG = (vb, noi, them) => '<svg viewBox="' + vb + '" shape-rendering="crispEdges" preserveAspectRatio="' + (them || 'xMidYMid slice') + '" aria-hidden="true">' + noi + '</svg>';
+const CO = id => '<pattern id="' + id + '" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#6fb24a"/><rect x="1" y="2" width="1" height="2" fill="#5a9a3b"/><rect x="5" y="5" width="1" height="2" fill="#5a9a3b"/><rect x="3" y="6" width="1" height="1" fill="#8ccf62"/></pattern>';
+const NEN = {
+  chao: () => SVG('0 0 320 200', '<defs>' + CO('n-co') +
+    '<pattern id="n-dat" width="8" height="8" patternUnits="userSpaceOnUse"><rect width="8" height="8" fill="#8a5a33"/><rect y="6" width="8" height="2" fill="#6e4526"/><rect x="2" y="2" width="2" height="1" fill="#a16d40"/></pattern>' +
+    '<pattern id="n-lua" width="12" height="12" patternUnits="userSpaceOnUse"><rect x="5" y="5" width="2" height="6" fill="#3f8a2a"/><rect x="2" y="3" width="3" height="3" fill="#5fb83a"/><rect x="7" y="2" width="3" height="3" fill="#5fb83a"/><rect x="5" y="1" width="2" height="3" fill="#e8c040"/><rect x="3" y="4" width="1" height="1" fill="#8ad65a"/></pattern>' +
+    '<pattern id="n-rao" width="12" height="10" patternUnits="userSpaceOnUse"><rect x="0" y="3" width="12" height="2" fill="#c08a50"/><rect x="0" y="5" width="12" height="1" fill="#8a5a2c"/><rect x="1" y="0" width="3" height="10" fill="#d8a066"/><rect x="3" y="0" width="1" height="10" fill="#8a5a2c"/></pattern></defs>' +
+    '<rect width="320" height="200" fill="#8fd0ee"/><rect y="56" width="320" height="24" fill="#a3daf1"/><rect y="80" width="320" height="40" fill="#bde5f3"/>' +
+    '<rect x="262" y="14" width="16" height="20" fill="#ffd65a"/><rect x="258" y="18" width="24" height="12" fill="#ffd65a"/><rect x="264" y="16" width="6" height="4" fill="#fff1a8"/>' +
+    '<rect x="30" y="22" width="30" height="6" fill="#fff"/><rect x="36" y="18" width="16" height="4" fill="#fff"/><rect x="26" y="26" width="38" height="4" fill="#eef8fc"/>' +
+    '<rect x="176" y="40" width="26" height="5" fill="#fff"/><rect x="182" y="36" width="12" height="4" fill="#fff"/><rect x="172" y="44" width="34" height="3" fill="#eef8fc"/>' +
+    '<rect x="104" y="12" width="18" height="4" fill="#fff"/><rect x="100" y="16" width="26" height="3" fill="#eef8fc"/>' +
+    '<rect x="0" y="100" width="96" height="20" fill="#7cc25a"/><rect x="10" y="94" width="66" height="6" fill="#7cc25a"/><rect x="24" y="90" width="34" height="4" fill="#86c95c"/>' +
+    '<rect x="190" y="98" width="130" height="22" fill="#7cc25a"/><rect x="214" y="92" width="88" height="6" fill="#7cc25a"/><rect x="236" y="88" width="44" height="4" fill="#86c95c"/>' +
+    '<rect x="0" y="116" width="320" height="84" fill="url(#n-co)"/>' +
+    '<rect x="150" y="116" width="20" height="84" fill="#d9b77a"/><rect x="152" y="120" width="2" height="2" fill="#c7a265"/><rect x="164" y="150" width="2" height="2" fill="#c7a265"/><rect x="156" y="178" width="3" height="2" fill="#c7a265"/>' +
+    '<rect x="24" y="146" width="118" height="46" fill="url(#n-dat)"/><rect x="24" y="146" width="118" height="46" fill="url(#n-lua)"/>' +
+    '<rect x="178" y="146" width="118" height="46" fill="url(#n-dat)"/><rect x="178" y="146" width="72" height="46" fill="url(#n-lua)"/>' +
+    '<rect x="0" y="132" width="146" height="10" fill="url(#n-rao)"/><rect x="174" y="132" width="146" height="10" fill="url(#n-rao)"/>' +
+    '<rect x="24" y="102" width="8" height="30" fill="#6e4526"/><rect x="30" y="102" width="2" height="30" fill="#4f3019"/>' +
+    '<rect x="4" y="80" width="48" height="14" fill="#3f8a2a"/><rect x="8" y="72" width="40" height="30" fill="#3f8a2a"/><rect x="12" y="64" width="32" height="10" fill="#4fa03a"/><rect x="16" y="60" width="24" height="6" fill="#4fa03a"/><rect x="14" y="68" width="8" height="4" fill="#6cc04a"/><rect x="26" y="62" width="6" height="3" fill="#6cc04a"/><rect x="8" y="98" width="40" height="4" fill="#2f6e20"/>' +
+    '<rect x="246" y="80" width="24" height="4" fill="#b5452f"/><rect x="240" y="84" width="36" height="6" fill="#b5452f"/><rect x="234" y="90" width="48" height="6" fill="#b5452f"/><rect x="230" y="96" width="56" height="6" fill="#9a3524"/>' +
+    '<rect x="236" y="102" width="44" height="28" fill="#ead3a2"/><rect x="236" y="102" width="44" height="2" fill="#c9ad78"/><rect x="252" y="112" width="12" height="18" fill="#7a4a24"/><rect x="261" y="120" width="2" height="2" fill="#f0b545"/>' +
+    '<rect x="268" y="108" width="9" height="9" fill="#5a3418"/><rect x="269" y="109" width="7" height="7" fill="#8fd6f0"/><rect x="272" y="109" width="1" height="7" fill="#5a3418"/>' +
+    '<rect x="240" y="108" width="9" height="9" fill="#5a3418"/><rect x="241" y="109" width="7" height="7" fill="#8fd6f0"/><rect x="244" y="109" width="1" height="7" fill="#5a3418"/>' +
+    '<rect x="124" y="140" width="2" height="22" fill="#7a4a24"/><rect x="116" y="146" width="18" height="2" fill="#7a4a24"/>' +
+    '<rect x="121" y="134" width="8" height="8" fill="#e9c58f"/><rect x="123" y="137" width="1" height="1" fill="#3b2414"/><rect x="126" y="137" width="1" height="1" fill="#3b2414"/>' +
+    '<rect x="117" y="132" width="16" height="2" fill="#e8d08a"/><rect x="119" y="130" width="12" height="2" fill="#e8d08a"/><rect x="121" y="128" width="8" height="2" fill="#f0dc9c"/><rect x="123" y="126" width="4" height="2" fill="#f0dc9c"/><rect x="117" y="133" width="16" height="1" fill="#b89a52"/>' +
+    '<rect x="120" y="142" width="10" height="10" fill="#4f7fbf"/><rect x="120" y="148" width="10" height="2" fill="#3b2414"/>'),
+  co: () => SVG('0 0 320 200', '<defs>' + CO('n-co2') + '</defs><rect width="320" height="200" fill="url(#n-co2)"/>' +
+    '<rect x="156" y="0" width="8" height="200" fill="#d9b77a"/><rect x="0" y="108" width="320" height="8" fill="#d9b77a"/>' +
+    '<rect x="158" y="40" width="2" height="2" fill="#c7a265"/><rect x="161" y="150" width="2" height="2" fill="#c7a265"/><rect x="60" y="111" width="3" height="2" fill="#c7a265"/><rect x="250" y="113" width="2" height="2" fill="#c7a265"/>'),
+  go: () => SVG('0 0 320 200', '<defs><pattern id="n-go" width="16" height="6" patternUnits="userSpaceOnUse"><rect width="16" height="6" fill="#a8693a"/><rect y="5" width="16" height="1" fill="#7a4a24"/><rect x="5" y="2" width="4" height="1" fill="#b97a46"/><rect x="12" y="3" width="2" height="1" fill="#93592e"/></pattern>' + CO('n-co3') + '</defs>' +
+    '<rect width="320" height="200" fill="url(#n-co3)"/><rect width="320" height="200" fill="url(#n-go)" opacity=".92"/>'),
+  thu: chieu => SVG('0 0 320 200', '<defs>' + CO('n-co4') + '</defs><rect width="320" height="200" fill="' + (chieu ? '#f2a35e' : '#8fd0ee') + '"/>' +
+    '<rect y="40" width="320" height="20" fill="' + (chieu ? '#f7c98a' : '#bde5f3') + '"/><rect y="56" width="320" height="144" fill="url(#n-co4)"/>' +
+    '<rect x="0" y="52" width="70" height="6" fill="#7cc25a"/><rect x="230" y="50" width="90" height="8" fill="#7cc25a"/>'),
+  ket: () => SVG('0 0 320 200', '<defs>' + CO('n-co5') + '<pattern id="n-bo" width="6" height="14" patternUnits="userSpaceOnUse"><rect x="2" y="2" width="2" height="12" fill="#d9a62a"/><rect x="2" y="2" width="2" height="3" fill="#f4d46a"/></pattern></defs>' +
+    '<rect width="320" height="200" fill="#e98a52"/><rect y="30" width="320" height="30" fill="#f2a35e"/><rect y="60" width="320" height="40" fill="#f7c98a"/>' +
+    '<rect x="148" y="78" width="24" height="16" fill="#ffd65a"/><rect x="144" y="82" width="32" height="10" fill="#ffd65a"/><rect x="140" y="90" width="40" height="6" fill="#ffe08a"/>' +
+    '<rect x="20" y="20" width="30" height="5" fill="#f7c0a0"/><rect x="26" y="16" width="14" height="4" fill="#f7c0a0"/><rect x="230" y="26" width="34" height="5" fill="#f7c0a0"/>' +
+    '<rect x="0" y="92" width="110" height="12" fill="#4f7f34"/><rect x="200" y="90" width="120" height="14" fill="#4f7f34"/><rect x="0" y="100" width="320" height="100" fill="url(#n-co5)"/>' +
+    '<rect x="0" y="150" width="320" height="50" fill="#8a5a33"/><rect x="0" y="150" width="320" height="34" fill="url(#n-bo)"/>')
+};
+let nenDang = '';
+function datNen(k, x) { const key = k + (x ? '1' : ''); if (key === nenDang) return; nenDang = key; nen.innerHTML = NEN[k](x); }
+const ICON = {
+  ve: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>',
+  toi: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>',
+  mam: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M12 21V11"/><path d="M12 11c0-4 3-6 7-6 0 4-3 6-7 6z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5z"/></svg>',
+  nhac: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>',
+  nhacTat: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><path d="M3 3l18 18"/></svg>'
+};
+const CU = {
+  tf: ['M4 10h11v9H4z', 'M15 12l5-4M7 10V7h5v3'], one: ['M5 20L16 9', 'M14 4h6v6'], wrong: ['M5 20l4-4', 'M9 16c6 0 11-5 10-12-3 5-7 7-11 7'],
+  multi: ['M3 10h18l-2 10H5z', 'M7 10c0-5 10-5 10 0'], fill: ['M7 8h10l2 12H5z', 'M9 8L8 4h8l-1 4']
+};
+const iconCu = d => '<svg viewBox="0 0 24 24" fill="none" stroke="#3b2414" stroke-width="2.5" stroke-linecap="square" aria-hidden="true"><path d="' + CU[d][0] + '"/><path d="' + CU[d][1] + '"/></svg>';
+/* thửa trên bản đồ: 0 đất trống, 1 mầm, 2 lúa chín */
+function veThua(muc) {
+  let s = '<rect width="32" height="24" fill="#8a5a33"/><rect y="6" width="32" height="2" fill="#6e4526"/><rect y="14" width="32" height="2" fill="#6e4526"/><rect y="22" width="32" height="2" fill="#6e4526"/>';
+  if (muc === 1) s += '<rect x="5" y="2" width="2" height="4" fill="#5fb83a"/><rect x="15" y="2" width="2" height="4" fill="#5fb83a"/><rect x="25" y="2" width="2" height="4" fill="#5fb83a"/><rect x="9" y="10" width="2" height="4" fill="#5fb83a"/><rect x="20" y="10" width="2" height="4" fill="#5fb83a"/><rect x="4" y="2" width="1" height="1" fill="#8ad65a"/><rect x="16" y="1" width="2" height="1" fill="#8ad65a"/>';
+  if (muc === 2) [0, 8, 16].forEach((y, r) => [3, 9, 15, 21, 27].forEach(x => { const xx = x + (r === 1 ? 3 : 0); if (xx < 30) s += '<rect x="' + xx + '" y="' + y + '" width="2" height="6" fill="#d9a62a"/><rect x="' + xx + '" y="' + y + '" width="2" height="2" fill="#f4d46a"/>'; }));
+  return SVG('0 0 32 24', s, 'xMidYMid meet');
+}
+function veO(kq) {
+  let s = '<rect y="12" width="16" height="2" fill="#6e4526"/>';
+  if (kq === true) s += '<rect x="3" y="2" width="2" height="10" fill="#d9a62a"/><rect x="7" y="0" width="2" height="12" fill="#d9a62a"/><rect x="11" y="2" width="2" height="10" fill="#d9a62a"/><rect x="3" y="2" width="2" height="2" fill="#f4d46a"/><rect x="7" y="0" width="2" height="2" fill="#f4d46a"/><rect x="11" y="2" width="2" height="2" fill="#f4d46a"/><rect x="2" y="8" width="12" height="2" fill="#b5452f"/>';
+  else if (kq === false) s += '<rect x="7" y="6" width="2" height="6" fill="#8a7a4a"/><rect x="4" y="7" width="3" height="1" fill="#8a7a4a"/><rect x="9" y="5" width="3" height="1" fill="#8a7a4a"/>';
+  else s += '<rect x="7" y="8" width="2" height="4" fill="#5fb83a"/><rect x="5" y="7" width="2" height="2" fill="#5fb83a"/><rect x="9" y="6" width="2" height="2" fill="#5fb83a"/>';
+  return SVG('0 0 16 14', s, 'xMidYMid meet');
+}
+function veMam(co) {
+  let s = '<rect width="40" height="10" fill="#8a5a33"/><rect y="8" width="40" height="2" fill="#6e4526"/>';
+  s += co ? '<rect x="19" y="2" width="2" height="6" fill="#3f8a2a"/><rect x="15" y="1" width="4" height="3" fill="#5fb83a"/><rect x="21" y="0" width="4" height="3" fill="#5fb83a"/><rect x="16" y="1" width="1" height="1" fill="#8ad65a"/><rect x="7" y="4" width="2" height="4" fill="#3f8a2a"/><rect x="5" y="3" width="3" height="2" fill="#5fb83a"/><rect x="31" y="4" width="2" height="4" fill="#3f8a2a"/><rect x="32" y="3" width="3" height="2" fill="#5fb83a"/>'
+    : '<rect x="18" y="3" width="4" height="2" fill="#6e4526"/><rect x="19" y="2" width="2" height="1" fill="#a16d40"/>';
+  return SVG('0 0 40 10', s, 'xMidYMid meet');
+}
+
+/* ---------- MÁY PHÁT NHẠC ----------
+   Hai bộ phát để chuyển cảnh nhỏ dần – lên dần 1,5 giây. Trình duyệt chặn tự phát nên chờ lần bấm đầu. */
+const AM = {on: st.nhac !== false, mo: false, canh: null, el: [new Audio(), new Audio()], i: 0, ban: null, k: 0, keo: null};
+AM.el.forEach(a => { a.preload = 'none'; a.addEventListener('ended', () => { if (a === AM.el[AM.i]) hetBan(); }); a.addEventListener('error', () => { if (a === AM.el[AM.i]) capNhatNhac(); }); });
+function hetBan() {
+  const c = CANH_NHAC[AM.canh]; if (!c) return;
+  if (c.mot) { phatCanh(c.sau); return; }
+  AM.k = (AM.k + 1) % c.ds.length; chuyen(c.ds[AM.k], c.am);
+}
+function chuyen(maBan, am) {
+  const b = BAN[maBan]; if (!b) return;
+  const cu = AM.el[AM.i], moiA = AM.el[1 - AM.i];
+  AM.i = 1 - AM.i; AM.ban = maBan;
+  moiA.src = b.src; moiA.loop = false; moiA.volume = 0;
+  const p = moiA.play(); if (p && p.catch) p.catch(() => {});
+  clearInterval(AM.keo);
+  const t0 = performance.now(), v0 = cu.volume;
+  AM.keo = setInterval(() => {
+    const x = Math.min(1, (performance.now() - t0) / 1500);
+    moiA.volume = am * x; cu.volume = v0 * (1 - x);
+    if (x >= 1) { clearInterval(AM.keo); cu.pause(); }
+  }, 50);
+  capNhatNhac();
+}
+function phatCanh(k) {
+  if (!k || !CANH_NHAC[k]) return;
+  const doi = AM.canh !== k; AM.canh = k;
+  if (!AM.on || !AM.mo) { capNhatNhac(); return; }
+  const c = CANH_NHAC[k];
+  if (!doi && AM.ban && c.ds.includes(AM.ban) && !AM.el[AM.i].paused) return;
+  if (c.ds.includes(AM.ban) && !AM.el[AM.i].paused) { capNhatNhac(); return; }
+  AM.k = 0; chuyen(c.ds[0], c.am);
+}
+function tatBatNhac() {
+  AM.on = !AM.on; st.nhac = AM.on; luu(); AM.mo = true;
+  if (AM.on) { AM.ban = null; phatCanh(AM.canh); }
+  else { clearInterval(AM.keo); AM.el.forEach(a => a.pause()); capNhatNhac(); }
+}
+document.addEventListener('pointerdown', () => { if (!AM.mo) { AM.mo = true; if (AM.on) phatCanh(AM.canh); } }, true);
+document.addEventListener('keydown', () => { if (!AM.mo) { AM.mo = true; if (AM.on) phatCanh(AM.canh); } }, true);
+function tenBan(gon) {
+  const c = CANH_NHAC[AM.canh]; const ma = (AM.ban && c && c.ds.includes(AM.ban)) ? AM.ban : (c ? c.ds[0] : null);
+  const b = BAN[ma]; if (!b) return '';
+  return gon ? b.ten : b.tg + ' – ' + b.ten;
+}
+/* nút nhạc trên thanh đầu: tên bản đang phát; bấm để bật/tắt */
+function chipNhac(gon) {
+  const nhan = AM.on ? '♪ ' + tenBan(gon) : '♪ ' + t('nhac_tat');
+  return '<button type="button" class="chip" data-nhac="1" data-gon="' + (gon ? 1 : 0) + '" aria-label="' + h(AM.on ? t('nhac_tatNut') : t('nhac_bat')) + '">' + h(nhan) + '</button>';
+}
+function capNhatNhac() {
+  app.querySelectorAll('[data-nhac]').forEach(b => {
+    const gon = b.dataset.gon === '1';
+    b.textContent = AM.on ? '♪ ' + tenBan(gon) : '♪ ' + t('nhac_tat');
+    b.setAttribute('aria-label', AM.on ? t('nhac_tatNut') : t('nhac_bat'));
+  });
+  const may = app.querySelector('.may-nhac');
+  if (may) {
+    may.querySelector('button').innerHTML = AM.on ? ICON.nhac : ICON.nhacTat;
+    may.querySelector('button').setAttribute('aria-label', AM.on ? t('nhac_tatNut') : t('nhac_bat'));
+    may.querySelector('.px').textContent = !AM.on ? t('nhac_tat') : (AM.mo ? t('nhac_dang') : t('nhac_cho'));
+    may.querySelector('b').textContent = tenBan(false);
+  }
+}
+app.addEventListener('click', e => { const b = e.target.closest('[data-nhac]'); if (b && !(SUA && SUA.bat)) tatBatNhac(); });
+
+/* ---------- KHUNG CHUNG ---------- */
+function dauTrang(veDau, ten, phu, phai) {
+  return '<header class="dau"><div class="dau-trai">' +
+    '<button type="button" class="ve" data-ve="' + veDau + '" aria-label="' + h(veDau === 'chao' ? t('ve_chao') : t('ve_banDo')) + '">' + ICON.ve + '</button>' +
+    '<span class="px dau-ten">' + ten + '</span>' + (phu ? '<span class="px dau-phu">' + phu + '</span>' : '') +
+    '</div><div class="dau-phai">' + (phai || '') + '</div></header>';
+}
+function ve(html, ten, nenK, nenX, nhacK) {
+  dungGio();
+  manHienTai = ten;
+  datNen(nenK, nenX);
+  app.innerHTML = '<div class="man">' + html + '</div>';
+  app.querySelectorAll('[data-ve]').forEach(b => b.onclick = () => (b.dataset.ve === 'chao' ? manChao() : manBanDo()));
+  if (nhacK) phatCanh(nhacK);
+  capNhatNhac();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- MÀN CHÀO ---------- */
+function manChao() {
+  ve('<div class="chao">' +
+    '<div class="bien"><span class="px bien-tren">' + tk('ten_tren') + '</span>' +
+    '<h1 class="px bien-ten">' + tk('ten_game1') + '<br>' + tk('ten_game2') + '</h1>' +
+    '<span class="px bien-duoi">' + tk('ten_duoi') + '</span></div>' +
+    '<div class="cot"><i></i><i></i></div>' +
+    '<div class="giay trich"><p>' + tk('trich') + '</p><p class="px">' + tk('trich_tg') + '</p></div>' +
+    '<nav class="chao-nut" aria-label="Lựa chọn bắt đầu">' +
+      '<button type="button" class="pbtn" id="vao">' + ICON.mam + tk('nut_vao') + '</button>' +
+      '<button type="button" class="pbtn nhat" id="cach">' + tk('nut_cachChoi') + '</button>' +
+      '<button type="button" class="pbtn nhat" id="nhac">' + tk('nut_amNhac') + '</button></nav>' +
+    '<div class="chao-duoi">' +
+      '<div class="cach-choi" id="cach-choi"><p class="px">' + tk('cc_tieuDe') + '</p>' +
+      '<p>1. <b>' + tk('cc_1a') + '</b>' + tk('cc_1b') + '</p><p>2. <b>' + tk('cc_2a') + '</b>' + tk('cc_2b') + '</p></div>' +
+      '<div class="may-nhac"><button type="button" data-nhac="1" data-gon="0"></button><div><span class="px"></span><b></b></div></div>' +
+    '</div></div>', 'Màn chào', 'chao', false, 'chao');
+  /* nút trong máy nhạc hiện biểu tượng, không hiện tên bản */
+  const may = app.querySelector('.may-nhac button'); may.removeAttribute('data-gon'); may.dataset.nhac = '';
+  may.onclick = () => { if (!(SUA && SUA.bat)) tatBatNhac(); };
+  capNhatNhac();
+  document.getElementById('vao').onclick = manBanDo;
+  document.getElementById('nhac').onclick = manNhac;
+  document.getElementById('cach').onclick = () => {
+    const c = document.getElementById('cach-choi'); c.scrollIntoView({behavior: 'smooth', block: 'center'});
+    c.classList.remove('nhay'); void c.offsetWidth; c.classList.add('nhay');
+  };
+}
+
+/* ---------- BẢN ĐỒ BỐN MÙA ---------- */
+const MAU_MUA = {xuan: ['#9fd47a', '#f4b6c8'], ha: ['#7cc25a', '#ffe27a'], thu: ['#d9a45a', '#f2a35e'], dong: ['#dfeaf0', '#bcdcee']};
+function trangThaiThua(m, th) {
+  const a = soYCo(th.ma), b = th.y.length, gieo = st.thua[th.ma] && st.thua[th.ma].gieo;
+  if (a === b && b) return {muc: 2, chu: (daGatMua(m.ma) === cauMua(m.ma).length && cauMua(m.ma).length) ? t('thua_gat') : t('thua_du'), mau: '#f0b545'};
+  if (gieo) return {muc: a ? 1 : 0, chu: t('thua_lon', {a, b}), mau: '#9be07a'};
+  return {muc: 0, chu: t('thua_chua'), mau: '#e9dcc0'};
+}
+function manBanDo() {
+  const html = dauTrang('chao', tk('bd_tieuDe'), '',
+    '<span class="chip cay">' + tk('bd_cay') + ' <b>' + tongCay() + '</b></span><span class="chip">' + tk('bd_lua') + ' <b>' + tongLua() + '</b></span>' + chipNhac(false)) +
+    '<main class="than"><div class="bando">' + MUA.map(m => {
+      const [bg, vien] = MAU_MUA[m.ma] || ['#9fd47a', '#f4b6c8'];
+      const n = cauMua(m.ma).length, da = daGatMua(m.ma), dung = dungMua(m.ma);
+      let thu;
+      if (!da) thu = '<button type="button" class="pbtn" data-thu="' + m.ma + '">' + tk('bd_thu') + '</button>';
+      else if (da < n) thu = '<button type="button" class="pbtn" data-thu="' + m.ma + '">' + tk('bd_thuTiep', {a: da, b: n}) + '</button>';
+      else thu = '<span class="px ghi">' + tk('bd_daGat', {a: dung, b: n}) + '</span><button type="button" class="pbtn nhat" data-ket="' + m.ma + '">' + tk('th_ket') + '</button><button type="button" class="pbtn nhat" data-lai="' + m.ma + '">' + tk('bd_gatLai') + '</button>';
+      return '<section class="mua" style="--nen:' + bg + ';--vien:' + vien + '" aria-label="' + h(m.ten) + '">' +
+        '<div class="mua-dau"><h2 class="px mua-ten">' + h(m.ten) + '</h2><span class="px mua-phan">' + h(m.phan) + ' · ' + tk('bd_soCau', {n}) + '</span></div>' +
+        '<div class="thua-ds">' + m.thua.map(th => {
+          const s = trangThaiThua(m, th);
+          return '<button type="button" class="thua" data-thua="' + h(th.ma) + '">' + veThua(s.muc) +
+            '<span class="px ma">' + h(th.ma) + '</span><span class="ten">' + h(th.ten) + '</span>' +
+            '<span class="px the" style="background:' + s.mau + '">' + h(s.chu) + '</span></button>';
+        }).join('') + '</div><div class="mua-thu">' + thu + '</div></section>';
+    }).join('') + '</div></main>';
+  ve(html, 'Bản đồ', 'co', false, 'bando');
+  app.querySelectorAll('[data-thua]').forEach(b => b.onclick = () => manGieo(b.dataset.thua));
+  app.querySelectorAll('[data-thu]').forEach(b => b.onclick = () => manThu(b.dataset.thu));
+  app.querySelectorAll('[data-ket]').forEach(b => b.onclick = () => manKet(b.dataset.ket));
+  app.querySelectorAll('[data-lai]').forEach(b => b.onclick = () => { cauMua(b.dataset.lai).forEach(c => delete st.kq[c.id]); luu(); manThu(b.dataset.lai); });
+}
+
+/* ---------- GIEO HẠT: ĐỌC VÀ TÓM TẮT ---------- */
+/* dòng ngắn mở đầu bằng "a." "b)" "1." … là đề mục nhỏ */
+const laDeMuc = s => s.length < 170 && /^([a-zđ]|[0-9]{1,2})[\.\)]\s/i.test(s);
+const doan = ds => (ds || []).map(p => laDeMuc(p) ? '<h3>' + h(p) + '</h3>' : '<p>' + h(p) + '</p>').join('');
+function manGieo(maThua) {
+  const r = thuaTheoMa(maThua); if (!r) return manBanDo();
+  const {m, th} = r;
+  const luuThua = st.thua[th.ma] || {};
+  let tab = 'bg';
+  const nhap = st.nhap[th.ma] != null ? st.nhap[th.ma] : (luuThua.text || '');
+  const html = dauTrang('bando', tk('g_tieuDe'), tk('g_dong', {mua: tenMua(m), ma: th.ma, ten: th.ten}), chipNhac(false)) +
+    '<main class="than"><div class="gieo">' +
+    '<section aria-label="Tài liệu đọc"><div class="the-ds" role="tablist" aria-label="Chọn tài liệu">' +
+      '<button type="button" role="tab" class="tab" id="tab-bg" aria-selected="true">' + tk('g_tabBG') + '</button>' +
+      '<button type="button" role="tab" class="tab" id="tab-gt" aria-selected="false">' + tk('g_tabGT') + '</button></div>' +
+      '<div class="giay sach" id="sach" tabindex="0"></div></section>' +
+    '<section class="so" aria-label="Nhật ký gieo hạt">' +
+      '<div class="so-dau"><h2 class="px">' + tk('g_nhatKy') + '</h2><span class="px">' + tk('g_soY', {n: th.y.length}) + '</span></div>' +
+      '<label for="tom-tat">' + tk('g_huongDan') + '</label>' +
+      '<textarea id="tom-tat" spellcheck="false"></textarea>' +
+      '<div class="so-hang"><span class="px" id="dem"></span><button type="button" class="pbtn" id="gieo">' + ICON.mam + tk('g_nut') + '</button></div>' +
+      '<div class="y-ds" id="y-ds"></div>' +
+      '<div class="bao" role="status" id="bao"></div>' +
+      '<div class="so-cuoi"><button type="button" class="pbtn nhat" id="sang">' + tk('g_sangThu') + ICON.toi + '</button></div>' +
+    '</section></div></main>';
+  ve(html, 'Gieo hạt · thửa ' + th.ma, 'go', false, 'gieo');
+  const sach = document.getElementById('sach'), o = document.getElementById('tom-tat');
+  const veSach = () => {
+    sach.innerHTML = tab === 'bg'
+      ? '<p class="px nhan">' + tk('g_nhanBG', {ma: th.ma}) + '</p><h2>' + h(th.ten) + '</h2>' + doan(th.baiGiang)
+      : '<p class="px nhan">' + tk('g_nhanGT', {ma: th.ma}) + '</p><h2>' + h(th.ten) + '</h2>' + doan(th.giaoTrinh);
+    document.getElementById('tab-bg').setAttribute('aria-selected', tab === 'bg');
+    document.getElementById('tab-gt').setAttribute('aria-selected', tab === 'gt');
+    sach.scrollTop = 0;
+  };
+  document.getElementById('tab-bg').onclick = () => { tab = 'bg'; veSach(); };
+  document.getElementById('tab-gt').onclick = () => { tab = 'gt'; veSach(); };
+  veSach();
+  const dem = () => { const n = demChu(o.value), e = document.getElementById('dem'); e.textContent = t('g_dem', {n}); e.classList.toggle('qua', n > TOI_DA); };
+  const veY = (ketQua, thongBao) => {
+    const daGieo = !!(st.thua[th.ma] && st.thua[th.ma].gieo);
+    const y = ketQua || yCo(th.ma);
+    document.getElementById('y-ds').innerHTML = th.y.map((x, i) => {
+      if (!daGieo) return '<div class="y">' + veMam(false) + '<span>' + h(t('g_oTrong', {n: i + 1})) + '</span></div>';
+      return y[i] ? '<div class="y co">' + veMam(true) + '<span>' + h(x.ten) + '</span></div>'
+        : '<div class="y thieu">' + veMam(false) + '<span>' + h(x.goiY) + '</span></div>';
+    }).join('');
+    const a = y.filter(Boolean).length;
+    document.getElementById('bao').textContent = thongBao || (!daGieo ? t('g_dau') : a === th.y.length ? t('g_du', {n: a}) : t('g_thieu', {a, b: th.y.length}));
+  };
+  o.value = nhap; dem(); veY();
+  let hoan = null;
+  o.addEventListener('input', () => { dem(); clearTimeout(hoan); hoan = setTimeout(() => { st.nhap[th.ma] = o.value; luu(); }, 400); });
+  document.getElementById('gieo').onclick = () => {
+    const n = demChu(o.value);
+    if (n < TOI_THIEU) { veY(null, t('g_ngan')); return; }
+    if (n > TOI_DA) { veY(null, t('g_dai')); return; }
+    const c = chuan(o.value);
+    const kq = th.y.map(x => coY(c, x));
+    const cu = yCo(th.ma);
+    /* ý đã nảy mầm ở lần gieo trước được giữ lại */
+    const y = kq.map((v, i) => v || !!cu[i]);
+    st.thua[th.ma] = {text: o.value, gieo: ((st.thua[th.ma] || {}).gieo || 0) + 1, y};
+    st.nhap[th.ma] = o.value; luu();
+    veY(y);
+  };
+  document.getElementById('sang').onclick = () => manThu(m.ma);
+}
+
+/* ---------- THU HOẠCH: TRẢ LỜI CÂU HỎI ---------- */
+let gio = null;
+function dungGio() { clearInterval(gio); gio = null; }
+function xao(a) { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; }
+let tam = null;   /* phiên thu hoạch: {ma, ds, i, sel, xong, lan, con, thuTu} */
+function manThu(maMua) {
+  const ds = cauMua(maMua);
+  if (!ds.length) return manBanDo();
+  const i = ds.findIndex(c => st.kq[c.id] == null);
+  if (i < 0) return manKet(maMua);
+  tam = {ma: maMua, ds, i, sel: [], xong: false, lan: false, con: GIAY, thuTu: null};
+  veCau();
+}
+function veCau() {
+  const m = MUA.find(x => x.ma === tam.ma), c = tam.ds[tam.i];
+  if (!tam.thuTu) tam.thuTu = (c.dang === 'tf') ? c.pa.map((x, k) => k) : xao(c.pa.map((x, k) => k));
+  const pct = Math.max(0, Math.round(tam.con / GIAY * 100)), chieu = pct <= 30;
+  const chu = ['A', 'B', 'C', 'D', 'E', 'G'];
+  const ketThuc = tam.xong;
+  const dungHet = ketThuc && st.kq[c.id] === true;
+  let pa;
+  if (c.dang === 'fill') {
+    pa = '<div class="tu-ds">' + tam.thuTu.map(k => {
+      let cls = 'tu';
+      if (ketThuc) cls += c.dung.includes(k) ? ' dung' : (tam.sel.includes(k) ? ' sai' : ' mo');
+      return '<button type="button" class="' + cls + '" data-pa="' + k + '"' + (ketThuc ? ' disabled' : '') + '>' + h(c.pa[k]) + '</button>';
+    }).join('') + '</div>';
+  } else {
+    pa = '<div class="pa-ds">' + tam.thuTu.map((k, vt) => {
+      const chon = tam.sel.includes(k), dung = c.dung.includes(k);
+      let cls = 'pa', ghi = '';
+      if (ketThuc) {
+        if (dung) { cls += ' dung'; ghi = c.dang === 'wrong' ? t('tag_paSai') : t('tag_dung'); }
+        else if (chon) { cls += ' sai'; ghi = t('tag_chuaDung'); }
+        else cls += ' mo';
+      } else if (chon) cls += ' chon';
+      const nhan = c.dang === 'tf' ? (k === 0 ? t('tf_d') : t('tf_s')) : chu[vt];
+      return '<button type="button" class="' + cls + '" data-pa="' + k + '" aria-pressed="' + chon + '"' + (ketThuc ? ' disabled' : '') + '>' +
+        '<span class="px chu">' + h(nhan) + '</span><span class="noi">' + h(c.pa[k]) + '</span><span class="px ghi">' + h(ghi) + '</span></button>';
+    }).join('') + '</div>';
+  }
+  let hoi = c.hoi;
+  if (c.dang === 'fill' && tam.sel.length) hoi = c.hoi.replace('____', '[ ' + c.pa[tam.sel[0]] + ' ]');
+  let cuoi = '';
+  if (ketThuc) {
+    const lop = tam.lan ? 'lan' : (dungHet ? 'dung' : 'sai');
+    cuoi = '<div class="phan-hoi ' + lop + '" role="status"><span class="px">' + tk(tam.lan ? 'fb_lan' : (dungHet ? 'fb_dung' : 'fb_sai')) + '</span> ' + h(c.giaiThich) + '</div>' +
+      (tam.i < tam.ds.length - 1 ? '<button type="button" class="pbtn" id="tiep">' + tk('th_tiep') + '</button>' : '<button type="button" class="pbtn" id="ket">' + tk('th_ket') + '</button>');
+  } else if (c.dang === 'multi') {
+    cuoi = '<span class="nhieu-ghi">' + tk('th_nhieu') + '</span><button type="button" class="pbtn" id="gat">' + tk('th_gat') + '</button>';
+  }
+  const html = dauTrang('bando', tk('th_tieuDe'), tk('th_dong', {mua: tenMua(m), n: tam.i + 1, tong: tam.ds.length}),
+    '<span class="chip">' + tk('bd_lua') + ' <b>' + dungMua(tam.ma) + '</b></span>' + chipNhac(true)) +
+    '<main class="than"><div class="thu">' +
+    '<nav class="cu-ds" aria-label="Nông cụ theo dạng câu hỏi">' + ['tf', 'one', 'wrong', 'multi', 'fill'].map(d =>
+      '<div class="cu' + (d === c.dang ? ' dang' : '') + '"><div>' + iconCu(d) + '<span class="px">' + tk('cu_' + d) + '</span></div><small>' + tk('kd_' + d) + '</small></div>').join('') + '</nav>' +
+    '<div><section class="giay cau" aria-label="Câu hỏi">' +
+      '<div class="gio"><svg viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><rect x="3" y="1" width="6" height="10" fill="#ffd65a"/><rect x="1" y="3" width="10" height="6" fill="#ffd65a"/><rect x="4" y="2" width="2" height="2" fill="#fff1a8"/></svg>' +
+      '<div class="thanh"><i id="gio-thanh" class="' + (chieu ? 'chieu' : '') + '" style="width:' + pct + '%"></i></div><span class="px" id="gio-chu">' + h(tam.con > 0 ? t('th_gio', {s: tam.con}) : t('th_lan')) + '</span></div>' +
+      '<p class="px dong-cu">' + tk('ln_' + c.dang) + '</p>' +
+      '<h2>' + h(hoi) + '</h2>' + pa +
+      '<div class="cau-cuoi">' + cuoi + '</div></section>' +
+    '<section class="o-ds" aria-label="Ruộng thu hoạch">' + tam.ds.map((x, k) => {
+      const kq = st.kq[x.id];
+      const nhan = kq === true ? t('o_gat') : kq === false ? t('o_heo') : (k === tam.i ? t('o_dang') : t('o_cho'));
+      return '<div class="o' + (k === tam.i ? ' dang' : '') + '">' + veO(kq) + '<span class="px">' + h(nhan) + '</span></div>';
+    }).join('') + '</section></div></div></main>';
+  ve(html, 'Thu hoạch · ' + tenMua(m) + ' · câu ' + (tam.i + 1), 'thu', chieu, 'thu_' + tam.ma);
+  app.querySelectorAll('[data-pa]').forEach(b => b.onclick = () => chonPa(+b.dataset.pa));
+  const g = document.getElementById('gat'); if (g) g.onclick = () => chot(false);
+  const tp = document.getElementById('tiep'); if (tp) tp.onclick = () => { tam.i++; tam.sel = []; tam.xong = false; tam.lan = false; tam.con = GIAY; tam.thuTu = null; veCau(); };
+  const kt = document.getElementById('ket'); if (kt) kt.onclick = () => manKet(tam.ma);
+  if (!ketThuc) chayGio();
+}
+function chayGio() {
+  dungGio();
+  gio = setInterval(() => {
+    if (SUA && SUA.bat) return;   /* đang sửa chữ thì đồng hồ đứng */
+    if (!tam || tam.xong) { dungGio(); return; }
+    tam.con--;
+    if (tam.con <= 0) { tam.con = 0; chot(true); return; }
+    const pct = Math.round(tam.con / GIAY * 100), th = document.getElementById('gio-thanh'), ch = document.getElementById('gio-chu');
+    if (th) { th.style.width = pct + '%'; th.classList.toggle('chieu', pct <= 30); }
+    if (ch) ch.textContent = t('th_gio', {s: tam.con});
+    if (pct <= 30) datNen('thu', true);
+  }, 1000);
+}
+function chonPa(k) {
+  if (!tam || tam.xong) return;
+  const c = tam.ds[tam.i];
+  if (c.dang === 'multi') {
+    tam.sel = tam.sel.includes(k) ? tam.sel.filter(x => x !== k) : tam.sel.concat([k]);
+    app.querySelectorAll('[data-pa]').forEach(b => { const on = tam.sel.includes(+b.dataset.pa); b.classList.toggle('chon', on); b.setAttribute('aria-pressed', on); });
+    return;
+  }
+  tam.sel = [k]; chot(false);
+}
+function chot(hetGio) {
+  if (!tam || tam.xong) return;
+  dungGio();
+  const c = tam.ds[tam.i];
+  const sel = tam.sel.slice().sort((a, b) => a - b), d = c.dung.slice().sort((a, b) => a - b);
+  const dung = !hetGio && sel.length === d.length && d.every((x, k) => sel[k] === x);
+  tam.xong = true; tam.lan = hetGio;
+  st.kq[c.id] = dung; luu();
+  veCau();
+}
+
+/* ---------- KẾT MÙA ---------- */
+function manKet(maMua) {
+  const i = MUA.findIndex(x => x.ma === maMua), m = MUA[i], sau = MUA[i + 1];
+  const ds = cauMua(maMua), dung = dungMua(maMua);
+  const yTong = m.thua.reduce((s, th) => s + th.y.length, 0), yDa = m.thua.reduce((s, th) => s + soYCo(th.ma), 0);
+  const thieu = [];
+  /* chỉ nêu ý còn thiếu của thửa đã gieo; thửa chưa gieo ghi "chưa gieo" */
+  m.thua.forEach(th => { if (!(st.thua[th.ma] && st.thua[th.ma].gieo)) return; const y = yCo(th.ma); th.y.forEach((x, k) => { if (!y[k]) thieu.push(x.ten + ' (mục ' + th.ma + ')'); }); });
+  const chuaXong = m.thua.find(th => soYCo(th.ma) < th.y.length);
+  const theoCu = ['tf', 'one', 'wrong', 'multi', 'fill'].map(d => { const c = ds.filter(x => x.dang === d); return c.length ? {d, a: c.filter(x => st.kq[x.id] === true).length, b: c.length} : null; }).filter(Boolean);
+  const sai = ds.filter(x => st.kq[x.id] === false);
+  const xongBon = MUA.every(x => cauMua(x.ma).every(c => st.kq[c.id] != null));
+  const ttY = MUA.reduce((s, x) => s + x.thua.reduce((a, th) => a + th.y.length, 0), 0);
+  const html = '<main class="than"><div class="ket-ten"><h1 class="px">' + tk('k_tieuDe', {mua: tenMua(m).toUpperCase()}) + '</h1></div>' +
+    '<div class="ket">' +
+    (xongBon ? '<p class="px hoan-thanh">' + tk('k_hoanThanh', {a: tongLua(), b: CAU.length, c: tongCay(), d: ttY}) + '</p>' : '') +
+    '<section class="giay" aria-label="Gieo hạt"><div class="ket-dau"><h2 class="px">' + tk('k_gieo') + '</h2><span class="px" style="color:#3f8a2a">' + h(t('k_y', {a: yDa, b: yTong})) + '</span></div>' +
+      m.thua.map(th => '<div class="dong"><span>' + h(th.ma + ' · ' + th.ten) + '</span><b>' + h(st.thua[th.ma] && st.thua[th.ma].gieo ? t('k_y', {a: soYCo(th.ma), b: th.y.length}) : t('k_chuaGieo')) + '</b></div>').join('') +
+      '<p class="px nho">' + tk('k_docLai') + '</p>' +
+      (thieu.length ? '<ul>' + thieu.map(x => '<li>' + h(x) + '</li>').join('') + '</ul>' : '<p>' + tk('k_docLaiKhong') + '</p>') +
+      (chuaXong ? '<div class="ket-cuoi" style="margin-top:.4em"><button type="button" class="pbtn nhat" data-gieo="' + h(chuaXong.ma) + '">' + tk('k_gieoLai', {ma: chuaXong.ma}) + '</button></div>' : '') +
+    '</section>' +
+    '<section class="giay" aria-label="Thu hoạch"><div class="ket-dau"><h2 class="px">' + tk('k_thu') + '</h2><span class="px" style="color:#a8751a">' + h(t('k_lua', {a: dung, b: ds.length})) + '</span></div>' +
+      '<div class="cu-diem">' + theoCu.map(x => '<div><span class="px">' + tk('cu_' + x.d) + '</span><span class="px diem">' + x.a + '/' + x.b + '</span></div>').join('') + '</div>' +
+      '<p class="px nho">' + tk('k_chuaDung') + '</p>' +
+      (sai.length ? '<ul>' + sai.map(x => '<li>' + h(x.giaiThich) + ' <span class="sua-nho">(mục ' + h(x.muc) + ')</span></li>').join('') + '</ul>' : '<p>' + tk('k_khongSai') + '</p>') +
+    '</section></div>' +
+    '<div class="ket-cuoi">' + chipNhac(false) +
+      (sau ? '<button type="button" class="pbtn" id="sang">' + tk('k_sang', {mua: tenMua(sau), phan: sau.phan.replace(/^[IVX]+\.\s*/, '')}) + ICON.toi + '</button>'
+           : '<button type="button" class="pbtn" id="sang">' + tk('k_veBanDo') + ICON.toi + '</button>') +
+    '</div></main>';
+  ve(html, 'Kết mùa · ' + tenMua(m), 'ket', false, null);
+  phatCanh(xongBon && !st.daHoanThanh ? 'hoanThanh' : 'ket');
+  if (xongBon && !st.daHoanThanh) { st.daHoanThanh = true; luu(); }
+  document.getElementById('sang').onclick = manBanDo;
+  app.querySelectorAll('[data-gieo]').forEach(b => b.onclick = () => manGieo(b.dataset.gieo));
+}
+
+/* ---------- ÂM NHẠC ---------- */
+function manNhac() {
+  const hang = Object.keys(CANH_NHAC).map(k => {
+    const c = CANH_NHAC[k];
+    return '<tr><td><b>' + h(c.ten) + '</b></td><td><span class="px" style="background:' + (c.loai === 'g' ? '#cfe9b8' : '#f6c08f') + '">' + tk(c.loai === 'g' ? 'an_guitar' : 'an_gh') + '</span></td><td>' +
+      c.ds.map(b => '<div>' + h(BAN[b].tg + ' – ' + BAN[b].ten) + '<small>' + h(BAN[b].thu) + ' · ' + h(BAN[b].gp) + ' · <a href="' + BAN[b].trang + '" target="_blank" rel="noopener">Wikimedia Commons</a></small></div>').join('') +
+      '</td><td>' + h(c.cach) + '</td></tr>';
+  }).join('');
+  ve(dauTrang('chao', tk('an_tieuDe'), '', chipNhac(false)) +
+    '<main class="than"><div class="giay bang-nhac">' +
+    '<div class="loai px"><span style="background:#cfe9b8">' + tk('an_guitar') + '</span><span style="background:#f6c08f">' + tk('an_gh') + '</span></div>' +
+    '<div class="cuon"><table><thead><tr><th scope="col">' + tk('an_canh') + '</th><th scope="col">' + tk('an_tinhChat') + '</th><th scope="col">' + tk('an_ban') + '</th><th scope="col">' + tk('an_phat') + '</th></tr></thead><tbody>' + hang + '</tbody></table></div>' +
+    '<div class="hai-hop"><div><p class="px">' + tk('an_dk') + '</p><p>' + tk('an_dk2') + '</p></div><div><p class="px">' + tk('an_bq') + '</p><p>' + tk('an_bq2') + '</p></div></div>' +
+    '</div></main>', 'Âm nhạc', 'go', false, null);
+}
+
+/* =====================================================================
+   CHẾ ĐỘ SỬA (?sua=1) — theo khuôn game Quy tụ, chỉ sửa chữ (không sửa giao diện).
+   Sửa chữ: bấm vào chữ để sửa tại chỗ; chuyển sang "chơi thử" để đi tới màn khác.
+   Lưu trên máy (localStorage "trong-nguoi-sua"); "Tải tệp sửa" xuất sua-chu-trong-nguoi.json,
+   cong-cu/ap-sua-chu.py đưa vào noi-dung.json / _khuon.html rồi dựng lại game.
+   Trang không có ?sua=1 (trang sinh viên) không có chế độ này.
+   ===================================================================== */
+if (SUA) {
+  const $ = s => document.querySelector(s);
+  const luuSua = () => { try { localStorage.setItem(KHOA_SUA, JSON.stringify({bat: SUA.bat, chu: SUA.chu, chuGD: SUA.chuGD})); } catch (e) {} };
+  const bao = (tx, ms) => { const e = $('#sua-bao'); e.textContent = tx; e.hidden = false; clearTimeout(bao.t); bao.t = setTimeout(() => { e.hidden = true; }, ms || 3000); };
+  /* chữ đã sửa hiện ngay cả khi game vẽ lại màn */
+  const apSua = goc => {
+    if (!SUA.chu.length) return;
+    const doi = new Map(SUA.chu.map(x => [x.cu, x.moi]));
+    const thay = n => { const tx = n.data.trim(); if (tx && doi.has(tx)) n.data = n.data.replace(tx, doi.get(tx)); };
+    if (goc.nodeType === 3) { thay(goc); return; }
+    if (goc.nodeType !== 1 || goc.closest('#sua-khung')) return;
+    const w = document.createTreeWalker(goc, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) thay(n);
+  };
+  new MutationObserver(ds => ds.forEach(m => m.addedNodes.forEach(apSua))).observe(app, {childList: true, subtree: true});
+  const khung = document.createElement('div'); khung.id = 'sua-khung';
+  khung.innerHTML = '<div class="sua-thanh"><b>✎ Chế độ sửa</b><button type="button" id="sua-bat"></button><span id="sua-dem"></span>' +
+    '<button type="button" id="sua-ch-nut">Chữ hiển thị</button><button type="button" id="sua-xem">Danh sách</button><button type="button" id="sua-tai" class="chinh">Tải tệp sửa</button><button type="button" id="sua-gon" title="Thu gọn thanh sửa">–</button></div>' +
+    '<div id="sua-bao" class="sua-hop" hidden></div>' +
+    '<div id="sua-ds" class="sua-hop" hidden></div>' +
+    '<div id="sua-ch" class="sua-hop" hidden><p class="sua-nho" style="margin:0 0 .4rem">Mọi chữ giao diện của game. Gõ là đổi ngay trên trang. Giữ nguyên các chỗ trong ngoặc nhọn như {n}, {tong}, {a}, {b}, {s}, {mua}, {ma}: máy điền số, chữ vào đó. Ô có viền vàng là chữ đã sửa.</p><div id="sua-ch-ds"></div><button type="button" id="sua-ch-goc">Trả mọi chữ hiển thị về gốc</button></div>' +
+    '<div id="sua-o" class="sua-hop" hidden><div class="sua-nho" id="sua-goc"></div><textarea id="sua-chu" rows="3"></textarea>' +
+      '<div class="sua-nut"><button type="button" id="sua-xong" class="chinh">Xong (Enter)</button><button type="button" id="sua-tra">Trả chữ gốc</button><button type="button" id="sua-huy">Hủy (Esc)</button></div></div>';
+  document.body.appendChild(khung);
+  document.body.classList.add('co-sua');
+  let dang = null, xoaLan = 0;
+  const chuGocCua = k => (DB.chuGiaoDien && DB.chuGiaoDien[k] != null) ? DB.chuGiaoDien[k] : CHU_GOC[k];
+  /* vẽ lại màn đang mở để chữ hiển thị mới hiện ngay */
+  const veLai = () => {
+    if (manHienTai === 'Màn chào') manChao(); else if (manHienTai === 'Bản đồ') manBanDo(); else if (manHienTai === 'Âm nhạc') manNhac();
+    else if (manHienTai.indexOf('Thu hoạch') === 0 && tam) veCau(); else if (manHienTai.indexOf('Kết mùa') === 0 && tam) manKet(tam.ma);
+    else if (manHienTai.indexOf('Gieo hạt · thửa ') === 0) manGieo(manHienTai.slice(16));
+  };
+  const ghiMa = (k, moi, tuBang) => {
+    if (moi === chuGocCua(k)) delete SUA.chuGD[k]; else SUA.chuGD[k] = moi;
+    luuSua();
+    if (!tuBang) veThanh(); else $('#sua-dem').textContent = (SUA.chu.length + Object.keys(SUA.chuGD).length) + ' chỗ sửa chữ';
+    veLai();
+    if (tuBang) { const o = khung.querySelector('[data-ck="' + k + '"]'); if (o) o.classList.toggle('da-sua', SUA.chuGD[k] != null); }
+  };
+  const veBangChu = () => {
+    $('#sua-ch-ds').innerHTML = Object.keys(CHU_GOC).map(k =>
+      '<label class="sua-ch-dong"><span>' + h(NHAN_CHU[k] || k) + '</span><input type="text" data-ck="' + k + '" value="' + h(t(k)) + '"' + (SUA.chuGD[k] != null ? ' class="da-sua"' : '') + '></label>').join('');
+  };
+  const veThanh = () => {
+    $('#sua-bat').textContent = SUA.bat ? 'Đang sửa chữ — bấm vào chữ' : 'Đang chơi thử — bấm để sửa tiếp';
+    $('#sua-bat').classList.toggle('bat', SUA.bat); document.body.classList.toggle('dang-sua', SUA.bat);
+    const soCh = Object.keys(SUA.chuGD).length;
+    $('#sua-dem').textContent = (SUA.chu.length + soCh) + ' chỗ sửa chữ';
+    $('#sua-ds').innerHTML = (SUA.chu.length || soCh)
+      ? '<ol>' + SUA.chu.map((x, i) => '<li><span class="sua-nho">' + h(x.man) + '</span><br><s>' + h(x.cu) + '</s><br><b>' + h(x.moi) + '</b> <button type="button" data-bo="' + i + '" title="Bỏ chỗ sửa này">↩ bỏ</button></li>').join('') +
+        Object.keys(SUA.chuGD).map(k => '<li><span class="sua-nho">Chữ hiển thị · ' + h(NHAN_CHU[k] || k) + '</span><br><s>' + h(chuGocCua(k)) + '</s><br><b>' + h(SUA.chuGD[k]) + '</b> <button type="button" data-bok="' + k + '" title="Bỏ chỗ sửa này">↩ bỏ</button></li>').join('') +
+        '</ol><button type="button" id="sua-xoa">Xóa hết danh sách</button>'
+      : '<p>Chưa sửa chỗ nào.</p>';
+    veBangChu();
+  };
+  const ghiSua = (cu, moi) => {
+    const i = SUA.chu.findIndex(x => x.cu === cu);
+    if (moi === cu) { if (i >= 0) SUA.chu.splice(i, 1); }
+    else if (i >= 0) SUA.chu[i].moi = moi;
+    else SUA.chu.push({man: manHienTai, cu, moi});
+    luuSua(); veThanh();
+  };
+  const moSuaMa = k => {
+    dang = {k};
+    $('#sua-goc').textContent = 'Chữ hiển thị · ' + (NHAN_CHU[k] || k) + ' · chữ gốc: “' + chuGocCua(k) + '”' + (/\{\w+\}/.test(chuGocCua(k)) ? ' — giữ nguyên chỗ {…}' : '');
+    $('#sua-chu').value = t(k); $('#sua-o').hidden = false; $('#sua-chu').focus(); $('#sua-chu').select();
+  };
+  const moSua = n => {
+    const tx = n.data.trim(), r = SUA.chu.find(x => x.moi === tx), cu = r ? r.cu : tx;
+    dang = {n, cu};
+    $('#sua-goc').textContent = manHienTai + ' · chữ gốc: “' + cu + '”';
+    $('#sua-chu').value = tx; $('#sua-o').hidden = false; $('#sua-chu').focus(); $('#sua-chu').select();
+  };
+  const dong = () => { $('#sua-o').hidden = true; dang = null; };
+  const xong = moiChu => {
+    if (!dang) return; moiChu = moiChu.replace(/\s+/g, ' ').trim();
+    if (dang.k) { if (moiChu) ghiMa(dang.k, moiChu); dong(); return; }
+    if (moiChu) { const tx = dang.n.data.trim(); dang.n.data = dang.n.data.replace(tx, moiChu); ghiSua(dang.cu, moiChu); }
+    dong();
+  };
+  /* chữ nằm dưới con trỏ: nút chữ chứa điểm bấm; không lấy được thì lấy chữ duy nhất của phần tử bấm vào */
+  const chuTai = e => {
+    let n = null;
+    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(e.clientX, e.clientY); n = p && p.offsetNode; }
+    else if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(e.clientX, e.clientY); n = r && r.startContainer; }
+    if (n && n.nodeType === 3) { const r = document.createRange(); r.selectNodeContents(n);
+      if (![...r.getClientRects()].some(b => e.clientX >= b.left - 2 && e.clientX <= b.right + 2 && e.clientY >= b.top - 2 && e.clientY <= b.bottom + 2)) n = null; }
+    if (!n || n.nodeType !== 3 || !n.data.trim()) { const ts = [...e.target.childNodes].filter(x => x.nodeType === 3 && x.data.trim()); n = ts.length === 1 ? ts[0] : null; }
+    return n;
+  };
+  document.addEventListener('click', e => {
+    if (!SUA.bat || e.target.closest('#sua-khung') || !e.target.closest('#app')) return;
+    if (e.target.closest('textarea')) return;
+    e.preventDefault(); e.stopPropagation();
+    const ma = e.target.closest('[data-k]');
+    if (ma) { moSuaMa(ma.dataset.k); return; }
+    const n = chuTai(e);
+    if (n) moSua(n);
+  }, true);
+  let tro = null;
+  document.addEventListener('mouseover', e => { if (tro) tro.classList.remove('sua-tro'); tro = null;
+    if (SUA.bat && !e.target.closest('#sua-khung') && e.target.closest('#app') && e.target !== app && !e.target.classList.contains('man')) { tro = e.target; tro.classList.add('sua-tro'); } });
+  $('#sua-bat').onclick = () => { SUA.bat = !SUA.bat; dong(); luuSua(); veThanh(); };
+  $('#sua-xem').onclick = () => { $('#sua-ds').hidden = !$('#sua-ds').hidden; };
+  $('#sua-ch-nut').onclick = () => { $('#sua-ch').hidden = !$('#sua-ch').hidden; };
+  $('#sua-ch-ds').addEventListener('input', e => { const o = e.target.closest('[data-ck]'); if (!o) return; ghiMa(o.dataset.ck, o.value, true); });
+  $('#sua-ch-goc').onclick = () => { SUA.chuGD = {}; luuSua(); veThanh(); veLai(); };
+  $('#sua-gon').onclick = () => { const gon = khung.classList.toggle('gon'); $('#sua-gon').textContent = gon ? '✎' : '–'; $('#sua-gon').title = gon ? 'Mở thanh sửa' : 'Thu gọn thanh sửa'; };
+  $('#sua-ds').onclick = e => { const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'sua-xoa') {
+      if (Date.now() - xoaLan > 4000) { xoaLan = Date.now(); bao('Bấm “Xóa hết danh sách” lần nữa để xóa mọi chỗ sửa chữ trên máy này.', 4000); return; }
+      SUA.chu = []; SUA.chuGD = {}; luuSua(); location.reload(); return; }
+    if (b.dataset.bok) { ghiMa(b.dataset.bok, chuGocCua(b.dataset.bok)); return; }
+    if (b.dataset.bo) { SUA.chu.splice(+b.dataset.bo, 1); luuSua(); location.reload(); } };
+  $('#sua-tai').onclick = () => {
+    const coCh = Object.keys(SUA.chuGD).length > 0;
+    if (!SUA.chu.length && !coCh) { bao('Chưa sửa chỗ nào.'); return; }
+    const a = document.createElement('a');
+    /* chữ hiển thị xuất trọn bộ đang dùng (bản trong noi-dung.json + chỗ mới sửa), để đưa vào không mất chỗ sửa lần trước */
+    const chuGiaoDien = coCh ? Object.assign({}, DB.chuGiaoDien || {}, SUA.chuGD) : null;
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({game: 'trong-nguoi', luc: new Date().toISOString(), sua: SUA.chu, chuGiaoDien}, null, 2)], {type: 'application/json'}));
+    a.download = 'sua-chu-trong-nguoi.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    bao('Đã tải sua-chu-trong-nguoi.json — gửi tệp này để đưa chữ đã sửa vào game.', 5000);
+  };
+  $('#sua-xong').onclick = () => xong($('#sua-chu').value);
+  $('#sua-tra').onclick = () => { if (dang && dang.k) { ghiMa(dang.k, chuGocCua(dang.k)); dong(); } else if (dang) xong(dang.cu); };
+  $('#sua-huy').onclick = dong;
+  $('#sua-chu').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); xong(e.target.value); } else if (e.key === 'Escape') dong(); });
+  veThanh();
+}
+manChao();
+</script>
+</body>
+</html>

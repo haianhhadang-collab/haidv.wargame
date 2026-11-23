@@ -105,6 +105,17 @@ Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame
 
 ![Mã QR vào Non sông một dải](non-song/qr-vao-game.png)
 
+## Trăm năm trồng người
+
+Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người (Bài 8), mỗi người một máy, nông trại pixel bốn mùa.
+Gieo hạt: đọc một mục bài giảng (có thể tra Giáo trình ở Thư viện làng) và tóm tắt ý chính; mỗi ý nêu đúng nảy một cây.
+Thu hoạch: 30 câu trắc nghiệm, năm dạng là năm nông cụ, mỗi câu 20 giây. Nhạc nền guitar cổ điển và giao hưởng
+(bản thu tự do trên Wikimedia Commons).
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/trong-nguoi/
+
+![Mã QR vào Trăm năm trồng người](trong-nguoi/qr-vao-game.png)
+
 ## Quy tụ — bốn vòng đoàn kết
 
 Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế (Bài 7), mỗi người một điện thoại, không tính giờ.
