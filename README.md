@@ -134,7 +134,7 @@ Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame
 sơ đồ kiến thức sáu chương, bài viết tham khảo, câu hỏi ôn tập kèm hướng dẫn trả lời, lưu ý phần liên hệ,
 game ôn bài có mã QR và câu trả lời tham khảo phần lý thuyết. Một tệp HTML, đọc được khi không có mạng.
 
-- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/de-cuong-on-tap/
+- **Mở đề cương:** https://haianhhadang-collab.github.io/haidv.wargame/de-cuong-on-tap/
 
 ![Mã QR vào Đề cương ôn tập học phần](de-cuong-on-tap/qr-vao-game.png)
 
