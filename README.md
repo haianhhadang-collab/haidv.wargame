@@ -128,6 +128,16 @@ Poster QR: A4 dọc [PDF in](https://haianhhadang-collab.github.io/haidv.wargame
 
 ![Mã QR vào Quy tụ — bốn vòng đoàn kết](quy-tu/qr-vao-game.png)
 
+## Đề cương ôn tập học phần
+
+Đề cương ôn tập kiến thức và câu hỏi ôn tập cả học phần, biên soạn theo Giáo trình Tư tưởng Hồ Chí Minh (2026):
+sơ đồ kiến thức sáu chương, bài viết tham khảo, câu hỏi ôn tập kèm hướng dẫn trả lời, lưu ý phần liên hệ,
+game ôn bài có mã QR và câu trả lời tham khảo phần lý thuyết. Một tệp HTML, đọc được khi không có mạng.
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/de-cuong-on-tap/
+
+![Mã QR vào Đề cương ôn tập học phần](de-cuong-on-tap/qr-vao-game.png)
+
 ## 1911 — Anh Ba xin làm phụ bếp
 
 Game nhập vai cá nhân trên điện thoại, khoảng 15 phút: vào vai anh Ba xin làm phụ bếp trên con tàu
