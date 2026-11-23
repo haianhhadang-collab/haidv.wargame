@@ -138,7 +138,17 @@
   body.dang-sua .sua-duoc:hover { outline: 1px dashed #e0a43a; outline-offset: 2px; }
   .sua-duoc[contenteditable="true"] { outline: 2px solid #f5c242 !important; outline-offset: 2px; background: #fffbe8; }
   .da-sua { box-shadow: inset 0 0 0 9999px rgba(245,194,66,.18); }
+  /* bộ đếm lượt truy cập (dịch vụ Abacus) và nút quay lại đầu trang */
+  .dem { font-size: 14px; color: var(--mo); margin-top: 4px; }
+  .dem b { color: var(--chu); font-variant-numeric: tabular-nums; }
+  #len-dau { position: fixed; right: 16px; bottom: 16px; z-index: 15; width: 52px; height: 52px; border-radius: 50%;
+             border: 2px solid #b08d57; background: #26314a; color: #fff; font: bold 24px/1 Cambria, serif; cursor: pointer;
+             box-shadow: 0 4px 16px rgba(0,0,0,.25); opacity: 0; visibility: hidden; transform: translateY(10px);
+             transition: opacity .2s, transform .2s, visibility .2s; }
+  #len-dau.hien { opacity: .92; visibility: visible; transform: none; }
+  #len-dau:hover, #len-dau:focus-visible { opacity: 1; background: #1f4e9c; }
   @media print {
+    #len-dau, .dem { display: none; }
     #thanh-sua, #ds-sua { display: none; }
     .da-sua { box-shadow: none; }
     nav.thanh, .nut, .dieu-khien { display: none; }
@@ -151,9 +161,10 @@
 <body>
 
 <header class="dau" id="dau">
-  <div class="nhan-dau">Học phần Tư tưởng Hồ Chí Minh · POL1001</div>
+  <div class="nhan-dau">Học phần Tư tưởng Hồ Chí Minh</div>
   <h1>Đề cương ôn tập kiến thức và câu hỏi ôn tập</h1>
-  <div class="nguon">Biên soạn theo <b>Giáo trình Tư tưởng Hồ Chí Minh (2026)</b>. Bản đọc offline, cập nhật 23/11/2026.</div>
+  <div class="nguon">Biên soạn theo <b>Giáo trình Tư tưởng Hồ Chí Minh (2026)</b></div>
+  <div class="dem" id="dem" hidden>Lượt truy cập: <b id="dem-luot">…</b> · Số người đọc: <b id="dem-nguoi">…</b> · Hôm nay: <b id="dem-ngay">…</b></div>
 </header>
 
 <nav class="thanh" aria-label="Mục lục nhanh">
@@ -165,7 +176,7 @@
   <a class="p2" href="#tra-loi">6. Câu trả lời tham khảo</a>
 </nav>
 
-<p class="gioi-thieu">Đề cương gồm hai phần. <b>Phần thứ nhất</b> hệ thống kiến thức sáu chương của giáo trình dưới dạng sơ đồ tư duy và giới thiệu các bài viết tham khảo. <b>Phần thứ hai</b> hướng dẫn sinh viên ôn tập: mỗi câu hỏi ôn tập được đặt ngay sau phần lý thuyết mà câu hỏi dựa vào, kèm gợi ý cách triển khai; tiếp đó là những lưu ý khi liên hệ, vận dụng, danh sách game ôn bài có mã QR và câu trả lời tham khảo phần lý thuyết cho từng câu hỏi. Đây là tài liệu tham khảo để sinh viên tự ôn luyện và phát huy; kiến thức, số lượng ý và câu trích dẫn đều theo Giáo trình Tư tưởng Hồ Chí Minh (2026).</p>
+<p class="gioi-thieu">Đề cương gồm hai phần: <b>Phần thứ nhất</b> hệ thống kiến thức giáo trình môn học dưới dạng sơ đồ tư duy từ khung đến chi tiết. <b>Phần thứ hai</b> hướng dẫn sinh viên ôn tập: mỗi câu hỏi ôn tập được đính kèm phần lý thuyết, cùng với gợi ý cách triển khai; tiếp đó là những lưu ý khi liên hệ, vận dụng, danh sách game ôn bài và câu trả lời tham khảo phần lý thuyết cho từng câu hỏi. Đây là tài liệu tham khảo để sinh viên tự ôn luyện và phát huy; kiến thức, số lượng ý và câu trích dẫn đều lấy từ Giáo trình Tư tưởng Hồ Chí Minh (2026).</p>
 
 <!-- =================== PHẦN THỨ NHẤT =================== -->
 <div class="phan"><div class="so">Phần thứ nhất</div><h2>Kiến thức chung</h2></div>
@@ -384,7 +395,7 @@
     <div class="trich">“Dĩ bất biến ứng vạn biến”.</div>
     <p>Môn học góp phần giáo dục thế hệ trẻ hoàn thiện nhân cách, trở thành những chiến sĩ tiên phong trong sự nghiệp xây dựng và bảo vệ Tổ quốc, làm cho đất nước “đàng hoàng hơn, to đẹp hơn”.</p>
   </div></details>
-  <div class="lech"><b>Lưu ý:</b> Giáo trình nêu đúng <b>ba</b> ý nghĩa; tên của ý nghĩa thứ hai dài nên dễ chép thiếu vế. Ba ý nghĩa này là ý nghĩa của <b>việc học tập môn học</b>, khác với “ý nghĩa của tư tưởng Hồ Chí Minh” (phương diện thứ ba của khái niệm).</div>
+  <div class="lech"><b>Lưu ý:</b> ý nghĩa của <b>việc học tập môn học</b>, khác với “ý nghĩa của tư tưởng Hồ Chí Minh”.</div>
 
   <div class="cauhoi" id="cau-1">
     <div class="cauhoi-nhan">Câu hỏi ôn tập</div>
@@ -458,7 +469,7 @@
       <p>Những sự kiện này, cùng thực tiễn xây dựng chủ nghĩa xã hội ở Liên Xô và sự phát triển của phong trào cộng sản, công nhân, giải phóng dân tộc, ảnh hưởng sâu sắc tới Hồ Chí Minh trên hành trình tìm mục tiêu và con đường cứu nước.</p>
     </div></details>
 
-    <div class="lech"><b>Lưu ý:</b> Khi trình bày sự biến đổi của xã hội Việt Nam, nên viết “Việt Nam từ một nước phong kiến độc lập trở thành nước <b>thuộc địa nửa phong kiến</b>”; viết theo chữ của Hồ Chí Minh mà giáo trình dẫn ở mục này, nước “<b>thuộc địa và phong kiến</b>”, cũng đúng (ở mục II.5, giáo trình cũng dùng cụm “chế độ thuộc địa, nửa phong kiến”). Sinh viên có thể dẫn thêm cụm “thuộc địa và phong kiến” làm trích dẫn. Tên “Phan Châu Trinh” trong giáo trình còn được viết là “Phan Chu Trinh”; hai cách viết cùng chỉ một người.</div>
+    <div class="lech"><b>Lưu ý:</b> Khi trình bày sự biến đổi của xã hội Việt Nam, nên viết “Việt Nam từ một nước phong kiến độc lập trở thành nước <b>thuộc địa nửa phong kiến</b>”; cách viết nước “<b>thuộc địa và phong kiến</b>” cũng chính xác. Tên “Phan Châu Trinh” trong giáo trình còn được viết là “Phan Chu Trinh”; hai cách viết cùng chỉ một người.</div>
 
     <div class="cauhoi" id="cau-3">
       <div class="cauhoi-nhan">Câu hỏi ôn tập</div>
@@ -2987,7 +2998,7 @@
 
 <h3 class="muc-lon" id="cach-lam">3. Hướng dẫn trả lời câu hỏi ôn tập</h3>
 <div class="khung-chung">
-  <p>Một bài trả lời tốt trước hết phải nêu đúng và đủ các luận điểm của vấn đề, theo đúng thứ tự, rồi triển khai từng luận điểm thành các ý cụ thể. Bài viết dài nhưng gọi sai tên luận điểm hoặc bỏ sót ý thì vẫn chưa đạt yêu cầu. Sinh viên cần tự xác định đâu là trọng tâm của câu hỏi để phân bổ dung lượng cho hợp lý.</p>
+  <p>Muốn trả lời tốt trước hết phải nêu đúng và đủ các luận điểm của vấn đề, theo đúng thứ tự, rồi triển khai từng luận điểm thành các ý cụ thể. Sinh viên cần tự xác định đâu là trọng tâm của câu hỏi để phân bổ dung lượng cho hợp lý.</p>
   <p><b>Một bài trả lời nên gồm năm bước:</b></p>
   <ol>
     <li><b>Đặt vấn đề</b>: một, hai câu nêu vị trí của vấn đề trong hệ thống tư tưởng Hồ Chí Minh.</li>
@@ -3035,15 +3046,15 @@
 
 <h3 class="muc-lon" id="lien-he">4. Lưu ý phần liên hệ, vận dụng</h3>
 <div class="khung-chung">
-  <p>Phần lớn câu hỏi ôn tập có yêu cầu vận dụng hoặc nêu quan điểm của sinh viên. Đây là phần thể hiện rõ nhất khả năng tư duy độc lập: không có bài viết sẵn để học thuộc, nhưng có những yêu cầu rõ ràng cần bảo đảm.</p>
+  <p>Chương câu hỏi ôn tập có yêu cầu vận dụng hoặc nêu quan điểm của sinh viên. Đây là phần thể hiện rõ nhất khả năng tư duy độc lập: không có bài viết sẵn để học thuộc, nhưng có những yêu cầu rõ ràng cần bảo đảm.</p>
   <p><b>Một phần liên hệ đạt yêu cầu gồm bốn lớp:</b></p>
   <ol>
-    <li><b>Luận điểm của sinh viên</b>: một câu nói rõ quan điểm nào của Hồ Chí Minh đang được vận dụng và vận dụng vào việc gì.</li>
-    <li><b>Căn cứ trong giáo trình</b>: phần vận dụng của chương và chủ trương của Đảng mà giáo trình dẫn (Đại hội, Nghị quyết), ghi đúng tên và thời gian.</li>
+    <li><b>Luận điểm của sinh viên</b>: Nêu một câu nói rõ quan điểm nào của Hồ Chí Minh đang được vận dụng và vận dụng vào việc gì.</li>
+    <li><b>Căn cứ từ giáo trình</b>: phần vận dụng của chương và chủ trương của Đảng mà giáo trình dẫn (Đại hội, Nghị quyết), ghi đúng tên và thời gian.</li>
     <li><b>Thực tiễn cụ thể</b>: hai, ba sự kiện, chủ trương hoặc số liệu có thời gian, nguồn chính thống; phân tích xem sự kiện ấy thể hiện quan điểm của Hồ Chí Minh ở chỗ nào. Nêu cả kết quả đạt được và hạn chế còn tồn tại.</li>
     <li><b>Trách nhiệm của sinh viên</b>: những việc làm cụ thể gắn với học tập, rèn luyện, tránh hô khẩu hiệu.</li>
   </ol>
-  <p><b>Cần tránh:</b> liên hệ chung chung (“Đảng và Nhà nước luôn quan tâm…”); chép lại phần lý thuyết; chỉ kể thành tựu mà không gắn với quan điểm cần vận dụng; dùng số liệu, sự kiện không rõ nguồn; viết phần liên hệ dài hơn phần lý thuyết.</p>
+  <p><b>Cần tránh:</b> liên hệ chung chung (“Đảng và Nhà nước luôn quan tâm…”); chép lại lý thuyết; chỉ kể thành tựu mà không gắn với quan điểm cần vận dụng; dùng số liệu, sự kiện không rõ nguồn; viết phần liên hệ dài hơn phần lý thuyết.</p>
   <p>Các ví dụ thực tiễn dưới đây là <b>gợi ý ngoài giáo trình</b>, đã đối chiếu nguồn; sinh viên có thể dùng ví dụ khác, miễn là cụ thể và chính xác.</p>
 </div>
 <h4 class="lh-chuong">Chương 1. Khái niệm, đối tượng, phương pháp nghiên cứu và ý nghĩa học tập môn Tư tưởng Hồ Chí Minh</h4>
@@ -4221,6 +4232,7 @@
 </article></details>
 
 <footer>Đề cương ôn tập học phần Tư tưởng Hồ Chí Minh · biên soạn theo Giáo trình 2026 · cập nhật 23/11/2026. <a href="#dau">Về đầu trang</a></footer>
+<button type="button" id="len-dau" title="Quay lại đầu trang" aria-label="Quay lại đầu trang">↑</button>
 
 <script>
   // tầng 1: chỉ phần lớn; tầng 2: đến mục và ý (ẩn chi tiết); tầng 9: mở hết. Chỉ tác động vùng sơ đồ.
@@ -4250,6 +4262,47 @@
   });
   if (location.hash) moToi(decodeURIComponent(location.hash.slice(1)));
   window.addEventListener('beforeprint', function () { document.querySelectorAll('details').forEach(function (d) { d.open = true; }); });
+
+  // Nút quay lại đầu trang: hiện khi đã kéo xuống quá một màn hình
+  (function () {
+    var nut = document.getElementById('len-dau'), cho = false;
+    function xet() { cho = false; nut.classList.toggle('hien', window.scrollY > Math.max(600, window.innerHeight)); }
+    window.addEventListener('scroll', function () { if (!cho) { cho = true; requestAnimationFrame(xet); } }, { passive: true });
+    nut.addEventListener('click', function () {
+      history.replaceState(null, '', location.pathname + location.search);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    xet();
+  })();
+
+  // Bộ đếm lượt truy cập — dịch vụ đếm miễn phí Abacus (abacus.jasoncameron.dev), không gửi thông tin người đọc.
+  // Chỉ đếm khi trang mở từ GitHub Pages và không ở chế độ sửa; bản mở trên máy chỉ xem số.
+  // Lượt truy cập: mỗi lần mở trang trong một phiên trình duyệt; Số người đọc: mỗi trình duyệt một lần; Hôm nay: theo giờ Việt Nam.
+  (function () {
+    var API = 'https://abacus.jasoncameron.dev/', NS = 'haidv-wargame', K = 'de-cuong-on-tap';
+    var dem = document.getElementById('dem'); if (!dem || !window.fetch) return;
+    var ngay = new Date().toLocaleDateString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }).replace(/-/g, '');
+    var duocDem = /\.github\.io$/.test(location.hostname) && !/[?&]sua=1\b/.test(location.search);
+    function co(kho, khoa) { try { return kho.getItem(khoa); } catch (e) { return '1'; } }
+    function dat(kho, khoa) { try { kho.setItem(khoa, '1'); } catch (e) {} }
+    var moiPhien = duocDem && !co(sessionStorage, 'dem-phien');
+    var moiNguoi = duocDem && !co(localStorage, 'dem-nguoi');
+    function lay(khoa, tang) {
+      return fetch(API + (tang ? 'hit/' : 'get/') + NS + '/' + khoa)
+        .then(function (r) { return r.status === 404 ? { value: 0 } : r.json(); })
+        .then(function (j) { return typeof j.value === 'number' ? j.value : null; })
+        .catch(function () { return null; });
+    }
+    Promise.all([lay(K + '-luot', moiPhien), lay(K + '-nguoi', moiNguoi), lay(K + '-' + ngay, moiPhien)]).then(function (so) {
+      if (so[0] === null) return;   // dịch vụ không trả lời: giữ ẩn
+      if (moiPhien) dat(sessionStorage, 'dem-phien');
+      if (moiNguoi) dat(localStorage, 'dem-nguoi');
+      ['dem-luot', 'dem-nguoi', 'dem-ngay'].forEach(function (id, i) {
+        document.getElementById(id).textContent = so[i] === null ? '–' : so[i].toLocaleString('vi-VN');
+      });
+      dem.hidden = false;
+    });
+  })();
 </script>
 <script>
 /* Chế độ sửa chữ — mở trang với đuôi ?sua=1 (chỉ giảng viên). Bấm vào chữ để sửa, Enter để xong, Esc để hủy.
