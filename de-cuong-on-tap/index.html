@@ -4276,6 +4276,7 @@
   })();
 
   // Bộ đếm lượt truy cập — dịch vụ đếm miễn phí Abacus (abacus.jasoncameron.dev), không gửi thông tin người đọc.
+  // Dịch vụ miễn phí nên có lúc chậm (số hiện sau vài giây) hoặc lỗi (khi đó bộ đếm ẩn, trang vẫn đọc bình thường).
   // Chỉ đếm khi trang mở từ GitHub Pages và không ở chế độ sửa; bản mở trên máy chỉ xem số.
   // Lượt truy cập: mỗi lần mở trang trong một phiên trình duyệt; Số người đọc: mỗi trình duyệt một lần; Hôm nay: theo giờ Việt Nam.
   (function () {
@@ -4294,9 +4295,10 @@
         .catch(function () { return null; });
     }
     Promise.all([lay(K + '-luot', moiPhien), lay(K + '-nguoi', moiNguoi), lay(K + '-' + ngay, moiPhien)]).then(function (so) {
+      // chỉ đánh dấu "đã đếm" khi dịch vụ đã đếm được; lỗi thì lần mở sau đếm lại
+      if (moiPhien && so[0] !== null) dat(sessionStorage, 'dem-phien');
+      if (moiNguoi && so[1] !== null) dat(localStorage, 'dem-nguoi');
       if (so[0] === null) return;   // dịch vụ không trả lời: giữ ẩn
-      if (moiPhien) dat(sessionStorage, 'dem-phien');
-      if (moiNguoi) dat(localStorage, 'dem-nguoi');
       ['dem-luot', 'dem-nguoi', 'dem-ngay'].forEach(function (id, i) {
         document.getElementById(id).textContent = so[i] === null ? '–' : so[i].toLocaleString('vi-VN');
       });
