@@ -1,0 +1,1609 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cán cân ba đỉnh – Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Cán cân ba đỉnh — game Bài 8 (Chương 6). Khuôn giao diện; nội dung ở noi-dung.json.
+   Dựng index.html: python _KHO-DU-LIEU/cong-cu/tao-game-can-can.py */
+:root{--muc:#121826;--muc2:#1b2336;--muc3:#283352;--muc4:#38446a;--vang:#d8b46a;--vang2:#f3dc9a;--vang3:#8f7038;--giay:#f3e8cc;--giay2:#e4d2a8;--giay3:#b99d66;--chu:#f2ead6;--chu2:#bdb39b;--mo:#8d8670;--dung:#86d0a2;--sai:#e88a74;--vh:#e9b85b;--dd:#78b2ec;--cn:#9bd67f}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#0d121d}
+body{font-family:'Be Vietnam Pro','Segoe UI',system-ui,sans-serif;color:var(--chu);background:radial-gradient(120% 80% at 50% 0%,#24304d 0%,#141b2b 55%,#0b0f18 100%) fixed}
+#app{position:relative;container-type:inline-size;min-height:100vh}
+/* chữ co giãn theo bề rộng khung: gốc 16–28px; câu hỏi 1.35em (sàn 22px), phương án 1.12em (sàn 19px) */
+.man{font-size:clamp(16px,1.2cqi,28px);min-height:100vh;display:flex;flex-direction:column}
+.td{font-family:'Cormorant Garamond','Palatino Linotype',Constantia,serif;font-weight:700;letter-spacing:.01em}
+button{font:inherit;color:inherit}
+input{font:inherit}
+.an{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+:focus-visible{outline:3px solid var(--vang2);outline-offset:2px}
+.than{flex:1;width:100%;max-width:78em;margin:0 auto;padding:1em 1em 2em}
+
+/* khung đường mảnh, đầu hình thoi */
+.khung{position:relative;background:linear-gradient(180deg,rgba(32,41,64,.94),rgba(19,25,39,.94));border:1px solid var(--vang3);box-shadow:0 10px 30px rgba(0,0,0,.45);padding:1.1em 1.2em}
+.khung::before{content:'';position:absolute;inset:5px;border:1px solid rgba(216,180,106,.32);pointer-events:none}
+.khung::after{content:'';position:absolute;left:50%;top:-6px;width:10px;height:10px;background:var(--vang);transform:translateX(-50%) rotate(45deg);box-shadow:0 0 10px rgba(243,220,154,.7)}
+.khung.giay{background:linear-gradient(180deg,#f6ecd2,#e9d8b0);color:#2a2214;border-color:var(--giay3)}
+.khung.giay::before{border-color:rgba(143,112,56,.45)}
+.tieu{display:flex;align-items:center;gap:.6em;color:var(--vang2);font-size:1.35em;margin:0 0 .6em}
+.tieu::before,.tieu::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--vang) 30%,var(--vang) 70%,transparent)}
+.tieu span{white-space:nowrap}
+.tieu.trai::before{display:none}
+.hthoi{display:inline-block;width:.5em;height:.5em;background:var(--vang);transform:rotate(45deg);margin:0 .35em;vertical-align:.12em}
+
+/* nút */
+.nut{position:relative;font-family:'Cormorant Garamond','Palatino Linotype',serif;font-weight:700;font-size:1.2em;line-height:1.15;color:var(--vang2);background:linear-gradient(180deg,#3a4669,#222a41);border:1px solid var(--vang);padding:.55em 1.4em;min-height:48px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:.4em;text-align:center;box-shadow:0 4px 0 #0b0f18,0 0 0 3px rgba(216,180,106,.12)}
+.nut::before,.nut::after{content:'';position:absolute;top:50%;width:8px;height:8px;background:var(--vang);transform:translateY(-50%) rotate(45deg)}
+.nut::before{left:-5px}.nut::after{right:-5px}
+.nut:hover{background:linear-gradient(180deg,#46557f,#2a3350);color:#fff3cc}
+.nut:active{transform:translateY(2px);box-shadow:0 2px 0 #0b0f18}
+.nut.chinh{background:linear-gradient(180deg,#f0d48d,#b98d3f);color:#1c1509;border-color:#fbe7b0}
+.nut.chinh:hover{background:linear-gradient(180deg,#f7df9f,#c99b4a)}
+.nut.nho{font-size:1em;padding:.4em 1em;min-height:44px}
+.nut[disabled]{opacity:.45;cursor:not-allowed}
+.hang-nut{display:flex;flex-wrap:wrap;gap:.8em 1.2em;align-items:center}
+
+/* thanh đầu */
+.dau{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.4em .8em;padding:.5em 1em;background:linear-gradient(180deg,rgba(13,18,29,.97),rgba(18,24,38,.92));border-bottom:1px solid var(--vang3);box-shadow:0 1px 0 rgba(216,180,106,.25)}
+.dau-trai,.dau-phai{display:flex;flex-wrap:wrap;align-items:center;gap:.4em .7em}
+.ve{width:44px;height:44px;display:grid;place-items:center;background:var(--muc3);border:1px solid var(--vang3);color:var(--vang2);cursor:pointer;padding:0}
+.ve svg{width:20px;height:20px}
+.dau-ten{font-size:1.45em;color:var(--vang2)}
+.dau-phu{color:var(--chu2);font-size:.92em}
+.chip{display:inline-flex;align-items:center;gap:.3em;font-size:.9em;background:rgba(40,51,82,.8);border:1px solid rgba(216,180,106,.45);padding:.25em .65em;min-height:34px;color:var(--chu)}
+.chip b{color:var(--vang2)}
+button.chip{cursor:pointer}
+button.chip:hover{border-color:var(--vang)}
+.net{display:inline-flex;align-items:center;gap:.35em;font-size:.82em;color:var(--chu2)}
+.net i{width:9px;height:9px;border-radius:50%;background:var(--sai)}
+.net i.on{background:var(--dung)}
+
+/* màn chào */
+.chao{flex:1;display:grid;place-items:center;padding:1.5em 1em;position:relative;overflow:hidden}
+.chao-nen{position:absolute;inset:0;pointer-events:none}
+.chao-nen svg{width:100%;height:100%}
+.chao-hop{position:relative;max-width:40em;width:100%;text-align:center}
+.chao-tren{letter-spacing:.3em;color:var(--chu2);font-size:.85em}
+.chao-ten{font-size:clamp(46px,6.5cqi,110px);line-height:1;color:var(--vang2);text-shadow:0 0 24px rgba(243,220,154,.35),0 3px 0 #000;margin:.15em 0 .1em}
+.chao-duoi{color:var(--chu);font-size:1.1em;margin-bottom:1em}
+.chao-tg{width:min(16em,70%);margin:0 auto .8em}
+.chao .hang-nut{justify-content:center;flex-direction:column}
+.chao .nut{min-width:15em}
+.chao-ghi{margin-top:1.2em;color:var(--mo);font-size:.85em;line-height:1.5}
+.cach{text-align:left;line-height:1.55;font-size:.95em}
+.cach ol{margin:.3em 0 0;padding-left:1.3em}.cach li{margin:.25em 0}
+
+/* bản đồ */
+.bd{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(16em,1fr);gap:1.2em}
+@container (max-width:820px){.bd{grid-template-columns:1fr}}
+@media (max-width:600px){.dau{position:static}}
+.bd-ban svg{width:100%;height:auto;display:block}
+.bd-ds{display:grid;gap:.9em}
+.ch-the{display:grid;grid-template-columns:auto 1fr auto;gap:.3em .9em;align-items:center;text-align:left;cursor:pointer;background:rgba(27,35,54,.9);border:1px solid rgba(216,180,106,.45);padding:.7em .9em;color:var(--chu);width:100%}
+.ch-the:hover{border-color:var(--vang);background:rgba(40,51,82,.95)}
+.ch-so{width:2.4em;height:2.4em;display:grid;place-items:center;transform:rotate(45deg);border:1px solid var(--vang);background:var(--muc3);grid-row:span 2}
+.ch-so span{transform:rotate(-45deg);color:var(--vang2);font-size:1.05em}
+.ch-ten{font-size:1.25em;color:var(--vang2)}
+.ch-tt{font-size:.85em;color:var(--chu2);grid-column:2}
+.ch-diem{grid-row:span 2;font-size:.9em;color:var(--chu2);text-align:right}
+.ch-the.xong .ch-so{background:#3d5a43;border-color:var(--dung)}
+.ch-the.dang .ch-so{box-shadow:0 0 12px rgba(243,220,154,.6)}
+.bd-cc{display:grid;grid-template-columns:minmax(10em,15em) 1fr;gap:1em;align-items:center;margin-top:1em}
+@container (max-width:560px){.bd-cc{grid-template-columns:1fr}}
+
+/* tam giác cán cân */
+.tg svg{width:100%;height:auto;display:block;overflow:visible}
+.dinh-hang{display:grid;gap:.45em;font-size:.92em}
+.dinh-dong{display:grid;grid-template-columns:6.5em 1fr 3.6em;gap:.5em;align-items:center}
+.dinh-vach{height:10px;background:rgba(255,255,255,.08);border:1px solid rgba(216,180,106,.3)}
+.dinh-vach i{display:block;height:100%}
+.dinh-so{text-align:right;color:var(--chu2);font-variant-numeric:tabular-nums}
+
+/* khám phá */
+.canh{position:relative;border:1px solid var(--vang3);overflow:hidden;box-shadow:0 12px 34px rgba(0,0,0,.5)}
+.canh svg{display:block;width:100%;height:auto}
+.canh::before,.canh::after{content:'';position:absolute;left:0;right:0;height:16%;pointer-events:none;-webkit-backdrop-filter:blur(2.5px);backdrop-filter:blur(2.5px)}
+.canh::before{top:0;-webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent)}
+.canh::after{bottom:0;-webkit-mask:linear-gradient(transparent,#000);mask:linear-gradient(transparent,#000)}
+.diem{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:0;padding:0;cursor:pointer;z-index:2}
+.diem-the{font-size:clamp(12px,1.1cqi,20px);background:rgba(18,24,38,.92);border:1px solid var(--vang);color:var(--vang2);padding:.25em .6em;white-space:nowrap;font-family:'Cormorant Garamond',serif;font-weight:700}
+.diem-hthoi{width:18px;height:18px;transform:rotate(45deg);background:var(--vang);box-shadow:0 0 0 4px rgba(243,220,154,.25),0 0 16px rgba(243,220,154,.9);animation:nhip 1.6s ease-in-out infinite}
+.diem.da .diem-hthoi{background:var(--dung);box-shadow:0 0 0 4px rgba(134,208,162,.25);animation:none}
+.diem.da .diem-the{border-color:var(--dung);color:#d8f3e2}
+@keyframes nhip{50%{box-shadow:0 0 0 9px rgba(243,220,154,.05),0 0 26px rgba(243,220,154,1)}}
+.kp-duoi{display:grid;grid-template-columns:1fr auto;gap:1em;align-items:center;margin-top:1em}
+@container (max-width:640px){.kp-duoi{grid-template-columns:1fr}}
+.kp-ds{display:flex;flex-wrap:wrap;gap:.5em}
+.kp-ds button{background:rgba(27,35,54,.9);border:1px solid rgba(216,180,106,.45);color:var(--chu);padding:.4em .8em;min-height:44px;cursor:pointer}
+.kp-ds button.da{border-color:var(--dung);color:#cfeedd}
+
+/* lớp phủ hội thoại */
+.phu{position:fixed;inset:0;z-index:50;background:rgba(5,8,14,.72);display:flex;align-items:flex-end;justify-content:center;padding:1em;overflow:auto;container-type:inline-size}
+.phu .khung{width:min(52em,100%);max-height:calc(100vh - 2em);overflow:auto;font-size:clamp(16px,1.2cqi,24px);margin:auto 0 0}
+.hoi-thoai{display:grid;grid-template-columns:auto 1fr;gap:.9em;align-items:start}
+.hoi-thoai svg{width:clamp(56px,9cqi,110px);height:auto;image-rendering:pixelated}
+.ten-bang{display:inline-block;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.15em;color:#1c1509;background:linear-gradient(180deg,#f0d48d,#c99b4a);padding:.1em .7em;margin-bottom:.35em}
+.loi{line-height:1.55;margin:0}
+.the-ds{display:grid;gap:.7em;margin:1em 0}
+.lc{position:relative;background:linear-gradient(180deg,#f7eed6,#eadbb6);color:#2a2214;border:1px solid var(--giay3);padding:.7em .9em .6em 2.3em;line-height:1.5;text-align:left}
+.lc::before{content:'';position:absolute;left:.8em;top:.95em;width:.6em;height:.6em;background:#8f7038;transform:rotate(45deg)}
+.lc small{display:block;color:#7b6640;font-size:.78em;margin-top:.25em}
+button.lc{width:100%;cursor:pointer;font:inherit}
+button.lc:hover{border-color:#8f7038;box-shadow:0 0 0 2px rgba(143,112,56,.35)}
+.lc.trung{background:linear-gradient(180deg,#e3f4e6,#c9e7cf);border-color:#3d8a57}
+.lc.truot{background:linear-gradient(180deg,#f7e0d8,#ecc7bb);border-color:#b2573f}
+.lc.mo{opacity:.55}
+
+/* hội đồng */
+.hd-san{position:relative;background:linear-gradient(180deg,#3a2418 0%,#2a1a12 55%,#1a110c 100%);border:1px solid var(--vang3);padding:1em .6em .3em;overflow:hidden}
+.hd-san::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 11%,rgba(0,0,0,.25) 11% 12.5%);pointer-events:none}
+.hd-hang{position:relative;display:flex;justify-content:center;gap:clamp(.5em,3cqi,3em);flex-wrap:wrap}
+.hd-nguoi{background:none;border:0;padding:.3em;cursor:pointer;display:flex;flex-direction:column;align-items:center;color:var(--chu)}
+.hd-nguoi svg{width:clamp(64px,10cqi,130px);height:auto}
+.hd-nguoi .ten-bang{font-size:.95em}
+.hd-nguoi.chon .ten-bang{box-shadow:0 0 0 2px #fff3cc,0 0 16px rgba(243,220,154,.9)}
+.hd-nguoi .tt{font-size:.78em;color:var(--chu2);min-height:1.3em}
+.hd-nguoi.ok .tt{color:var(--dung)}.hd-nguoi.khong .tt{color:var(--sai)}
+.bong{position:relative;background:var(--giay);color:#2a2214;padding:.9em 1.1em;margin:1em 0;line-height:1.55;border:1px solid var(--giay3)}
+.bong::before{content:'';position:absolute;left:2.2em;top:-9px;width:16px;height:16px;background:var(--giay);border-left:1px solid var(--giay3);border-top:1px solid var(--giay3);transform:rotate(45deg)}
+.bong b{font-family:'Cormorant Garamond',serif;font-size:1.1em}
+.bao{padding:.7em 1em;border-left:4px solid var(--vang);background:rgba(40,51,82,.6);line-height:1.5;margin:.8em 0}
+.bao.tot{border-color:var(--dung);background:rgba(61,138,87,.18)}
+.bao.xau{border-color:var(--sai);background:rgba(178,87,63,.18)}
+
+/* trận luận chiến */
+.tran{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(19em,1fr);gap:1em;align-items:start}
+@container (max-width:900px){.tran{grid-template-columns:1fr}}
+.ban{position:relative;border:1px solid var(--vang3);background:radial-gradient(90% 70% at 50% 40%,#2d3b5c,#141b2b);overflow:hidden}
+.ban svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.ban::before,.ban::after{content:'';position:absolute;left:0;right:0;height:13%;pointer-events:none;-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);z-index:1}
+.ban::before{top:0;-webkit-mask:linear-gradient(#000,transparent);mask:linear-gradient(#000,transparent)}
+.ban::after{bottom:0;-webkit-mask:linear-gradient(transparent,#000);mask:linear-gradient(transparent,#000)}
+.ban-tt{position:absolute;left:.6em;top:.5em;z-index:2;font-size:.85em;color:var(--chu2);background:rgba(13,18,29,.75);padding:.2em .6em;border:1px solid rgba(216,180,106,.35)}
+.u{transition:transform .17s linear}
+.u.dich{cursor:pointer}
+.u.roi{transition:opacity .5s,transform .5s;opacity:0}
+.ky-ds{display:grid;gap:.4em;margin:.6em 0;font-size:.9em}
+.ky-dong{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center}
+.ky-bieu{width:2em;height:2em;display:grid;place-items:center;border:1px solid var(--vang);transform:rotate(45deg);background:var(--muc3)}
+.ky-bieu b{transform:rotate(-45deg);font-size:.95em;color:var(--vang2)}
+.hoi-dau{display:flex;flex-wrap:wrap;gap:.5em;justify-content:space-between;align-items:center;margin-bottom:.6em}
+.hoi-ky{color:var(--vang2);font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.15em}
+.dongho{flex:1;min-width:8em;max-width:14em;height:12px;border:1px solid var(--vang3);background:rgba(255,255,255,.06);position:relative}
+.dongho i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#e6c27a,#f3dc9a)}
+.dongho.gap i{background:linear-gradient(90deg,#d4664d,#e88a74)}
+.dongho-so{font-variant-numeric:tabular-nums;color:var(--chu2);font-size:.85em;min-width:2.5em;text-align:right}
+.hoi-chu{font-size:max(22px,1.3em);line-height:1.45;margin:.2em 0 .7em}
+.o-trong{display:inline-block;min-width:4.5em;border-bottom:2px solid var(--vang);text-align:center;color:var(--vang2)}
+.pa-ds{display:grid;gap:.55em}
+.pa{display:grid;grid-template-columns:auto 1fr;gap:.6em;align-items:start;text-align:left;width:100%;font-size:max(19px,1.08em);line-height:1.4;background:rgba(27,35,54,.95);border:1px solid rgba(216,180,106,.45);color:var(--chu);padding:.55em .75em;cursor:pointer;min-height:48px}
+.pa:hover{border-color:var(--vang)}
+.pa .k{width:1.6em;height:1.6em;display:grid;place-items:center;border:1px solid var(--vang3);font-size:.8em;color:var(--vang2)}
+.pa.chon{border-color:var(--vang2);background:rgba(90,76,40,.55)}
+.pa.chon .k{background:var(--vang);color:#1c1509}
+.pa.dung{border-color:var(--dung);background:rgba(61,138,87,.3)}
+.pa.sai{border-color:var(--sai);background:rgba(178,87,63,.3)}
+.pa.bo{border-style:dashed;border-color:var(--dung)}
+.pa.loai{opacity:.3;pointer-events:none;text-decoration:line-through}
+.pa .tag{display:block;font-size:.75em;color:var(--chu2);margin-top:.15em}
+.tf{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.tf .pa{justify-content:center;grid-template-columns:1fr;text-align:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:max(22px,1.35em)}
+.tu-ds{display:flex;flex-wrap:wrap;gap:.55em}
+.tu-ds .pa{width:auto;grid-template-columns:1fr;font-weight:600}
+.giai{line-height:1.55;font-size:.95em;margin:.7em 0}
+.kq-dau{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.4em}
+.kq-dau.tot{color:var(--dung)}.kq-dau.xau{color:var(--sai)}
+
+/* kết chương, tổng kết */
+.ket{display:grid;grid-template-columns:minmax(12em,20em) 1fr;gap:1.2em;align-items:start}
+@container (max-width:720px){.ket{grid-template-columns:1fr}}
+.so-lieu{display:grid;grid-template-columns:repeat(auto-fit,minmax(9em,1fr));gap:.6em;margin:.4em 0 1em}
+.so-lieu div{border:1px solid rgba(216,180,106,.4);background:rgba(27,35,54,.8);padding:.5em .7em}
+.so-lieu b{display:block;font-family:'Cormorant Garamond',serif;font-size:1.6em;color:var(--vang2)}
+.on-ds{display:grid;gap:.6em}
+.on-ds details{background:rgba(27,35,54,.85);border:1px solid rgba(232,138,116,.45);padding:.55em .8em}
+.on-ds summary{cursor:pointer;line-height:1.45}
+.on-ds summary small{display:block;color:var(--chu2)}
+.on-ds p{margin:.5em 0 0;line-height:1.55;color:var(--chu2)}
+
+/* phòng */
+.form{display:grid;gap:.9em;max-width:32em;margin:0 auto}
+.o-nhap{width:100%;font-size:1.3em;padding:.5em .7em;background:#0f1522;color:var(--chu);border:1px solid var(--vang);min-height:52px}
+.o-nhap.ma{text-transform:uppercase;letter-spacing:.35em;text-align:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:1.8em}
+.nhom-ds{display:grid;grid-template-columns:repeat(auto-fill,minmax(5.5em,1fr));gap:.5em}
+.nhom-ds button{min-height:52px;background:rgba(27,35,54,.95);border:1px solid rgba(216,180,106,.45);color:var(--chu);cursor:pointer;font-weight:600}
+.nhom-ds button.chon{background:linear-gradient(180deg,#f0d48d,#b98d3f);color:#1c1509;border-color:#fbe7b0}
+.chon-dong{display:flex;flex-wrap:wrap;gap:.6em;align-items:center}
+.dem-nut{display:inline-flex;align-items:center;gap:.5em}
+.dem-nut b{min-width:2.2em;text-align:center;font-size:1.4em;font-family:'Cormorant Garamond',serif;color:var(--vang2)}
+.loi-nho{color:var(--sai);min-height:1.3em;font-size:.9em}
+.ghi-nho{color:var(--chu2);font-size:.85em;line-height:1.5}
+
+/* màn chiếu 1920×1080 */
+body.chieu{overflow:hidden}
+.san-ngoai{position:fixed;inset:0;display:grid;place-items:center;background:#070a11}
+.san{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:50% 50%;transform:translate(-50%,-50%);font-size:24px;color:var(--chu);background:radial-gradient(90% 70% at 50% 20%,#26324f,#121826 60%,#0a0e17);overflow:hidden}
+.s-dau{position:absolute;left:0;right:0;top:0;height:120px;display:grid;grid-template-columns:560px 1fr 560px;align-items:center;padding:0 40px;border-bottom:1px solid var(--vang3);background:linear-gradient(180deg,rgba(10,14,23,.9),rgba(18,24,38,.6))}
+.s-ten{font-size:56px;color:var(--vang2);line-height:1}
+.s-ten small{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:500;font-size:19px;color:var(--chu2);margin-top:6px}
+.s-gio{text-align:center;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:78px;color:var(--vang2);font-variant-numeric:tabular-nums;line-height:1}
+.s-gio small{display:block;font-family:'Be Vietnam Pro',sans-serif;font-size:18px;font-weight:500;color:var(--chu2);letter-spacing:.1em}
+.s-gio.gap{color:#f0a08a}
+.s-phong{display:flex;justify-content:flex-end;align-items:center;gap:18px;text-align:right}
+.s-phong .qr svg{width:96px;height:96px;background:#fff;padding:4px;display:block}
+.s-ma{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:54px;color:var(--vang2);letter-spacing:.12em;line-height:1}
+.s-ma small{display:block;font-family:'Be Vietnam Pro',sans-serif;font-weight:500;font-size:17px;letter-spacing:0;color:var(--chu2)}
+.s-cot{position:absolute;top:150px;bottom:112px}
+.s-bang{left:40px;width:780px}
+.s-giua{left:850px;width:520px}
+.s-phai{left:1400px;width:480px}
+.s-cot .khung{height:100%;padding:22px 26px}
+.s-cot .tieu{font-size:32px}
+.b-dong{display:grid;grid-template-columns:54px 1fr 120px;gap:14px;align-items:center;padding:9px 4px;border-bottom:1px solid rgba(216,180,106,.15)}
+.b-hang{width:42px;height:42px;display:grid;place-items:center;transform:rotate(45deg);border:1px solid var(--vang3);background:var(--muc3);margin-left:6px}
+.b-hang span{transform:rotate(-45deg);font-family:'Cormorant Garamond',serif;font-weight:700;font-size:24px;color:var(--vang2)}
+.b-dong.h1 .b-hang{background:linear-gradient(180deg,#f0d48d,#b98d3f)}.b-dong.h1 .b-hang span{color:#1c1509}
+.b-ten{font-size:26px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b-ten small{font-weight:400;font-size:17px;color:var(--chu2);margin-left:8px}
+.b-vach{height:8px;background:rgba(255,255,255,.07);margin-top:6px}
+.b-vach i{display:block;height:100%;background:linear-gradient(90deg,var(--vang3),var(--vang2));transition:width .8s}
+.b-diem{text-align:right;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:34px;color:var(--vang2);font-variant-numeric:tabular-nums}
+.b-phu{font-size:16px;color:var(--chu2);margin-top:4px}
+.len{color:var(--dung);font-size:18px;margin-left:6px}
+.s-tg{width:250px;margin:0 auto}
+.s-giua .khung{overflow:hidden}
+.s-nham{margin-top:18px}
+.s-nham .n-dong{border-left:3px solid var(--sai);padding:5px 12px;margin:8px 0;background:rgba(178,87,63,.12);font-size:18px;line-height:1.35}
+.s-nham .n-dong small{display:block;color:var(--chu2);font-size:15px}
+.mo-hop{display:grid;grid-template-columns:150px 1fr;gap:14px;align-items:start}
+.mo-hop svg{width:150px;height:auto}
+.mo-loi{position:relative;background:var(--giay);color:#2a2214;padding:16px 18px;font-size:21px;line-height:1.45;min-height:150px;border:1px solid var(--giay3)}
+.mo-loi::before{content:'';position:absolute;left:-9px;top:30px;width:16px;height:16px;background:var(--giay);border-left:1px solid var(--giay3);border-bottom:1px solid var(--giay3);transform:rotate(45deg)}
+.mo-loi b{font-family:'Cormorant Garamond',serif;font-size:22px;display:block;margin-bottom:4px}
+.kk-ds{margin-top:22px}
+.kk{display:grid;grid-template-columns:70px 1fr;gap:10px;font-size:19px;line-height:1.4;padding:8px 0;border-bottom:1px solid rgba(216,180,106,.15)}
+.kk span{color:var(--vang2);font-variant-numeric:tabular-nums}
+.s-chay{position:absolute;left:0;right:0;bottom:0;height:64px;border-top:1px solid var(--vang3);background:rgba(10,14,23,.92);overflow:hidden;display:flex;align-items:center}
+.s-chay-nhan{flex:none;position:relative;z-index:1;height:100%;display:grid;place-items:center;padding:0 22px;background:linear-gradient(180deg,#f0d48d,#b98d3f);color:#1c1509;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:26px}
+.s-chay-dai{white-space:nowrap;font-size:22px;padding-left:100%;animation:chay 60s linear infinite}
+@keyframes chay{to{transform:translateX(-100%)}}
+.s-dk{position:absolute;right:40px;bottom:70px;z-index:3;display:flex;gap:10px;opacity:.35;transition:opacity .3s}
+.s-dk:hover{opacity:1}
+.s-dk button{font:600 15px 'Be Vietnam Pro',sans-serif;background:var(--muc3);color:var(--chu);border:1px solid var(--vang3);padding:6px 12px;cursor:pointer}
+.s-cho{position:absolute;left:40px;right:40px;top:150px;bottom:96px;display:grid;grid-template-columns:600px 1fr;gap:40px}
+.s-cho .qr-lon svg{width:520px;height:520px;background:#fff;padding:14px;display:block;margin:0 auto}
+.s-cho .dia-chi{text-align:center;font-size:22px;color:var(--chu2);margin-top:14px;word-break:break-all}
+.s-dem{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-top:16px}
+.s-dem div{border:1px solid rgba(216,180,106,.4);background:rgba(27,35,54,.8);padding:12px;text-align:center;font-size:20px}
+.s-dem b{display:block;font-family:'Cormorant Garamond',serif;font-size:46px;color:var(--vang2);line-height:1.1}
+.s-nut-lon{margin-top:28px;display:flex;gap:22px}
+.s-nut-lon .nut{font-size:34px;padding:16px 40px}
+.s-xong{position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,8,14,.78);z-index:5}
+.s-xong .khung{width:1100px;padding:40px 50px;text-align:center}
+.s-xong h2{font-size:64px;color:var(--vang2);margin:0 0 10px}
+.podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:26px;margin-top:28px;align-items:end}
+.podium div{border:1px solid var(--vang);background:rgba(40,51,82,.85);padding:20px;font-size:26px}
+.podium div b{display:block;font-family:'Cormorant Garamond',serif;font-size:48px;color:var(--vang2)}
+
+/* chế độ sửa (?sua=1) — chỉ giảng viên mở */
+#sua-khung{position:fixed;left:.6rem;bottom:.6rem;z-index:80;max-width:min(46rem,calc(100vw - 1.2rem));font:500 15px/1.4 'Segoe UI',system-ui,sans-serif;color:#2a2214}
+#sua-khung .sua-thanh,#sua-khung .sua-hop{background:#f3e8cc;border:2px solid #8f7038;box-shadow:0 6px 18px rgba(0,0,0,.45);padding:.5rem .65rem;margin-top:.4rem}
+#sua-khung .sua-thanh{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;background:#1b2336;color:#f2ead6;border-color:#d8b46a}
+#sua-khung .sua-thanh b{font:700 20px/1 'Cormorant Garamond',serif;color:#f3dc9a}
+#sua-khung button{font:600 14px 'Segoe UI',system-ui,sans-serif;border:1px solid #8f7038;background:#e4d2a8;color:#2a2214;padding:.3rem .6rem;cursor:pointer;min-height:36px}
+#sua-khung button.bat,#sua-khung button.chinh{background:#f0d48d}
+#sua-khung.gon .sua-thanh > :not(#sua-gon),#sua-khung.gon .sua-hop{display:none!important}
+#sua-dem{font-weight:700;color:#f3dc9a}
+#sua-ds{max-height:45vh;overflow:auto}
+#sua-ds ol{margin:0 0 .5rem;padding-left:1.3rem} #sua-ds li{margin:.4rem 0} #sua-ds s{color:#7b6640}
+#sua-o textarea{width:100%;font:600 16px 'Segoe UI',system-ui,sans-serif;border:2px solid #8f7038;padding:.5rem;margin:.35rem 0;resize:vertical;color:#2a2214;background:#fffaf0}
+#sua-o .sua-nut{display:flex;gap:.4rem;flex-wrap:wrap}
+.sua-nho{color:#6b5530;font-size:13px}
+body.co-sua .man{padding-bottom:76px}
+#sua-ch{max-height:60vh;overflow:auto;min-width:min(42rem,calc(100vw - 1.2rem))}
+#sua-ch .sua-ch-dong{display:grid;grid-template-columns:minmax(10rem,1fr) minmax(12rem,1.6fr);gap:.6rem;align-items:center;margin:.25rem 0;font-size:13px}
+#sua-ch input{font:500 14px 'Segoe UI',system-ui,sans-serif;border:1px solid #8f7038;padding:.35rem .5rem;width:100%;color:#2a2214;background:#fffaf0}
+#sua-ch input.da-sua{border:2px solid #b98d3f;background:#fff1c9}
+@media (max-width:560px){#sua-ch .sua-ch-dong{grid-template-columns:1fr}}
+body.dang-sua .sua-tro{outline:2px dashed #e9b85b;outline-offset:2px;cursor:text}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<noscript>Game cần bật JavaScript.</noscript>
+<script>
+const DB = {"giayMoiCau":25,"dinh":[{"ma":"vh","ten":"Văn hóa"},{"ma":"dd","ten":"Đạo đức"},{"ma":"cn","ten":"Con người"}],"chuong":[{"ma":"I","ten":"Văn hóa","tenDai":"Chương I · Văn hóa","dinh":"vh","canh":"lang","hoiDong":["p1","p2"],"mo":"Làng đang bàn việc dựng nền văn hóa mới. Hai vị trong hội đồng còn giữ những luận điệu chưa đúng.","diaDiem":[{"thua":"I.1","ten":"Đình làng","nguoi":"Ông từ giữ đình","loi":"Muốn bàn chuyện văn hóa, trước hết phải hiểu Hồ Chí Minh quan niệm văn hóa thế nào và văn hóa đứng ở đâu giữa đời sống.","tenMuc":"Quan niệm về văn hóa","luanCu":[{"ma":"I.1-2","chu":"Chính trị, kinh tế, văn hóa, xã hội quan trọng ngang nhau và có sự tác động qua lại lẫn nhau"},{"ma":"I.1-4","chu":"Văn hóa không hoàn toàn phụ thuộc vào kinh tế mà có vai trò tác động tích cực trở lại kinh tế"},{"ma":"I.1-5","chu":"Giữ gìn bản sắc văn hóa dân tộc, lấy văn hóa dân tộc làm gốc để tiếp thu tinh hoa văn hóa nhân loại"}]},{"thua":"I.2","ten":"Chiếu chèo","nguoi":"Cô đào chèo","loi":"Văn hóa không chỉ để thưởng thức. Người đặt cho văn hóa những vai trò rất lớn đối với cách mạng.","tenMuc":"Vai trò của văn hóa","luanCu":[{"ma":"I.2-0","chu":"Văn hóa là mục tiêu của cách mạng"},{"ma":"I.2-2","chu":"Văn hóa là động lực của sự nghiệp cách mạng"},{"ma":"I.2-4","chu":"Văn hóa là một mặt trận; anh chị em văn nghệ sĩ là chiến sĩ trên mặt trận ấy"}]},{"thua":"I.3","ten":"Lớp bình dân học vụ","nguoi":"Cô giáo bình dân","loi":"Nền văn hóa mới được xây dựng ra sao qua từng thời kỳ cách mạng?","tenMuc":"Xây dựng nền văn hóa mới","luanCu":[{"ma":"I.3-1","chu":"Nền văn hóa Hồ Chí Minh chủ trương kết hợp truyền thống tốt đẹp của văn hóa dân tộc với tinh hoa văn hóa nhân loại, thấm nhuần chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính"},{"ma":"I.3-3","chu":"Trong kháng chiến chống thực dân Pháp, nền văn hóa mới có tính chất dân tộc, khoa học, đại chúng"},{"ma":"I.3-5","chu":"Nền văn hóa mới là nền văn hóa toàn diện, giữ gìn cốt cách văn hóa dân tộc, bảo đảm tính khoa học, tiến bộ và nhân văn"}]}]},{"ma":"II","ten":"Đạo đức","tenDai":"Chương II · Đạo đức","dinh":"dd","canh":"gieng","hoiDong":["p3"],"mo":"Hội đồng chọn người gánh việc chung. Có người cho rằng chỉ cần tài là đủ.","diaDiem":[{"thua":"II.1","ten":"Giếng làng","nguoi":"Bác cán bộ xã","loi":"Người cách mạng cần điều gì trước nhất? Ở giếng làng, ai cũng bàn chuyện đức và tài.","tenMuc":"Đạo đức là gốc, là nền tảng","luanCu":[{"ma":"II.1-0","chu":"Đạo đức là gốc, là nền tảng, là sức mạnh, là tiêu chuẩn hàng đầu của người cách mạng"},{"ma":"II.1-1","chu":"Như sông có nguồn, cây có gốc; người cách mạng không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân"},{"ma":"II.1-3","chu":"Đức và tài thống nhất, đức là gốc; nếu không có đạo đức cách mạng thì có tài cũng vô dụng"}]},{"thua":"II.2","ten":"Sân hợp tác xã","nguoi":"Chị xã viên","loi":"Bốn chuẩn mực đạo đức cách mạng là những chuẩn mực nào, chuẩn mực nào bao trùm?","tenMuc":"Bốn chuẩn mực đạo đức cách mạng","luanCu":[{"ma":"II.2-0","chu":"Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm quan trọng nhất và chi phối các phẩm chất khác"},{"ma":"II.2-2","chu":"Cần, kiệm, liêm, chính, chí công vô tư là nội dung cốt lõi của đạo đức cách mạng"},{"ma":"II.2-4","chu":"Thương yêu con người, sống có tình có nghĩa"}]},{"thua":"II.3","ten":"Nhà văn hóa xã","nguoi":"Anh đoàn viên","loi":"Nền đạo đức mới được xây dựng theo những nguyên tắc nào?","tenMuc":"Ba nguyên tắc xây dựng đạo đức","luanCu":[{"ma":"II.3-0","chu":"Nói đi đôi với làm, nêu gương về đạo đức là nguyên tắc quan trọng bậc nhất trong xây dựng nền đạo đức mới"},{"ma":"II.3-1","chu":"Xây đi đôi với chống, muốn xây phải chống, chống nhằm mục đích xây, lấy xây làm chính"},{"ma":"II.3-3","chu":"Tu dưỡng đạo đức như một cuộc cách mạng trường kỳ, gian khổ; nền đạo đức mới chỉ có thể được xây dựng trên cơ sở tự giác tu dưỡng đạo đức của mỗi người"}]}]},{"ma":"III","ten":"Con người","tenDai":"Chương III · Con người","dinh":"cn","canh":"song","hoiDong":["p4"],"mo":"Làng mở trường mới. Có người nghĩ việc “trồng người” chỉ là chuyện một sớm một chiều.","diaDiem":[{"thua":"III.1","ten":"Bến đò","nguoi":"Ông lái đò","loi":"Con người trong tư tưởng Hồ Chí Minh là con người như thế nào?","tenMuc":"Quan niệm về con người","luanCu":[{"ma":"III.1-0","chu":"Con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực"},{"ma":"III.1-2","chu":"Trong mỗi con người đều có tính tốt và tính xấu"},{"ma":"III.1-5","chu":"Hồ Chí Minh nhìn nhận con người lịch sử - cụ thể, xa lạ với con người trừu tượng"}]},{"thua":"III.2","ten":"Cánh đồng","nguoi":"Bà con xã viên","loi":"Con người có vai trò gì đối với sự nghiệp cách mạng?","tenMuc":"Vai trò của con người","luanCu":[{"ma":"III.2-0","chu":"Con người là mục tiêu của cách mạng"},{"ma":"III.2-3","chu":"Con người là động lực của cách mạng"},{"ma":"III.2-4","chu":"Con người là vốn quý nhất, nhân tố quyết định thành công của sự nghiệp cách mạng"}]},{"thua":"III.3","ten":"Trường làng","nguoi":"Thầy hiệu trưởng","loi":"Xây dựng con người là việc như thế nào, cần những gì?","tenMuc":"Xây dựng con người","luanCu":[{"ma":"III.3-0","chu":"Xây dựng con người là yêu cầu khách quan của sự nghiệp cách mạng, vừa cấp bách vừa lâu dài, có ý nghĩa chiến lược"},{"ma":"III.3-1","chu":"Vì lợi ích trăm năm thì phải trồng người"},{"ma":"III.3-3","chu":"Xây dựng con người toàn diện vừa hồng vừa chuyên"}]}]},{"ma":"IV","ten":"Hôm nay","tenDai":"Chương IV · Hôm nay","dinh":"vh","canh":"pho","hoiDong":["p5"],"mo":"Làng xưa nay đã thành phố huyện. Vận dụng tư tưởng của Người hôm nay, có người muốn đóng cổng làng lại.","diaDiem":[{"thua":"IV.1","ten":"Thư viện huyện","nguoi":"Cô thủ thư","loi":"Hôm nay, Đảng ta vận dụng tư tưởng của Người về văn hóa, con người ra sao?","tenMuc":"Xây dựng và phát triển văn hóa, con người","luanCu":[{"ma":"IV.1-0","chu":"Văn hóa là nền tảng tinh thần của xã hội, vừa là mục tiêu vừa là động lực thúc đẩy sự phát triển kinh tế - xã hội"},{"ma":"IV.1-3","chu":"Con người là trung tâm của chiến lược phát triển, đồng thời là chủ thể phát triển"},{"ma":"IV.1-5","chu":"Chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại"}]},{"thua":"IV.2","ten":"Giảng đường","nguoi":"Bạn sinh viên","loi":"Học tập đạo đức cách mạng Hồ Chí Minh hôm nay là học những gì?","tenMuc":"Xây dựng đạo đức cách mạng","luanCu":[{"ma":"IV.2-0","chu":"Hồ Chí Minh là tấm gương sáng, là hiện thân của nền đạo đức cách mạng Việt Nam"},{"ma":"IV.2-1","chu":"Học tập đạo đức cách mạng Hồ Chí Minh là phải trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng"},{"ma":"IV.2-5","chu":"Thế hệ trẻ là người chủ tương lai của nước nhà; cần chăm lo giáo dục lý tưởng cách mạng, đạo đức, lối sống, văn hóa cho sinh viên"}]}]}],"hoiDong":[{"ma":"p1","ten":"Ông Phú Hộ","vai":"chủ hiệu buôn","chuong":"I","dinh":"vh","hinh":"phuho","noi":"Văn hóa thuộc kiến trúc thượng tầng, nên hoàn toàn phụ thuộc vào kinh tế. Cứ lo kinh tế trước, văn hóa tính sau.","dung":["I.1-4"],"dongY":"Phải rồi. Văn hóa không đứng ngoài mà đứng trong kinh tế, còn tác động tích cực trở lại kinh tế. Tôi đặt quả cân của mình lên đỉnh Văn hóa.","giai":"Văn hóa thuộc kiến trúc thượng tầng, nhưng không thể đứng ngoài mà phải đứng trong kinh tế: văn hóa không hoàn toàn phụ thuộc vào kinh tế, mà có vai trò tác động tích cực trở lại kinh tế."},{"ma":"p2","ten":"Cụ Từ Lệ","vai":"người giữ lề lối cũ","chuong":"I","dinh":"vh","hinh":"tule","noi":"Nền văn hóa mới ư? Cứ duy trì hoàn toàn các phong tục tập quán cũ là đủ, chẳng cần học thêm của ai.","dung":["I.3-1","I.1-5"],"dongY":"Ta hiểu rồi. Giữ truyền thống tốt đẹp, phát triển và nâng cao nó, lại tiếp thu tinh hoa văn hóa nhân loại. Quả cân của ta đặt lên đỉnh Văn hóa.","giai":"Nền văn hóa mà Hồ Chí Minh chủ trương kết hợp những truyền thống tốt đẹp của văn hóa dân tộc được phát triển và nâng cao với tinh hoa văn hóa của nhân loại, thấm nhuần sâu sắc chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính."},{"ma":"p3","ten":"Cậu Tú Tài","vai":"người đỗ đạt","chuong":"II","dinh":"dd","hinh":"tutai","noi":"Cán bộ có tài là được. Có tài nhưng thiếu đạo đức cách mạng thì vẫn có thể lãnh đạo nhân dân thành công.","dung":["II.1-1","II.1-3"],"dongY":"Tôi nhận ra rồi. Đức là gốc; không có đạo đức cách mạng thì có tài cũng vô dụng. Quả cân của tôi đặt lên đỉnh Đạo đức.","giai":"Hồ Chí Minh khẳng định: “Người cách mạng phải có đạo đức, không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân” và “Nếu không có đạo đức cách mạng thì có tài cũng vô dụng”."},{"ma":"p4","ten":"Bà Chợ Phiên","vai":"người buôn bán","chuong":"III","dinh":"cn","hinh":"chophien","noi":"“Trồng người” chỉ là công việc trước mắt, dạy xong một lứa là xong, chẳng có ý nghĩa lâu dài gì.","dung":["III.3-0","III.3-1"],"dongY":"Thì ra “trồng người” là việc lâu dài, gian khổ, vừa vì lợi ích trước mắt vừa vì lợi ích lâu dài. Quả cân của tôi đặt lên đỉnh Con người.","giai":"“Vì lợi ích trăm năm thì phải “trồng người””. “Trồng người” là công việc lâu dài, gian khổ, vừa vì lợi ích trước mắt vừa vì lợi ích lâu dài, là công việc của văn hóa giáo dục."},{"ma":"p5","ten":"Ông Lũy Tre","vai":"người canh cổng làng","chuong":"IV","dinh":"vh","hinh":"luytre","noi":"Muốn giữ bản sắc thì phải hạn chế hội nhập quốc tế về văn hóa, đóng cổng làng lại cho chắc.","dung":["IV.1-5"],"dongY":"Vậy là phải chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại, mà vẫn xây dựng nền văn hóa tiên tiến, đậm đà bản sắc dân tộc. Quả cân của tôi đặt lên đỉnh Văn hóa.","giai":"Nghị quyết số 33-NQ/TW (Hội nghị Trung ương 9 khóa XI) nêu nhiệm vụ: “Chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại”."}],"cau":[{"id":"c01","goc":1,"chuong":"I","muc":"I.2","dinh":["vh"],"dang":"tf","hoi":"Theo Hồ Chí Minh, văn hóa là mục tiêu duy nhất của cách mạng Việt Nam.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. Mục tiêu của cách mạng Việt Nam là độc lập dân tộc và chủ nghĩa xã hội. Cùng với chính trị, kinh tế, xã hội, văn hóa nằm trong mục tiêu chung của toàn bộ tiến trình cách mạng; văn hóa không phải là mục tiêu duy nhất.","nho":"Văn hóa nằm trong mục tiêu chung của cách mạng, cùng với chính trị, kinh tế, xã hội; không phải mục tiêu duy nhất."},{"id":"c02","goc":2,"chuong":"I","muc":"I.3","dinh":["vh"],"dang":"tf","hoi":"UNESCO đã ghi nhận Chủ tịch Hồ Chí Minh là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam vào năm 1987.","pa":["Đúng","Sai"],"dung":[0],"giaiThich":"Đúng. Hồ Chí Minh được UNESCO ghi nhận là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam trong Nghị quyết 24C/18.6.5 của Khóa họp 24 Đại hội đồng UNESCO từ ngày 20/10 đến ngày 20/11/1987.","nho":"UNESCO ghi nhận Hồ Chí Minh là Anh hùng giải phóng dân tộc, Nhà văn hóa kiệt xuất Việt Nam (1987)."},{"id":"c03","goc":3,"chuong":"II","muc":"II.3","dinh":["dd"],"dang":"tf","hoi":"Câu nói của Hồ Chí Minh “Đạo đức cách mạng không phải trên trời sa xuống. Nó do đấu tranh, rèn luyện bền bỉ hằng ngày mà phát triển và củng cố. Cũng như ngọc càng mài càng sáng, vàng càng luyện càng trong” thể hiện nguyên tắc tu dưỡng đạo đức suốt đời.","pa":["Đúng","Sai"],"dung":[0],"giaiThich":"Đúng. Theo Hồ Chí Minh, tu dưỡng đạo đức như một cuộc cách mạng trường kỳ, gian khổ; mỗi người phải kiên trì rèn luyện liên tục, tu dưỡng suốt đời. Đạo đức không phải là cái gì đó có tính “nhất thành bất biến”, mà được hình thành, phát triển do môi trường giáo dục, do sự rèn luyện, phấn đấu và tu dưỡng bản thân của mỗi người.","nho":"“Đạo đức cách mạng không phải trên trời sa xuống…” thể hiện nguyên tắc tu dưỡng đạo đức suốt đời."},{"id":"c04","goc":4,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"tf","hoi":"Quan niệm văn hóa theo nghĩa rộng của Hồ Chí Minh xuất hiện sau Cách mạng Tháng Tám năm 1945, khi cả nước tập trung xây dựng đất nước.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. Quan niệm văn hóa theo nghĩa rộng được Hồ Chí Minh đưa ra vào tháng 8/1943, khi còn ở trong nhà tù của Tưởng Giới Thạch. Đây là quan niệm văn hóa duy nhất theo nghĩa rộng. Từ sau Cách mạng Tháng Tám, Hồ Chí Minh có bàn đến văn hóa nhưng theo nghĩa hẹp, với ý nghĩa là kiến trúc thượng tầng, là toàn bộ đời sống tinh thần của xã hội.","nho":"Quan niệm văn hóa theo nghĩa rộng ra đời tháng 8/1943, khi Người còn ở trong nhà tù của Tưởng Giới Thạch."},{"id":"c05","goc":5,"chuong":"III","muc":"III.3","dinh":["cn"],"dang":"tf","hoi":"Trong quan điểm của Hồ Chí Minh về xây dựng con người, “trồng người” chỉ là công việc trước mắt, không mang ý nghĩa lâu dài.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. “Vì lợi ích trăm năm thì phải “trồng người””. “Trồng người” là công việc lâu dài, gian khổ, vừa vì lợi ích trước mắt vừa vì lợi ích lâu dài, là công việc của văn hóa giáo dục.","nho":"“Trồng người” là công việc lâu dài, gian khổ, vừa vì lợi ích trước mắt vừa vì lợi ích lâu dài."},{"id":"c06","goc":6,"chuong":"II","muc":"II.1","dinh":["dd"],"dang":"tf","hoi":"Theo tư tưởng Hồ Chí Minh, nếu cán bộ có tài nhưng thiếu đạo đức cách mạng thì vẫn có thể lãnh đạo nhân dân thành công.","pa":["Đúng","Sai"],"dung":[1],"giaiThich":"Sai. Hồ Chí Minh khẳng định: “Người cách mạng phải có đạo đức, không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân” và “Nếu không có đạo đức cách mạng thì có tài cũng vô dụng”.","nho":"Không có đạo đức thì dù tài giỏi mấy cũng không lãnh đạo được nhân dân."},{"id":"c07","goc":7,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"one","hoi":"Theo Hồ Chí Minh, trong đời sống có bốn vấn đề phải được coi là quan trọng ngang nhau và có sự tác động qua lại lẫn nhau, đó là:","pa":["Chính trị, kinh tế, giáo dục, văn hóa.","Chính trị, kinh tế, xã hội, quốc phòng.","Chính trị, kinh tế, văn hóa, xã hội.","Kinh tế, văn hóa, giáo dục, y tế.","Chính trị, quân sự, văn hóa, xã hội."],"dung":[2],"giaiThich":"Hồ Chí Minh cho rằng, trong đời sống có bốn vấn đề phải được coi là quan trọng ngang nhau và có sự tác động qua lại lẫn nhau, đó là chính trị, kinh tế, văn hóa, xã hội.","nho":"Bốn vấn đề quan trọng ngang nhau, tác động qua lại: chính trị, kinh tế, văn hóa, xã hội."},{"id":"c08","goc":8,"chuong":"II","muc":"II.2","dinh":["dd"],"dang":"one","hoi":"Theo quan điểm của Hồ Chí Minh về đạo đức cách mạng, đâu là phẩm chất bao trùm và quan trọng nhất?","pa":["Cần, kiệm, liêm, chính.","Thương yêu con người, sống có tình có nghĩa.","Trung với nước, hiếu với dân.","Tinh thần quốc tế trong sáng.","Nói đi đôi với làm, nêu gương về đạo đức."],"dung":[2],"giaiThich":"Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm quan trọng nhất và chi phối các phẩm chất khác. Nói đi đôi với làm, nêu gương về đạo đức là một nguyên tắc xây dựng đạo đức, không phải một chuẩn mực.","nho":"Trung với nước, hiếu với dân là phẩm chất đạo đức bao trùm, quan trọng nhất."},{"id":"c09","goc":9,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"one","hoi":"Trong các cách tiếp cận văn hóa của Hồ Chí Minh, cách tiếp cận nào thường xuất hiện trong các bài nói với đồng bào miền núi?","pa":["Tiếp cận theo nghĩa rộng, tổng hợp mọi phương thức sinh hoạt của con người.","Tiếp cận theo nghĩa hẹp là đời sống tinh thần của xã hội, thuộc kiến trúc thượng tầng.","Tiếp cận theo nghĩa hẹp hơn là bàn đến các trường học, số người đi học, xóa nạn mù chữ, biết đọc, biết viết.","Tiếp cận theo “phương thức sử dụng công cụ sinh hoạt”.","Tiếp cận văn hóa như một mặt trận."],"dung":[2],"giaiThich":"Hồ Chí Minh có bốn cách tiếp cận chủ yếu về văn hóa. Trong đó, cách tiếp cận theo nghĩa hẹp hơn là bàn đến các trường học, số người đi học, xóa nạn mù chữ, biết đọc, biết viết thường xuất hiện trong các bài nói với đồng bào miền núi.","nho":"Cách tiếp cận văn hóa theo nghĩa hẹp hơn (trường học, xóa nạn mù chữ) thường gặp trong các bài nói với đồng bào miền núi."},{"id":"c10","goc":10,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"one","hoi":"“Dân ta phải biết sử ta. Cho tường gốc tích nước nhà Việt Nam” là lời nhắc nhở của Hồ Chí Minh về việc:","pa":["Học tập văn hóa các nước phương Đông.","Giữ gìn bản sắc văn hóa dân tộc.","Tiếp thu tinh hoa văn hóa nhân loại.","Xây dựng nền văn hóa mới xã hội chủ nghĩa.","Chống giặc dốt và nâng cao dân trí."],"dung":[1],"giaiThich":"Câu này nằm trong phần giữ gìn bản sắc văn hóa dân tộc: trách nhiệm của con người Việt Nam là phải trân trọng, khai thác, giữ gìn, phát huy, phát triển những giá trị của văn hóa dân tộc, đáp ứng yêu cầu, nhiệm vụ cách mạng của từng giai đoạn lịch sử.","nho":"“Dân ta phải biết sử ta…” là lời nhắc giữ gìn bản sắc văn hóa dân tộc."},{"id":"c11","goc":11,"chuong":"II","muc":"II.3","dinh":["dd"],"dang":"one","hoi":"Theo Hồ Chí Minh, nguồn gốc của mọi thứ tệ nạn như quan liêu, tham ô, lãng phí là gì?","pa":["Sự thiếu hiểu biết về pháp luật.","Chủ nghĩa cá nhân.","Thiếu kinh nghiệm lãnh đạo.","Ảnh hưởng của văn hóa ngoại lai.","Sự kém phát triển về kinh tế."],"dung":[1],"giaiThich":"Hồ Chí Minh chỉ rõ: “Quan liêu, tham ô, lãng phí là tội ác. Phải tẩy sạch nó để thực hiện cần kiệm liêm chính”. Nguồn gốc của mọi thứ tệ nạn là chủ nghĩa cá nhân: “do cá nhân chủ nghĩa mà phạm nhiều sai lầm... Phải kiên quyết quét sạch chủ nghĩa cá nhân”.","nho":"Chủ nghĩa cá nhân là nguồn gốc của mọi thứ tệ nạn như quan liêu, tham ô, lãng phí."},{"id":"c12","goc":12,"chuong":"I","muc":"I.3","dinh":["vh"],"dang":"one","hoi":"Trong thời kỳ kháng chiến chống thực dân Pháp, Hồ Chí Minh chủ trương xây dựng nền văn hóa mới với tính chất nào?","pa":["Tiên tiến, đậm đà bản sắc dân tộc.","Toàn diện, hiện đại, hội nhập.","Dân tộc, khoa học, đại chúng.","Xã hội chủ nghĩa và dân tộc.","Truyền thống và tiến bộ."],"dung":[2],"giaiThich":"Trong kháng chiến chống thực dân Pháp, Hồ Chí Minh khẳng định lại quan điểm của Đảng từ năm 1943 trong Đề cương văn hóa Việt Nam về phương châm xây dựng nền văn hóa mới: một nền văn hóa có tính chất dân tộc, khoa học, đại chúng.","nho":"Trong kháng chiến chống thực dân Pháp, nền văn hóa mới có tính chất dân tộc, khoa học, đại chúng."},{"id":"c13","goc":13,"chuong":"I","muc":"I.2","dinh":["vh"],"dang":"wrong","hoi":"Theo Hồ Chí Minh, để làm tròn nhiệm vụ của một chiến sĩ nghệ thuật trên mặt trận văn hóa, điều nào sau đây không phải là yêu cầu?","pa":["Có lập trường tư tưởng vững vàng.","Coi ngòi bút là vũ khí sắc bén trong sự nghiệp “phò chính trừ tà”.","Chỉ ca ngợi cái tốt, tránh phê bình cái xấu.","Bám sát cuộc sống thực tiễn, đi sâu vào quần chúng.","Có những tác phẩm xứng đáng với dân tộc anh hùng và thời đại vẻ vang."],"dung":[2],"giaiThich":"Để làm tròn nhiệm vụ, chiến sĩ nghệ thuật phải có lập trường tư tưởng vững vàng; ngòi bút là vũ khí sắc bén trong sự nghiệp “phò chính trừ tà”. Phải bám sát cuộc sống thực tiễn, đi sâu vào quần chúng, để phê bình nghiêm khắc những thói xấu như tham ô, lười biếng, lãng phí, quan liêu, và ca tụng chân thật những người tốt việc tốt. Vì vậy, “chỉ ca ngợi cái tốt, tránh phê bình cái xấu” là sai.","nho":"Chiến sĩ nghệ thuật phê bình nghiêm khắc những thói xấu và ca tụng chân thật những người tốt việc tốt."},{"id":"c14","goc":14,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"wrong","hoi":"Trong tư tưởng Hồ Chí Minh về quan hệ giữa văn hóa với các lĩnh vực khác, nhận định nào sau đây là không đúng?","pa":["Văn hóa phải phục vụ nhiệm vụ chính trị.","Văn hóa thuộc kiến trúc thượng tầng và hoàn toàn phụ thuộc vào kinh tế.","Giải phóng chính trị để mở đường cho văn hóa phát triển.","Văn hóa có vai trò tác động tích cực trở lại kinh tế.","Xã hội thế nào văn hóa thế ấy, nên phải giải phóng xã hội để văn hóa phát triển."],"dung":[1],"giaiThich":"Hồ Chí Minh giải thích rằng văn hóa thuộc kiến trúc thượng tầng. Tuy nhiên, văn hóa cũng không thể đứng ngoài mà phải đứng trong kinh tế, nghĩa là văn hóa không hoàn toàn phụ thuộc vào kinh tế, mà có vai trò tác động tích cực trở lại kinh tế. Vì vậy, nhận định “hoàn toàn phụ thuộc vào kinh tế” là sai.","nho":"Văn hóa không hoàn toàn phụ thuộc vào kinh tế mà có vai trò tác động tích cực trở lại kinh tế."},{"id":"c15","goc":15,"chuong":"II","muc":"II.3","dinh":["dd"],"dang":"wrong","hoi":"Theo Hồ Chí Minh, để xây dựng nền đạo đức mới, đạo đức cách mạng, điều nào sau đây không phải là đối tượng cần chống?","pa":["Chủ nghĩa đế quốc.","Những thói quen và tập tục lạc hậu.","Chủ nghĩa cá nhân.","Lợi ích cá nhân chính đáng của con người.","Những biểu hiện, hành vi vô đạo đức, suy thoái đạo đức."],"dung":[3],"giaiThich":"Trên con đường đi tới tiến bộ và cách mạng, đạo đức mới chỉ có thể được xây dựng thành công trên cơ sở kiên trì mục tiêu chống chủ nghĩa đế quốc, chống những thói quen và tập tục lạc hậu, phải loại trừ chủ nghĩa cá nhân; chống là chống các biểu hiện, các hành vi vô đạo đức, suy thoái đạo đức. Tuy nhiên, Người lưu ý: “Đấu tranh chống chủ nghĩa cá nhân không phải là “giày xéo lên lợi ích cá nhân””.","nho":"Đấu tranh chống chủ nghĩa cá nhân không phải là “giày xéo lên lợi ích cá nhân”."},{"id":"c16","goc":16,"chuong":"III","muc":"III.3","dinh":["cn"],"dang":"wrong","hoi":"Đâu không phải là nội dung xây dựng con người toàn diện “vừa hồng vừa chuyên” theo quan điểm của Hồ Chí Minh?","pa":["Có ý thức làm chủ, tinh thần tập thể xã hội chủ nghĩa.","Chỉ chú trọng phát triển trí tuệ, không cần đạo đức.","Cần kiệm xây dựng đất nước, hăng hái bảo vệ Tổ quốc.","Có lòng yêu nước nồng nàn, tinh thần quốc tế trong sáng.","Có phương pháp làm việc khoa học, phong cách quần chúng, dân chủ, nêu gương."],"dung":[1],"giaiThich":"Hồ Chí Minh quan tâm xây dựng con người toàn diện vừa “hồng” vừa “chuyên”, đặc biệt quan tâm đến việc nâng cao đạo đức cách mạng, quét sạch chủ nghĩa cá nhân, đồng thời bồi dưỡng năng lực trí tuệ. Người khuyên: “Đức là đạo đức cách mạng. Đó là cái gốc, rất quan trọng. Nếu không có đạo đức cách mạng thì có tài cũng vô dụng”. Vì vậy, “chỉ chú trọng phát triển trí tuệ, không cần đạo đức” là sai.","nho":"Con người toàn diện vừa “hồng” vừa “chuyên”: đức là gốc, đồng thời bồi dưỡng năng lực trí tuệ."},{"id":"c17","goc":17,"chuong":"II","muc":"II.2","dinh":["dd"],"dang":"wrong","hoi":"Theo Hồ Chí Minh, nhận định nào sau đây về chữ “Liêm” là không đúng?","pa":["Liêm là trong sạch, không tham lam.","Liêm là không tham địa vị, không tham tiền tài, không tham sung sướng.","Người liêm vẫn có thể ham người tâng bốc mình.","Người liêm chỉ có một thứ ham là ham học, ham làm, ham tiến bộ.","Chữ Liêm phải đi đôi với chữ Kiệm."],"dung":[2],"giaiThich":"Liêm “là trong sạch, không tham lam... Chữ LIÊM phải đi đôi với chữ KIỆM”; “Liêm là không tham địa vị. Không tham tiền tài. Không tham sung sướng. Không ham người tâng bốc mình... Chỉ có một thứ ham là ham học, ham làm, ham tiến bộ”. Vì vậy, nhận định “người liêm vẫn có thể ham người tâng bốc mình” là sai.","nho":"Liêm là không tham địa vị, tiền tài, sung sướng, không ham người tâng bốc mình; chỉ ham học, ham làm, ham tiến bộ."},{"id":"c18","goc":18,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"wrong","hoi":"Phát biểu nào sau đây không phản ánh quan điểm của Hồ Chí Minh về việc tiếp thu tinh hoa văn hóa nhân loại?","pa":["Tiếp thu cái gì tốt của văn hóa xưa và nay.","Tránh nguy cơ trở thành kẻ bắt chước.","Chỉ nên học hỏi văn hóa phương Đông.","Mục đích là làm giàu cho văn hóa Việt Nam.","Phải lấy văn hóa dân tộc làm gốc khi tiếp thu."],"dung":[2],"giaiThich":"Hồ Chí Minh chỉ rõ: “Tây phương hay Đông phương có cái gì tốt ta học lấy để tạo ra một nền văn hóa Việt Nam”. Nội dung tiếp thu là toàn diện, bao gồm Đông, Tây, kim, cổ; tiêu chí tiếp thu là có cái gì hay, cái gì tốt là ta học lấy; đồng thời tránh nguy cơ trở thành kẻ bắt chước. Vì vậy, “chỉ nên học hỏi văn hóa phương Đông” là sai.","nho":"Tây phương hay Đông phương có cái gì tốt ta học lấy để tạo ra một nền văn hóa Việt Nam."},{"id":"c19","goc":19,"chuong":"I","muc":"I.3","dinh":["vh"],"dang":"multi","hoi":"Theo Hồ Chí Minh, nền văn hóa mới Việt Nam được xây dựng trên cơ sở kết hợp những yếu tố nào? (Chọn tất cả phương án đúng)","pa":["Những truyền thống tốt đẹp của văn hóa dân tộc được phát triển và nâng cao.","Tinh hoa văn hóa của nhân loại.","Thấm nhuần sâu sắc chủ nghĩa yêu nước.","Thấm nhuần sâu sắc chủ nghĩa quốc tế chân chính.","Duy trì hoàn toàn các phong tục tập quán cũ."],"dung":[0,1,2,3],"giaiThich":"Nền văn hóa mà Hồ Chí Minh chủ trương kết hợp những truyền thống tốt đẹp của văn hóa dân tộc được phát triển và nâng cao với tinh hoa văn hóa của nhân loại, thấm nhuần sâu sắc chủ nghĩa yêu nước và chủ nghĩa quốc tế chân chính. Giáo trình nói đến những truyền thống tốt đẹp “được phát triển và nâng cao”, và văn hóa phải sửa đổi tham nhũng, lười biếng, phù hoa, xa xỉ. Vì vậy, “duy trì hoàn toàn các phong tục tập quán cũ” là sai.","nho":"Nền văn hóa mới kết hợp truyền thống tốt đẹp của dân tộc với tinh hoa văn hóa nhân loại, không duy trì hoàn toàn phong tục cũ."},{"id":"c20","goc":20,"chuong":"I","muc":"I.1","dinh":["vh"],"dang":"multi","hoi":"Theo quan điểm Hồ Chí Minh, những nhận định nào sau đây đúng về bản sắc văn hóa dân tộc? (Chọn tất cả phương án đúng)","pa":["Phản ánh những nét độc đáo, đặc tính dân tộc.","Là ngọn nguồn đi tới chủ nghĩa Mác - Lênin.","Có ý nghĩa quan trọng đối với sự nghiệp xây dựng và bảo vệ Tổ quốc.","Là những giá trị văn hóa nhất thời, dễ mất đi trong quá trình giao lưu với bên ngoài.","Về hình thức, biểu hiện ở ngôn ngữ, phong tục, tập quán, lễ hội, truyền thống, cách cảm và nghĩ."],"dung":[0,1,2,4],"giaiThich":"Bản sắc văn hóa dân tộc là những giá trị văn hóa bền vững của cộng đồng các dân tộc Việt Nam, chứa đựng giá trị lớn và có một ý nghĩa quan trọng đối với sự nghiệp xây dựng và bảo vệ Tổ quốc. Nó phản ánh những nét độc đáo, đặc tính dân tộc; nó là ngọn nguồn đi tới chủ nghĩa Mác - Lênin. Về hình thức, cốt cách văn hóa dân tộc biểu hiện ở ngôn ngữ, phong tục, tập quán, lễ hội, truyền thống, cách cảm và nghĩ. Vì vậy, coi bản sắc là “những giá trị nhất thời” là sai.","nho":"Bản sắc văn hóa dân tộc là những giá trị văn hóa bền vững, không phải những giá trị nhất thời."},{"id":"c21","goc":21,"chuong":"II","muc":"II.1","dinh":["dd"],"dang":"multi","hoi":"Theo tư tưởng Hồ Chí Minh, những biểu hiện nào sau đây thuộc về đạo đức cách mạng của người chiến sĩ cách mạng? (Chọn tất cả phương án đúng)","pa":["Cả đời hết lòng hết sức phục vụ nhân dân.","Sinh hoạt ngày thường thì làm gương mẫu: gian khổ, chất phác, kính trọng của công.","Gặp khó khăn, gian khổ, thất bại cũng không sợ sệt, rụt rè, lùi bước.","Khi gặp thuận lợi và thành công vẫn giữ vững tinh thần gian khổ, chất phác, khiêm tốn.","Ưu tiên lợi ích cá nhân trước lợi ích tập thể."],"dung":[0,1,2,3],"giaiThich":"Theo Hồ Chí Minh, “Đại đa số chiến sĩ cách mạng là người có đạo đức: Cả đời hết lòng hết sức phục vụ nhân dân, sinh hoạt ngày thường thì làm gương mẫu; gian khổ, chất phác, kính trọng của công...”. “Có đạo đức cách mạng thì khi gặp khó khăn, gian khổ, thất bại, cũng không sợ sệt, rụt rè, lùi bước... khi gặp thuận lợi và thành công vẫn giữ vững tinh thần gian khổ, chất phác, khiêm tốn”. Chí công vô tư là luôn đặt lợi ích của Đảng, của nhân dân, của dân tộc lên trên hết, trước hết; chí công vô tư là chống chủ nghĩa cá nhân. Vì vậy, “ưu tiên lợi ích cá nhân trước lợi ích tập thể” là trái với đạo đức cách mạng.","nho":"Chiến sĩ cách mạng có đạo đức cả đời hết lòng hết sức phục vụ nhân dân, khó khăn không lùi bước, thành công vẫn khiêm tốn."},{"id":"c22","goc":22,"chuong":"IV","muc":"IV.2","dinh":["dd"],"dang":"multi","hoi":"Học tập đạo đức cách mạng Hồ Chí Minh là học tập và làm theo những phẩm chất nào sau đây? (Chọn tất cả phương án đúng)","pa":["Trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng.","Cần, kiệm, liêm, chính, chí công vô tư; đức khiêm tốn, trung thực.","Đức tin tuyệt đối vào sức mạnh của nhân dân; nhân ái, vị tha, khoan dung và nhân hậu với con người.","Ý chí và nghị lực tinh thần to lớn, quyết tâm vượt qua mọi thử thách, gian nguy.","Đề cao chủ nghĩa yêu nước, tách rời tinh thần quốc tế để giữ vững độc lập dân tộc."],"dung":[0,1,2,3],"giaiThich":"Học tập đạo đức cách mạng Hồ Chí Minh là phải trung với nước, hiếu với dân, suốt đời đấu tranh cho sự nghiệp cách mạng; tu dưỡng, rèn luyện theo tấm gương cần, kiệm, liêm, chính, chí công vô tư, đức khiêm tốn, trung thực; có đức tin tuyệt đối vào sức mạnh của nhân dân, luôn nhân ái, vị tha, khoan dung và nhân hậu với con người; học tấm gương về ý chí và nghị lực tinh thần to lớn. Đồng thời, đó là học tấm gương về chủ nghĩa yêu nước kết hợp với chủ nghĩa quốc tế vô sản trong sáng, không tách rời hai mặt ấy.","nho":"Học tập đạo đức Hồ Chí Minh là học chủ nghĩa yêu nước kết hợp với chủ nghĩa quốc tế vô sản trong sáng, không tách rời."},{"id":"c23","goc":23,"chuong":"III","muc":"III.2","dinh":["cn"],"dang":"multi","hoi":"Theo Hồ Chí Minh, những nội dung nào sau đây thuộc về “giải phóng con người”? (Chọn tất cả phương án đúng)","pa":["Xóa bỏ tình trạng áp bức, bóc lột, nô dịch con người.","Xóa bỏ các điều kiện xã hội làm tha hóa con người.","Làm cho mọi người được hưởng tự do, hạnh phúc, có điều kiện phát huy khả năng sáng tạo, làm chủ xã hội, làm chủ tự nhiên và làm chủ bản thân.","Phát triển toàn diện theo đúng bản chất tốt đẹp của con người.","Xóa bỏ ách thống trị của chủ nghĩa đế quốc, giành lại độc lập cho dân tộc."],"dung":[0,1,2,3],"giaiThich":"Giải phóng con người là xóa bỏ tình trạng áp bức, bóc lột, nô dịch con người; xóa bỏ các điều kiện xã hội làm tha hóa con người, làm cho mọi người được hưởng tự do, hạnh phúc, có điều kiện phát huy khả năng sáng tạo, làm chủ xã hội, làm chủ tự nhiên và làm chủ bản thân, phát triển toàn diện theo đúng bản chất tốt đẹp của con người. “Xóa bỏ ách thống trị của chủ nghĩa đế quốc, giành lại độc lập cho dân tộc” là nội dung của giải phóng dân tộc.","nho":"Giải phóng con người là xóa bỏ áp bức, bóc lột, nô dịch con người; giành độc lập là nội dung của giải phóng dân tộc."},{"id":"c24","goc":24,"chuong":"IV","muc":"IV.1","dinh":["vh","cn"],"dang":"multi","hoi":"Theo Nghị quyết Hội nghị Trung ương 9 khóa XI và Nghị quyết Đại hội XIII của Đảng, những định hướng nào sau đây về xây dựng văn hóa, con người Việt Nam là đúng? (Chọn tất cả phương án đúng)","pa":["Phát triển con người toàn diện và xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc.","Văn hóa, con người Việt Nam thực sự trở thành sức mạnh nội sinh, động lực phát triển đất nước và bảo vệ Tổ quốc.","Chăm lo xây dựng con người Việt Nam phát triển toàn diện, trọng tâm là bồi dưỡng tinh thần yêu nước, lòng tự hào dân tộc, đạo đức, lối sống và nhân cách.","Xây dựng môi trường văn hóa lành mạnh, phù hợp với bối cảnh phát triển kinh tế thị trường định hướng xã hội chủ nghĩa và hội nhập quốc tế.","Hạn chế hội nhập quốc tế về văn hóa để giữ nguyên bản sắc dân tộc."],"dung":[0,1,2,3],"giaiThich":"Nghị quyết Đại hội XIII xác định: “Phát triển con người toàn diện và xây dựng nền văn hóa Việt Nam tiên tiến, đậm đà bản sắc dân tộc để văn hóa, con người Việt Nam thực sự trở thành sức mạnh nội sinh, động lực phát triển đất nước và bảo vệ Tổ quốc”. Nghị quyết số 33-NQ/TW (Hội nghị Trung ương 9 khóa XI) nêu: “Chăm lo xây dựng con người Việt Nam phát triển toàn diện, trọng tâm là bồi dưỡng tinh thần yêu nước, lòng tự hào dân tộc, đạo đức, lối sống và nhân cách”, cùng các nhiệm vụ như xây dựng môi trường văn hóa lành mạnh và chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại. Vì vậy, “hạn chế hội nhập quốc tế về văn hóa” là sai.","nho":"Văn hóa, con người hôm nay: chủ động hội nhập quốc tế về văn hóa, tiếp thu tinh hoa văn hóa nhân loại."},{"id":"c25","goc":25,"chuong":"II","muc":"II.1","dinh":["dd"],"dang":"fill","hoi":"Trong Di chúc, Hồ Chí Minh viết: “Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo, là người ____ thật trung thành của nhân dân”.","pa":["đồng chí","đầy tớ","chiến sĩ","bạn bè","đại diện"],"dung":[1],"giaiThich":"Trong Di chúc, Hồ Chí Minh viết: “Đảng ta là một Đảng cầm quyền. Mỗi đảng viên và cán bộ phải thật sự thấm nhuần đạo đức cách mạng, thật sự cần kiệm liêm chính, chí công vô tư. Phải giữ gìn Đảng ta thật trong sạch, phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân”.","nho":"Đảng phải xứng đáng là người lãnh đạo, là người đầy tớ thật trung thành của nhân dân."},{"id":"c26","goc":26,"chuong":"II","muc":"II.2","dinh":["dd"],"dang":"fill","hoi":"Theo Hồ Chí Minh: “Cần tức là siêng năng, chăm chỉ, cố gắng dẻo dai... Muốn cho chữ Cần có nhiều kết quả hơn, thì phải có ____ cho mọi công việc”.","pa":["mục tiêu","kế hoạch","sáng kiến","kinh nghiệm","quy trình"],"dung":[1],"giaiThich":"“Cần tức là siêng năng, chăm chỉ, cố gắng dẻo dai... Muốn cho chữ Cần có nhiều kết quả hơn, thì phải có kế hoạch cho mọi công việc”. Cần tức là lao động cần cù, siêng năng; lao động có kế hoạch, sáng tạo, có năng suất cao.","nho":"Muốn cho chữ Cần có nhiều kết quả hơn thì phải có kế hoạch cho mọi công việc."},{"id":"c27","goc":27,"chuong":"I","muc":"I.2","dinh":["vh"],"dang":"fill","hoi":"Hồ Chí Minh đã đặt cơ sở cho một xã hội phát triển bền vững với ba trụ cột là bền vững về kinh tế, xã hội và ____.","pa":["chính trị","văn hóa","môi trường","quốc phòng","giáo dục"],"dung":[2],"giaiThich":"Hồ Chí Minh đã đặt cơ sở cho một xã hội phát triển bền vững với ba trụ cột là bền vững về kinh tế, xã hội và môi trường.","nho":"Ba trụ cột của xã hội phát triển bền vững: kinh tế, xã hội và môi trường."},{"id":"c28","goc":28,"chuong":"III","muc":"III.3","dinh":["cn"],"dang":"fill","hoi":"Về phương pháp xây dựng con người, Hồ Chí Minh nhắc nhở rằng: “Hiền, dữ phải đâu là tính sẵn. Phần nhiều do ____ mà nên”.","pa":["di truyền","giáo dục","hoàn cảnh","tài năng","rèn luyện"],"dung":[1],"giaiThich":"Biện pháp giáo dục có một vị trí quan trọng. Hồ Chí Minh nhắc nhở rằng: “Hiền, dữ phải đâu là tính sẵn. Phần nhiều do giáo dục mà nên”.","nho":"“Hiền, dữ phải đâu là tính sẵn. Phần nhiều do giáo dục mà nên”."},{"id":"c29","goc":29,"chuong":"IV","muc":"IV.2","dinh":["dd"],"dang":"fill","hoi":"Hồ Chí Minh đã cống hiến trọn đời mình cho sự nghiệp giải phóng dân tộc và thống nhất Tổ quốc, giải phóng giai cấp công nhân và dân tộc bị áp bức, cho sự thắng lợi của chủ nghĩa xã hội, cho sự hợp tác anh em và ____ giữa các dân tộc.","pa":["cạnh tranh","hòa bình","hội nhập","đối đầu","đấu tranh"],"dung":[1],"giaiThich":"Hồ Chí Minh đã cống hiến trọn đời mình cho sự nghiệp giải phóng dân tộc và thống nhất Tổ quốc, giải phóng giai cấp công nhân và dân tộc bị áp bức, cho sự thắng lợi của chủ nghĩa xã hội, cho sự hợp tác anh em và hòa bình giữa các dân tộc.","nho":"Người cống hiến trọn đời cho sự hợp tác anh em và hòa bình giữa các dân tộc."},{"id":"c30","goc":30,"chuong":"III","muc":"III.1","dinh":["cn"],"dang":"fill","hoi":"Theo Hồ Chí Minh, con người là một chỉnh thể, thống nhất về trí lực, tâm lực, ____, đa dạng bởi mối quan hệ giữa cá nhân và xã hội (quan hệ gia đình, dòng tộc, làng xã, quan hệ giai cấp, dân tộc...) và các mối quan hệ xã hội (quan hệ chính trị, văn hóa, đạo đức, tôn giáo...).","pa":["nghị lực","thể lực","năng lực","trí tuệ","nhân lực"],"dung":[1],"giaiThich":"Theo Hồ Chí Minh, con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực, đa dạng bởi mối quan hệ giữa cá nhân và xã hội (quan hệ gia đình, dòng tộc, làng xã, quan hệ giai cấp, dân tộc...) và các mối quan hệ xã hội (quan hệ chính trị, văn hóa, đạo đức, tôn giáo...).","nho":"Con người là một chỉnh thể, thống nhất về trí lực, tâm lực, thể lực."}]};
+const QS = new URLSearchParams(location.search);
+const KHOA_SUA = 'can-can-sua';
+function layLS(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+/* chế độ sửa (?sua=1) — chỉ giảng viên mở; xem cuối tệp */
+const SUA = QS.get('sua') === '1' ? Object.assign({bat: true, chu: [], chuGD: {}}, layLS(KHOA_SUA) || {}) : null;
+const app = document.getElementById('app');
+let manHienTai = 'Màn chào';
+const GIAY = DB.giayMoiCau || 25;          /* thời gian mỗi câu trong trận (giây) */
+
+/* ---------- CHỮ HIỂN THỊ ----------
+   Mọi chữ giao diện (không thuộc nội dung câu hỏi, luận cứ, hội đồng) nằm ở bảng này: [khóa, nhãn trong bảng sửa, chữ].
+   {n}, {tong}, {ten}… là chỗ máy điền số, chữ — giữ nguyên khi sửa. */
+const CHU = [
+  ['c_tren', 'Màn chào · dòng trên', 'TƯ TƯỞNG HỒ CHÍ MINH'],
+  ['c_ten', 'Màn chào · tên game', 'Cán cân ba đỉnh'],
+  ['c_duoi', 'Màn chào · phụ đề', 'Văn hóa · Đạo đức · Con người'],
+  ['c_motMinh', 'Màn chào · nút chơi một mình', 'Chơi cá nhân'],
+  ['c_tiep', 'Màn chào · nút chơi tiếp', 'Chơi tiếp'],
+  ['c_vaoPhong', 'Màn chào · nút vào phòng', 'Vào phòng của lớp'],
+  ['c_veLai', 'Màn chào · nút về phòng cũ', 'Về phòng {ma}'],
+  ['c_taoPhong', 'Màn chào · nút giảng viên', 'Giảng viên: tạo phòng'],
+  ['c_moLai', 'Màn chào · nút mở lại phòng', 'Mở lại phòng {ma}'],
+  ['c_cachChoi', 'Màn chào · nút cách chơi', 'Cách chơi'],
+  ['c_ghi', 'Màn chào · dòng ghi chú', 'Kiến thức theo Giáo trình Tư tưởng Hồ Chí Minh (2026), Chương 6. Điểm game không vào sổ.'],
+  ['cc_tieu', 'Cách chơi · tiêu đề', 'Mỗi chương đi qua năm chặng'],
+  ['cc_1', 'Cách chơi · chặng 1', 'Khám phá: ghé các địa điểm trong làng, nghe chuyện và ghi luận cứ vào sổ.'],
+  ['cc_2', 'Cách chơi · chặng 2', 'Hội đồng: mỗi thành viên giữ một luận điệu chưa đúng; chọn đúng luận cứ để thuyết phục.'],
+  ['cc_3', 'Cách chơi · chặng 3', 'Cán cân: thành viên được thuyết phục đặt quả cân lên một trong ba đỉnh Văn hóa, Đạo đức, Con người.'],
+  ['cc_4', 'Cách chơi · chặng 4', 'Luận chiến: trên bàn ô chéo, chọn một luận điệu sai, dùng một trong năm kỹ năng để bác bỏ.'],
+  ['cc_5', 'Cách chơi · chặng 5', 'Kết chương: xem cán cân và những ý cần đọc lại.'],
+  ['ve_chao', 'Nút · về màn chào', 'Về màn chào'],
+  ['ve_banDo', 'Nút · về bản đồ', 'Về bản đồ'],
+  ['bd_tieu', 'Bản đồ · tiêu đề', 'Bản đồ bốn chương'],
+  ['bd_goiY', 'Bản đồ · gợi ý', 'Nên đi lần lượt từ Chương I. Tiến độ lưu trên máy này.'],
+  ['bd_chua', 'Bản đồ · chương chưa đi', 'Chưa khám phá'],
+  ['bd_kham', 'Bản đồ · đang khám phá', 'Đang khám phá {a}/{b} địa điểm'],
+  ['bd_hoi', 'Bản đồ · đang ở hội đồng', 'Đang thuyết phục hội đồng'],
+  ['bd_can', 'Bản đồ · đang ở cán cân', 'Hội đồng đã biểu quyết'],
+  ['bd_tran', 'Bản đồ · đang luận chiến', 'Đang luận chiến {a}/{b}'],
+  ['bd_xong', 'Bản đồ · chương xong', 'Đã khép chương · đúng {a}/{b}'],
+  ['bd_canCan', 'Bản đồ · tiêu đề cán cân', 'Cán cân của sinh viên'],
+  ['bd_tong', 'Bản đồ · nút tổng kết', 'Tổng kết bốn chương'],
+  ['bd_choiLai', 'Bản đồ · nút chơi lại', 'Chơi lại từ đầu'],
+  ['bd_choiLai2', 'Bản đồ · xác nhận chơi lại', 'Bấm lần nữa để xóa tiến độ trên máy này'],
+  ['chip_diem', 'Chip · điểm', '{n} điểm'],
+  ['chip_so', 'Chip · sổ luận cứ', 'Sổ luận cứ {n}'],
+  ['chip_hang', 'Chip · hạng', 'Hạng {h}/{n}'],
+  ['chip_hangNhom', 'Chip · hạng nhóm', 'Nhóm {g} · hạng {h}/{n}'],
+  ['net_on', 'Mạng · đã nối', 'Đã nối mạng'],
+  ['net_mat', 'Mạng · mất', 'Mất mạng, đang nối lại'],
+  ['dinh_vh', 'Đỉnh · Văn hóa', 'Văn hóa'],
+  ['dinh_dd', 'Đỉnh · Đạo đức', 'Đạo đức'],
+  ['dinh_cn', 'Đỉnh · Con người', 'Con người'],
+  ['cc_can', 'Cán cân · cân bằng', 'Ba đỉnh đang cân nhau.'],
+  ['cc_lech', 'Cán cân · lệch', 'Cán cân nghiêng về đỉnh {nang}; đỉnh {nhe} còn nhẹ.'],
+  ['cc_moi', 'Cán cân · mới có một đỉnh', 'Mới có quả cân ở đỉnh {dinh}; hai đỉnh còn lại chờ các chương sau.'],
+  ['cc_chua', 'Cán cân · chưa có quả cân', 'Chưa có quả cân nào. Mỗi luận cứ thuyết phục được, mỗi đòn trúng thêm một quả cân.'],
+  ['kp_tieu', 'Khám phá · tiêu đề', 'Khám phá'],
+  ['kp_huongDan', 'Khám phá · hướng dẫn', 'Bấm vào từng địa điểm có dấu hình thoi để nghe chuyện và ghi luận cứ.'],
+  ['kp_ghi', 'Khám phá · nút ghi sổ', 'Ghi vào sổ luận cứ'],
+  ['kp_daGhi', 'Khám phá · đã ghi', 'Đã ghi vào sổ'],
+  ['kp_dong', 'Khám phá · đóng', 'Đóng'],
+  ['kp_du', 'Khám phá · đủ', 'Đã thu {a}/{b} luận cứ của chương.'],
+  ['kp_den', 'Khám phá · nút đến hội đồng', 'Đến hội đồng'],
+  ['kp_chua', 'Khám phá · chưa đủ', 'Ghé đủ {b} địa điểm để mở cửa hội đồng ({a}/{b}).'],
+  ['lc_muc', 'Luận cứ · dòng nguồn', 'Mục {ma} · {ten}'],
+  ['hd_tieu', 'Hội đồng · tiêu đề', 'Hội đồng làng'],
+  ['hd_huongDan', 'Hội đồng · hướng dẫn', 'Chọn một luận cứ trong sổ để đáp lời. Mỗi thành viên nghe tối đa hai lần.'],
+  ['hd_chon', 'Hội đồng · nhãn chọn', 'Đáp lời bằng luận cứ'],
+  ['hd_truot', 'Hội đồng · luận cứ chưa trúng', 'Luận cứ ấy đúng, nhưng chưa trúng điều tôi nói. Thử luận cứ khác xem.'],
+  ['hd_thua', 'Hội đồng · sau hai lần chưa trúng', 'Thành viên này chưa đổi ý. Luận cứ cần dùng được tô xanh.'],
+  ['hd_tt_ok', 'Hội đồng · trạng thái đã thuyết phục', 'Đã thuyết phục'],
+  ['hd_tt_khong', 'Hội đồng · trạng thái chưa đổi ý', 'Chưa đổi ý'],
+  ['hd_tt_cho', 'Hội đồng · trạng thái đang chờ', 'Đang chờ'],
+  ['hd_tiep', 'Hội đồng · nút thành viên kế', 'Thành viên kế tiếp'],
+  ['hd_len', 'Hội đồng · nút lên cán cân', 'Hội đồng biểu quyết'],
+  ['can_tieu', 'Cán cân · tiêu đề', 'Cán cân ba đỉnh'],
+  ['can_bieu', 'Cán cân · biểu quyết', 'Hội đồng biểu quyết: {a}/{b} thành viên đặt quả cân.'],
+  ['can_ghi', 'Cán cân · giải thích', 'Mỗi đòn trúng trong trận luận chiến thêm một quả cân vào đỉnh của nội dung câu hỏi. Cán cân cho thấy đỉnh nào đã vững, đỉnh nào còn nhẹ.'],
+  ['can_vao', 'Cán cân · nút vào trận', 'Vào trận luận chiến'],
+  ['tr_tieu', 'Trận · tiêu đề', 'Luận chiến'],
+  ['tr_con', 'Trận · số còn lại', 'Còn {n} luận điệu'],
+  ['tr_huongDan', 'Trận · hướng dẫn', 'Bấm vào một luận điệu sai (bóng áo tím) trên bàn. Sứ giả tiến tới và ra đòn bằng kỹ năng của luận điệu ấy.'],
+  ['tr_ky', 'Trận · tiêu đề kỹ năng', 'Năm kỹ năng'],
+  ['ky_tf', 'Kỹ năng · đúng/sai', 'Phân định: nhận định đúng hay sai'],
+  ['ky_one', 'Kỹ năng · chọn một đúng', 'Chỉ chính: chọn một phương án đúng'],
+  ['ky_wrong', 'Kỹ năng · chọn một sai', 'Vạch sai: chọn một phương án sai'],
+  ['ky_multi', 'Kỹ năng · chọn nhiều', 'Hợp luận: chọn tất cả phương án đúng'],
+  ['ky_fill', 'Kỹ năng · điền khuyết', 'Điền chữ: chọn từ điền vào chỗ trống'],
+  ['tr_dong', 'Trận · đồng minh', 'Đồng minh: {ds}'],
+  ['tr_hienKe', 'Trận · nút hiến kế', 'Đồng minh hiến kế ({n})'],
+  ['tr_raDon', 'Trận · nút ra đòn', 'Ra đòn'],
+  ['tr_trung', 'Trận · đòn trúng', 'Đòn trúng! Luận điệu bị bác bỏ.'],
+  ['tr_truot', 'Trận · đòn chưa trúng', 'Chưa trúng. Luận điệu rút lui, ý này cần đọc lại.'],
+  ['tr_het', 'Trận · hết giờ', 'Hết giờ. Luận điệu rút lui, ý này cần đọc lại.'],
+  ['tr_diem', 'Trận · điểm', '+{n} điểm'],
+  ['tr_tiep', 'Trận · nút tiếp', 'Tiếp tục'],
+  ['tr_ket', 'Trận · nút kết chương', 'Kết chương'],
+  ['tag_dung', 'Nhãn · phương án đúng', 'phương án đúng'],
+  ['tag_boSot', 'Nhãn · bỏ sót', 'bỏ sót'],
+  ['tag_thua', 'Nhãn · chọn thừa', 'chọn thừa'],
+  ['tag_paSai', 'Nhãn · phương án sai (câu chọn sai)', 'phương án sai'],
+  ['tf_d', 'Nút · Đúng', 'Đúng'],
+  ['tf_s', 'Nút · Sai', 'Sai'],
+  ['k_tieu', 'Kết chương · tiêu đề', 'Kết chương'],
+  ['k_lc', 'Kết chương · luận cứ', 'luận cứ'],
+  ['k_tp', 'Kết chương · thuyết phục', 'thành viên thuyết phục'],
+  ['k_tran', 'Kết chương · đòn trúng', 'đòn trúng'],
+  ['k_diem', 'Kết chương · điểm', 'điểm chương'],
+  ['k_on', 'Kết chương · tiêu đề ôn', 'Ý cần đọc lại'],
+  ['k_onKhong', 'Kết chương · không có ý cần ôn', 'Mọi luận điệu của chương đã bị bác bỏ.'],
+  ['k_tron', 'Kết chương · thắng trọn', 'Thắng trọn chương!'],
+  ['k_tiep', 'Kết chương · nút chương kế', 'Sang {ten}'],
+  ['k_tranLai', 'Kết chương · nút luận chiến lại', 'Luận chiến lại các ý chưa trúng'],
+  ['tk_tieu', 'Tổng kết · tiêu đề', 'Tổng kết bốn chương'],
+  ['tk_xong', 'Tổng kết · dòng xong', 'Đã đi hết bốn chương của Bài 8.'],
+  ['so_tieu', 'Sổ luận cứ · tiêu đề', 'Sổ luận cứ'],
+  ['so_trong', 'Sổ luận cứ · trống', 'Sổ còn trống. Ghé các địa điểm trong làng để ghi luận cứ.'],
+  ['vp_tieu', 'Vào phòng · tiêu đề', 'Vào phòng của lớp'],
+  ['vp_ma', 'Vào phòng · nhãn mã', 'Mã phòng (trên màn chiếu)'],
+  ['vp_tim', 'Vào phòng · nút tìm', 'Tìm phòng'],
+  ['vp_dangTim', 'Vào phòng · đang tìm', 'Đang tìm phòng…'],
+  ['vp_khong', 'Vào phòng · không thấy', 'Không thấy phòng {ma}. Xem lại mã hoặc mạng.'],
+  ['vp_ten', 'Vào phòng · nhãn biệt danh', 'Biệt danh (không ghi họ tên)'],
+  ['vp_tenGoi', 'Vào phòng · gợi ý biệt danh', 'Ví dụ: Sen Hồng, Mõ Làng'],
+  ['vp_nhom', 'Vào phòng · nhãn nhóm', 'Chọn nhóm'],
+  ['vp_vao', 'Vào phòng · nút vào', 'Vào phòng'],
+  ['vp_thieuTen', 'Vào phòng · thiếu biệt danh', 'Cần đặt biệt danh (2–16 ký tự).'],
+  ['vp_thieuNhom', 'Vào phòng · thiếu nhóm', 'Cần chọn nhóm.'],
+  ['vp_cho', 'Vào phòng · chờ', 'Đã vào phòng {ma}. Chờ giảng viên bắt đầu…'],
+  ['vp_roi', 'Vào phòng · nút rời', 'Rời phòng'],
+  ['vp_xong', 'Vào phòng · phiên kết thúc', 'Giảng viên đã kết thúc phiên. Bảng xếp hạng đã chốt.'],
+  ['vp_canhan', 'Vào phòng · chế độ cá nhân', 'Phòng thi đấu cá nhân'],
+  ['vp_nhomCheDo', 'Vào phòng · chế độ nhóm', 'Phòng thi đấu nhóm · {n} nhóm'],
+  ['tp_tieu', 'Tạo phòng · tiêu đề', 'Giảng viên tạo phòng'],
+  ['tp_cheDo', 'Tạo phòng · nhãn chế độ', 'Chế độ'],
+  ['tp_canhan', 'Tạo phòng · cá nhân', 'Cá nhân'],
+  ['tp_nhom', 'Tạo phòng · nhóm', 'Nhóm'],
+  ['tp_soNhom', 'Tạo phòng · số nhóm', 'Số nhóm (2–10)'],
+  ['tp_phut', 'Tạo phòng · thời lượng', 'Thời lượng (phút)'],
+  ['tp_mo', 'Tạo phòng · nút mở', 'Mở phòng và chiếu'],
+  ['tp_ghi', 'Tạo phòng · ghi chú', 'Mỗi sinh viên chơi trên một máy, đặt biệt danh, không ghi họ tên. Chế độ nhóm: điểm nhóm là trung bình điểm các thành viên. Máy này chiếu bảng xếp hạng.'],
+  ['s_ten2', 'Màn chiếu · phụ đề', 'Văn hóa · Đạo đức · Con người'],
+  ['s_conLai', 'Màn chiếu · nhãn giờ', 'CÒN LẠI'],
+  ['s_cho', 'Màn chiếu · nhãn giờ chờ', 'CHỜ BẮT ĐẦU'],
+  ['s_het', 'Màn chiếu · nhãn hết giờ', 'HẾT GIỜ'],
+  ['s_ma', 'Màn chiếu · nhãn mã phòng', 'Mã phòng · {n} người'],
+  ['s_bang', 'Màn chiếu · bảng xếp hạng', 'Bảng xếp hạng'],
+  ['s_bangNhom', 'Màn chiếu · bảng xếp hạng nhóm', 'Bảng xếp hạng nhóm'],
+  ['s_nhom', 'Màn chiếu · tên nhóm', 'Nhóm {n}'],
+  ['s_nguoi', 'Màn chiếu · số người nhóm', '{n} người'],
+  ['s_khac', 'Màn chiếu · còn người khác', '… và {n} người khác'],
+  ['s_trongBang', 'Màn chiếu · bảng trống', 'Chưa có ai vào phòng.'],
+  ['s_dongBang', 'Màn chiếu · dòng phụ', '{lc} luận cứ · {tp} thuyết phục · {ch}/4 chương'],
+  ['s_canLop', 'Màn chiếu · cán cân cả lớp', 'Cán cân cả lớp'],
+  ['s_nham', 'Màn chiếu · ý đang nhầm', 'Ý cả lớp đang nhầm'],
+  ['s_nhamKhong', 'Màn chiếu · chưa có ý nhầm', 'Chưa có ý nào nhiều người nhầm.'],
+  ['s_nhamDong', 'Màn chiếu · dòng ý nhầm', 'Mục {muc} · {p}% chưa đúng'],
+  ['s_mo', 'Màn chiếu · tên Bác Mõ', 'Bác Mõ'],
+  ['s_kk', 'Màn chiếu · khoảnh khắc', 'Khoảnh khắc đáng nhớ'],
+  ['s_kkKhong', 'Màn chiếu · chưa có khoảnh khắc', 'Trận đấu mới bắt đầu.'],
+  ['s_chay', 'Màn chiếu · nhãn dải chữ', 'TIN LÀNG'],
+  ['s_chayTrong', 'Màn chiếu · dải chữ trống', 'Quét mã QR, đặt biệt danh, vào làng thu luận cứ.'],
+  ['s_batDau', 'Màn chiếu · nút bắt đầu', 'Bắt đầu'],
+  ['s_ketThuc', 'Màn chiếu · nút kết thúc', 'Kết thúc phiên'],
+  ['s_them', 'Màn chiếu · nút thêm giờ', '+2 phút'],
+  ['s_toanMan', 'Màn chiếu · nút toàn màn hình', 'Toàn màn hình'],
+  ['s_dong', 'Màn chiếu · nút đóng phòng', 'Đóng phòng'],
+  ['s_dong2', 'Màn chiếu · xác nhận đóng', 'Bấm lần nữa để đóng phòng'],
+  ['s_choTieu', 'Màn chiếu · chờ · tiêu đề', 'Quét mã để vào làng'],
+  ['s_choGhi', 'Màn chiếu · chờ · ghi chú', 'Mỗi sinh viên một máy. Đặt biệt danh, không ghi họ tên. Giảng viên bấm Bắt đầu khi lớp đã vào đủ.'],
+  ['s_dangVao', 'Màn chiếu · số người đã vào', '{n} người đã vào'],
+  ['s_xongTieu', 'Màn chiếu · kết thúc · tiêu đề', 'Phiên luận chiến khép lại'],
+  ['s_xongGhi', 'Màn chiếu · kết thúc · ghi chú', 'Ý cả lớp cần đọc lại được ghi ở cột giữa.'],
+  ['mo_cho', 'Bác Mõ · lúc chờ', 'Mõ ơi mõ! Quét mã, đặt biệt danh, chờ hiệu lệnh vào làng!'],
+  ['mo_batDau', 'Bác Mõ · bắt đầu', 'Làng mở hội luận chiến! Ghé đình, ghé chiếu chèo, ghi đủ luận cứ rồi hẵng vào hội đồng.'],
+  ['mo_tp', 'Bác Mõ · thuyết phục', '{ten} vừa thuyết phục được {nguoi}. Hội đồng gật gù mãi!'],
+  ['mo_ch', 'Bác Mõ · khép chương', '{ten} đã khép lại {chuong}. Mõ xin gõ một hồi chúc mừng!'],
+  ['mo_chuoi', 'Bác Mõ · chuỗi đúng', '{ten} đúng liền {n} câu. Luận điệu sai chạy dài!'],
+  ['mo_tron', 'Bác Mõ · thắng trọn', '{ten} thắng trọn trận {chuong}, không để lọt luận điệu nào!'],
+  ['mo_dan', 'Bác Mõ · dẫn đầu', '{ten} vừa vươn lên dẫn đầu bảng. Cả làng ngoái nhìn!'],
+  ['mo_nham', 'Bác Mõ · ý đang nhầm', 'Mõ nghe nhiều người còn vấp ở ý: “{y}” Ai chưa chắc thì đọc lại mục {muc} nhé!'],
+  ['mo_can', 'Bác Mõ · cán cân lớp', 'Cán cân cả lớp nghiêng về đỉnh {nang}. Đỉnh {nhe} còn nhẹ, cần thêm quả cân!'],
+  ['mo_vang', 'Bác Mõ · nhắc chung', 'Mõ ơi mõ! Hội đồng đang chờ luận cứ. Ai thu đủ rồi thì vào thuyết phục ngay!'],
+  ['mo_vang2', 'Bác Mõ · nhắc chung 2', 'Nhớ nhé: chọn luận cứ trúng điều người ta nói, đừng chỉ chọn câu nghe hay.'],
+  ['mo_het', 'Bác Mõ · hết giờ', 'Hết giờ! Bảng xếp hạng đã chốt. Mõ cảm ơn cả làng!'],
+  ['kk_dau', 'Khoảnh khắc · đòn đầu tiên', '{ten} ra đòn trúng đầu tiên của lớp'],
+  ['kk_tp5', 'Khoảnh khắc · thuyết phục đủ năm', '{ten} là người đầu tiên thuyết phục đủ năm thành viên hội đồng'],
+  ['kk_tron', 'Khoảnh khắc · thắng trọn chương', '{ten} thắng trọn {chuong} đầu tiên'],
+  ['kk_chuoi', 'Khoảnh khắc · chuỗi dài nhất', 'Chuỗi đúng dài nhất: {ten}, {n} câu liền'],
+  ['kk_xong', 'Khoảnh khắc · đi hết bốn chương', '{ten} đi hết bốn chương đầu tiên'],
+  ['chay_tp', 'Dải chữ · thuyết phục', '{ten} thuyết phục {nguoi}'],
+  ['chay_ch', 'Dải chữ · khép chương', '{ten} khép {chuong} ({a}/{b} đòn trúng)'],
+  ['chay_chuoi', 'Dải chữ · chuỗi', '{ten} đúng liền {n} câu'],
+  ['chay_vao', 'Dải chữ · vào phòng', '{ten} vào làng'],
+];
+const CHU_GOC = {}, NHAN_CHU = {};
+CHU.forEach(([k, n, v]) => { CHU_GOC[k] = v; NHAN_CHU[k] = n; });
+function t(k, v) {
+  let m = (SUA && SUA.chuGD && SUA.chuGD[k] != null) ? SUA.chuGD[k] : (DB.chuGiaoDien && DB.chuGiaoDien[k] != null) ? DB.chuGiaoDien[k] : CHU_GOC[k];
+  if (m == null) m = k;
+  return v ? m.replace(/\{(\w+)\}/g, (a, b) => v[b] != null ? v[b] : a) : m;
+}
+function h(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[c]); }
+/* chữ giao diện bấm sửa được (chế độ sửa) */
+function tk(k, v) { return '<span data-k="' + k + '">' + h(t(k, v)) + '</span>'; }
+
+/* ---------- DỮ LIỆU ---------- */
+const CH = {}, HD = {}, CAU = {}, LC = {};
+DB.chuong.forEach(c => { CH[c.ma] = c; c.diaDiem.forEach(d => d.luanCu.forEach(l => { LC[l.ma] = Object.assign({}, l, {thua: d.thua, tenMuc: d.tenMuc, chuong: c.ma}); })); });
+DB.hoiDong.forEach(p => { HD[p.ma] = p; });
+DB.cau.forEach((c, i) => { CAU[c.id] = c; c.so = i; });
+const MA_CH = DB.chuong.map(c => c.ma);
+const DINH = ['vh', 'dd', 'cn'];
+const tenDinh = p => t('dinh_' + p);
+const MAU_DINH = {vh: '#e9b85b', dd: '#78b2ec', cn: '#9bd67f'};
+/* câu của chương, xếp xen kẽ năm dạng để mỗi trận đổi kỹ năng liên tục */
+function cauCua(ma) {
+  const nhom = {}; DB.cau.filter(c => c.chuong === ma).forEach(c => (nhom[c.dang] = nhom[c.dang] || []).push(c.id));
+  const ds = [], cac = ['tf', 'one', 'wrong', 'multi', 'fill'].filter(d => nhom[d]);
+  for (let i = 0; ds.length < DB.cau.filter(c => c.chuong === ma).length; i++) cac.forEach(d => { if (nhom[d][i]) ds.push(nhom[d][i]); });
+  return ds;
+}
+const lcCua = ma => CH[ma].diaDiem.flatMap(d => d.luanCu.map(l => l.ma));
+
+/* ---------- LƯU TRÊN MÁY + ĐƯỜNG NỐI GIỮA CÁC MÁY ----------
+   Chép từ game Đấu trường hiểu bài (MQTT công cộng: emqx, hivemq, shiftr; mỗi đường dẫn là một tài liệu giữ lại trên máy chủ).
+   ?noi=bc để các tab của một trình duyệt nói chuyện trực tiếp, không cần mạng (mỗi tab là một máy). */
+const CHI_BC = QS.get('noi') === 'bc';
+const boNho = () => CHI_BC ? sessionStorage : localStorage;
+const docNho = k => { try { return JSON.parse(boNho().getItem(k)); } catch (x) { return null; } };
+const ghiNho = (k, v) => { try { boNho().setItem(k, JSON.stringify(v)); } catch (x) {} };
+const xoaNho = k => { try { boNho().removeItem(k); } catch (x) {} };
+const MAY_CHU = [{url: 'wss://broker.emqx.io:8084/mqtt'}, {url: 'wss://broker.hivemq.com:8884/mqtt'}, {url: 'wss://public.cloud.shiftr.io/mqtt', user: 'public', pass: 'public'}];
+const KHONG_GIAN = 'hanu-pol1001/can-can/v1/';
+function taoMQTT(cfg, onMsg, onState) {
+  let ws = null, ok = false, buf = new Uint8Array(0), pid = 0, ping = null, lui = 1000;
+  const subs = new Set(), cho = new Map(), te = new TextEncoder(), td = new TextDecoder();
+  const vlen = n => { const o = []; do { let b = n % 128; n = Math.floor(n / 128); if (n > 0) b |= 128; o.push(b); } while (n > 0); return o; };
+  const chu = x => { const b = te.encode(x); return [b.length >> 8, b.length & 255].concat(Array.from(b)); };
+  const goi = (hd, body) => { if (!ws || ws.readyState !== 1) return false; ws.send(new Uint8Array([hd].concat(vlen(body.length), body))); return true; };
+  const moiId = () => { pid = pid % 65535 + 1; return pid; };
+  function dangKy(f) { const id = moiId(); goi(0x82, [id >> 8, id & 255].concat(chu(f), [1])); return id; }
+  function ketNoi() {
+    try { ws = new WebSocket(cfg.url, ['mqtt']); } catch (x) { henLai(); return; }
+    ws.binaryType = 'arraybuffer';
+    ws.onopen = () => { let co = 0x02, pl = chu('cc' + Math.random().toString(36).slice(2, 12));
+      if (cfg.user) { co |= 0x80; pl = pl.concat(chu(cfg.user)); } if (cfg.pass) { co |= 0x40; pl = pl.concat(chu(cfg.pass)); }
+      goi(0x10, chu('MQTT').concat([4, co, 0, 30], pl)); };
+    ws.onmessage = x => { const d = new Uint8Array(x.data), n = new Uint8Array(buf.length + d.length); n.set(buf); n.set(d, buf.length); buf = n; tach(); };
+    ws.onclose = () => { const truoc = ok; ok = false; ws = null; buf = new Uint8Array(0); clearInterval(ping); cho.forEach(f => f(false)); cho.clear(); if (truoc) onState(); henLai(); };
+    ws.onerror = () => { try { ws && ws.close(); } catch (x) {} };
+  }
+  function henLai() { setTimeout(ketNoi, lui); lui = Math.min(lui * 2, 15000); }
+  function tach() { for (;;) { if (buf.length < 2) return; let m = 1, len = 0, i = 1, b;
+    do { if (i >= buf.length) return; b = buf[i++]; len += (b & 127) * m; m *= 128; } while (b & 128);
+    if (buf.length < i + len) return; const hd = buf[0], p = buf.slice(i, i + len); buf = buf.slice(i + len); try { xuLy(hd, p); } catch (x) {} } }
+  function xuLy(hd, p) { const ty = hd >> 4;
+    if (ty === 2) { if (p[1] === 0) { ok = true; lui = 1000; subs.forEach(dangKy); clearInterval(ping); ping = setInterval(() => goi(0xC0, []), 25000); onState(); } else { try { ws.close(); } catch (x) {} } }
+    else if (ty === 3) { const qos = (hd >> 1) & 3, tl = (p[0] << 8) | p[1], topic = td.decode(p.subarray(2, 2 + tl)); let o = 2 + tl;
+      if (qos > 0) { const id = (p[o] << 8) | p[o + 1]; o += 2; goi(0x40, [id >> 8, id & 255]); } onMsg(topic, td.decode(p.subarray(o))); }
+    else if (ty === 4 || ty === 9) { const id = (p[0] << 8) | p[1], f = cho.get(id); if (f) { cho.delete(id); f(true); } } }
+  const doi = (id, r, ms) => { cho.set(id, r); setTimeout(() => { if (cho.delete(id)) r(false); }, ms); };
+  return { get ok() { return ok; }, batDau: ketNoi,
+    sub(f) { if (subs.has(f)) return Promise.resolve(true); subs.add(f); if (!ok) return Promise.resolve(false); return new Promise(r => doi(dangKy(f), r, 4000)); },
+    pub(topic, text) { return new Promise(r => { if (!ok) return r(false); const id = moiId();
+      const pl = chu(topic).concat([id >> 8, id & 255], Array.from(te.encode(text))); if (!goi(0x33, pl)) return r(false); doi(id, r, 6000); }); } };
+}
+const SYNC = (() => {
+  const kho = new Map(), nghe = new Set(), may = []; let bc = null, tCuoi = 0;
+  const dc = p => KHONG_GIAN + p;
+  const khop = (f, tp) => { if (f.endsWith('/+')) { const g = f.slice(0, -1); return tp.startsWith(g) && tp.length > g.length && !tp.slice(g.length).includes('/'); } return f === tp; };
+  function nhan(tp, text) { if (!tp.startsWith(KHONG_GIAN) || !text) return; let r; try { r = JSON.parse(text); } catch (x) { return; }
+    if (!r || typeof r.t !== 'number' || typeof r.v !== 'object') return; const cu = kho.get(tp); if (cu && cu.t >= r.t) return;
+    kho.set(tp, r); nghe.forEach(l => { if (khop(l.f, tp)) try { l.cb(tp.slice(tp.lastIndexOf('/') + 1), r.v); } catch (x) { console.error(x); } }); }
+  const coMay = () => CHI_BC || may.some(m => m.ok);
+  const cho = (dk, ms) => new Promise(r => { if (dk()) return r(true); const t0 = Date.now(), iv = setInterval(() => { if (dk()) { clearInterval(iv); r(true); } else if (Date.now() - t0 > ms) { clearInterval(iv); r(false); } }, 100); });
+  const sub = f => { if (bc) bc.postMessage({k: 'hoi', f}); may.forEach(m => m.sub(f)); };
+  /* nhãn thời gian luôn lớn hơn bản đang giữ, để máy có đồng hồ chậm vẫn ghi đè được */
+  async function ghi(p, v) { const tp = dc(p), cu = kho.get(tp); tCuoi = Math.max(Date.now(), tCuoi + 1, cu ? cu.t + 1 : 0); const tx = JSON.stringify({t: tCuoi, v});
+    if (!coMay()) await cho(coMay, 6000); nhan(tp, tx); if (bc) bc.postMessage({k: 'pub', t: tp, tx}); if (CHI_BC) return;
+    const kq = await Promise.all(may.map(m => m.pub(tp, tx))); if (!kq.some(Boolean)) throw new Error('không gửi được'); }
+  function ngheTin(p, boDuoi, cb) { const f = dc(p) + (boDuoi ? '/+' : ''), l = {f, cb}; nghe.add(l); sub(f);
+    setTimeout(() => { kho.forEach((r, tp) => { if (nghe.has(l) && khop(f, tp)) cb(tp.slice(tp.lastIndexOf('/') + 1), r.v); }); }, 0);
+    return () => nghe.delete(l); }
+  let daNoi = false;
+  return { coMay, cho, ghi, ngheTin,
+    batDau() { if (daNoi) return; daNoi = true;
+      if (QS.get('noi') !== 'mqtt' && 'BroadcastChannel' in window) { bc = new BroadcastChannel('can-can');
+        bc.onmessage = x => { const d = x.data || {}; if (d.k === 'pub') nhan(d.t, d.tx); else if (d.k === 'hoi') kho.forEach((r, tp) => { if (khop(d.f, tp)) bc.postMessage({k: 'pub', t: tp, tx: JSON.stringify(r)}); }); }; }
+      if (!CHI_BC) MAY_CHU.forEach(c => { const m = taoMQTT(c, nhan, () => capNhatMang()); may.push(m); m.batDau(); }); } };
+})();
+function docMot(p, ms) { return new Promise(r => { let xong = false; const huy = SYNC.ngheTin(p, false, (_, v) => { if (xong) return; xong = true; setTimeout(() => huy(), 0); r(v); }); setTimeout(() => { if (!xong) { xong = true; huy(); r(null); } }, ms); }); }
+function capNhatMang() {
+  const co = SYNC.coMay();
+  document.querySelectorAll('[data-net]').forEach(x => { x.innerHTML = '<i class="' + (co ? 'on' : '') + '"></i>' + h(t(co ? 'net_on' : 'net_mat')); });
+}
+setInterval(capNhatMang, 2000);
+
+/* địa chỉ cho điện thoại: đang chạy bản trên mạng thì dùng chính nó; chạy từ tệp, localhost thì dùng bản trên GitHub Pages */
+const DIA_CHI_WEB = 'https://haianhhadang-collab.github.io/haidv.wargame/can-can/';
+const laBanWeb = () => /^https?:$/.test(location.protocol) && !/^(localhost|127\.|\[::1\])/.test(location.hostname);
+const diaChiGame = () => laBanWeb() ? location.origin + location.pathname.replace(/index\.html$/, '') : DIA_CHI_WEB;
+let hueQR = null;
+function napQR() {
+  if (!hueQR) hueQR = new Promise(r => { if (window.qrcode) return r(true);
+    const sc = document.createElement('script'); sc.src = 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js';
+    sc.onload = () => r(!!window.qrcode); sc.onerror = () => { hueQR = null; r(false); }; document.head.appendChild(sc); });
+  return hueQR;
+}
+function lienKetPhong() { return diaChiGame() + '?ma=' + PH.ma + (CHI_BC ? '&noi=bc' : ''); }
+function veQR(sel, co) {
+  napQR().then(ok => { if (!ok) return; const q = qrcode(0, 'M'); q.addData(lienKetPhong()); q.make();
+    document.querySelectorAll(sel).forEach(el => { el.innerHTML = q.createSvgTag({cellSize: co || 4, margin: 2, scalable: true}); }); });
+}
+
+/* ---------- PHÒNG ----------
+   p/<mã>/phong          máy chiếu ghi: chế độ, số nhóm, trạng thái (cho/choi/xong), giờ bắt đầu, số phút
+   p/<mã>/nguoi/<máy>    mỗi điện thoại ghi tình trạng của mình (biệt danh, nhóm, điểm, kết quả 30 câu, sự kiện gần đây)
+   p/<mã>/bang           máy chiếu ghi thứ hạng, để điện thoại hiện hạng của mình */
+const PH = {vai: null, ma: '', r: '', phong: null, cid: '', ten: '', nhom: 0, huy: [], nguoi: {}, bang: null, nhapMa: '', loi: ''};
+const dg = x => 'p/' + PH.ma + '/' + x;
+const CHU_MA = 'ACDEFHJKMNPRTUVWXY3479';
+const taoMa = n => Array.from({length: n}, () => CHU_MA[Math.floor(Math.random() * CHU_MA.length)]).join('');
+function cidMay() { let c = docNho('can-can-cid'); if (!c) { c = taoMa(10); ghiNho('can-can-cid', c); } return c; }
+
+/* ---------- TIẾN ĐỘ ---------- */
+let st = null;
+function moi() { return {lc: {}, den: {}, hd: {}, kq: {}, buoc: {}, nk: [], nkI: 0, chuoi: 0, chuoiMax: 0}; }
+function khoaTD() { return 'can-can-v1' + (PH.vai === 'dt' ? ':' + PH.ma + ':' + PH.r : ''); }
+function napTD() { st = Object.assign(moi(), docNho(khoaTD()) || {}); }
+function luu() { if (SUA) return; ghiNho(khoaTD(), st); if (PH.vai === 'dt') guiTinh(); }
+function suKien(k, x) { st.nkI++; st.nk.push(Object.assign({i: st.nkI, k, l: Date.now()}, x || {})); st.nk = st.nk.slice(-8); }
+function diemCua(s) {
+  let d = Object.keys(s.lc).length * 10;
+  for (const k in s.hd) if (s.hd[k].ok) d += s.hd[k].lan === 1 ? 100 : 50;
+  for (const k in s.kq) d += s.kq[k].d || 0;
+  return d;
+}
+function dinhCua(s) {
+  const r = {vh: [0, 0], dd: [0, 0], cn: [0, 0]};
+  for (const id in s.kq) if (CAU[id]) CAU[id].dinh.forEach(p => { r[p][1]++; if (s.kq[id].ok) r[p][0]++; });
+  for (const p in s.hd) if (s.hd[p].xong && HD[p]) { const d = HD[p].dinh; r[d][1]++; if (s.hd[p].ok) r[d][0]++; }
+  return r;
+}
+/* giá trị mỗi đỉnh: (đúng + 1) / (đã làm + 2) — chưa làm thì 0,5, nên cán cân bắt đầu ở giữa */
+const giaTri = r => ({vh: (r.vh[0] + 1) / (r.vh[1] + 2), dd: (r.dd[0] + 1) / (r.dd[1] + 2), cn: (r.cn[0] + 1) / (r.cn[1] + 2)});
+function nhanXetCan(r) {
+  const co = DINH.filter(p => r[p][1]);
+  if (!co.length) return t('cc_chua');
+  if (co.length === 1) return t('cc_moi', {dinh: tenDinh(co[0])});
+  const g = giaTri(r), xs = co.sort((a, b) => g[b] - g[a]);
+  const cuoi = xs[xs.length - 1];
+  if (g[xs[0]] - g[cuoi] < 0.12) return t('cc_can');
+  return t('cc_lech', {nang: tenDinh(xs[0]), nhe: tenDinh(cuoi)});
+}
+const xongCh = ma => st.buoc[ma] === 'xong';
+const dungCh = ma => cauCua(ma).filter(id => st.kq[id] && st.kq[id].ok).length;
+const lamCh = ma => cauCua(ma).filter(id => st.kq[id]).length;
+
+/* gửi tình trạng lên phòng (gộp các lần gửi sát nhau) */
+let henGui = null;
+function guiTinh() {
+  if (PH.vai !== 'dt' || !PH.ma || (PH.phong && PH.phong.trangThai === 'xong')) return;
+  clearTimeout(henGui);
+  henGui = setTimeout(() => {
+    const kq = DB.cau.map(c => st.kq[c.id] ? (st.kq[c.id].ok ? '1' : '0') : '.').join('');
+    const tp = Object.keys(st.hd).filter(k => st.hd[k].ok).length;
+    const v = {r: PH.r, ten: PH.ten, nhom: PH.nhom, d: diemCua(st), kq, lc: Object.keys(st.lc).length, tp, xong: MA_CH.filter(xongCh).length,
+      dn: dinhCua(st), chuoi: st.chuoi, chuoiMax: st.chuoiMax, nk: st.nk, lan: Date.now()};
+    SYNC.ghi(dg('nguoi/' + PH.cid), v).catch(() => {});
+  }, 600);
+}
+
+/* ---------- HÌNH PIXEL (tự vẽ, không dùng hình của game nào) ---------- */
+const MU = {
+  nonla: ['....hh....', '...hhhh...', '..hhhhhh..', 'hhhhhhhhhh'],
+  khan: ['..........', '..........', '...hhhh...', '..hhhhhh..'],
+  toc: ['..........', '....tt....', '...tttt...', '..tttttt..'],
+  bui: ['....tt....', '...tttt...', '..tttttt..', '..tttttt..'],
+  mu: ['..........', '...hhhh...', '..hhhhhh..', '.hhhhhhhh.']
+};
+const DAU = ['...ssss...', '...sese...', '...ssss...'];
+const DAU_MU = ['..hxxxxh..', '..hxrxrh..', '..hxxxxh..'];
+const MINH = ['..aaaaaa..', '.aaaaaaaa.', '.saaaaaas.', '..aaaaaa..', '..aaaaaa..', '..bb..bb..', '..kk..kk..'];
+const MINH_MU = ['.hhaaaahh.', 'hhaaaaaahh', 'haaaaaaaah', '.aaaaaaaa.', 'aaaaaaaaaa', '.aa.aa.aa.', '..........'];
+const HINH = {
+  su: {mu: 'khan', h: '#2a3a68', s: '#f0c79c', e: '#2a1a10', a: '#3e74b8', b: '#ece5d2', k: '#3a2a1a'},
+  phuho: {mu: 'khan', h: '#1d1d1d', s: '#eec193', e: '#2a1a10', a: '#8a5a2b', b: '#d8cdae', k: '#2a1a10'},
+  tule: {mu: 'toc', t: '#e8e8e8', s: '#e9bd90', e: '#2a1a10', a: '#5b4636', b: '#cfc2a2', k: '#2a1a10'},
+  tutai: {mu: 'khan', h: '#6b1f2a', s: '#f2ca9f', e: '#2a1a10', a: '#c9b27a', b: '#efe6cf', k: '#3a2a1a'},
+  chophien: {mu: 'nonla', h: '#e2c787', s: '#eec193', e: '#2a1a10', a: '#b5553c', b: '#2d2d2d', k: '#2a1a10'},
+  luytre: {mu: 'nonla', h: '#d6c286', s: '#e6b98a', e: '#2a1a10', a: '#4d6b3a', b: '#2f3b2a', k: '#2a1a10'},
+  mo: {mu: 'khan', h: '#3b2a1a', s: '#eec193', e: '#2a1a10', a: '#7a4b2a', b: '#d8cdae', k: '#2a1a10'},
+  dich: {mu: 'mu', h: '#3d3350', x: '#1b1626', r: '#ff8a72', a: '#53456d', b: '#2a2238', k: '#1b1626'}
+};
+const NPC = [
+  {mu: 'khan', h: '#2b2b2b', s: '#ecc095', e: '#2a1a10', a: '#4a3a2a', b: '#d8cdae', k: '#2a1a10'},
+  {mu: 'bui', t: '#1f1612', s: '#f3cda5', e: '#2a1a10', a: '#c0392b', b: '#2d2d2d', k: '#2a1a10'},
+  {mu: 'bui', t: '#2a1d16', s: '#f3cda5', e: '#2a1a10', a: '#f1e6cf', b: '#2d2d2d', k: '#2a1a10'},
+  {mu: 'nonla', h: '#e2c787', s: '#e6b98a', e: '#2a1a10', a: '#3f5d8a', b: '#2d2d2d', k: '#2a1a10'},
+  {mu: 'nonla', h: '#e2c787', s: '#eec193', e: '#2a1a10', a: '#7d4c8a', b: '#2d2d2d', k: '#2a1a10'},
+  {mu: 'toc', t: '#1f1612', s: '#f0c79c', e: '#2a1a10', a: '#2f6f5a', b: '#dcd3bb', k: '#2a1a10'}
+];
+function veHinh(hinh, x, y, px) {
+  const p = typeof hinh === 'string' ? HINH[hinh] : hinh, mu = p.mu === 'mu';
+  const hang = (MU[p.mu] || MU.khan).concat(mu ? DAU_MU : DAU, mu ? MINH_MU : MINH);
+  let o = '';
+  hang.forEach((dong, j) => { let i = 0; while (i < dong.length) { const c = dong[i]; if (c === '.' || !p[c]) { i++; continue; }
+    let k = i; while (k < dong.length && dong[k] === c) k++;
+    o += '<rect x="' + (x + i * px).toFixed(1) + '" y="' + (y + j * px).toFixed(1) + '" width="' + ((k - i) * px + .3).toFixed(1) + '" height="' + (px + .3).toFixed(1) + '" fill="' + p[c] + '"/>'; i = k; } });
+  return o;
+}
+/* một nhân vật đứng: chân tại (x, y) */
+function nguoiDung(hinh, x, y, px) { px = px || 2.6; return '<ellipse cx="' + x + '" cy="' + (y - px * .3) + '" rx="' + px * 4.2 + '" ry="' + px * 1.3 + '" fill="rgba(0,0,0,.35)"/>' + veHinh(hinh, x - px * 5, y - px * 14, px); }
+function svgNguoi(hinh, cao) { return '<svg viewBox="0 0 40 46" aria-hidden="true" style="image-rendering:pixelated">' + nguoiDung(hinh, 20, 44, 3) + '</svg>'; }
+
+/* tam giác cán cân: g = giá trị ba đỉnh (0–1); opt.qua = các quả cân (mã đỉnh); opt.lop = chấm cả lớp */
+const DINH_XY = {vh: [150, 22], dd: [22, 244], cn: [278, 244]};
+function diemTG(g) { const s = g.vh + g.dd + g.cn || 1; return DINH.reduce((a, p) => [a[0] + DINH_XY[p][0] * g[p] / s, a[1] + DINH_XY[p][1] * g[p] / s], [0, 0]); }
+function veTamGiac(g, opt) {
+  opt = opt || {};
+  const tam = [150, 170], A = DINH_XY.vh, B = DINH_XY.dd, C = DINH_XY.cn;
+  const pt = diemTG(g), nho = f => [A, B, C].map(v => (tam[0] + (v[0] - tam[0]) * f).toFixed(1) + ',' + (tam[1] + (v[1] - tam[1]) * f).toFixed(1)).join(' ');
+  let o = '<svg viewBox="-10 -16 320 300" role="img" aria-label="' + h(t('can_tieu')) + '"><defs><radialGradient id="tgSang"><stop offset="0" stop-color="#fff6d6"/><stop offset=".5" stop-color="#f3dc9a"/><stop offset="1" stop-color="#f3dc9a" stop-opacity="0"/></radialGradient></defs>';
+  o += '<polygon points="' + nho(1) + '" fill="rgba(216,180,106,.07)" stroke="#d8b46a" stroke-width="1.4"/>';
+  [.66, .33].forEach(f => { o += '<polygon points="' + nho(f) + '" fill="none" stroke="rgba(216,180,106,.28)" stroke-width="1"/>'; });
+  DINH.forEach(p => { const v = DINH_XY[p]; o += '<line x1="' + tam[0] + '" y1="' + tam[1] + '" x2="' + v[0] + '" y2="' + v[1] + '" stroke="rgba(216,180,106,.22)"/>'; });
+  /* quả cân hội đồng đặt cạnh đỉnh */
+  const demQ = {vh: 0, dd: 0, cn: 0};
+  (opt.qua || []).forEach(p => { const v = DINH_XY[p], k = demQ[p]++, dx = (k - 1) * 14, x = v[0] + (p === 'vh' ? dx : p === 'dd' ? 20 + k * 13 : -20 - k * 13), y = v[1] + (p === 'vh' ? 30 : -14 - k * 4);
+    o += '<rect x="' + (x - 5) + '" y="' + (y - 5) + '" width="10" height="10" transform="rotate(45 ' + x + ' ' + y + ')" fill="' + MAU_DINH[p] + '" stroke="#1b2336"/>'; });
+  DINH.forEach(p => { const v = DINH_XY[p];
+    o += '<rect x="' + (v[0] - 8) + '" y="' + (v[1] - 8) + '" width="16" height="16" transform="rotate(45 ' + v[0] + ' ' + v[1] + ')" fill="' + MAU_DINH[p] + '" stroke="#f3dc9a"/>';
+    const ly = p === 'vh' ? v[1] - 16 : v[1] + 30, anc = p === 'vh' ? 'middle' : p === 'dd' ? 'start' : 'end', lx = p === 'dd' ? v[0] - 18 : p === 'cn' ? v[0] + 18 : v[0];
+    o += '<text x="' + lx + '" y="' + ly + '" text-anchor="' + anc + '" fill="' + MAU_DINH[p] + '" font-family="Cormorant Garamond,serif" font-weight="700" font-size="19"><tspan data-k="dinh_' + p + '">' + h(tenDinh(p)) + '</tspan>' + (opt.so ? ' ' + Math.round(g[p] * 100) + '%' : '') + '</text>'; });
+  if (opt.lop) { const q = diemTG(opt.lop); o += '<circle cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="9" fill="none" stroke="#78b2ec" stroke-width="2" stroke-dasharray="3 3"/>'; }
+  o += '<circle cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="22" fill="url(#tgSang)"/><circle cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="6.5" fill="#fff6d6" stroke="#8f7038" stroke-width="1.5"/>';
+  return o + '</svg>';
+}
+function dongDinh(r) {
+  return '<div class="dinh-hang">' + DINH.map(p => '<div class="dinh-dong"><span style="color:' + MAU_DINH[p] + '">' + tk('dinh_' + p) + '</span><span class="dinh-vach"><i style="width:' + (r[p][1] ? Math.round(r[p][0] / r[p][1] * 100) : 0) + '%;background:' + MAU_DINH[p] + '"></i></span><span class="dinh-so">' + r[p][0] + '/' + r[p][1] + '</span></div>').join('') + '</div>';
+}
+
+/* ---------- CẢNH NỀN (SVG tự vẽ, phong cách diorama) ---------- */
+const BANG_MAU = {
+  lang: {troi: ['#f6c98b', '#e9a777', '#7a6c9a'], nui: '#6d6f98', dat: '#7fae5a', dat2: '#5e8f45'},
+  gieng: {troi: ['#bfe3f0', '#e8d9a8', '#cba16e'], nui: '#7f9a86', dat: '#8bb45e', dat2: '#6a9447'},
+  song: {troi: ['#f2b28a', '#c98aa0', '#5f5c8e'], nui: '#5a5f88', dat: '#79a65a', dat2: '#5a8545'},
+  pho: {troi: ['#a9cdea', '#d7e3e8', '#e9d3a8'], nui: '#8aa0b5', dat: '#9bb877', dat2: '#7b9a5c'}
+};
+function tre(x, y, s) { let o = ''; for (let i = 0; i < 5; i++) { const xx = x + (i - 2) * 7 * s; o += '<rect x="' + xx + '" y="' + (y - 90 * s + i % 2 * 8) + '" width="' + 3 * s + '" height="' + (90 * s - i % 2 * 8) + '" fill="#4f7a3a"/>'; }
+  return o + '<ellipse cx="' + x + '" cy="' + (y - 85 * s) + '" rx="' + 34 * s + '" ry="' + 22 * s + '" fill="#5d9a45"/><ellipse cx="' + (x - 14 * s) + '" cy="' + (y - 70 * s) + '" rx="' + 22 * s + '" ry="' + 16 * s + '" fill="#4f8a3c"/><ellipse cx="' + (x + 16 * s) + '" cy="' + (y - 66 * s) + '" rx="' + 20 * s + '" ry="' + 14 * s + '" fill="#6aac50"/>'; }
+function cay(x, y, s, m) { return '<rect x="' + (x - 5 * s) + '" y="' + (y - 50 * s) + '" width="' + 10 * s + '" height="' + 50 * s + '" fill="#6b4a2e"/><circle cx="' + x + '" cy="' + (y - 62 * s) + '" r="' + 34 * s + '" fill="' + (m || '#4f8a3c') + '"/><circle cx="' + (x - 22 * s) + '" cy="' + (y - 48 * s) + '" r="' + 22 * s + '" fill="' + (m || '#4f8a3c') + '" opacity=".9"/><circle cx="' + (x + 20 * s) + '" cy="' + (y - 50 * s) + '" r="' + 24 * s + '" fill="#62a24b"/>'; }
+function nha(x, y, w, mai, tuong) { const hh = w * .45; return '<rect x="' + (x - w / 2) + '" y="' + (y - hh) + '" width="' + w + '" height="' + hh + '" fill="' + (tuong || '#d9c39a') + '"/><polygon points="' + (x - w / 2 - 10) + ',' + (y - hh) + ' ' + x + ',' + (y - hh - w * .38) + ' ' + (x + w / 2 + 10) + ',' + (y - hh) + '" fill="' + (mai || '#9a4a32') + '"/><rect x="' + (x - w * .1) + '" y="' + (y - hh * .6) + '" width="' + w * .2 + '" height="' + hh * .6 + '" fill="#4a2f1d"/>'; }
+function dinh(x, y) { return '<rect x="' + (x - 90) + '" y="' + (y - 60) + '" width="180" height="60" fill="#c9a676"/>' + [-70, -35, 0, 35, 70].map(d => '<rect x="' + (x + d - 4) + '" y="' + (y - 60) + '" width="8" height="60" fill="#7a3a24"/>').join('') +
+  '<path d="M' + (x - 125) + ' ' + (y - 58) + ' Q ' + (x - 110) + ' ' + (y - 70) + ' ' + (x - 100) + ' ' + (y - 96) + ' L ' + (x + 100) + ' ' + (y - 96) + ' Q ' + (x + 110) + ' ' + (y - 70) + ' ' + (x + 125) + ' ' + (y - 58) + ' Z" fill="#8c3a26"/><path d="M' + (x - 128) + ' ' + (y - 104) + ' L ' + (x - 100) + ' ' + (y - 96) + ' L ' + (x + 100) + ' ' + (y - 96) + ' L ' + (x + 128) + ' ' + (y - 104) + '" stroke="#5b2416" stroke-width="7" fill="none"/>'; }
+function veCanh(k, w, hh) {
+  w = w || 1000; hh = hh || 560; const m = BANG_MAU[k] || BANG_MAU.lang;
+  let o = '<svg viewBox="0 0 ' + w + ' ' + hh + '" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="troi' + k + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + m.troi[2] + '"/><stop offset=".55" stop-color="' + m.troi[1] + '"/><stop offset="1" stop-color="' + m.troi[0] + '"/></linearGradient>' +
+    '<radialGradient id="sang' + k + '" cx=".7" cy=".25" r=".5"><stop offset="0" stop-color="#fff4d0" stop-opacity=".85"/><stop offset="1" stop-color="#fff4d0" stop-opacity="0"/></radialGradient>' +
+    '<radialGradient id="toi' + k + '" cx=".5" cy=".5" r=".75"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".55"/></radialGradient></defs>';
+  o += '<rect width="' + w + '" height="' + hh + '" fill="url(#troi' + k + ')"/><rect width="' + w + '" height="' + hh + '" fill="url(#sang' + k + ')"/>';
+  o += '<polygon points="0,260 120,180 230,240 360,150 500,230 640,160 780,220 900,170 1000,210 1000,320 0,320" fill="' + m.nui + '" opacity=".75"/>';
+  o += '<polygon points="0,300 160,250 330,290 520,240 700,285 860,250 1000,280 1000,360 0,360" fill="' + m.nui + '" opacity=".95"/>';
+  o += '<path d="M0 330 Q 500 290 1000 330 L 1000 560 L 0 560 Z" fill="' + m.dat + '"/>';
+  for (let i = 0; i < 9; i++) o += '<path d="M0 ' + (360 + i * 24) + ' Q 500 ' + (330 + i * 26) + ' 1000 ' + (360 + i * 24) + '" stroke="' + m.dat2 + '" stroke-width="2" fill="none" opacity=".6"/>';
+  if (k === 'lang') { o += tre(80, 360, 1.3) + tre(930, 350, 1.2) + dinh(520, 345) + nha(240, 350, 90) + nha(790, 345, 80, '#7a4a2a'); }
+  if (k === 'gieng') { o += cay(150, 360, 1.6, '#3f7a35') + nha(420, 350, 100) + nha(760, 345, 90, '#7a4a2a') + '<ellipse cx="560" cy="420" rx="46" ry="16" fill="#8d8a80"/><ellipse cx="560" cy="414" rx="36" ry="11" fill="#2d4f6a"/><rect x="600" y="360" width="6" height="60" fill="#6b4a2e"/>' + tre(920, 350, 1.1); }
+  if (k === 'song') { o += '<path d="M0 410 Q 300 380 560 420 T 1000 400 L 1000 470 Q 640 500 360 470 T 0 480 Z" fill="#5c8fb5"/><path d="M80 440 h60 M400 450 h80 M700 440 h50" stroke="#cfe6f5" stroke-width="3" opacity=".7"/>' +
+    '<path d="M430 440 h120 l-14 18 h-92 Z" fill="#6b4a2e"/><rect x="470" y="410" width="4" height="30" fill="#4a2f1d"/>' + nha(220, 370, 110, '#9a4a32', '#e6d3a8') + nha(820, 365, 90) + cay(640, 370, 1.1); }
+  if (k === 'pho') { o += '<rect x="400" y="230" width="220" height="120" fill="#e6dccb"/><polygon points="385,230 510,180 635,230" fill="#9a4a32"/>' + [420, 460, 500, 540, 580].map(x => '<rect x="' + x + '" y="250" width="14" height="100" fill="#cbbfa8"/>').join('') +
+    nha(170, 355, 100, '#3f5d8a', '#ece3d0') + nha(810, 350, 110, '#7a4a2a', '#efe6d6') + cay(300, 360, 1.1) + cay(690, 365, 1, '#3f7a35') + '<rect x="0" y="440" width="1000" height="24" fill="#b9ad97" opacity=".7"/>'; }
+  for (let i = 0; i < 16; i++) { const bx = (i * 137) % w, by = 60 + (i * 89) % 200; o += '<circle cx="' + bx + '" cy="' + by + '" r="' + (6 + i % 5 * 4) + '" fill="#fff4d0" opacity="' + (.05 + i % 4 * .03) + '"/>'; }
+  return o + '<rect width="' + w + '" height="' + hh + '" fill="url(#toi' + k + ')"/></svg>';
+}
+/* % ngang, % dọc của các địa điểm trên cảnh (chương có hai địa điểm) */
+const VI_TRI2 = [[30, 66], [70, 62]];
+
+/* ---------- KHUNG CHUNG ---------- */
+const IC = {
+  ve: '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 4 6 10l6 6"/></svg>'
+};
+function chips() {
+  if (!st) return '';
+  let o = '<span class="chip">★ <b>' + h(t('chip_diem', {n: diemCua(st)})) + '</b></span>' +
+    '<button type="button" class="chip" data-a="so">' + h(t('chip_so', {n: Object.keys(st.lc).length})) + '</button>';
+  if (PH.vai === 'dt') {
+    if (hangCuaToi()) o += '<span class="chip">' + h(hangCuaToi()) + '</span>';
+    o += '<span class="chip">' + h(PH.ma) + ' · ' + h(PH.ten) + '</span><span class="net" data-net></span>';
+  }
+  return o;
+}
+function dauTrang(veDau, ten, phu) {
+  return '<header class="dau"><div class="dau-trai">' + (veDau ? '<button type="button" class="ve" data-a="' + veDau + '" aria-label="' + h(t(veDau === 'chao' ? 've_chao' : 've_banDo')) + '" title="' + h(t(veDau === 'chao' ? 've_chao' : 've_banDo')) + '">' + IC.ve + '</button>' : '') +
+    '<div><div class="dau-ten td">' + ten + '</div>' + (phu ? '<div class="dau-phu">' + phu + '</div>' : '') + '</div></div><div class="dau-phai">' + chips() + '</div></header>';
+}
+function ve(html, ten) {
+  manHienTai = ten; dungGio();
+  document.body.classList.remove('chieu');
+  app.innerHTML = '<div class="man">' + html + '</div>';
+  window.scrollTo(0, 0); capNhatMang();
+}
+function moPhu(html) { dongPhu(); const d = document.createElement('div'); d.className = 'phu'; d.id = 'phu'; d.innerHTML = '<div class="khung">' + html + '</div>'; app.appendChild(d);
+  d.addEventListener('click', e => { if (e.target === d && !(SUA && SUA.bat)) dongPhu(); }); }
+function dongPhu() { const d = document.getElementById('phu'); if (d) d.remove(); }
+
+/* ---------- MÀN CHÀO ---------- */
+function manChao() {
+  PH.vai = PH.vai === 'chu' ? null : PH.vai;
+  const cu = docNho('can-can-v1'), dt = docNho('can-can-dt'), chu = docNho('can-can-chu');
+  const coTD = cu && (Object.keys(cu.lc || {}).length || Object.keys(cu.kq || {}).length);
+  const g = {vh: .62, dd: .5, cn: .55};
+  ve('<main class="chao"><div class="chao-nen">' + veCanh('lang') + '</div><div class="chao-hop khung">' +
+    '<div class="chao-tren">' + tk('c_tren') + '</div><h1 class="chao-ten td">' + tk('c_ten') + '</h1><div class="chao-duoi">' + tk('c_duoi') + '</div>' +
+    '<div class="chao-tg tg">' + veTamGiac(g) + '</div>' +
+    '<div class="hang-nut">' +
+      (dt && dt.ma ? '<button type="button" class="nut chinh" data-a="veLaiPhong">' + tk('c_veLai', {ma: dt.ma}) + '</button>' : '') +
+      '<button type="button" class="nut' + (dt && dt.ma ? '' : ' chinh') + '" data-a="vaoPhong">' + tk('c_vaoPhong') + '</button>' +
+      '<button type="button" class="nut" data-a="motMinh">' + tk(coTD ? 'c_tiep' : 'c_motMinh') + '</button>' +
+      (chu && chu.ma ? '<button type="button" class="nut nho" data-a="moLaiPhong">' + tk('c_moLai', {ma: chu.ma}) + '</button>' : '') +
+      '<button type="button" class="nut nho" data-a="taoPhong">' + tk('c_taoPhong') + '</button>' +
+      '<button type="button" class="nut nho" data-a="cachChoi">' + tk('c_cachChoi') + '</button>' +
+    '</div><p class="chao-ghi">' + tk('c_ghi') + '</p></div></main>', 'Màn chào');
+}
+function cachChoi() {
+  moPhu('<h2 class="tieu td"><span>' + tk('cc_tieu') + '</span></h2><div class="cach"><ol>' + [1, 2, 3, 4, 5].map(i => '<li>' + tk('cc_' + i) + '</li>').join('') + '</ol>' +
+    '<div class="ky-ds">' + ['tf', 'one', 'wrong', 'multi', 'fill'].map(d => '<div class="ky-dong"><span class="ky-bieu"><b>' + KY_BIEU[d] + '</b></span><span>' + tk('ky_' + d) + '</span></div>').join('') + '</div></div>' +
+    '<div class="hang-nut"><button type="button" class="nut nho" data-a="dongPhu">' + tk('kp_dong') + '</button></div>');
+}
+
+/* ---------- BẢN ĐỒ BỐN CHƯƠNG ---------- */
+function trangThaiCh(ma) {
+  const b = st.buoc[ma], c = CH[ma];
+  if (b === 'xong') return t('bd_xong', {a: dungCh(ma), b: cauCua(ma).length});
+  if (b === 'tran') return t('bd_tran', {a: lamCh(ma), b: cauCua(ma).length});
+  if (b === 'can') return t('bd_can');
+  if (b === 'hoi') return t('bd_hoi');
+  const den = c.diaDiem.filter(d => st.den[d.thua]).length;
+  return den ? t('bd_kham', {a: den, b: c.diaDiem.length}) : t('bd_chua');
+}
+function diemCh(ma) {
+  let d = lcCua(ma).filter(x => st.lc[x]).length * 10;
+  CH[ma].hoiDong.forEach(p => { if (st.hd[p] && st.hd[p].ok) d += st.hd[p].lan === 1 ? 100 : 50; });
+  cauCua(ma).forEach(id => { if (st.kq[id]) d += st.kq[id].d || 0; });
+  return d;
+}
+function veBanDoSvg() {
+  const nut = [[110, 300], [300, 180], [520, 250], [700, 120]];
+  let o = '<svg viewBox="0 0 800 380" role="img" aria-label="' + h(t('bd_tieu')) + '"><defs><linearGradient id="bdg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f3e8cc"/><stop offset="1" stop-color="#d9c294"/></linearGradient></defs>' +
+    '<rect x="6" y="6" width="788" height="368" fill="url(#bdg)" stroke="#8f7038"/><rect x="14" y="14" width="772" height="352" fill="none" stroke="rgba(143,112,56,.5)"/>' +
+    '<path d="M60 330 Q 200 360 300 300 T 520 330 T 760 260" stroke="#7fa6c8" stroke-width="16" fill="none" opacity=".55"/>' +
+    '<path d="M40 90 l40 -40 l40 40 M640 330 l30 -30 l30 30 M180 110 l26 -26 l26 26" stroke="#8a7a5a" stroke-width="3" fill="none" opacity=".6"/>' +
+    '<polyline points="' + nut.map(p => p.join(',')).join(' ') + '" fill="none" stroke="#8f7038" stroke-width="3" stroke-dasharray="8 7"/>';
+  MA_CH.forEach((ma, i) => { const [x, y] = nut[i], xg = xongCh(ma), dg2 = !xg && st.buoc[ma];
+    o += '<g data-a="chuong" data-v="' + ma + '" style="cursor:pointer"><rect x="' + (x - 26) + '" y="' + (y - 26) + '" width="52" height="52" transform="rotate(45 ' + x + ' ' + y + ')" fill="' + (xg ? '#3d5a43' : '#1b2336') + '" stroke="' + (xg ? '#86d0a2' : '#d8b46a') + '" stroke-width="2.5"' + (dg2 ? ' filter="drop-shadow(0 0 8px #f3dc9a)"' : '') + '/>' +
+      '<text x="' + x + '" y="' + (y + 9) + '" text-anchor="middle" font-family="Cormorant Garamond,serif" font-weight="700" font-size="26" fill="#f3dc9a">' + ma + '</text>' +
+      '<text x="' + x + '" y="' + (y + 62) + '" text-anchor="middle" font-family="Cormorant Garamond,serif" font-weight="700" font-size="22" fill="#2a2214">' + h(CH[ma].ten) + '</text></g>'; });
+  return o + '</svg>';
+}
+function manBanDo() {
+  const r = dinhCua(st), tatCa = MA_CH.every(xongCh);
+  ve(dauTrang('chao', tk('bd_tieu'), tk('bd_goiY')) + '<main class="than"><div class="bd"><div class="bd-ban khung giay">' + veBanDoSvg() + '</div><div class="bd-ds">' +
+    MA_CH.map(ma => { const xg = xongCh(ma), c = CH[ma];
+      return '<button type="button" class="ch-the' + (xg ? ' xong' : st.buoc[ma] ? ' dang' : '') + '" data-a="chuong" data-v="' + ma + '"><span class="ch-so"><span class="td">' + ma + '</span></span><span class="ch-ten td">' + h(c.tenDai) + '</span><span class="ch-diem">' + diemCh(ma) + '</span><span class="ch-tt">' + h(trangThaiCh(ma)) + '</span></button>'; }).join('') +
+    (tatCa ? '<button type="button" class="nut chinh" data-a="tong">' + tk('bd_tong') + '</button>' : '') +
+    '</div></div><section class="khung" style="margin-top:1.4em"><h2 class="tieu trai td"><span>' + tk('bd_canCan') + '</span></h2><div class="bd-cc"><div class="tg">' + veTamGiac(giaTri(r), {qua: quaCan()}) + '</div><div>' + dongDinh(r) +
+    '<p class="giai">' + h(nhanXetCan(r)) + '</p><button type="button" class="nut nho" data-a="choiLai" id="nut-lai">' + tk('bd_choiLai') + '</button></div></div></section></main>', 'Bản đồ');
+}
+const quaCan = () => DB.hoiDong.filter(p => st.hd[p.ma] && st.hd[p.ma].ok).map(p => p.dinh);
+function moChuong(ma) {
+  const b = st.buoc[ma] || 'kham';
+  if (b === 'kham') manKham(ma); else if (b === 'hoi') manHoi(ma); else if (b === 'can') manCan(ma); else if (b === 'tran') manTran(ma); else manKet(ma);
+}
+
+/* ---------- KHÁM PHÁ: THU LUẬN CỨ ---------- */
+function the(l, nut) {
+  const lc = LC[l] || l;
+  return (nut ? '<button type="button" class="lc" data-a="trinh" data-v="' + lc.ma + '">' : '<div class="lc">') + h(lc.chu) + '<small>' + h(t('lc_muc', {ma: lc.thua, ten: lc.tenMuc})) + '</small>' + (nut ? '</button>' : '</div>');
+}
+function manKham(ma) {
+  const c = CH[ma], vt = c.diaDiem.length === 2 ? VI_TRI2 : [[24, 70], [52, 74], [80, 68]];
+  const soLc = lcCua(ma).filter(x => st.lc[x]).length, tong = lcCua(ma).length, den = c.diaDiem.filter(d => st.den[d.thua]).length, du = den === c.diaDiem.length;
+  ve(dauTrang('banDo', h(c.tenDai) + ' · ' + tk('kp_tieu'), h(c.mo)) + '<main class="than"><div class="canh">' + veCanh(c.canh) +
+    c.diaDiem.map((d, i) => '<button type="button" class="diem' + (st.den[d.thua] ? ' da' : '') + '" style="left:' + vt[i][0] + '%;top:' + vt[i][1] + '%" data-a="diaDiem" data-v="' + d.thua + '"><span class="diem-the">' + h(d.ten) + '</span><span class="diem-hthoi"></span></button>').join('') +
+    '</div><div class="kp-duoi"><div><p class="ghi-nho" style="margin:0 0 .5em">' + tk('kp_huongDan') + '</p><div class="kp-ds">' +
+    c.diaDiem.map(d => '<button type="button" class="' + (st.den[d.thua] ? 'da' : '') + '" data-a="diaDiem" data-v="' + d.thua + '">' + (st.den[d.thua] ? '✓ ' : '◆ ') + h(d.ten) + '</button>').join('') + '</div>' +
+    '<p class="ghi-nho">' + h(t('kp_du', {a: soLc, b: tong})) + (du ? '' : ' ' + h(t('kp_chua', {a: den, b: c.diaDiem.length}))) + '</p></div>' +
+    '<button type="button" class="nut chinh" data-a="denHoi" data-v="' + ma + '"' + (du ? '' : ' disabled') + '>' + tk('kp_den') + '</button></div></main>', 'Khám phá · ' + ma);
+}
+function moDiaDiem(thua) {
+  const ma = thua.split('.')[0], c = CH[ma], i = c.diaDiem.findIndex(d => d.thua === thua), d = c.diaDiem[i], so = DB.chuong.indexOf(c) * 3 + i, da = !!st.den[thua];
+  moPhu('<div class="hoi-thoai">' + svgNguoi(NPC[so % NPC.length]) + '<div><div class="ten-bang">' + h(d.nguoi) + ' · ' + h(d.ten) + '</div><p class="loi">' + h(d.loi) + '</p></div></div>' +
+    '<div class="the-ds">' + d.luanCu.map(l => the(l.ma)).join('') + '</div><div class="hang-nut">' +
+    (da ? '<span class="chip">✓ ' + tk('kp_daGhi') + '</span><button type="button" class="nut nho" data-a="dongPhu">' + tk('kp_dong') + '</button>' : '<button type="button" class="nut chinh" data-a="ghiSo" data-v="' + thua + '">' + tk('kp_ghi') + '</button>') + '</div>');
+}
+function ghiSo(thua) {
+  const ma = thua.split('.')[0], d = CH[ma].diaDiem.find(x => x.thua === thua);
+  st.den[thua] = 1; d.luanCu.forEach(l => { st.lc[l.ma] = 1; }); luu(); dongPhu(); manKham(ma);
+}
+function soLuanCu() {
+  const co = Object.keys(st.lc);
+  moPhu('<h2 class="tieu td"><span>' + tk('so_tieu') + '</span></h2>' + (co.length ? MA_CH.map(ma => { const ds = lcCua(ma).filter(x => st.lc[x]); return ds.length ? '<h3 class="td" style="color:var(--vang2);margin:.6em 0 .3em">' + h(CH[ma].tenDai) + '</h3><div class="the-ds" style="margin:0">' + ds.map(x => the(x)).join('') + '</div>' : ''; }).join('') : '<p>' + tk('so_trong') + '</p>') +
+    '<div class="hang-nut" style="margin-top:1em"><button type="button" class="nut nho" data-a="dongPhu">' + tk('kp_dong') + '</button></div>');
+}
+
+/* ---------- HỘI ĐỒNG: THUYẾT PHỤC ---------- */
+let hdChon = null, hdBao = null;
+function manHoi(ma) {
+  const c = CH[ma], ds = c.hoiDong;
+  if (!hdChon || !ds.includes(hdChon)) hdChon = ds.find(p => !(st.hd[p] && st.hd[p].xong)) || ds[0];
+  const p = HD[hdChon], s = st.hd[hdChon] || {lan: 0}, xong = ds.every(x => st.hd[x] && st.hd[x].xong);
+  const ttNguoi = x => st.hd[x] && st.hd[x].xong ? (st.hd[x].ok ? 'ok' : 'khong') : '';
+  let bao = '';
+  if (s.xong && s.ok) bao = '<div class="bao tot"><b>' + h(p.ten) + ':</b> ' + h(p.dongY) + '</div>';
+  else if (s.xong) bao = '<div class="bao xau">' + tk('hd_thua') + '<br><span class="giai">' + h(p.giai) + '</span></div>';
+  else if (hdBao === hdChon) bao = '<div class="bao xau"><b>' + h(p.ten) + ':</b> ' + tk('hd_truot') + '</div>';
+  const the2 = lcCua(ma).filter(x => st.lc[x]).map(x => { const lc = LC[x];
+    let lop = ''; if (s.xong) lop = p.dung.includes(x) ? ' trung' : ' mo'; else if ((s.da || []).includes(x)) lop = ' truot mo';
+    return '<button type="button" class="lc' + lop + '" data-a="trinh" data-v="' + x + '"' + (s.xong || (s.da || []).includes(x) ? ' disabled' : '') + '>' + h(lc.chu) + '<small>' + h(t('lc_muc', {ma: lc.thua, ten: lc.tenMuc})) + '</small></button>'; }).join('');
+  const sau = ds.find(x => !(st.hd[x] && st.hd[x].xong));
+  ve(dauTrang('banDo', h(c.tenDai) + ' · ' + tk('hd_tieu'), tk('hd_huongDan')) + '<main class="than"><div class="hd-san"><div class="hd-hang">' +
+    ds.map(x => '<button type="button" class="hd-nguoi' + (x === hdChon ? ' chon' : '') + ' ' + ttNguoi(x) + '" data-a="chonNguoi" data-v="' + x + '">' + svgNguoi(HD[x].hinh) + '<span class="ten-bang">' + h(HD[x].ten) + '</span><span class="tt">' + h(st.hd[x] && st.hd[x].xong ? t(st.hd[x].ok ? 'hd_tt_ok' : 'hd_tt_khong') : t('hd_tt_cho')) + '</span></button>').join('') +
+    '</div></div><div class="bong"><b>' + h(p.ten) + '</b> <small>(' + h(p.vai) + ')</small><br>“' + h(p.noi) + '”</div>' + bao +
+    '<h2 class="tieu trai td"><span>' + tk('hd_chon') + '</span></h2><div class="the-ds">' + the2 + '</div><div class="hang-nut">' +
+    (xong ? '<button type="button" class="nut chinh" data-a="denCan" data-v="' + ma + '">' + tk('hd_len') + '</button>' : s.xong && sau ? '<button type="button" class="nut chinh" data-a="chonNguoi" data-v="' + sau + '">' + tk('hd_tiep') + '</button>' : '') +
+    '</div></main>', 'Hội đồng · ' + ma);
+}
+function trinh(x) {
+  const p = HD[hdChon], s = st.hd[hdChon] = st.hd[hdChon] || {lan: 0, da: []};
+  if (s.xong) return;
+  s.lan++; s.da = (s.da || []).concat(x);
+  if (p.dung.includes(x)) { s.ok = true; s.xong = true; suKien('tp', {p: p.ma}); }
+  else if (s.lan >= 2) { s.ok = false; s.xong = true; }
+  hdBao = s.xong ? null : hdChon;
+  luu(); manHoi(p.chuong);
+}
+
+/* ---------- CÁN CÂN: HỘI ĐỒNG BIỂU QUYẾT ---------- */
+function manCan(ma) {
+  const c = CH[ma], ok = c.hoiDong.filter(p => st.hd[p] && st.hd[p].ok), r = dinhCua(st);
+  ve(dauTrang('banDo', h(c.tenDai) + ' · ' + tk('can_tieu')) + '<main class="than"><div class="ket"><div class="khung tg">' + veTamGiac(giaTri(r), {qua: quaCan(), so: true}) + '</div><div class="khung">' +
+    '<h2 class="tieu trai td"><span>' + h(t('can_bieu', {a: ok.length, b: c.hoiDong.length})) + '</span></h2>' +
+    c.hoiDong.map(p => '<div class="hoi-thoai" style="margin:.6em 0">' + svgNguoi(HD[p].hinh) + '<div><div class="ten-bang">' + h(HD[p].ten) + '</div><p class="loi">' + h(st.hd[p] && st.hd[p].ok ? HD[p].dongY : t('hd_tt_khong') + '.') + '</p></div></div>').join('') +
+    dongDinh(r) + '<p class="giai">' + tk('can_ghi') + '</p><p class="giai">' + h(nhanXetCan(r)) + '</p><button type="button" class="nut chinh" data-a="vaoTran" data-v="' + ma + '">' + tk('can_vao') + '</button></div></div></main>', 'Cán cân · ' + ma);
+}
+
+/* ---------- TRẬN LUẬN CHIẾN: BÀN Ô CHÉO ---------- */
+const N = 7, TW = 64, TH = 32, OX = 224, OY = 72;
+const KY_BIEU = {tf: '⚖', one: '◎', wrong: '✕', multi: '❖', fill: '✎'};
+const CHAN = {I: ['2,3', '4,2', '5,4'], II: ['1,3', '3,2', '5,3'], III: ['2,2', '4,3', '1,4'], IV: ['3,3', '5,2']};
+let tam = null, gio = null;
+function dungGio() { clearInterval(gio); gio = null; }
+const isoX = (x, y) => (x - y) * TW / 2 + OX, isoY = (x, y) => (x + y) * TH / 2 + OY;
+const oKey = (x, y) => x + ',' + y;
+function oTrong(x, y, bo) {
+  if (x < 0 || y < 0 || x >= N || y >= N) return false;
+  if (tam.chan.has(oKey(x, y))) return false;
+  if (tam.hero.x === x && tam.hero.y === y) return false;
+  if (tam.dich.some(d => d.x === x && d.y === y && d !== bo)) return false;
+  if (tam.dong.some(d => d.x === x && d.y === y && d !== bo)) return false;
+  return true;
+}
+const KE = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+function duong(tu, dichFn, bo) {
+  const q = [[tu.x, tu.y]], tr = {}; tr[oKey(tu.x, tu.y)] = null;
+  while (q.length) { const [x, y] = q.shift(); if (dichFn(x, y) && !(x === tu.x && y === tu.y)) { const ds = []; let k = oKey(x, y); while (k) { ds.unshift(k.split(',').map(Number)); k = tr[k]; } return ds.slice(1); }
+    for (const [dx, dy] of KE) { const nx = x + dx, ny = y + dy, k = oKey(nx, ny); if (k in tr || !oTrong(nx, ny, bo)) continue; tr[k] = oKey(x, y); q.push([nx, ny]); } }
+  return null;
+}
+function manTran(ma) {
+  const c = CH[ma], con = cauCua(ma).filter(id => !st.kq[id]);
+  st.buoc[ma] = con.length ? 'tran' : 'ket'; luu();
+  if (!con.length) { manKet(ma); return; }
+  const dongMinh = DB.hoiDong.filter(p => st.hd[p.ma] && st.hd[p.ma].ok).sort((a, b) => (b.chuong === ma) - (a.chuong === ma)).slice(0, 2);
+  tam = {ch: ma, hang: con.slice(), dich: [], hero: {x: 5, y: 5}, dong: dongMinh.map((p, i) => ({ma: p.ma, hinh: p.hinh, x: i ? 5 : 6, y: i ? 6 : 5})), chan: new Set(CHAN[ma] || []),
+    ke: dongMinh.length, cau: null, xong: false, dangDi: false};
+  for (let i = 0; i < 4 && tam.hang.length; i++) sinhDich();
+  ve(dauTrang('banDo', h(c.tenDai) + ' · ' + tk('tr_tieu'), dongMinh.length ? h(t('tr_dong', {ds: dongMinh.map(p => p.ten).join(', ')})) : '') +
+    '<main class="than"><div class="tran"><div class="ban"><span class="ban-tt" id="ban-tt"></span>' + veBan() + '</div><div class="khung" id="hoi"></div></div></main>', 'Luận chiến · ' + ma);
+  veHuongDan();
+}
+const CHO_SINH = [[1, 0], [0, 2], [3, 0], [2, 2], [0, 4], [4, 1], [1, 3], [5, 0], [0, 5], [3, 2]];
+function sinhDich() {
+  if (!tam.hang.length) return;
+  const vt = CHO_SINH.find(([x, y]) => oTrong(x, y)); if (!vt) return;
+  tam.dich.push({id: tam.hang.shift(), x: vt[0], y: vt[1]});
+}
+function veO(x, y) {
+  const X = isoX(x, y), Y = isoY(x, y), chan = tam.chan.has(oKey(x, y)), sang = (x + y) % 2;
+  const mat = chan ? '#5c6b4e' : sang ? '#6f9a58' : '#638f4f';
+  let o = '<polygon points="' + (X - 32) + ',' + (Y + 16) + ' ' + X + ',' + (Y + 32) + ' ' + X + ',' + (Y + 42) + ' ' + (X - 32) + ',' + (Y + 26) + '" fill="#3e5a34"/>' +
+    '<polygon points="' + (X + 32) + ',' + (Y + 16) + ' ' + X + ',' + (Y + 32) + ' ' + X + ',' + (Y + 42) + ' ' + (X + 32) + ',' + (Y + 26) + '" fill="#2f4729"/>' +
+    '<polygon points="' + X + ',' + Y + ' ' + (X + 32) + ',' + (Y + 16) + ' ' + X + ',' + (Y + 32) + ' ' + (X - 32) + ',' + (Y + 16) + '" fill="' + mat + '" stroke="rgba(243,220,154,.18)"/>';
+  if (chan) o += tre(X, Y + 22, .62);
+  return o;
+}
+function gUnit(u, loai) {
+  const X = isoX(u.x, u.y), Y = isoY(u.x, u.y) + 18;
+  let o = '<g class="u ' + loai + '" data-u="' + (u.id || u.ma || 'su') + '"' + (loai === 'dich' ? ' data-a="danhDich" data-v="' + u.id + '" role="button" tabindex="0" aria-label="' + h(t('ky_' + CAU[u.id].dang)) + '"' : '') + ' style="transform:translate(' + X + 'px,' + Y + 'px)">';
+  if (loai === 'dich') o += '<polygon points="0,-9 18,0 0,9 -18,0" fill="rgba(232,138,116,.35)" stroke="#e88a74"/>';
+  if (loai === 'su') o += '<polygon points="0,-9 18,0 0,9 -18,0" fill="rgba(243,220,154,.3)" stroke="#f3dc9a"/>';
+  o += nguoiDung(loai === 'dich' ? 'dich' : u.hinh || 'su', 0, 2, 2.5);
+  if (loai === 'dich') o += '<g transform="translate(0,-48)"><rect x="-11" y="-11" width="22" height="22" transform="rotate(45)" fill="#1b2336" stroke="#d8b46a"/><text y="6" text-anchor="middle" font-size="15" fill="#f3dc9a">' + KY_BIEU[CAU[u.id].dang] + '</text></g>';
+  return o + '</g>';
+}
+function veBan() {
+  let o = '<svg viewBox="0 0 448 322" id="ban-svg"><g>';
+  const os = []; for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) os.push([x, y]);
+  os.sort((a, b) => a[0] + a[1] - b[0] - b[1]).forEach(([x, y]) => { o += veO(x, y); });
+  return o + '</g><g id="lop-u">' + veUnits() + '</g></svg>';
+}
+function veUnits() {
+  const ds = [].concat(tam.dich.map(d => [d, 'dich']), tam.dong.map(d => [d, 'dong']), [[tam.hero, 'su']]);
+  ds.sort((a, b) => a[0].x + a[0].y - b[0].x - b[0].y);
+  return ds.map(([u, l]) => gUnit(u, l)).join('');
+}
+function datViTri(u) { const el = document.querySelector('[data-u="' + (u.id || u.ma || 'su') + '"]'); if (el) el.style.transform = 'translate(' + isoX(u.x, u.y) + 'px,' + (isoY(u.x, u.y) + 18) + 'px)'; }
+function xepLai() { const l = document.getElementById('lop-u'); if (l) l.innerHTML = veUnits(); }
+function capNhatTT() { const e = document.getElementById('ban-tt'); if (e) e.textContent = t('tr_con', {n: tam.dich.length + tam.hang.length}); }
+function veHuongDan() {
+  capNhatTT();
+  const e = document.getElementById('hoi'); if (!e) return;
+  e.innerHTML = '<h2 class="tieu trai td"><span>' + tk('tr_tieu') + '</span></h2><p class="giai">' + tk('tr_huongDan') + '</p><h3 class="td" style="color:var(--vang2);margin:.4em 0">' + tk('tr_ky') + '</h3><div class="ky-ds">' +
+    ['tf', 'one', 'wrong', 'multi', 'fill'].map(d => '<div class="ky-dong"><span class="ky-bieu"><b>' + KY_BIEU[d] + '</b></span><span>' + tk('ky_' + d) + '</span></div>').join('') + '</div>';
+}
+function danhDich(id) {
+  if (!tam || tam.cau || tam.dangDi) return;
+  const d = tam.dich.find(x => x.id === id); if (!d) return;
+  const ke = (x, y) => Math.abs(x - d.x) + Math.abs(y - d.y) === 1;
+  let ds = ke(tam.hero.x, tam.hero.y) ? [] : duong(tam.hero, ke);
+  if (!ds) { /* không tới sát được thì đến ô gần luận điệu nhất */
+    let tot = null, kc = Math.abs(tam.hero.x - d.x) + Math.abs(tam.hero.y - d.y);
+    for (let x = 0; x < N; x++) for (let y = 0; y < N; y++) { const k = Math.abs(x - d.x) + Math.abs(y - d.y); if (k < kc && oTrong(x, y)) { const p = duong(tam.hero, (a, b) => a === x && b === y); if (p) { kc = k; tot = p; } } }
+    ds = tot || []; }
+  tam.dangDi = true; tam.cau = id;
+  let i = 0;
+  const buoc = () => {
+    if (i < ds.length) { tam.hero.x = ds[i][0]; tam.hero.y = ds[i][1]; datViTri(tam.hero); i++; setTimeout(buoc, 170); return; }
+    tam.dangDi = false; xepLai(); moCau(id);
+  };
+  buoc();
+}
+const xao = a => { const b = a.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; };
+function moCau(id) {
+  const c = CAU[id]; tam.daCuon = false;
+  tam.thuTu = c.dang === 'tf' ? [0, 1] : xao(c.pa.map((_, i) => i));
+  tam.chon = []; tam.loai = []; tam.daKe = false; tam.kq = null; tam.batDau = Date.now(); tam.dung = 0;
+  veCau();
+  dungGio(); gio = setInterval(chayGio, 250);
+}
+function conLai() { return Math.max(0, GIAY - (Date.now() - tam.batDau - tam.dung) / 1000); }
+function chayGio() {
+  if (!tam || !tam.cau || tam.kq) { dungGio(); return; }
+  if (SUA && SUA.bat) { tam.dung += 250; return; }   /* đang sửa chữ thì đồng hồ đứng */
+  const s = conLai(), e = document.querySelector('.dongho'), so = document.querySelector('.dongho-so');
+  if (e) { e.firstChild.style.width = (s / GIAY * 100) + '%'; e.classList.toggle('gap', s <= 6); }
+  if (so) so.textContent = Math.ceil(s) + 's';
+  if (s <= 0) chot(true);
+}
+function veCau() {
+  const c = CAU[tam.cau], kq = tam.kq, e = document.getElementById('hoi'); if (!e) return;
+  const nhan = 'ABCDE';
+  let chu = h(c.hoi);
+  if (c.dang === 'fill') chu = chu.replace('____', '<span class="o-trong">' + (tam.chon.length ? h(c.pa[tam.chon[0]]) : '&nbsp;') + '</span>');
+  let pa = '';
+  const lop = i => { let l = ''; if (tam.chon.includes(i)) l += ' chon'; if (tam.loai.includes(i)) l += ' loai';
+    if (kq) { const dg2 = c.dung.includes(i), ch = tam.chon.includes(i); if (dg2 && ch) l += ' dung'; else if (dg2) l += c.dang === 'multi' ? ' bo' : ' dung'; else if (ch) l += ' sai'; } return l; };
+  const tag = i => { if (!kq) return ''; const dg2 = c.dung.includes(i), ch = tam.chon.includes(i);
+    if (c.dang === 'multi') return dg2 && !ch ? tk('tag_boSot') : !dg2 && ch ? tk('tag_thua') : dg2 ? tk('tag_dung') : '';
+    return dg2 ? tk(c.dang === 'wrong' ? 'tag_paSai' : 'tag_dung') : ''; };
+  if (c.dang === 'tf') pa = '<div class="tf">' + [0, 1].map(i => '<button type="button" class="pa' + lop(i) + '" data-a="pa" data-v="' + i + '"' + (kq ? ' disabled' : '') + '>' + tk(i ? 'tf_s' : 'tf_d') + (tag(i) ? '<span class="tag">' + tag(i) + '</span>' : '') + '</button>').join('') + '</div>';
+  else if (c.dang === 'fill') pa = '<div class="tu-ds">' + tam.thuTu.map(i => '<button type="button" class="pa' + lop(i) + '" data-a="pa" data-v="' + i + '"' + (kq ? ' disabled' : '') + '>' + h(c.pa[i]) + '</button>').join('') + '</div>';
+  else pa = '<div class="pa-ds">' + tam.thuTu.map((i, k) => '<button type="button" class="pa' + lop(i) + '" data-a="pa" data-v="' + i + '"' + (kq ? ' disabled' : '') + '><span class="k">' + nhan[k] + '</span><span>' + h(c.pa[i]) + (tag(i) ? '<span class="tag">' + tag(i) + '</span>' : '') + '</span></button>').join('') + '</div>';
+  let duoi = '';
+  if (!kq) {
+    const canNut = c.dang === 'one' || c.dang === 'wrong' || c.dang === 'multi';
+    duoi = '<div class="hang-nut" style="margin-top:.9em">' + (canNut ? '<button type="button" class="nut chinh" data-a="raDon"' + (tam.chon.length ? '' : ' disabled') + '>' + tk('tr_raDon') + '</button>' : '') +
+      (tam.ke > 0 && c.dang !== 'tf' && !tam.daKe ? '<button type="button" class="nut nho" data-a="hienKe">' + tk('tr_hienKe', {n: tam.ke}) + '</button>' : '') + '</div>';
+  } else {
+    const con = tam.dich.length + tam.hang.length;
+    duoi = '<p class="kq-dau ' + (kq.ok ? 'tot' : 'xau') + '">' + tk(kq.ok ? 'tr_trung' : kq.het ? 'tr_het' : 'tr_truot') + (kq.ok ? ' <small style="font-size:.7em;color:var(--vang2)">' + h(t('tr_diem', {n: kq.d})) + '</small>' : '') + '</p>' +
+      '<p class="giai">' + h(c.giaiThich) + '</p><div class="hang-nut"><button type="button" class="nut chinh" data-a="tiep">' + tk(con ? 'tr_tiep' : 'tr_ket') + '</button></div>';
+  }
+  e.innerHTML = '<div class="hoi-dau"><span class="hoi-ky">' + KY_BIEU[c.dang] + ' ' + tk('ky_' + c.dang) + '</span>' + (kq ? '' : '<span class="dongho"><i style="width:' + (conLai() / GIAY * 100) + '%"></i></span><span class="dongho-so">' + Math.ceil(conLai()) + 's</span>') + '</div>' +
+    '<p class="hoi-chu">' + chu + '</p>' + pa + duoi;
+  if (window.innerWidth < 900 && !kq && !tam.daCuon) { tam.daCuon = true; e.scrollIntoView({behavior: 'smooth', block: 'start'}); }
+}
+function chonPa(i) {
+  if (!tam || !tam.cau || tam.kq) return;
+  const c = CAU[tam.cau];
+  if (c.dang === 'multi') { tam.chon = tam.chon.includes(i) ? tam.chon.filter(x => x !== i) : tam.chon.concat(i); veCau(); return; }
+  tam.chon = [i];
+  if (c.dang === 'tf' || c.dang === 'fill') { chot(false); return; }
+  veCau();
+}
+function hienKe() {
+  if (!tam || tam.kq || tam.ke <= 0 || tam.daKe) return;
+  const c = CAU[tam.cau];
+  if (c.dang === 'multi') { const i = c.dung.find(x => !tam.chon.includes(x)); if (i == null) return; tam.chon.push(i); }
+  else { const sai = tam.thuTu.filter(i => !c.dung.includes(i) && !tam.loai.includes(i) && !tam.chon.includes(i)); if (!sai.length) return; tam.loai.push(sai[0]); }
+  tam.ke--; tam.daKe = true; veCau();
+}
+function chot(het) {
+  if (!tam || !tam.cau || tam.kq) return;
+  dungGio();
+  const c = CAU[tam.cau], ch = tam.chon.slice().sort(), dg2 = c.dung.slice().sort();
+  const ok = !het && ch.length === dg2.length && ch.every((x, i) => x === dg2[i]);
+  const thuong = Math.round(50 * conLai() / GIAY), d = ok ? 100 + (tam.daKe ? Math.round(thuong / 2) : thuong) : 0;
+  tam.kq = {ok, het, d};
+  st.kq[tam.cau] = {ok, d};
+  if (ok) { st.chuoi++; st.chuoiMax = Math.max(st.chuoiMax, st.chuoi); if (st.chuoi === 3 || st.chuoi % 5 === 0) suKien('chuoi', {n: st.chuoi}); if (!st.dauTien) { st.dauTien = 1; suKien('dau'); } }
+  else st.chuoi = 0;
+  luu(); veCau();
+}
+function tiep() {
+  if (!tam || !tam.kq) return;
+  const id = tam.cau, ok = tam.kq.ok;
+  tam.cau = null; tam.kq = null;
+  const el = document.querySelector('[data-u="' + id + '"]');
+  if (el) { el.classList.add('roi'); el.style.transform += ok ? ' translateY(-30px)' : ' translateY(-12px) translateX(40px)'; }
+  tam.dich = tam.dich.filter(d => d.id !== id);
+  setTimeout(() => {
+    /* luận điệu còn lại tiến một bước về phía sứ giả; đồng minh đứng sau sứ giả */
+    tam.dich.forEach(d => { if (Math.abs(d.x - tam.hero.x) + Math.abs(d.y - tam.hero.y) <= 1) return;
+      const ds = duong(d, (x, y) => Math.abs(x - tam.hero.x) + Math.abs(y - tam.hero.y) <= 1, d) || [];
+      if (ds.length) { d.x = ds[0][0]; d.y = ds[0][1]; } });
+    tam.dong.forEach((a, i) => { const cho = [[tam.hero.x + (i ? 1 : -1), tam.hero.y + 1], [tam.hero.x + (i ? 1 : -1), tam.hero.y], [tam.hero.x, tam.hero.y + 1], [tam.hero.x + (i ? -1 : 1), tam.hero.y + 1]].find(([x, y]) => oTrong(x, y, a));
+      if (cho) { a.x = cho[0]; a.y = cho[1]; } });
+    tam.dich.concat(tam.dong).forEach(datViTri);
+    setTimeout(() => {
+      sinhDich(); xepLai(); capNhatTT();
+      if (!tam.dich.length && !tam.hang.length) { ketTran(); return; }
+      veHuongDan();
+    }, 220);
+  }, 420);
+}
+function ketTran() {
+  const ma = tam.ch, tong = cauCua(ma).length, a = dungCh(ma);
+  st.buoc[ma] = 'ket';
+  suKien('ch', {c: ma, a, b: tong}); if (a === tong) suKien('tron', {c: ma});
+  if (MA_CH.every(x => x === ma || xongCh(x))) suKien('xong4');
+  luu(); manKet(ma);
+}
+
+/* ---------- KẾT CHƯƠNG ---------- */
+function manKet(ma) {
+  const c = CH[ma], ids = cauCua(ma), sai = ids.filter(id => st.kq[id] && !st.kq[id].ok), a = dungCh(ma);
+  if (st.buoc[ma] !== 'xong') { st.buoc[ma] = 'xong'; luu(); }
+  const r = dinhCua(st), i = MA_CH.indexOf(ma), sau = MA_CH.slice(i + 1).concat(MA_CH.slice(0, i)).find(x => !xongCh(x));
+  ve(dauTrang('banDo', h(c.tenDai) + ' · ' + tk('k_tieu')) + '<main class="than"><div class="ket"><div class="khung tg">' + veTamGiac(giaTri(r), {qua: quaCan(), so: true}) + dongDinh(r) + '</div><div class="khung">' +
+    (a === ids.length ? '<p class="kq-dau tot">' + tk('k_tron') + '</p>' : '') +
+    '<div class="so-lieu"><div><b>' + lcCua(ma).filter(x => st.lc[x]).length + '/' + lcCua(ma).length + '</b>' + tk('k_lc') + '</div><div><b>' + c.hoiDong.filter(p => st.hd[p] && st.hd[p].ok).length + '/' + c.hoiDong.length + '</b>' + tk('k_tp') + '</div>' +
+    '<div><b>' + a + '/' + ids.length + '</b>' + tk('k_tran') + '</div><div><b>' + diemCh(ma) + '</b>' + tk('k_diem') + '</div></div>' +
+    '<p class="giai">' + h(nhanXetCan(r)) + '</p><h2 class="tieu trai td"><span>' + tk('k_on') + '</span></h2>' + veOn(sai) +
+    '<div class="hang-nut" style="margin-top:1em">' + (sau ? '<button type="button" class="nut chinh" data-a="chuong" data-v="' + sau + '">' + tk('k_tiep', {ten: CH[sau].tenDai}) + '</button>' : '<button type="button" class="nut chinh" data-a="tong">' + tk('bd_tong') + '</button>') +
+    '<button type="button" class="nut nho" data-a="banDo">' + tk('ve_banDo') + '</button>' + (sai.length ? '<button type="button" class="nut nho" data-a="tranLai" data-v="' + ma + '">' + tk('k_tranLai') + '</button>' : '') + '</div></div></div></main>', 'Kết chương · ' + ma);
+}
+function veOn(sai) {
+  if (!sai.length) return '<p class="giai">' + tk('k_onKhong') + '</p>';
+  return '<div class="on-ds">' + sai.map(id => { const c = CAU[id]; return '<details><summary>' + h(c.nho) + '<small>' + h(t('lc_muc', {ma: c.muc, ten: tenMucCua(c.muc)})) + '</small></summary><p>' + h(c.giaiThich) + '</p></details>'; }).join('') + '</div>';
+}
+function tenMucCua(m) { for (const c of DB.chuong) for (const d of c.diaDiem) if (d.thua === m) return d.tenMuc; return ''; }
+function tranLai(ma) { cauCua(ma).forEach(id => { if (st.kq[id] && !st.kq[id].ok) delete st.kq[id]; }); st.buoc[ma] = 'tran'; luu(); manTran(ma); }
+function manTong() {
+  const r = dinhCua(st), sai = DB.cau.filter(c => st.kq[c.id] && !st.kq[c.id].ok).map(c => c.id), dung = DB.cau.filter(c => st.kq[c.id] && st.kq[c.id].ok).length;
+  ve(dauTrang('banDo', tk('tk_tieu'), tk('tk_xong')) + '<main class="than"><div class="ket"><div class="khung tg">' + veTamGiac(giaTri(r), {qua: quaCan(), so: true}) + dongDinh(r) + '</div><div class="khung">' +
+    '<div class="so-lieu"><div><b>' + Object.keys(st.lc).length + '/' + Object.keys(LC).length + '</b>' + tk('k_lc') + '</div><div><b>' + quaCan().length + '/' + DB.hoiDong.length + '</b>' + tk('k_tp') + '</div>' +
+    '<div><b>' + dung + '/' + DB.cau.length + '</b>' + tk('k_tran') + '</div><div><b>' + diemCua(st) + '</b>★</div></div><p class="giai">' + h(nhanXetCan(r)) + '</p>' +
+    '<h2 class="tieu trai td"><span>' + tk('k_on') + '</span></h2>' + veOn(sai) + '<div class="hang-nut" style="margin-top:1em"><button type="button" class="nut nho" data-a="banDo">' + tk('ve_banDo') + '</button></div></div></div></main>', 'Tổng kết');
+}
+
+/* ---------- VÀO PHÒNG (điện thoại) ---------- */
+function manVaoPhong(buoc) {
+  const ph = PH.phong;
+  let than = '';
+  if (!buoc || !ph) {
+    than = '<label class="form"><span>' + tk('vp_ma') + '</span><input class="o-nhap ma" id="o-ma" maxlength="6" autocomplete="off" autocapitalize="characters" value="' + h(PH.nhapMa) + '"></label>' +
+      '<p class="loi-nho" id="vp-loi">' + h(PH.loi) + '</p><div class="hang-nut" style="justify-content:center"><button type="button" class="nut chinh" data-a="timPhong">' + tk('vp_tim') + '</button></div>';
+  } else {
+    than = '<p class="ghi-nho" style="text-align:center">' + h(PH.nhapMa) + ' · ' + (ph.cheDo === 'nhom' ? h(t('vp_nhomCheDo', {n: ph.soNhom})) : tk('vp_canhan')) + '</p>' +
+      '<label class="form"><span>' + tk('vp_ten') + '</span><input class="o-nhap" id="o-ten" maxlength="16" autocomplete="off" placeholder="' + h(t('vp_tenGoi')) + '" value="' + h(PH.ten) + '"></label>' +
+      (ph.cheDo === 'nhom' ? '<div class="form"><span>' + tk('vp_nhom') + '</span><div class="nhom-ds">' + Array.from({length: ph.soNhom}, (_, i) => '<button type="button" data-a="chonNhom" data-v="' + (i + 1) + '" class="' + (PH.nhom === i + 1 ? 'chon' : '') + '">' + h(t('s_nhom', {n: i + 1})) + '</button>').join('') + '</div></div>' : '') +
+      '<p class="loi-nho" id="vp-loi">' + h(PH.loi) + '</p><div class="hang-nut" style="justify-content:center"><button type="button" class="nut chinh" data-a="vaoChoi">' + tk('vp_vao') + '</button></div>';
+  }
+  ve(dauTrang('chao', tk('vp_tieu')) + '<main class="than"><div class="khung form" style="margin-top:1.5em">' + than + '</div></main>', 'Vào phòng');
+  const o = document.getElementById(buoc ? 'o-ten' : 'o-ma'); if (o && !(SUA && SUA.bat)) { o.focus(); o.addEventListener('keydown', e => { if (e.key === 'Enter') HANH[buoc ? 'vaoChoi' : 'timPhong'](); }); }
+}
+async function timPhong() {
+  const o = document.getElementById('o-ma'); PH.nhapMa = (o ? o.value : PH.nhapMa).toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (PH.nhapMa.length < 4) { PH.loi = t('vp_khong', {ma: PH.nhapMa}); manVaoPhong(); return; }
+  const l = document.getElementById('vp-loi'); if (l) l.textContent = t('vp_dangTim');
+  SYNC.batDau();
+  PH.ma = PH.nhapMa;
+  const ph = await docMot(dg('phong'), 7000);
+  if (!ph || ph.dong) { PH.loi = t('vp_khong', {ma: PH.nhapMa}); PH.ma = ''; manVaoPhong(); return; }
+  PH.phong = ph; PH.loi = '';
+  const dt = docNho('can-can-dt');
+  if (dt && dt.ma === PH.ma && dt.r === ph.r) { vaoLai(dt); return; }
+  manVaoPhong(2);
+}
+function vaoChoi() {
+  const o = document.getElementById('o-ten'); PH.ten = (o ? o.value : PH.ten).replace(/\s+/g, ' ').trim();
+  if (PH.ten.length < 2) { PH.loi = t('vp_thieuTen'); manVaoPhong(2); return; }
+  if (PH.phong.cheDo === 'nhom' && !PH.nhom) { PH.loi = t('vp_thieuNhom'); manVaoPhong(2); return; }
+  PH.loi = '';
+  vaoLai({ma: PH.ma, r: PH.phong.r, ten: PH.ten, nhom: PH.phong.cheDo === 'nhom' ? PH.nhom : 0});
+}
+function vaoLai(dt) {
+  PH.vai = 'dt'; PH.ma = dt.ma; PH.r = dt.r; PH.ten = dt.ten; PH.nhom = dt.nhom; PH.cid = cidMay();
+  ghiNho('can-can-dt', dt);
+  napTD();
+  if (!st.nkI) suKien('vao');
+  SYNC.batDau();
+  PH.huy.forEach(f => f()); PH.huy = [];
+  PH.huy.push(SYNC.ngheTin(dg('phong'), false, (_, v) => { const cu = PH.phong; PH.phong = v; if (v.r !== PH.r) return;
+    if (cu && cu.trangThai === 'cho' && v.trangThai === 'choi' && manHienTai === 'Chờ') manBanDo();
+    if (v.trangThai === 'xong' && (!cu || cu.trangThai !== 'xong')) baoXong(); }));
+  PH.huy.push(SYNC.ngheTin(dg('bang'), false, (_, v) => { PH.bang = v; const c = document.querySelector('.dau-phai'); if (c) { c.innerHTML = chips(); capNhatMang(); } }));
+  clearInterval(PH.nhip); PH.nhip = setInterval(guiTinh, 20000);
+  luu();
+  if (PH.phong && PH.phong.trangThai === 'cho') manCho(); else manBanDo();
+}
+function manCho() {
+  ve(dauTrang('chao', tk('vp_tieu')) + '<main class="than"><div class="khung" style="max-width:36em;margin:1.5em auto;text-align:center"><p class="kq-dau">' + h(t('vp_cho', {ma: PH.ma})) + '</p>' +
+    '<p>' + h(PH.ten) + (PH.nhom ? ' · ' + h(t('s_nhom', {n: PH.nhom})) : '') + '</p><div class="cach"><ol>' + [1, 2, 3, 4, 5].map(i => '<li>' + tk('cc_' + i) + '</li>').join('') + '</ol></div>' +
+    '<div class="hang-nut" style="justify-content:center;margin-top:1em"><button type="button" class="nut nho" data-a="roiPhong">' + tk('vp_roi') + '</button></div></div></main>', 'Chờ');
+}
+function hangCuaToi() { const b = PH.bang && PH.bang.r === PH.r ? PH.bang : null; if (!b) return '';
+  if (PH.phong && PH.phong.cheDo === 'nhom') return b.nhom && b.nhom[PH.nhom] ? t('chip_hangNhom', {g: PH.nhom, h: b.nhom[PH.nhom], n: b.soNhom}) : '';
+  return b.hang && b.hang[PH.cid] ? t('chip_hang', {h: b.hang[PH.cid], n: b.so}) : ''; }
+function baoXong() { setTimeout(() => moPhu('<p class="kq-dau">' + tk('vp_xong') + '</p>' + (hangCuaToi() ? '<p>' + h(hangCuaToi()) + '</p>' : '') + '<div class="hang-nut"><button type="button" class="nut nho" data-a="dongPhu">' + tk('kp_dong') + '</button></div>'), 1500); }
+function roiPhong() { PH.huy.forEach(f => f()); PH.huy = []; clearInterval(PH.nhip); xoaNho('can-can-dt'); PH.vai = null; PH.ma = ''; PH.phong = null; manChao(); }
+
+/* ---------- GIẢNG VIÊN TẠO PHÒNG ---------- */
+const TP = {cheDo: 'nhom', soNhom: 6, phut: 10};
+function manTaoPhong() {
+  ve(dauTrang('chao', tk('tp_tieu')) + '<main class="than"><div class="khung form" style="margin-top:1.5em"><span>' + tk('tp_cheDo') + '</span><div class="chon-dong">' +
+    ['canhan', 'nhom'].map(k => '<button type="button" class="nut nho' + (TP.cheDo === k ? ' chinh' : '') + '" data-a="cheDo" data-v="' + k + '">' + tk('tp_' + k) + '</button>').join('') + '</div>' +
+    (TP.cheDo === 'nhom' ? '<span>' + tk('tp_soNhom') + '</span><div class="dem-nut"><button type="button" class="nut nho" data-a="soNhom" data-v="-1">−</button><b>' + TP.soNhom + '</b><button type="button" class="nut nho" data-a="soNhom" data-v="1">+</button></div>' : '') +
+    '<span>' + tk('tp_phut') + '</span><div class="dem-nut"><button type="button" class="nut nho" data-a="phut" data-v="-1">−</button><b>' + TP.phut + '</b><button type="button" class="nut nho" data-a="phut" data-v="1">+</button></div>' +
+    '<p class="ghi-nho">' + tk('tp_ghi') + '</p><div class="hang-nut"><button type="button" class="nut chinh" data-a="moPhong">' + tk('tp_mo') + '</button></div></div></main>', 'Tạo phòng');
+}
+async function moPhong(cu) {
+  SYNC.batDau();
+  PH.vai = 'chu'; PH.nguoi = {}; PH.daThay = new Set(); PH.mo = []; PH.chay = []; PH.kk = {}; PH.dauBang = null; PH.hangCu = {}; PH.moLuc = Date.now();
+  if (cu) { PH.ma = cu.ma; PH.r = cu.r; PH.phong = cu.phong; }
+  else { PH.ma = taoMa(4); PH.r = taoMa(6); PH.phong = {r: PH.r, cheDo: TP.cheDo, soNhom: TP.cheDo === 'nhom' ? TP.soNhom : 0, phut: TP.phut, trangThai: 'cho', batDau: 0}; }
+  ghiPhong();
+  PH.huy.forEach(f => f()); PH.huy = [];
+  PH.huy.push(SYNC.ngheTin(dg('nguoi'), true, nhanNguoi));
+  manChieu();
+}
+function ghiPhong() { ghiNho('can-can-chu', {ma: PH.ma, r: PH.r, phong: PH.phong}); SYNC.ghi(dg('phong'), PH.phong).catch(() => {}); }
+function nhanNguoi(cid, v) {
+  if (PH.vai !== 'chu' || !v || v.r !== PH.r) return;
+  const cu = PH.nguoi[cid];
+  PH.nguoi[cid] = v;
+  (v.nk || []).forEach(e => { const k = cid + ':' + e.i; if (PH.daThay.has(k)) return; PH.daThay.add(k); if (e.l && e.l < PH.moLuc - 10000) return; xuLySuKien(cid, v, e); });
+  if (!cu) PH.doi = true;
+  PH.doi = true;
+}
+const tenHien = v => v.ten + (PH.phong.cheDo === 'nhom' && v.nhom ? ' (' + t('s_nhom', {n: v.nhom}) + ')' : '');
+function phutGiay() { const s = Math.max(0, Math.floor((Date.now() - (PH.phong.batDau || Date.now())) / 1000)); return String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0'); }
+function xuLySuKien(cid, v, e) {
+  const ten = tenHien(v);
+  const loi = (k, x) => { PH.mo.unshift(t(k, Object.assign({ten}, x))); PH.mo = PH.mo.slice(0, 6); };
+  const chay = (k, x) => { PH.chay.unshift(t(k, Object.assign({ten}, x))); PH.chay = PH.chay.slice(0, 12); };
+  const kk = (k, x) => { if (PH.kk[k]) return; PH.kk[k] = {luc: phutGiay(), chu: t('kk_' + k, Object.assign({ten}, x))}; };
+  if (e.k === 'vao') chay('chay_vao');
+  if (e.k === 'tp' && HD[e.p]) { loi('mo_tp', {nguoi: HD[e.p].ten}); chay('chay_tp', {nguoi: HD[e.p].ten}); if (v.tp >= DB.hoiDong.length) kk('tp5'); }
+  if (e.k === 'ch' && CH[e.c]) { loi('mo_ch', {chuong: CH[e.c].tenDai}); chay('chay_ch', {chuong: CH[e.c].tenDai, a: e.a, b: e.b}); }
+  if (e.k === 'tron' && CH[e.c]) { loi('mo_tron', {chuong: CH[e.c].tenDai}); kk('tron', {chuong: CH[e.c].tenDai}); }
+  if (e.k === 'chuoi') { if (e.n >= 5) loi('mo_chuoi', {n: e.n}); chay('chay_chuoi', {n: e.n}); }
+  if (e.k === 'dau') kk('dau');
+  if (e.k === 'xong4') kk('xong');
+  if (!PH.kk.chuoiMax || v.chuoiMax > PH.kk.chuoiMax.n) { if (v.chuoiMax >= 3) PH.kk.chuoiMax = {n: v.chuoiMax, luc: phutGiay(), chu: t('kk_chuoi', {ten, n: v.chuoiMax})}; }
+}
+
+/* ---------- MÀN CHIẾU (máy giảng viên, 1920×1080 tự co theo màn) ---------- */
+let nhipChieu = null, nhipMo = null, loiMo = '', xoaPhongLan = 0;
+function bangXep() {
+  const ds = Object.entries(PH.nguoi).map(([cid, v]) => Object.assign({cid}, v));
+  if (PH.phong.cheDo === 'nhom') {
+    const nh = Array.from({length: PH.phong.soNhom}, (_, i) => ({ma: i + 1, ds: ds.filter(v => v.nhom === i + 1)}));
+    nh.forEach(n => { n.d = n.ds.length ? Math.round(n.ds.reduce((a, v) => a + v.d, 0) / n.ds.length) : 0; n.lc = n.ds.reduce((a, v) => a + v.lc, 0); n.tp = n.ds.reduce((a, v) => a + v.tp, 0); n.xong = n.ds.reduce((a, v) => Math.max(a, v.xong), 0); });
+    return nh.filter(n => n.ds.length).sort((a, b) => b.d - a.d);
+  }
+  return ds.sort((a, b) => b.d - a.d);
+}
+function tongLop() {
+  const r = {vh: [0, 0], dd: [0, 0], cn: [0, 0]}, sai = DB.cau.map(() => [0, 0]);
+  Object.values(PH.nguoi).forEach(v => { DINH.forEach(p => { if (v.dn && v.dn[p]) { r[p][0] += v.dn[p][0]; r[p][1] += v.dn[p][1]; } });
+    String(v.kq || '').split('').forEach((c, i) => { if (c === '.' || !sai[i]) return; sai[i][1]++; if (c === '0') sai[i][0]++; }); });
+  const nham = sai.map((x, i) => ({c: DB.cau[i], sai: x[0], lam: x[1], p: x[1] ? x[0] / x[1] : 0})).filter(x => x.lam >= 2 && x.p >= .3).sort((a, b) => b.p - a.p || b.sai - a.sai).slice(0, 3);
+  return {r, nham};
+}
+function manChieu() {
+  manHienTai = 'Màn chiếu'; dungGio(); document.body.classList.add('chieu');
+  app.innerHTML = '<div class="san-ngoai"><div class="san" id="san"></div></div>';
+  coSan(); window.onresize = coSan;
+  veSan();
+  clearInterval(nhipChieu); nhipChieu = setInterval(() => { tickChieu(); }, 1000);
+  clearInterval(nhipMo); nhipMo = setInterval(doiLoiMo, 8000); doiLoiMo();
+}
+function coSan() { const s = document.getElementById('san'); if (!s) return; const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+  s.style.transformOrigin = '50% 50%'; s.style.transform = 'translate(-50%,-50%) scale(' + k + ')'; }
+function giayCon() { const ph = PH.phong; if (ph.trangThai !== 'choi') return ph.trangThai === 'xong' ? 0 : ph.phut * 60; return Math.max(0, Math.round((ph.batDau + ph.phut * 60000 - Date.now()) / 1000)); }
+const mmss = s => String(Math.floor(s / 60)).padStart(2, '0') + ':' + String(s % 60).padStart(2, '0');
+function veSan() {
+  const s = document.getElementById('san'); if (!s) return; const ph = PH.phong, so = Object.keys(PH.nguoi).length;
+  let o = '<div class="s-dau"><div class="s-ten td">' + tk('c_ten') + '<small>' + tk('s_ten2') + '</small></div><div class="s-gio" id="s-gio"></div>' +
+    '<div class="s-phong"><div class="s-ma">' + h(PH.ma) + '<small>' + h(t('s_ma', {n: so})) + '</small></div><div class="qr" id="qr-nho"></div></div></div>';
+  if (ph.trangThai === 'cho') {
+    o += '<div class="s-cho"><div class="khung"><div class="qr-lon" id="qr-lon"></div><div class="dia-chi">' + h(lienKetPhong()) + '</div></div><div class="khung"><h2 class="tieu td"><span>' + tk('s_choTieu') + '</span></h2>' +
+      '<p style="font-size:26px;line-height:1.5">' + tk('s_choGhi') + '</p><p class="kq-dau" style="font-size:40px" id="s-dem-tong"></p><div class="s-dem" id="s-dem"></div>' +
+      '<div class="mo-hop" style="margin-top:26px">' + svgNguoi('mo') + '<div class="mo-loi"><b>' + tk('s_mo') + '</b>' + tk('mo_cho') + '</div></div>' +
+      '<div class="s-nut-lon"><button type="button" class="nut chinh" data-a="batDau">' + tk('s_batDau') + '</button></div></div></div>';
+  } else {
+    o += '<div class="s-cot s-bang"><div class="khung"><h2 class="tieu trai td"><span>' + tk(ph.cheDo === 'nhom' ? 's_bangNhom' : 's_bang') + '</span></h2><div id="s-bang"></div></div></div>' +
+      '<div class="s-cot s-giua"><div class="khung"><h2 class="tieu td"><span>' + tk('s_canLop') + '</span></h2><div class="s-tg tg" id="s-tg"></div><div id="s-dinh" style="font-size:20px"></div><div class="s-nham"><h3 class="tieu trai td" style="font-size:26px;margin-top:12px"><span>' + tk('s_nham') + '</span></h3><div id="s-nham"></div></div></div></div>' +
+      '<div class="s-cot s-phai"><div class="khung"><div class="mo-hop">' + svgNguoi('mo') + '<div class="mo-loi" id="s-mo"></div></div><div class="kk-ds"><h3 class="tieu trai td" style="font-size:26px"><span>' + tk('s_kk') + '</span></h3><div id="s-kk"></div></div></div></div>';
+  }
+  o += '<div class="s-chay"><div class="s-chay-nhan">' + tk('s_chay') + '</div><div class="s-chay-dai" id="s-chay"></div></div>' +
+    '<div class="s-dk">' + (ph.trangThai === 'choi' ? '<button type="button" data-a="themGio">' + tk('s_them') + '</button><button type="button" data-a="ketThuc">' + tk('s_ketThuc') + '</button>' : '') +
+    '<button type="button" data-a="toanMan">' + tk('s_toanMan') + '</button><button type="button" data-a="chao">' + tk('ve_chao') + '</button><button type="button" data-a="dongPhong" id="nut-dong">' + tk('s_dong') + '</button></div>';
+  if (ph.trangThai === 'xong') o += '<div class="s-xong" id="s-xong"></div>';
+  s.innerHTML = o;
+  veQR('#qr-nho', 3); if (ph.trangThai === 'cho') veQR('#qr-lon', 10);
+  PH.doi = true; PH.chayCu = ''; tickChieu(); doiLoiMo();
+}
+function tickChieu() {
+  if (manHienTai !== 'Màn chiếu') { clearInterval(nhipChieu); clearInterval(nhipMo); return; }
+  const ph = PH.phong, g = document.getElementById('s-gio'), con = giayCon();
+  if (g) { g.className = 's-gio' + (ph.trangThai === 'choi' && con <= 60 ? ' gap' : ''); g.innerHTML = (ph.trangThai === 'xong' ? '00:00' : mmss(con)) + '<small>' + h(t(ph.trangThai === 'cho' ? 's_cho' : ph.trangThai === 'xong' ? 's_het' : 's_conLai')) + '</small>'; }
+  if (ph.trangThai === 'choi' && con <= 0) { ketThuc(); return; }
+  if (ph.trangThai !== 'cho') ghiBang(bangXep());
+  if (!PH.doi) return; PH.doi = false;
+  const so = Object.keys(PH.nguoi).length, ma = document.querySelector('.s-ma small'); if (ma) ma.textContent = t('s_ma', {n: so});
+  const bx = bangXep();
+  if (ph.trangThai === 'cho') {
+    const dt = document.getElementById('s-dem-tong'); if (dt) dt.textContent = t('s_dangVao', {n: so});
+    const dm = document.getElementById('s-dem');
+    if (dm) dm.innerHTML = ph.cheDo === 'nhom' ? Array.from({length: ph.soNhom}, (_, i) => '<div><b>' + Object.values(PH.nguoi).filter(v => v.nhom === i + 1).length + '</b>' + h(t('s_nhom', {n: i + 1})) + '</div>').join('') : '';
+  } else {
+    const b = document.getElementById('s-bang');
+    if (b) { const top = bx.slice(0, ph.cheDo === 'nhom' ? 10 : 10), max = Math.max(1, ...top.map(x => x.d));
+      b.innerHTML = top.length ? top.map((x, i) => { const k = ph.cheDo === 'nhom' ? 'n' + x.ma : x.cid, len = PH.hangCu[k] && PH.hangCu[k] > i + 1;
+        return '<div class="b-dong' + (i ? '' : ' h1') + '"><span class="b-hang"><span>' + (i + 1) + '</span></span><div><div class="b-ten">' + h(ph.cheDo === 'nhom' ? t('s_nhom', {n: x.ma}) : x.ten) + (ph.cheDo === 'nhom' ? '<small>' + h(t('s_nguoi', {n: x.ds.length})) + '</small>' : '') + (len ? '<span class="len">▲</span>' : '') + '</div>' +
+          '<div class="b-vach"><i style="width:' + Math.round(x.d / max * 100) + '%"></i></div><div class="b-phu">' + h(t('s_dongBang', {lc: x.lc, tp: x.tp, ch: x.xong})) + '</div></div><div class="b-diem">' + x.d + '</div></div>'; }).join('') +
+        (ph.cheDo !== 'nhom' && bx.length > 10 ? '<p class="ghi-nho" style="font-size:18px">' + h(t('s_khac', {n: bx.length - 10})) + '</p>' : '') : '<p style="font-size:22px">' + tk('s_trongBang') + '</p>';
+      if (bx[0] && bx[0].d > 0) { const dau = ph.cheDo === 'nhom' ? 'n' + bx[0].ma : bx[0].cid; if (PH.dauBang && PH.dauBang !== dau && ph.trangThai === 'choi') PH.mo.unshift(t('mo_dan', {ten: ph.cheDo === 'nhom' ? t('s_nhom', {n: bx[0].ma}) : bx[0].ten})); PH.dauBang = dau; }
+      if (Date.now() - (PH.hangLuc || 0) > 10000) { PH.hangLuc = Date.now(); PH.hangCu = {}; bx.forEach((x, i) => { PH.hangCu[ph.cheDo === 'nhom' ? 'n' + x.ma : x.cid] = i + 1; }); } }
+    const tl = tongLop(), tg = document.getElementById('s-tg'); if (tg) tg.innerHTML = veTamGiac(giaTri(tl.r), {so: true});
+    const dn = document.getElementById('s-dinh'); if (dn) dn.innerHTML = dongDinh(tl.r);
+    PH.nhamLop = tl.nham; PH.rLop = tl.r;
+    const nm = document.getElementById('s-nham'); if (nm) nm.innerHTML = tl.nham.length ? tl.nham.map(x => '<div class="n-dong">' + h(x.c.nho) + '<small>' + h(t('s_nhamDong', {muc: x.c.muc, p: Math.round(x.p * 100)})) + '</small></div>').join('') : '<p style="font-size:19px;color:var(--chu2)">' + tk('s_nhamKhong') + '</p>';
+    const kk = document.getElementById('s-kk'), ds = ['dau', 'tp5', 'tron', 'xong', 'chuoiMax'].map(k => PH.kk[k]).filter(Boolean);
+    if (kk) kk.innerHTML = ds.length ? ds.map(x => '<div class="kk"><span>' + h(x.luc) + '</span><div>' + h(x.chu) + '</div></div>').join('') : '<p style="font-size:19px;color:var(--chu2)">' + tk('s_kkKhong') + '</p>';
+  }
+  const ch = document.getElementById('s-chay'), chu = PH.chay.length ? PH.chay.join('   ◆   ') : t('s_chayTrong');
+  if (ch && chu !== PH.chayCu) { PH.chayCu = chu; ch.textContent = chu; }
+  const xg = document.getElementById('s-xong');
+  if (xg) { const top = bx.slice(0, 3), ten = x => ph.cheDo === 'nhom' ? t('s_nhom', {n: x.ma}) : x.ten;
+    xg.innerHTML = '<div class="khung"><h2 class="td">' + tk('s_xongTieu') + '</h2><p style="font-size:24px">' + tk('s_xongGhi') + '</p><div class="podium">' + [1, 0, 2].map(i => top[i] ? '<div style="min-height:' + (i === 0 ? 220 : i === 1 ? 170 : 140) + 'px"><b>' + (i + 1) + '</b>' + h(ten(top[i])) + '<br>' + top[i].d + ' ★</div>' : '<span></span>').join('') + '</div>' +
+      '<div class="hang-nut" style="justify-content:center;margin-top:26px"><button type="button" class="nut nho" data-a="anXong">' + tk('kp_dong') + '</button></div></div>'; }
+}
+function ghiBang(bx) {
+  const ph = PH.phong, v = {r: PH.r, so: Object.keys(PH.nguoi).length, soNhom: bx.length, hang: {}, nhom: {}};
+  if (ph.cheDo === 'nhom') bx.forEach((x, i) => { v.nhom[x.ma] = i + 1; });
+  else bx.forEach((x, i) => { v.hang[x.cid] = i + 1; });
+  const s = JSON.stringify(v); if (s === PH.bangCu || Date.now() - (PH.bangLuc || 0) < 5000) return;
+  PH.bangCu = s; PH.bangLuc = Date.now(); SYNC.ghi(dg('bang'), v).catch(() => {});
+}
+function doiLoiMo() {
+  const e = document.getElementById('s-mo'); if (!e) return;
+  let chu = PH.mo.shift();
+  if (!chu) { const ph = PH.phong, lua = [];
+    if (ph.trangThai === 'xong') lua.push(t('mo_het'));
+    else { if (PH.nhamLop && PH.nhamLop[0]) lua.push(t('mo_nham', {y: PH.nhamLop[0].c.nho, muc: PH.nhamLop[0].c.muc}));
+      if (PH.rLop && DINH.some(p => PH.rLop[p][1] >= 3)) { const g = giaTri(PH.rLop), xs = DINH.slice().sort((a, b) => g[b] - g[a]); if (g[xs[0]] - g[xs[2]] >= .1) lua.push(t('mo_can', {nang: tenDinh(xs[0]), nhe: tenDinh(xs[2])})); }
+      lua.push(t('mo_vang'), t('mo_vang2')); }
+    chu = lua[Math.floor(Math.random() * lua.length)]; if (chu === loiMo && lua.length > 1) chu = lua.find(x => x !== loiMo); }
+  loiMo = chu; e.innerHTML = '<b>' + tk('s_mo') + '</b>' + h(chu);
+}
+function batDau() { PH.phong = Object.assign({}, PH.phong, {trangThai: 'choi', batDau: Date.now()}); PH.mo.unshift(t('mo_batDau')); ghiPhong(); veSan(); }
+function ketThuc() { PH.phong = Object.assign({}, PH.phong, {trangThai: 'xong'}); PH.mo.unshift(t('mo_het')); PH.bangLuc = 0; ghiPhong(); veSan(); }
+function themGio() { PH.phong = Object.assign({}, PH.phong, {phut: PH.phong.phut + 2}); ghiPhong(); tickChieu(); }
+function dongPhong() {
+  if (Date.now() - xoaPhongLan > 4000) { xoaPhongLan = Date.now(); const b = document.getElementById('nut-dong'); if (b) b.textContent = t('s_dong2'); return; }
+  PH.phong = Object.assign({}, PH.phong, {dong: true, trangThai: 'xong'}); SYNC.ghi(dg('phong'), PH.phong).catch(() => {});
+  xoaNho('can-can-chu'); PH.huy.forEach(f => f()); PH.huy = []; clearInterval(nhipChieu); clearInterval(nhipMo); window.onresize = null; PH.vai = null; manChao();
+}
+
+/* ---------- HÀNH ĐỘNG (bấm) ---------- */
+let laiLan = 0;
+const HANH = {
+  chao: () => { if (PH.vai === 'chu') { clearInterval(nhipChieu); clearInterval(nhipMo); } manChao(); },
+  banDo: () => manBanDo(),
+  cachChoi: () => cachChoi(),
+  dongPhu: () => dongPhu(),
+  motMinh: () => { PH.vai = null; napTD(); manBanDo(); },
+  vaoPhong: () => { PH.loi = ''; PH.phong = null; manVaoPhong(); },
+  veLaiPhong: async () => { const dt = docNho('can-can-dt'); if (!dt) return; PH.nhapMa = dt.ma; PH.ma = dt.ma; SYNC.batDau(); const ph = await docMot(dg('phong'), 7000);
+    if (!ph || ph.r !== dt.r || ph.dong) { xoaNho('can-can-dt'); PH.loi = t('vp_khong', {ma: dt.ma}); PH.ma = ''; manVaoPhong(); return; } PH.phong = ph; vaoLai(dt); },
+  taoPhong: () => manTaoPhong(),
+  moLaiPhong: () => { const c = docNho('can-can-chu'); if (c) moPhong(c); },
+  cheDo: v => { TP.cheDo = v; manTaoPhong(); },
+  soNhom: v => { TP.soNhom = Math.min(10, Math.max(2, TP.soNhom + +v)); manTaoPhong(); },
+  phut: v => { TP.phut = Math.min(30, Math.max(3, TP.phut + +v)); manTaoPhong(); },
+  moPhong: () => moPhong(),
+  batDau: () => batDau(), ketThuc: () => ketThuc(), themGio: () => themGio(), dongPhong: () => dongPhong(),
+  anXong: () => { const x = document.getElementById('s-xong'); if (x) x.remove(); },
+  toanMan: () => { const d = document.documentElement; if (document.fullscreenElement) document.exitFullscreen(); else if (d.requestFullscreen) d.requestFullscreen().catch(() => {}); },
+  timPhong: () => timPhong(),
+  chonNhom: v => { const o = document.getElementById('o-ten'); if (o) PH.ten = o.value; PH.nhom = +v; manVaoPhong(2); },
+  vaoChoi: () => vaoChoi(),
+  roiPhong: () => roiPhong(),
+  chuong: v => moChuong(v),
+  diaDiem: v => moDiaDiem(v),
+  ghiSo: v => ghiSo(v),
+  so: () => soLuanCu(),
+  denHoi: v => { st.buoc[v] = 'hoi'; luu(); hdChon = null; manHoi(v); },
+  chonNguoi: v => { hdChon = v; hdBao = null; manHoi(HD[v].chuong); },
+  trinh: v => trinh(v),
+  denCan: v => { st.buoc[v] = 'can'; luu(); manCan(v); },
+  vaoTran: v => manTran(v),
+  danhDich: v => danhDich(v),
+  pa: v => chonPa(+v),
+  raDon: () => chot(false),
+  hienKe: () => hienKe(),
+  tiep: () => tiep(),
+  tranLai: v => tranLai(v),
+  tong: () => manTong(),
+  choiLai: () => { if (Date.now() - laiLan > 4000) { laiLan = Date.now(); const b = document.getElementById('nut-lai'); if (b) b.textContent = t('bd_choiLai2'); return; }
+    st = moi(); luu(); manBanDo(); }
+};
+app.addEventListener('click', e => {
+  if (SUA && SUA.bat) return;
+  const b = e.target.closest('[data-a]'); if (!b || b.disabled) return;
+  const f = HANH[b.dataset.a]; if (f) f(b.dataset.v, b);
+});
+app.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('g[data-a]')) { e.preventDefault(); const f = HANH[e.target.dataset.a]; if (f) f(e.target.dataset.v); } });
+
+/* =====================================================================
+   CHẾ ĐỘ SỬA (?sua=1) — theo khuôn game Quy tụ và Trăm năm trồng người, chỉ sửa chữ (không sửa giao diện).
+   Sửa chữ: bấm vào chữ để sửa tại chỗ; chuyển sang "chơi thử" để đi tới màn khác.
+   Lưu trên máy (localStorage "can-can-sua"); "Tải tệp sửa" xuất sua-chu-can-can.json,
+   cong-cu/ap-sua-chu.py đưa vào noi-dung.json / _khuon.html rồi dựng lại game.
+   Trang không có ?sua=1 (trang sinh viên) không có chế độ này. Khi sửa, tiến độ chơi thử không lưu.
+   ===================================================================== */
+if (SUA) {
+  const $ = s => document.querySelector(s);
+  const luuSua = () => { try { localStorage.setItem(KHOA_SUA, JSON.stringify({bat: SUA.bat, chu: SUA.chu, chuGD: SUA.chuGD})); } catch (e) {} };
+  const bao = (tx, ms) => { const e = $('#sua-bao'); e.textContent = tx; e.hidden = false; clearTimeout(bao.t); bao.t = setTimeout(() => { e.hidden = true; }, ms || 3000); };
+  const apSua = goc => {
+    if (!SUA.chu.length) return;
+    const doi = new Map(SUA.chu.map(x => [x.cu, x.moi]));
+    const thay = n => { const tx = n.data.trim(); if (tx && doi.has(tx)) n.data = n.data.replace(tx, doi.get(tx)); };
+    if (goc.nodeType === 3) { thay(goc); return; }
+    if (goc.nodeType !== 1 || goc.closest('#sua-khung')) return;
+    const w = document.createTreeWalker(goc, NodeFilter.SHOW_TEXT); let n; while ((n = w.nextNode())) thay(n);
+  };
+  new MutationObserver(ds => ds.forEach(m => m.addedNodes.forEach(apSua))).observe(app, {childList: true, subtree: true});
+  const khung = document.createElement('div'); khung.id = 'sua-khung';
+  khung.innerHTML = '<div class="sua-thanh"><b>✎ Chế độ sửa</b><button type="button" id="sua-bat"></button><span id="sua-dem"></span>' +
+    '<button type="button" id="sua-ch-nut">Chữ hiển thị</button><button type="button" id="sua-xem">Danh sách</button><button type="button" id="sua-tai" class="chinh">Tải tệp sửa</button><button type="button" id="sua-gon" title="Thu gọn thanh sửa">–</button></div>' +
+    '<div id="sua-bao" class="sua-hop" hidden></div>' +
+    '<div id="sua-ds" class="sua-hop" hidden></div>' +
+    '<div id="sua-ch" class="sua-hop" hidden><p class="sua-nho" style="margin:0 0 .4rem">Mọi chữ giao diện của game. Gõ là đổi ngay trên trang. Giữ nguyên các chỗ trong ngoặc nhọn như {n}, {ten}, {a}, {b}, {ma}: máy điền số, chữ vào đó. Ô có viền vàng là chữ đã sửa.</p><div id="sua-ch-ds"></div><button type="button" id="sua-ch-goc">Trả mọi chữ hiển thị về gốc</button></div>' +
+    '<div id="sua-o" class="sua-hop" hidden><div class="sua-nho" id="sua-goc"></div><textarea id="sua-chu" rows="3"></textarea>' +
+      '<div class="sua-nut"><button type="button" id="sua-xong" class="chinh">Xong (Enter)</button><button type="button" id="sua-tra">Trả chữ gốc</button><button type="button" id="sua-huy">Hủy (Esc)</button></div></div>';
+  document.body.appendChild(khung);
+  document.body.classList.add('co-sua');
+  let dang = null, xoaLan = 0;
+  const chuGocCua = k => (DB.chuGiaoDien && DB.chuGiaoDien[k] != null) ? DB.chuGiaoDien[k] : CHU_GOC[k];
+  /* vẽ lại màn đang mở để chữ hiển thị mới hiện ngay */
+  const veLai = () => {
+    const m = manHienTai, ma = m.split(' · ')[1];
+    if (m === 'Màn chào') manChao(); else if (m === 'Bản đồ') manBanDo(); else if (m === 'Tổng kết') manTong(); else if (m === 'Vào phòng') manVaoPhong(PH.phong ? 2 : 0);
+    else if (m === 'Tạo phòng') manTaoPhong(); else if (m === 'Màn chiếu') veSan(); else if (m === 'Chờ') manCho();
+    else if (m.indexOf('Khám phá') === 0) manKham(ma); else if (m.indexOf('Hội đồng') === 0) manHoi(ma); else if (m.indexOf('Cán cân') === 0) manCan(ma);
+    else if (m.indexOf('Kết chương') === 0) manKet(ma); else if (m.indexOf('Luận chiến') === 0 && tam) { if (tam.cau) veCau(); else veHuongDan(); }
+  };
+  const ghiMa = (k, moi, tuBang) => {
+    if (moi === chuGocCua(k)) delete SUA.chuGD[k]; else SUA.chuGD[k] = moi;
+    luuSua();
+    if (!tuBang) veThanh(); else $('#sua-dem').textContent = (SUA.chu.length + Object.keys(SUA.chuGD).length) + ' chỗ sửa chữ';
+    veLai();
+    if (tuBang) { const o = khung.querySelector('[data-ck="' + k + '"]'); if (o) o.classList.toggle('da-sua', SUA.chuGD[k] != null); }
+  };
+  const veBangChu = () => {
+    $('#sua-ch-ds').innerHTML = Object.keys(CHU_GOC).map(k =>
+      '<label class="sua-ch-dong"><span>' + h(NHAN_CHU[k] || k) + '</span><input type="text" data-ck="' + k + '" value="' + h(t(k)) + '"' + (SUA.chuGD[k] != null ? ' class="da-sua"' : '') + '></label>').join('');
+  };
+  const veThanh = () => {
+    $('#sua-bat').textContent = SUA.bat ? 'Đang sửa chữ — bấm vào chữ' : 'Đang chơi thử — bấm để sửa tiếp';
+    $('#sua-bat').classList.toggle('bat', SUA.bat); document.body.classList.toggle('dang-sua', SUA.bat);
+    const soCh = Object.keys(SUA.chuGD).length;
+    $('#sua-dem').textContent = (SUA.chu.length + soCh) + ' chỗ sửa chữ';
+    $('#sua-ds').innerHTML = (SUA.chu.length || soCh)
+      ? '<ol>' + SUA.chu.map((x, i) => '<li><span class="sua-nho">' + h(x.man) + '</span><br><s>' + h(x.cu) + '</s><br><b>' + h(x.moi) + '</b> <button type="button" data-bo="' + i + '" title="Bỏ chỗ sửa này">↩ bỏ</button></li>').join('') +
+        Object.keys(SUA.chuGD).map(k => '<li><span class="sua-nho">Chữ hiển thị · ' + h(NHAN_CHU[k] || k) + '</span><br><s>' + h(chuGocCua(k)) + '</s><br><b>' + h(SUA.chuGD[k]) + '</b> <button type="button" data-bok="' + k + '" title="Bỏ chỗ sửa này">↩ bỏ</button></li>').join('') +
+        '</ol><button type="button" id="sua-xoa">Xóa hết danh sách</button>'
+      : '<p>Chưa sửa chỗ nào.</p>';
+    veBangChu();
+  };
+  const ghiSua = (cu, moi) => {
+    const i = SUA.chu.findIndex(x => x.cu === cu);
+    if (moi === cu) { if (i >= 0) SUA.chu.splice(i, 1); }
+    else if (i >= 0) SUA.chu[i].moi = moi;
+    else SUA.chu.push({man: manHienTai, cu, moi});
+    luuSua(); veThanh();
+  };
+  const moSuaMa = k => {
+    dang = {k};
+    $('#sua-goc').textContent = 'Chữ hiển thị · ' + (NHAN_CHU[k] || k) + ' · chữ gốc: “' + chuGocCua(k) + '”' + (/\{\w+\}/.test(chuGocCua(k)) ? ' — giữ nguyên chỗ {…}' : '');
+    $('#sua-chu').value = t(k); $('#sua-o').hidden = false; $('#sua-chu').focus(); $('#sua-chu').select();
+  };
+  const moSua = n => {
+    const tx = n.data.trim(), r = SUA.chu.find(x => x.moi === tx), cu = r ? r.cu : tx;
+    dang = {n, cu};
+    $('#sua-goc').textContent = manHienTai + ' · chữ gốc: “' + cu + '”';
+    $('#sua-chu').value = tx; $('#sua-o').hidden = false; $('#sua-chu').focus(); $('#sua-chu').select();
+  };
+  const dong = () => { $('#sua-o').hidden = true; dang = null; };
+  const xong = moiChu => {
+    if (!dang) return; moiChu = moiChu.replace(/\s+/g, ' ').trim();
+    if (dang.k) { if (moiChu) ghiMa(dang.k, moiChu); dong(); return; }
+    if (moiChu) { const tx = dang.n.data.trim(); dang.n.data = dang.n.data.replace(tx, moiChu); ghiSua(dang.cu, moiChu); }
+    dong();
+  };
+  const chuTai = e => {
+    let n = null;
+    if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(e.clientX, e.clientY); n = p && p.offsetNode; }
+    else if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(e.clientX, e.clientY); n = r && r.startContainer; }
+    if (n && n.nodeType === 3) { const r = document.createRange(); r.selectNodeContents(n);
+      if (![...r.getClientRects()].some(b => e.clientX >= b.left - 2 && e.clientX <= b.right + 2 && e.clientY >= b.top - 2 && e.clientY <= b.bottom + 2)) n = null; }
+    if (!n || n.nodeType !== 3 || !n.data.trim()) { const ts = [...e.target.childNodes].filter(x => x.nodeType === 3 && x.data.trim()); n = ts.length === 1 ? ts[0] : null; }
+    return n;
+  };
+  document.addEventListener('click', e => {
+    if (!SUA.bat || e.target.closest('#sua-khung') || !e.target.closest('#app')) return;
+    if (e.target.closest('textarea, input')) return;
+    e.preventDefault(); e.stopPropagation();
+    const ma = e.target.closest('[data-k]');
+    if (ma) { moSuaMa(ma.dataset.k); return; }
+    const n = chuTai(e);
+    if (n) moSua(n);
+  }, true);
+  let tro = null;
+  document.addEventListener('mouseover', e => { if (tro) tro.classList.remove('sua-tro'); tro = null;
+    if (SUA.bat && !e.target.closest('#sua-khung') && e.target.closest('#app') && e.target !== app && !e.target.classList.contains('man') && !(e.target instanceof SVGElement)) { tro = e.target; tro.classList.add('sua-tro'); } });
+  $('#sua-bat').onclick = () => { SUA.bat = !SUA.bat; dong(); luuSua(); veThanh(); };
+  $('#sua-xem').onclick = () => { $('#sua-ds').hidden = !$('#sua-ds').hidden; };
+  $('#sua-ch-nut').onclick = () => { $('#sua-ch').hidden = !$('#sua-ch').hidden; };
+  $('#sua-ch-ds').addEventListener('input', e => { const o = e.target.closest('[data-ck]'); if (!o) return; ghiMa(o.dataset.ck, o.value, true); });
+  $('#sua-ch-goc').onclick = () => { SUA.chuGD = {}; luuSua(); veThanh(); veLai(); };
+  $('#sua-gon').onclick = () => { const gon = khung.classList.toggle('gon'); $('#sua-gon').textContent = gon ? '✎' : '–'; $('#sua-gon').title = gon ? 'Mở thanh sửa' : 'Thu gọn thanh sửa'; };
+  $('#sua-ds').onclick = e => { const b = e.target.closest('button'); if (!b) return;
+    if (b.id === 'sua-xoa') {
+      if (Date.now() - xoaLan > 4000) { xoaLan = Date.now(); bao('Bấm “Xóa hết danh sách” lần nữa để xóa mọi chỗ sửa chữ trên máy này.', 4000); return; }
+      SUA.chu = []; SUA.chuGD = {}; luuSua(); location.reload(); return; }
+    if (b.dataset.bok) { ghiMa(b.dataset.bok, chuGocCua(b.dataset.bok)); return; }
+    if (b.dataset.bo) { SUA.chu.splice(+b.dataset.bo, 1); luuSua(); location.reload(); } };
+  $('#sua-tai').onclick = () => {
+    const coCh = Object.keys(SUA.chuGD).length > 0;
+    if (!SUA.chu.length && !coCh) { bao('Chưa sửa chỗ nào.'); return; }
+    const a = document.createElement('a');
+    const chuGiaoDien = coCh ? Object.assign({}, DB.chuGiaoDien || {}, SUA.chuGD) : null;
+    a.href = URL.createObjectURL(new Blob([JSON.stringify({game: 'can-can', luc: new Date().toISOString(), sua: SUA.chu, chuGiaoDien}, null, 2)], {type: 'application/json'}));
+    a.download = 'sua-chu-can-can.json'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+    bao('Đã tải sua-chu-can-can.json — gửi tệp này để đưa chữ đã sửa vào game.', 5000);
+  };
+  $('#sua-xong').onclick = () => xong($('#sua-chu').value);
+  $('#sua-tra').onclick = () => { if (dang && dang.k) { ghiMa(dang.k, chuGocCua(dang.k)); dong(); } else if (dang) xong(dang.cu); };
+  $('#sua-huy').onclick = dong;
+  $('#sua-chu').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); xong(e.target.value); } else if (e.key === 'Escape') dong(); });
+  veThanh();
+}
+
+/* ---------- KHỞI ĐỘNG ---------- */
+napTD();
+if (QS.get('ma')) { PH.nhapMa = QS.get('ma').toUpperCase().replace(/[^A-Z0-9]/g, ''); const dt = docNho('can-can-dt'); manVaoPhong(); if (dt && dt.ma === PH.nhapMa) HANH.veLaiPhong(); else timPhong(); }
+else manChao();
+</script>
+</body>
+</html>

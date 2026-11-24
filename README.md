@@ -116,6 +116,19 @@ Thu hoạch: 30 câu trắc nghiệm, năm dạng là năm nông cụ, mỗi câ
 
 ![Mã QR vào Trăm năm trồng người](trong-nguoi/qr-vao-game.png)
 
+## Cán cân ba đỉnh
+
+Tư tưởng Hồ Chí Minh về văn hóa, đạo đức, con người (Bài 8), mỗi người một máy, chạy song song với Trăm năm trồng người.
+Bốn chương, mỗi chương năm chặng: khám phá làng thu luận cứ, thuyết phục hội đồng (năm thành viên giữ luận điệu chưa đúng),
+cán cân ba đỉnh Văn hóa – Đạo đức – Con người, trận luận chiến trên bàn ô chéo (30 câu, năm kỹ năng = năm dạng câu), kết chương.
+Chế độ cá nhân hoặc nhóm 2–10: giảng viên tạo phòng, máy chiếu hiện bảng xếp hạng, Bác Mõ bình luận, ý cả lớp đang nhầm.
+
+Poster QR ngang 4:3: [PDF](https://haianhhadang-collab.github.io/haidv.wargame/can-can/poster-ngang-4-3.pdf) · [PNG](https://haianhhadang-collab.github.io/haidv.wargame/can-can/poster-ngang-4-3.png).
+
+- **Vào chơi:** https://haianhhadang-collab.github.io/haidv.wargame/can-can/
+
+![Mã QR vào Cán cân ba đỉnh](can-can/qr-vao-game.png)
+
 ## Quy tụ — bốn vòng đoàn kết
 
 Tư tưởng Hồ Chí Minh về đại đoàn kết toàn dân tộc và đoàn kết quốc tế (Bài 7), mỗi người một điện thoại, không tính giờ.
